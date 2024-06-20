@@ -1,0 +1,18 @@
+/* This injects Tailwind's base styles and any base styles registered by plugins.
+*/
+@import "tailwindcss/base";
+
+/* This injects Tailwind's component classes and any component classes registered by plugins.
+@import "tailwindcss/components";
+*/
+
+/* This injects Tailwind's utility classes and any utility classes registered by plugins.
+@import "tailwindcss/utilities";
+*/
+@import "./_breakpoints.css";
+@import "./_body.css";
+@import "./_layout.css";
+@import "./_slogan.css";
+@import "./_top-bar.css";
+@import "./_navigation.css";
+@import "./_footer.css";

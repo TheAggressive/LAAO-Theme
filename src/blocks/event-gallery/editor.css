@@ -1,0 +1,11 @@
+.wp-block-event-gallery {
+	@apply grid gap-2 md:gap-6;
+
+	&.columns-10 {
+		@apply grid-cols-2 md:grid-cols-5 lg:grid-cols-10;
+	}
+}
+
+.wp-block-event-gallery-item {
+	@apply w-auto m-0;
+}

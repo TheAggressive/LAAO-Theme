@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "laao/copyright-date-tag",
+	"version": "1.0.0",
+	"title": "Copyright Date Tag",
+	"category": "widgets",
+	"description": "LAAO copyright date tagline.",
+	"example": {},
+	"supports": {
+		"color": {
+			"background": false,
+			"text": true
+		},
+		"html": false,
+		"typography": {
+			"fontSize": true,
+			"textAlign": true
+		},
+		"spacing": {
+			"padding": true
+		}
+	},
+	"attributes": {
+		"showStartingYear": {
+			"type": "boolean"
+		},
+		"startingYear": {
+			"type": "string"
+		},
+		"companyName": {
+			"type": "string"
+		}
+	},
+	"textdomain": "laao",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./editor.css",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.wp-block-search-button {
+	@apply bg-blue-500 text-white;
+}

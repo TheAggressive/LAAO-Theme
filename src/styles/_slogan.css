@@ -1,0 +1,29 @@
+.site-slogan {
+	font-size: clamp(
+		var(--wp--preset--font-size--normal),
+		var(--wp--preset--font-size--x-large),
+		var(--wp--preset--font-size--xx-large)
+	);
+	position: relative;
+
+	@apply grid place-items-center overflow-hidden h-[3.75rem] w-full;
+
+	h3 {
+		display: flex;
+		position: absolute;
+		letter-spacing: 1vw;
+
+		@media (--bp-md) {
+			letter-spacing: 1.5vw;
+		}
+	}
+
+	p {
+		@apply flex justify-center items-center m-0 p-0 absolute overflow-hidden uppercase tracking-[1vw] lg:tracking-[1.5vw];
+
+		.letter {
+			/* This will let you apply transforms to the span char elements. */
+			@apply inline-block;
+		}
+	}
+}

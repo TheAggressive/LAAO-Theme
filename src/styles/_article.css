@@ -1,0 +1,31 @@
+.site-article {
+	.article-content {
+		@apply order-2 col-span-2;
+	}
+
+	.article-images {
+		@apply order-1 col-span-2;
+	}
+
+	@media (--bp-lg) {
+		& {
+			.article-content {
+				@apply order-2 col-span-1;
+			}
+
+			.article-images {
+				@apply order-1 col-span-1;
+			}
+		}
+	}
+}
+
+li:has(.site-article):nth-child(2n) {
+	.article-content {
+		@apply order-1;
+	}
+
+	.article-images {
+		@apply order-2;
+	}
+}

@@ -1,0 +1,58 @@
+<!-- wp:template-part {"slug":"header","theme":"laao","area":"header","className":"site-header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"0","bottom":"0"},"padding":{"right":"var:preset|spacing|44","left":"var:preset|spacing|44"}}},"className":"site-main","layout":{"type":"grid","columnCount":"12","minimumColumnWidth":null}} -->
+	<main
+	class="wp-block-group site-main" style="margin-top:0;margin-bottom:0;padding-right:var(--wp--preset--spacing--44);padding-left:var(--wp--preset--spacing--44)"> <!-- wp:group {"tagName":"section","style":{"layout":{"columnSpan":""}},"className":"site-content","layout":{"type":"default"}} -->
+	<section
+		class="wp-block-group site-content">
+		<!-- wp:query {"queryId":10,"query":{"perPage":4,"pages":0,"offset":0,"postType":"arts","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true,"parents":[]}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"style":{"spacing":{"blockGap":"0"}}} -->
+			<!-- wp:group {"tagName":"article","style":{"spacing":{"padding":{"right":"var:preset|spacing|24","left":"var:preset|spacing|24","top":"var:preset|spacing|24","bottom":"var:preset|spacing|24"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"laao-white","className":"site-article","layout":{"type":"grid","columnCount":"2","minimumColumnWidth":null}} -->
+				<article
+				class="wp-block-group site-article has-laao-white-background-color has-background" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--24);padding-right:var(--wp--preset--spacing--24);padding-bottom:var(--wp--preset--spacing--24);padding-left:var(--wp--preset--spacing--24)"> <!-- wp:group {"className":"article-images","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group article-images"><!-- wp:post-featured-image /--></div>
+				<!-- /wp:group -->
+
+				<!-- wp:group {"className":"article-content","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group article-content"><!-- wp:post-title /-->
+
+					<!-- wp:post-content /-->
+				</div>
+				<!-- /wp:group -->
+			</article>
+			<!-- /wp:group -->
+
+			<!-- wp:laao/query-loop-ad-inserter {"placeAfter":2,"align":"center","style":{"spacing":{"margin":{"top":"var:preset|spacing|44","bottom":"var:preset|spacing|44"},"padding":{"top":"var:preset|spacing|24","bottom":"var:preset|spacing|24","left":"var:preset|spacing|24","right":"var:preset|spacing|24"}}},"backgroundColor":"laao-white"} -->
+			<div class="wp-block-laao-query-loop-ad-inserter aligncenter has-laao-white-background-color has-background" style="margin-top:var(--wp--preset--spacing--44);margin-bottom:var(--wp--preset--spacing--44);padding-top:var(--wp--preset--spacing--24);padding-right:var(--wp--preset--spacing--24);padding-bottom:var(--wp--preset--spacing--24);padding-left:var(--wp--preset--spacing--24)"><!-- wp:adsanity/ad-group {"group_ids":[19],"groups":[{"value":19,"label":"728×90 Break","adIds":[48695,48065,48832,48849,48703]}],"ad_ids":[{"classes":"ad-728x90 adsanity-728x90  adsanity- alignnone adsanity-alignnone","markup":"\u003cdiv id=\u0022ad-48695\u0022 class=\u0022ad-728x90 adsanity-728x90  adsanity-\u0022\n\u003e\n\n\u003ca rel=\u0022nofollow\u0022   target=\u0022_blank\u0022\u003e\u003cimg width=\u0022728\u0022 height=\u002290\u0022 src=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg\u0022 class=\u0022no-lazy-load wp-post-image\u0022 alt=\u0022\u0022 decoding=\u0022async\u0022 fetchpriority=\u0022high\u0022 srcset=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg 728w, http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1-300x37.jpg 300w\u0022 sizes=\u0022(max-width: 728px) 100vw, 728px\u0022 /\u003e\u003c/a\u003e\n\u003c/div\u003e","id":48695,"isNetwork":false}]} /--></div>
+			<!-- /wp:laao/query-loop-ad-inserter -->
+			<!-- /wp:post-template -->
+
+			<!-- wp:query-pagination -->
+			<!-- wp:query-pagination-previous /-->
+
+			<!-- wp:query-pagination-numbers /-->
+
+			<!-- wp:query-pagination-next /-->
+			<!-- /wp:query-pagination -->
+
+			<!-- wp:query-no-results -->
+			<!-- wp:paragraph {"placeholder":"Add text or blocks that will display when a query returns no results."} --><p>
+		</p>
+			<!-- /wp:paragraph -->
+			<!-- /wp:query-no-results -->
+		</div>
+		<!-- /wp:query -->
+	</section>
+	<!-- /wp:group -->
+
+	<!-- wp:group {"tagName":"aside","style":{"layout":{"columnSpan":""}},"className":"site-nav","layout":{"type":"default"}} -->
+	<aside class="wp-block-group site-nav"><!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search...","width":100,"widthUnit":"%","buttonText":"Search","buttonPosition":"button-inside","buttonUseIcon":true,"backgroundColor":"laao-transparent","className":"site-nav-search"} /-->
+
+		<!-- wp:navigation {"ref":48884,"textColor":"laao-white","backgroundColor":"laao-black","overlayMenu":"never","layout":{"type":"flex","justifyContent":"left","orientation":"vertical","flexWrap":"nowrap"},"style":{"typography":{"textTransform":"uppercase"},"spacing":{"blockGap":"var:preset|spacing|8"}}} /-->
+	</aside>
+	<!-- /wp:group -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","theme":"laao","className":"site-footer"} /-->

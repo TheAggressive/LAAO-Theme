@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "laao/event-gallery",
+	"title": "Event Gallery",
+	"version": "1.0.0",
+	"icon": "format-gallery",
+	"description": "LAAO Event Gallery",
+	"category": "media",
+	"textdomain": "laao",
+	"keywords": ["Event Gallery", "LAAO", "Gallery", "Events"],
+	"editorScript": "file:index.js",
+	"editorStyle": "file:index.css",
+	"style": "file:style-index.css",
+	"attributes": {
+		"images": {
+			"type": "array",
+			"default": []
+		}
+	}
+}

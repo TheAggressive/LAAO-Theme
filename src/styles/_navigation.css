@@ -1,0 +1,34 @@
+.site-nav {
+	@apply absolute top-0 right-0 z-20 w-full h-screen translate-x-full;
+
+	@media (--bp-lg) {
+		@apply relative translate-x-0 -top-16;
+	}
+
+	/* Site Search */
+	.site-nav-search {
+		.wp-block-search__inside-wrapper {
+			@apply relative p-0;
+
+			button {
+				@apply absolute top-1 right-0 p-4 border-none;
+			}
+		}
+
+		.wp-block-search__input {
+			@apply py-5 pl-4 pr-14 outline-none bg-[var(--wp--preset--color--laao-light-gray)] w-full;
+		}
+	}
+
+	/* Site Nav Menu */
+	.wp-block-navigation,
+	.wp-block-navigation__container {
+		@apply w-full h-screen mt-0;
+
+		.wp-block-navigation-link {
+			@media (--bp-md) {
+				@apply text-[var(--wp--preset--color--laao-white)] hover:text-[var(--wp--preset--color--laao-red)] transition-all;
+			}
+		}
+	}
+}

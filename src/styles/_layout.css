@@ -1,0 +1,33 @@
+/* .site-layout {
+} */
+.site-main {
+	@apply px-[--wp--preset--spacing--24];
+
+	@media (--bp-md) {
+		@apply px-[--wp--preset--spacing--48];
+	}
+}
+
+.site-content {
+	@apply col-span-12;
+
+	@media (--bp-lg) {
+		@apply col-span-9;
+	}
+
+	@media (--bp-2xl) {
+		@apply col-span-10;
+	}
+}
+
+.site-nav {
+	@apply col-span-12;
+
+	@media (--bp-lg) {
+		@apply col-span-3;
+	}
+
+	@media (--bp-2xl) {
+		@apply col-span-2;
+	}
+}

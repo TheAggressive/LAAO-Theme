@@ -1,0 +1,355 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"spacing": {
+			"defaultSpacingSizes": false,
+			"spacingSizes": [
+				{
+					"name": "4",
+					"size": "0.25rem",
+					"slug": "4"
+				},
+				{
+					"name": "8",
+					"size": "0.5rem",
+					"slug": "8"
+				},
+				{
+					"name": "12",
+					"size": "0.75rem",
+					"slug": "12"
+				},
+				{
+					"name": "16",
+					"size": "1rem",
+					"slug": "16"
+				},
+				{
+					"name": "20",
+					"size": "1.25rem",
+					"slug": "20"
+				},
+				{
+					"name": "24",
+					"size": "1.5rem",
+					"slug": "24"
+				},
+				{
+					"name": "28",
+					"size": "1.75rem",
+					"slug": "28"
+				},
+				{
+					"name": "32",
+					"size": "2rem",
+					"slug": "32"
+				},
+				{
+					"name": "36",
+					"size": "2.25rem",
+					"slug": "36"
+				},
+				{
+					"name": "40",
+					"size": "2.5rem",
+					"slug": "40"
+				},
+				{
+					"name": "44",
+					"size": "2.75rem",
+					"slug": "44"
+				},
+				{
+					"name": "48",
+					"size": "3rem",
+					"slug": "48"
+				},
+				{
+					"name": "56",
+					"size": "3.5rem",
+					"slug": "56"
+				},
+				{
+					"name": "64",
+					"size": "4rem",
+					"slug": "64"
+				},
+				{
+					"name": "80",
+					"size": "5rem",
+					"slug": "80"
+				},
+				{
+					"name": "96",
+					"size": "6rem",
+					"slug": "96"
+				},
+				{
+					"name": "112",
+					"size": "7rem",
+					"slug": "112"
+				},
+				{
+					"name": "128",
+					"size": "8rem",
+					"slug": "128"
+				},
+				{
+					"name": "144",
+					"size": "9rem",
+					"slug": "144"
+				},
+				{
+					"name": "160",
+					"size": "10rem",
+					"slug": "160"
+				},
+				{
+					"name": "176",
+					"size": "11rem",
+					"slug": "176"
+				},
+				{
+					"name": "192",
+					"size": "12rem",
+					"slug": "192"
+				},
+				{
+					"name": "208",
+					"size": "13rem",
+					"slug": "208"
+				},
+				{
+					"name": "224",
+					"size": "14rem",
+					"slug": "224"
+				}
+			],
+			"units": ["px", "em", "rem", "vh", "vw", "%"]
+		},
+		"layout": {
+			"contentSize": "1500px",
+			"wideSize": "1820px"
+		},
+		"color": {
+			"defaultPalette": false,
+			"link": true,
+			"palette": [
+				{
+					"color": "hsl(0, 0%, 0.43%)",
+					"name": "Black",
+					"slug": "laao-black"
+				},
+				{
+					"color": "hsl(0, 0%, 100%)",
+					"name": "White",
+					"slug": "laao-white"
+				},
+				{
+					"color": "hsl(0, 73.7%, 41.8%)",
+					"name": "Red",
+					"slug": "laao-red"
+				},
+				{
+					"color": "hsl(0, 0%, 22.35%)",
+					"name": "Dark Gray",
+					"slug": "laao-dark-gray"
+				},
+				{
+					"color": "hsl(0, 0%, 44.7%)",
+					"name": "Gray",
+					"slug": "laao-gray"
+				},
+				{
+					"color": "hsl(0, 0%, 89.4%)",
+					"name": "Light Gray",
+					"slug": "laao-light-gray"
+				},
+				{
+					"color": "hsla(0, 0%, 0%, 0)",
+					"name": "Transparent",
+					"slug": "laao-transparent"
+				}
+			]
+		},
+		"typography": {
+			"defaultFontSizes": false,
+			"dropCap": false,
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"fontFamily": "Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;",
+					"slug": "industrial",
+					"name": "Industrial"
+				},
+				{
+					"fontFamily": "system-ui, sans-serif;",
+					"slug": "system-ui",
+					"name": "System UI"
+				},
+
+				{
+					"fontFamily": "Roboto Condensed",
+					"slug": "roboto-condensed",
+					"name": "Roboto Condensed",
+					"fontFace": [
+						{
+							"fontFamily": "Roboto Condensed",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": ["file:./assets/fonts/Roboto-Condensed.ttf"]
+						}
+					]
+				}
+			],
+			"fontSizes": [
+				{
+					"fluid": false,
+					"size": "0.75rem",
+					"slug": "small",
+					"name": "XS"
+				},
+				{
+					"fluid": false,
+					"size": "0.875rem",
+					"slug": "medium",
+					"name": "SM"
+				},
+				{
+					"fluid": {
+						"min": "0.875rem",
+						"max": "1.125rem"
+					},
+					"size": "1.125rem",
+					"slug": "large",
+					"name": "LG"
+				},
+				{
+					"fluid": {
+						"min": "1rem",
+						"max": "1.25rem"
+					},
+					"size": "1.25rem",
+					"slug": "x-large",
+					"name": "XL"
+				},
+				{
+					"fluid": {
+						"min": "1.25rem",
+						"max": "1.5rem"
+					},
+					"size": "1.5rem",
+					"slug": "xx-large",
+					"name": "2XL"
+				},
+				{
+					"fluid": {
+						"min": "1.625rem",
+						"max": "1.875rem"
+					},
+					"size": "1.875rem",
+					"slug": "xxx-large",
+					"name": "3XL"
+				},
+				{
+					"fluid": {
+						"min": "1.85rem",
+						"max": "2.25rem"
+					},
+					"size": "2.25rem",
+					"slug": "xxxx-large",
+					"name": "4XL"
+				},
+				{
+					"fluid": {
+						"min": "2.45rem",
+						"max": "3rem"
+					},
+					"size": "3rem",
+					"slug": "xxxxx-large",
+					"name": "5XL"
+				},
+				{
+					"fluid": {
+						"min": "3.15rem",
+						"max": "3.75rem"
+					},
+					"size": "3.75rem",
+					"slug": "xxxxxx-large",
+					"name": "6XL"
+				},
+				{
+					"fluid": {
+						"min": "3.95rem",
+						"max": "4.5rem"
+					},
+					"size": "4.5rem",
+					"slug": "xxxxxxx-large",
+					"name": "7XL"
+				},
+				{
+					"fluid": {
+						"min": "5.25rem",
+						"max": "6rem"
+					},
+					"size": "6rem",
+					"slug": "xxxxxxxx-large",
+					"name": "8XL"
+				},
+				{
+					"fluid": {
+						"min": "6.75rem",
+						"max": "8rem"
+					},
+					"size": "8rem",
+					"slug": "xxxxxxxxx-large",
+					"name": "9XL"
+				}
+			]
+		},
+		"custom": {}
+	},
+	"styles": {
+		"color": {
+			"background": "var:preset|color|laao-light-gray",
+			"text": "var:preset|color|laao-black"
+		},
+		"elements": {
+			"link": {
+				"color": {
+					"text": "var:preset|color|laao-red"
+				},
+				":hover": {
+					"color": {
+						"text": "var:preset|color|laao-black"
+					}
+				},
+				"typography": {
+					"textDecoration": "none"
+				}
+			}
+		},
+		"blocks": {}
+	},
+	"templateParts": [
+		{
+			"area": "header",
+			"name": "header",
+			"title": "Header"
+		},
+		{
+			"area": "footer",
+			"name": "footer",
+			"title": "Footer"
+		}
+	],
+	"customTemplates": [
+		{
+			"name": "article-default-template",
+			"title": "Article Default Template",
+			"postTypes": ["arts", "film", "music", "theater"]
+		}
+	]
+}

@@ -1,0 +1,7 @@
+::selection {
+	@apply bg-[var(--wp--preset--color--laao-red)] text-[var(--wp--preset--color--laao-white)];
+}
+
+body {
+	@apply overflow-x-hidden;
+}
