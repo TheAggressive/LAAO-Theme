@@ -26,10 +26,10 @@ function sidebar_plugin_register() {
 }
 add_action( 'init', 'sidebar_plugin_register' );
 
-// function sidebar_plugin_script_enqueue() {
-//  wp_enqueue_script( 'plugin-sidebar-js' );
-// }
-// add_action( 'enqueue_block_editor_assets', 'sidebar_plugin_script_enqueue' );
+function sidebar_plugin_script_enqueue() {
+	wp_enqueue_script( 'plugin-sidebar-js' );
+}
+add_action( 'enqueue_block_editor_assets', 'sidebar_plugin_script_enqueue' );
 
 
 function myguten_register_post_meta() {
