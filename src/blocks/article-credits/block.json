@@ -2,23 +2,19 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "laao/article-credits",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"title": "Article Credits",
 	"category": "widgets",
-	"description": "LAAO article credits.",
-	"icon": "admin-users",
+	"icon": "smiley",
+	"description": "Article Post Credits",
+	"example": {},
 	"supports": {
-		"html": false,
-		"typography": {
-			"fontSize": true,
-			"textAlign": true
-		},
-		"spacing": {
-			"padding": true
-		}
+		"html": false
 	},
 	"textdomain": "laao",
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./editor.css",
-	"render": "file:./render.php"
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
 }

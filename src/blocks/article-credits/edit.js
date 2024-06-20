@@ -11,6 +11,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -31,14 +32,19 @@ import './editor.scss';
 export default function Edit() {
 	const postType = useSelect((select) => select('core/editor').getCurrentPostType(), []);
 	const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
-	// const [meta, updateMeta] = useEntityProp(
-	// 	'postType',
-	// 	postType,
-	// 	'meta',
-	// 	postId
-	// );
+
+	const [meta, updateMeta] = useEntityProp(
+		'postType',
+		postType,
+		'meta',
+		postId
+	);
+
+	const { author } = meta;
 
 	return (
-		<p {...useBlockProps()}>{postType} - {postId}</p>
+		<p {...useBlockProps()}>
+			{postType} - {postId} - {author}
+		</p>
 	);
 }

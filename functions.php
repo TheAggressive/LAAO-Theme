@@ -34,7 +34,7 @@ add_action( 'init', 'sidebar_plugin_register' );
 
 function myguten_register_post_meta() {
 	register_post_meta(
-		'post',
+		'arts',
 		'author',
 		array(
 			'show_in_rest' => true,
@@ -44,3 +44,5 @@ function myguten_register_post_meta() {
 	);
 }
 add_action( 'init', 'myguten_register_post_meta' );
+
+add_filter( 'acf/settings/remove_wp_meta_box', '__return_false' );
