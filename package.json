@@ -42,6 +42,9 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.5",
+		"@types/wordpress__block-editor": "^11.5.15",
+		"@types/wordpress__blocks": "^12.5.14",
+		"@types/wordpress__editor": "^13.6.8",
 		"@wordpress/a11y": "^4.1.0",
 		"@wordpress/api-fetch": "^7.1.0",
 		"@wordpress/autop": "^4.1.0",
