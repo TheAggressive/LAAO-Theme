@@ -862,8 +862,6 @@ class LAAO_Setup {
 		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
 			wp_enqueue_script( 'editorial-block-plugin' );
 			wp_enqueue_script( 'image-credits-block-plugin' );
-			wp_enqueue_script( 'location-block-plugin' );
-			wp_enqueue_script( 'hair-makeup-block-plugin' );
 		}
 
 		if ( in_array( get_post_type(), $this->cover_post_type, true ) ) {
@@ -872,6 +870,11 @@ class LAAO_Setup {
 
 		if ( in_array( get_post_type(), $this->wh_post_types, true ) ) {
 			wp_enqueue_script( 'wh-block-plugin' );
+		}
+
+		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
+			wp_enqueue_script( 'location-block-plugin' );
+			wp_enqueue_script( 'hair-makeup-block-plugin' );
 		}
 	}
 
