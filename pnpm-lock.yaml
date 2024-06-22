@@ -25,6 +25,9 @@ devDependencies:
   '@types/wordpress__block-editor':
     specifier: ^11.5.15
     version: 11.5.15(react-dom@18.3.1)(react@18.3.1)
+  '@types/wordpress__block-library':
+    specifier: ^2.6.3
+    version: 2.6.3
   '@types/wordpress__blocks':
     specifier: ^12.5.14
     version: 12.5.14(react-dom@18.3.1)(react@18.3.1)
@@ -3465,6 +3468,10 @@ packages:
       - '@emotion/is-prop-valid'
       - react
       - react-dom
+    dev: true
+
+  /@types/wordpress__block-library@2.6.3:
+    resolution: {integrity: sha512-Rr5iO7k1j6B0d5N6ZSZjspE/Ko9fBrfTsytw8v2VgR4kGs8Z3KM/lg0Nb5UNqTBjbdv7eIvsuNvQcTzlc+IlJA==}
     dev: true
 
   /@types/wordpress__blocks@12.5.14(react-dom@18.3.1)(react@18.3.1):
