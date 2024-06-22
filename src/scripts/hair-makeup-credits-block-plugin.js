@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { PanelRow, SelectControl, TextControl } from '@wordpress/components';
+import { PanelRow, TextControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
@@ -16,37 +16,45 @@ const getCurrentPostType = () => {
 	return useSelect((select) => select('core/editor').getCurrentPostType());
 };
 
-const EditorialFields = () => {
+const HairMakeupFields = () => {
 	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
 	return (
 		<PluginDocumentSettingPanel
-			name="editorial-options"
-			title={__('Editorial Credits', 'laao')}
-			className="editorial-options">
+			name="hair-makeup-credits-options"
+			title={__('Hair/Makeup Credits', 'laao')}
+			className="hair-makeup-credits-options">
 			<PanelRow>
-				<SelectControl
-					label={__('Credit Types:', 'laao')}
-					value={meta['by_options'] || 'Please Select'}
-					options={[
-						{ label: 'Please Select', value: 'Please Select' },
-						{ label: 'By', value: 'By' },
-						{ label: 'Story / Photo By', value: 'Story / Photo By' },
-						{ label: 'Story / Photos By', value: 'Story / Photos By' },
-					]}
-					onChange={(value) => setMeta({
-						...meta,
-						['by_options']: value,
-					})}
+				<TextControl
+					value={meta['hair_by'] || ''}
+					label={__('Hair Credited To:', 'laao')}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							['hair_by']: value,
+						})
+					}
 				/>
 			</PanelRow>
 			<PanelRow>
 				<TextControl
-					value={meta['author'] || ''}
-					label={__('Author Name:', 'laao')}
+					value={meta['make_up_by'] || ''}
+					label={__('Makeup Credited To:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,
-							['author']: value,
+							['make_up_by']: value,
+						})
+					}
+				/>
+			</PanelRow>
+			<PanelRow>
+				<TextControl
+					value={meta['grooming_by'] || ''}
+					label={__('Grooming Credited To:', 'laao')}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							['grooming_by']: value,
 						})
 					}
 				/>
@@ -55,10 +63,10 @@ const EditorialFields = () => {
 	);
 };
 
-registerPlugin('laao-editorial-options', {
+registerPlugin('laao-hair-makeup-options', {
 	render: () => (
 		<>
-			<EditorialFields />
+			<HairMakeupFields />
 		</>
 	),
 });

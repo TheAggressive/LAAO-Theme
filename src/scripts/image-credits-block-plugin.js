@@ -26,7 +26,7 @@ const ImageCreditFields = () => {
 			className="image-credit-options">
 			<PanelRow>
 				<SelectControl
-					label={__('Credit Types', 'laao')}
+					label={__('Credit Types:', 'laao')}
 					value={meta['photo_credits_types'] || 'Please Select'}
 					options={[
 						{ label: 'Please Select', value: 'Please Select' },
@@ -52,7 +52,7 @@ const ImageCreditFields = () => {
 			<PanelRow>
 				<TextControl
 					value={meta['photo_credit_belongs_to'] || ''}
-					label={__('Credit Belongs To', 'laao')}
+					label={__('Credit Belongs To:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,

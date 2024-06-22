@@ -30,7 +30,7 @@ const CoverFields = () => {
 			title={__('Cover Images', 'laao')}
 			className="cover-options">
 			<PanelBody>
-				<h2>{__('Cover Image #2', 'laao')}</h2>
+				<h2>{__('Cover Image #2:', 'laao')}</h2>
 				<PanelRow>
 					<MediaUploadCheck>
 						<MediaUpload
@@ -81,7 +81,7 @@ const CoverFields = () => {
 				)}
 			</PanelBody>
 			<PanelBody>
-				<h2>{__('Cover Image #3', 'laao')}</h2>
+				<h2>{__('Cover Image #3:', 'laao')}</h2>
 				<PanelRow>
 					<MediaUploadCheck>
 						<MediaUpload

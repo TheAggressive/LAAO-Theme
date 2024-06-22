@@ -26,7 +26,7 @@ const LocationField = () => {
 			<PanelRow>
 				<TextControl
 					value={meta['location'] || ''}
-					label={__('Location', 'laao')}
+					label={__('Location:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,

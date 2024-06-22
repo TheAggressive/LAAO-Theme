@@ -848,6 +848,14 @@ class LAAO_Setup {
 			wp_get_theme()->get( 'Version' ),
 			false
 		);
+
+		wp_register_script(
+			'hair-makeup-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/hair-makeup-credits-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
 	}
 
 	public function enqueue_block_plugins_scripts() {
@@ -855,6 +863,7 @@ class LAAO_Setup {
 			wp_enqueue_script( 'editorial-block-plugin' );
 			wp_enqueue_script( 'image-credits-block-plugin' );
 			wp_enqueue_script( 'location-block-plugin' );
+			wp_enqueue_script( 'hair-makeup-block-plugin' );
 		}
 
 		if ( in_array( get_post_type(), $this->cover_post_type, true ) ) {

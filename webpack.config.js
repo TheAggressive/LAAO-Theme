@@ -43,6 +43,7 @@ module.exports = {
 			'scripts/cover-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'cover-block-plugin.js'),
 			'scripts/wh-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'wh-block-plugin.js'),
 			'scripts/location-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'location-block-plugin.js'),
+			'scripts/hair-makeup-credits-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'hair-makeup-credits-block-plugin.js'),
 			'styles/app': path.resolve(process.cwd(), 'src/styles', 'app.css'),
 			'styles/editor': path.resolve(process.cwd(), 'src/styles', 'editor.css')
 		},
