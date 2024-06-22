@@ -123,7 +123,7 @@ const CoverFields = () => {
 						<Button variant='secondary' isDestructive onClick={() => setMeta(
 							{
 								...meta,
-								['photo_2']: '',
+								['photo_3']: '',
 							}
 						)} >
 							{__('Remove', 'laao')}
