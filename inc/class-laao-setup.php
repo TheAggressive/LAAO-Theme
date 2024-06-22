@@ -818,6 +818,14 @@ class LAAO_Setup {
 		);
 
 		wp_register_script(
+			'image-credits-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/image-credits-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
+
+		wp_register_script(
 			'cover-block-plugin',
 			get_template_directory_uri() . '/dist/scripts/cover-block-plugin.js',
 			array( 'wp-plugins', 'wp-editor', 'react' ),
@@ -832,11 +840,21 @@ class LAAO_Setup {
 			wp_get_theme()->get( 'Version' ),
 			false
 		);
+
+		wp_register_script(
+			'location-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/location-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
 	}
 
 	public function enqueue_block_plugins_scripts() {
 		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
 			wp_enqueue_script( 'editorial-block-plugin' );
+			wp_enqueue_script( 'image-credits-block-plugin' );
+			wp_enqueue_script( 'location-block-plugin' );
 		}
 
 		if ( in_array( get_post_type(), $this->cover_post_type, true ) ) {
