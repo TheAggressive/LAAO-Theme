@@ -38,7 +38,9 @@ module.exports = {
 			'scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
 			'scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
 			'scripts/smoothscroll': path.resolve(process.cwd(), 'src/scripts', 'smoothscroll.js'),
-			'scripts/plugin-post-meta': path.resolve(process.cwd(), 'src/scripts', 'plugin-post-meta.js'),
+			'scripts/editorial-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'editorial-block-plugin.js'),
+			'scripts/cover-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'cover-block-plugin.js'),
+			'scripts/wh-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'wh-block-plugin.js'),
 			'styles/app': path.resolve(process.cwd(), 'src/styles', 'app.css'),
 			'styles/editor': path.resolve(process.cwd(), 'src/styles', 'editor.css')
 		},

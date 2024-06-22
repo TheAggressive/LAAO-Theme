@@ -1,11 +1,17 @@
 <?php
 
 class LAAO_Setup {
+	public $cover_post_type      = array( 'cover' );
+	public $editorial_post_types = array( 'cover', 'arts', 'theatre', 'film', 'television', 'extra', 'music', 'spotlight', 'dining', 'events' );
+	public $wh_post_types        = array( 'wh_cover' );
+
 	public function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'theme_supports' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
 		add_action( 'init', array( $this, 'register_post_meta' ) );
+		add_action( 'init', array( $this, 'register_block_plugins_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_plugins_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -26,6 +32,16 @@ class LAAO_Setup {
 
 		// Remove core block patterns.
 		remove_theme_support( 'core-block-patterns' );
+
+		// Ensure that the search results page shows 10 posts per page.
+		add_filter(
+			'pre_get_posts',
+			function ( $query ) {
+				if ( is_search() && $query->is_main_query() ) {
+					$query->set( 'posts_per_page', 10 );
+				}
+			}
+		);
 	}
 
 	/** This is where you can register custom post types */
@@ -94,6 +110,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'has_archive'         => true,
 					'rewrite'             => array(
@@ -146,7 +163,7 @@ class LAAO_Setup {
 					'supports'         => array(
 						0 => 'title',
 						1 => 'editor',
-						2 => 'thumbnail',
+						2 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -163,7 +180,7 @@ class LAAO_Setup {
 				'edition',
 				array(
 					'labels'              => array(
-						'name'          => 'Editions',
+						'name'          => 'Edition',
 						'singular_name' => 'Edition',
 					),
 					'public'              => true,
@@ -193,6 +210,7 @@ class LAAO_Setup {
 					'supports'            => array(
 						0 => 'title',
 						1 => 'editor',
+						2 => 'custom-fields',
 					),
 					'has_archive'         => true,
 					'rewrite'             => array(
@@ -217,6 +235,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -245,6 +264,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -272,6 +292,7 @@ class LAAO_Setup {
 					'menu_icon'           => 'dashicons-images-alt2',
 					'supports'            => array(
 						0 => 'title',
+						1 => 'custom-fields',
 					),
 					'delete_with_user'    => false,
 				)
@@ -292,6 +313,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -319,6 +341,7 @@ class LAAO_Setup {
 					'supports'            => array(
 						0 => 'title',
 						1 => 'editor',
+						2 => 'custom-fields',
 					),
 					'delete_with_user'    => false,
 				)
@@ -339,6 +362,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -366,6 +390,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -393,6 +418,7 @@ class LAAO_Setup {
 						0 => 'title',
 						1 => 'editor',
 						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -420,6 +446,7 @@ class LAAO_Setup {
 					'supports'            => array(
 						0 => 'title',
 						1 => 'editor',
+						2 => 'custom-fields',
 					),
 					'has_archive'         => true,
 					'rewrite'             => array(
@@ -444,6 +471,7 @@ class LAAO_Setup {
 					'supports'            => array(
 						0 => 'title',
 						1 => 'thumbnail',
+						2 => 'custom-fields',
 					),
 					'can_export'          => false,
 					'delete_with_user'    => false,
@@ -457,25 +485,11 @@ class LAAO_Setup {
 
 	/** This is where you can register custom taxonomies. */
 	public function register_post_meta() {
-		$cover_post_type      = array( 'cover' );
-		$editorial_post_types = array( 'cover', 'arts', 'theatre', 'film', 'television', 'extra', 'music', 'spotlight', 'dining', 'events' );
-		$wh_post_types        = array( 'wh_cover' );
 
 		$editorial_meta = array(
 			array(
 				'id'      => 'by_options',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'By Options',
@@ -489,18 +503,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'author',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Author',
@@ -514,18 +517,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'photo_credits_types',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Photo Credits Types',
@@ -540,18 +532,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'photo_credit_belongs_to',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Photo Credits Types',
@@ -566,18 +547,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'picture_id',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Picture ID',
@@ -592,18 +562,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'location',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Location',
@@ -617,19 +576,8 @@ class LAAO_Setup {
 
 			),
 			array(
-				'id'      => 'hair_by',                   // Meta box ID
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),                                              // Array of post types where the meta box should appear
+				'id'      => 'hair_by',
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Hair By',
@@ -643,19 +591,8 @@ class LAAO_Setup {
 
 			),
 			array(
-				'id'      => 'make_up_by',                 // Meta box ID
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'id'      => 'make_up_by',
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Make Up By',
@@ -669,18 +606,7 @@ class LAAO_Setup {
 			),
 			array(
 				'id'      => 'grooming_by',
-				'screens' => array(
-					'cover',
-					'arts',
-					'theatre',
-					'film',
-					'television',
-					'extra',
-					'music',
-					'spotlight',
-					'dining',
-					'events',
-				),
+				'screens' => $this->editorial_post_types,
 				'args'    => array(
 					'show_in_rest'  => true,
 					'title'         => 'Grooming By',
@@ -775,7 +701,6 @@ class LAAO_Setup {
 
 	//  Register Style(s)
 	public function register_style() {
-
 		// Deregister/dequeue adsanity css
 		wp_dequeue_style( 'adsanity-default-css' );
 		wp_deregister_style( 'adsanity-default-css' );
@@ -841,6 +766,46 @@ class LAAO_Setup {
 			wp_get_theme()->get( 'Version' ),
 			true,
 		);
+	}
+
+	public function register_block_plugins_scripts() {
+		wp_register_script(
+			'editorial-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/editorial-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
+
+		wp_register_script(
+			'cover-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/cover-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
+
+		wp_register_script(
+			'wh-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/wh-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
+	}
+
+	public function enqueue_block_plugins_scripts() {
+		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
+			wp_enqueue_script( 'editorial-block-plugin' );
+		}
+
+		if ( in_array( get_post_type(), $this->cover_post_type, true ) ) {
+			wp_enqueue_script( 'cover-block-plugin' );
+		}
+
+		if ( in_array( get_post_type(), $this->wh_post_types, true ) ) {
+			wp_enqueue_script( 'wh-block-plugin' );
+		}
 	}
 
 	public function defer_parsing_of_js( $url ) {
