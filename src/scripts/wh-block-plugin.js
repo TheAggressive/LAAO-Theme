@@ -71,9 +71,9 @@ const ImageFields = () => {
 
 	return (
 		<PluginDocumentSettingPanel
-			name="image-options"
+			name="wh-options"
 			title={__('Image Options', 'laao')}
-			className="image-options">
+			className="wh-options">
 			<PanelRow>
 				<MediaUploadCheck>
 					<MediaUpload
@@ -126,18 +126,10 @@ const ImageFields = () => {
 	);
 };
 
-registerPlugin('laao-author-options', {
+registerPlugin('laao-wh-options', {
 	render: () => (
 		<>
 			<AuthorField />
-		</>
-	),
-});
-
-registerPlugin('laao-image-options', {
-	render: () => (
-		<>
-			<ImageFields />
 		</>
 	),
 });

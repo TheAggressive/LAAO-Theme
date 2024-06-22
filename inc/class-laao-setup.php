@@ -163,7 +163,8 @@ class LAAO_Setup {
 					'supports'         => array(
 						0 => 'title',
 						1 => 'editor',
-						2 => 'custom-fields',
+						2 => 'thumbnail',
+						3 => 'custom-fields',
 					),
 					'taxonomies'       => array(
 						0 => 'post_tag',
@@ -471,16 +472,13 @@ class LAAO_Setup {
 					'supports'            => array(
 						0 => 'title',
 						1 => 'thumbnail',
-						2 => 'custom-fields',
+						2 => 'editor',
+						3 => 'custom-fields',
 					),
 					'can_export'          => false,
 					'delete_with_user'    => false,
 				)
 			);
-	}
-
-	/** This is where you can register custom taxonomies. */
-	public function register_taxonomies() {
 	}
 
 	/** This is where you can register custom taxonomies. */
@@ -620,12 +618,54 @@ class LAAO_Setup {
 			),
 		);
 
-		// Loop through each meta box configuration
+		// Loop through each Editorial meta box configuration
 		foreach ( $editorial_meta as $meta_box ) {
 			foreach ( $meta_box['screens'] as $screen ) {
 				register_post_meta( $screen, $meta_box['id'], $meta_box['args'] );
 			}
 		}
+
+		$cover_stories_meta = array(
+			array(
+				'id'      => 'photo_2',
+				'screens' => $this->cover_post_type,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Photo 2',
+					'description'   => '',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+			array(
+				'id'      => 'photo_3',
+				'screens' => $this->cover_post_type,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Photo 3',
+					'description'   => '',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+		);
+
+		// Loop through each Cover Story meta box configuration
+		foreach ( $cover_stories_meta as $meta_box ) {
+			foreach ( $meta_box['screens'] as $screen ) {
+				register_post_meta( $screen, $meta_box['id'], $meta_box['args'] );
+			}
+		}
+	}
+
+	/** This is where you can register custom taxonomies. */
+	public function register_taxonomies() {
 	}
 
 	public function theme_supports() {

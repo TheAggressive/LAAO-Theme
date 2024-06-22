@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Button, PanelRow, ResponsiveWrapper, SelectControl, TextControl } from '@wordpress/components';
+import { Button, PanelBody, PanelRow, ResponsiveWrapper } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
@@ -17,127 +17,128 @@ const getCurrentPostType = () => {
 	return useSelect((select) => select('core/editor').getCurrentPostType());
 };
 
-const AuthorField = () => {
-	const postId = useSelect((select) => select('core/editor').getCurrentPostId());
-	const postType = useSelect((select) => select('core/editor').getCurrentPostType());
-	const [meta, setMeta] = useEntityProp('postType', postType, 'meta', postId);
-	return (
-		<PluginDocumentSettingPanel
-			name="author-options"
-			title={__('Author Options', 'laao')}
-			className="author-options">
-			<PanelRow>
-				<SelectControl
-					label={__('Author Credits', 'laao')}
-					value={meta['by_options'] || 'Please Select'}
-					options={[
-						{ label: 'Please Select', value: 'Please Select' },
-						{ label: 'By', value: 'By' },
-						{ label: 'Story / Photo By', value: 'Story / Photo By' },
-						{ label: 'Story / Photos By', value: 'Story / Photos By' },
-					]}
-					onChange={(value) => setMeta({
-						...meta,
-						['by_options']: value,
-					})}
-					__nextHasNoMarginBottom
-				/>
-			</PanelRow>
-			<PanelRow>
-				<TextControl
-					value={meta['author'] || ''}
-					label={__('Author Name', 'laao')}
-					onChange={(value) =>
-						setMeta({
-							...meta,
-							['author']: value,
-						})
-					}
-				/>
-			</PanelRow>
-		</PluginDocumentSettingPanel>
-	);
-};
-
-const ImageFields = () => {
-	const postId = useSelect((select) => select('core/editor').getCurrentPostId());
-	const postType = useSelect((select) => select('core/editor').getCurrentPostType());
-	const [meta, setMeta] = useEntityProp('postType', postType, 'meta', postId);
-	const { image } = useSelect((select) => ({
-		image: select('core').getMedia(meta['location']),
+const CoverFields = () => {
+	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
+	const { image_1, image_2 } = useSelect((select) => ({
+		image_1: select('core').getMedia(meta['photo_2']),
+		image_2: select('core').getMedia(meta['photo_3']),
 	}));
 
-	console.log(image);
-
 	return (
 		<PluginDocumentSettingPanel
-			name="image-options"
-			title={__('Image Options', 'laao')}
-			className="image-options">
-			<PanelRow>
-				<MediaUploadCheck>
-					<MediaUpload
-						onSelect={(media) => setMeta({
-							...meta,
-							['location']: media.id.toString(),
-						})}
-						allowedTypes={['image']}
-						value={meta['location'] || ''}
-						render={({ open }) => (
-							<Button variant={image ? 'link' : 'primary'} onClick={open}>
-								{!image ? __('Upload Image', 'laao') : (
-									<ResponsiveWrapper naturalWidth={image.media_details.width} naturalHeight={image.media_details.height}>
-										<img src={image.source_url} height={image.media_details.height} width={image.media_details.width} />
-									</ResponsiveWrapper>
-								)
-								}
-							</Button>
-						)}
-					/>
-				</MediaUploadCheck>
-			</PanelRow>
-			{image && (
+			name="cover-options"
+			title={__('Cover Images', 'laao')}
+			className="cover-options">
+			<PanelBody>
+				<h2>{__('Cover Image #2', 'laao')}</h2>
 				<PanelRow>
 					<MediaUploadCheck>
 						<MediaUpload
-							title={__('Replace', 'laao')}
-							value={meta['location'] || ''}
 							onSelect={(media) => setMeta({
 								...meta,
-								['location']: media.id.toString(),
+								['photo_2']: media.id.toString(),
 							})}
 							allowedTypes={['image']}
+							value={meta['photo_2'] || ''}
 							render={({ open }) => (
-								<Button variant='secondary' onClick={open}>{__('Replace image', 'laao')}</Button>
+								<Button variant={image_1 ? 'link' : 'primary'} onClick={open}>
+									{!image_1 ? __('Upload Image', 'laao') : (
+										<ResponsiveWrapper naturalWidth={image_1.media_details.width} naturalHeight={image_1.media_details.height}>
+											<img src={image_1.source_url} height={image_1.media_details.height} width={image_1.media_details.width} />
+										</ResponsiveWrapper>
+									)
+									}
+								</Button>
 							)}
 						/>
 					</MediaUploadCheck>
-					<Button variant='secondary' isDestructive onClick={() => setMeta(
-						{
-							...meta,
-							['location']: '',
-						}
-					)} >
-						{__('Remove Image', 'laao')}
-					</Button>
 				</PanelRow>
-			)}
-		</PluginDocumentSettingPanel>
+				{image_1 && (
+					<PanelRow>
+						<MediaUploadCheck>
+							<MediaUpload
+								title={__('Replace', 'laao')}
+								value={meta['photo_2'] || ''}
+								onSelect={(media) => setMeta({
+									...meta,
+									['photo_2']: media.id.toString(),
+								})}
+								allowedTypes={['image']}
+								render={({ open }) => (
+									<Button variant='secondary' onClick={open}>{__('Replace Image', 'laao')}</Button>
+								)}
+							/>
+						</MediaUploadCheck>
+						<Button variant='secondary' isDestructive onClick={() => setMeta(
+							{
+								...meta,
+								['photo_2']: '',
+							}
+						)} >
+							{__('Remove', 'laao')}
+						</Button>
+					</PanelRow>
+				)}
+			</PanelBody>
+			<PanelBody>
+				<h2>{__('Cover Image #3', 'laao')}</h2>
+				<PanelRow>
+					<MediaUploadCheck>
+						<MediaUpload
+							onSelect={(media) => setMeta({
+								...meta,
+								['photo_3']: media.id.toString(),
+							})}
+							allowedTypes={['image']}
+							value={meta['photo_3'] || ''}
+							render={({ open }) => (
+								<Button variant={image_2 ? 'link' : 'primary'} onClick={open}>
+									{!image_2 ? __('Upload Image', 'laao') : (
+										<ResponsiveWrapper naturalWidth={image_2.media_details.width} naturalHeight={image_2.media_details.height}>
+											<img src={image_2.source_url} height={image_2.media_details.height} width={image_2.media_details.width} />
+										</ResponsiveWrapper>
+									)
+									}
+								</Button>
+							)}
+						/>
+					</MediaUploadCheck>
+				</PanelRow>
+				{image_2 && (
+					<PanelRow>
+						<MediaUploadCheck>
+							<MediaUpload
+								title={__('Replace', 'laao')}
+								value={meta['photo_3'] || ''}
+								onSelect={(media) => setMeta({
+									...meta,
+									['photo_3']: media.id.toString(),
+								})}
+								allowedTypes={['image']}
+								render={({ open }) => (
+									<Button variant='secondary' onClick={open}>{__('Replace Image', 'laao')}</Button>
+								)}
+							/>
+						</MediaUploadCheck>
+						<Button variant='secondary' isDestructive onClick={() => setMeta(
+							{
+								...meta,
+								['photo_2']: '',
+							}
+						)} >
+							{__('Remove', 'laao')}
+						</Button>
+					</PanelRow>
+				)}
+			</PanelBody>
+		</PluginDocumentSettingPanel >
 	);
 };
 
-registerPlugin('laao-author-options', {
+registerPlugin('laao-cover-options', {
 	render: () => (
 		<>
-			<AuthorField />
-		</>
-	),
-});
-
-registerPlugin('laao-image-options', {
-	render: () => (
-		<>
-			<ImageFields />
+			<CoverFields />
 		</>
 	),
 });
