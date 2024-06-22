@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { RichText } from '@wordpress/block-editor';
 import { PanelRow, SelectControl, TextControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
@@ -57,6 +58,30 @@ const ImageCreditFields = () => {
 						setMeta({
 							...meta,
 							['photo_credit_belongs_to']: value,
+						})
+					}
+				/>
+			</PanelRow>
+			<PanelRow>
+				<RichText
+					value={meta['picture_id'] || ''}
+					label={__('Caption:', 'laao')}
+					identifier="content"
+					allowedFormats={['core/bold', 'core/italic']}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							['photo_credit']: value,
+						})
+					}
+				/>
+				<TextControl
+					value={meta['picture_id'] || ''}
+					label={__('Caption:', 'laao')}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							['picture_id']: value,
 						})
 					}
 				/>
