@@ -1,11 +1,11 @@
 /**
  * WordPress dependencies
  */
-import { RichText } from '@wordpress/block-editor';
 import { PanelRow, SelectControl, TextControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { registerPlugin } from '@wordpress/plugins';
 
@@ -19,6 +19,21 @@ const getCurrentPostType = () => {
 
 const ImageCreditFields = () => {
 	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
+	const [pictureID, setPictureID] = useState(meta['picture_id'] || 'Caption ID Here...');
+	const ref = useRef(null);
+
+
+	console.log(meta['picture_id']);
+
+	useEffect(() => {
+		console.log(pictureID);
+
+		setMeta({
+			...meta,
+			['picture_id']: pictureID,
+		});
+
+	}, [pictureID]);
 
 	return (
 		<PluginDocumentSettingPanel
@@ -62,31 +77,11 @@ const ImageCreditFields = () => {
 					}
 				/>
 			</PanelRow>
+			<label>Format Text:</label>
 			<PanelRow>
-				<RichText
-					value={meta['picture_id'] || ''}
-					label={__('Caption:', 'laao')}
-					identifier="content"
-					allowedFormats={['core/bold', 'core/italic']}
-					onChange={(value) =>
-						setMeta({
-							...meta,
-							['photo_credit']: value,
-						})
-					}
-				/>
-				<TextControl
-					value={meta['picture_id'] || ''}
-					label={__('Caption:', 'laao')}
-					onChange={(value) =>
-						setMeta({
-							...meta,
-							['picture_id']: value,
-						})
-					}
-				/>
+				<div ref={ref} dangerouslySetInnerHTML={{ __html: pictureID }} contentEditable onInput={(event) => setPictureID(event.target.innerHTML)} />
 			</PanelRow>
-		</PluginDocumentSettingPanel>
+		</PluginDocumentSettingPanel >
 	);
 };
 
