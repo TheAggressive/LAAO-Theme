@@ -6,6 +6,7 @@ import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
+import { commentAuthorAvatar } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 
 const getCurrentPostId = () => {
@@ -21,6 +22,7 @@ const EditorialFields = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="editorial-options"
+			icon={commentAuthorAvatar}
 			title={__('Editorial Credits', 'laao')}
 			className="editorial-options">
 			<PanelRow>

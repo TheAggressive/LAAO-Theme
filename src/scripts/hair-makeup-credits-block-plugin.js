@@ -6,6 +6,7 @@ import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
+import { seen } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 
 const getCurrentPostId = () => {
@@ -21,6 +22,7 @@ const HairMakeupFields = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="hair-makeup-credits-options"
+			icon={seen}
 			title={__('Hair/Makeup Credits', 'laao')}
 			className="hair-makeup-credits-options">
 			<PanelRow>

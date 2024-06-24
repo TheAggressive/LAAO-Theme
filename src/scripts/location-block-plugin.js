@@ -6,6 +6,7 @@ import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
+import { mapMarker } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 
 const getCurrentPostId = () => {
@@ -21,6 +22,7 @@ const LocationField = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="location-options"
+			icon={mapMarker}
 			title={__('Location', 'laao')}
 			className="location-options">
 			<PanelRow>

@@ -5,9 +5,11 @@ import { PanelRow, SelectControl, TextControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { image } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
+import ContentEditable from '../components/ContentEditable';
 
 const getCurrentPostId = () => {
 	return useSelect((select) => select('core/editor').getCurrentPostId());
@@ -19,25 +21,23 @@ const getCurrentPostType = () => {
 
 const ImageCreditFields = () => {
 	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
-	const [pictureID, setPictureID] = useState(meta['picture_id'] || 'Caption ID Here...');
-	const ref = useRef(null);
+	const [pictureID, setPictureID] = useState(meta['picture_id'] || null);
 
-
-	console.log(meta['picture_id']);
+	const handleChange = (content) => {
+		setPictureID(content);
+	};
 
 	useEffect(() => {
-		console.log(pictureID);
-
 		setMeta({
 			...meta,
 			['picture_id']: pictureID,
 		});
-
 	}, [pictureID]);
 
 	return (
 		<PluginDocumentSettingPanel
 			name="image-credit-options"
+			icon={image}
 			title={__('Image Credits', 'laao')}
 			className="image-credit-options">
 			<PanelRow>
@@ -77,15 +77,16 @@ const ImageCreditFields = () => {
 					}
 				/>
 			</PanelRow>
-			<label>Format Text:</label>
+			<label style={{ "fontSize": "11px", "paddingTop": "10px", "display": "block", "fontWeight": "600" }} className='components-base-control__label'>CAPTION ID:</label>
 			<PanelRow>
-				<div ref={ref} dangerouslySetInnerHTML={{ __html: pictureID }} contentEditable onInput={(event) => setPictureID(event.target.innerHTML)} />
+				<ContentEditable initialContent={pictureID} onChange={handleChange} />
 			</PanelRow>
 		</PluginDocumentSettingPanel >
 	);
 };
 
 registerPlugin('laao-image-credit-options', {
+	icon: 'admin-post',
 	render: () => (
 		<>
 			<ImageCreditFields />
