@@ -5,16 +5,16 @@
 	"version": "0.1.0",
 	"title": "Article Credits",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "editor-ul",
 	"description": "Article Post Credits",
 	"example": {},
 	"supports": {
 		"html": false
 	},
+	"usesContext": ["postType", "postId"],
 	"textdomain": "laao",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"render": "file:./render.php"
 }

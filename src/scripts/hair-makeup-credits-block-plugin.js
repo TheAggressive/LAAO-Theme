@@ -19,6 +19,7 @@ const getCurrentPostType = () => {
 
 const HairMakeupFields = () => {
 	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
+
 	return (
 		<PluginDocumentSettingPanel
 			name="hair-makeup-credits-options"

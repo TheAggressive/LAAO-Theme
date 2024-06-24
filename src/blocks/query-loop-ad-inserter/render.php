@@ -2,6 +2,10 @@
 /**
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}   // Exit if accessed directly
+
 if ( ! function_exists( 'laao_get_current_post_index' ) ) {
 	function laao_get_current_post_index() {
 		global $wp_query;
@@ -40,4 +44,3 @@ if ( ! function_exists( 'laao_get_post_count_target' ) ) {
 if ( laao_get_current_post_index() === laao_get_post_count_target( $attributes ) ) {
 	echo wp_kses_post( $content );
 }
-?>

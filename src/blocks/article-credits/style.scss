@@ -6,5 +6,8 @@
  */
 
 .wp-block-laao-article-credits {
-	padding: 2px;
+	& li {
+		text-transform: uppercase;
+		font-weight: 600;
+	}
 }

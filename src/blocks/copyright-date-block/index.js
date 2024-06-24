@@ -20,14 +20,9 @@ import './style.scss';
 import metadata from './block.json';
 import Edit from './edit';
 
-const calendarIcon = (
-	<svg
-		viewBox="0 0 24 24"
-		xmlns="http://www.w3.org/2000/svg"
-		aria-hidden="true"
-		focusable="false"
-	>
-		<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm.5 16c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5V7h15v12zM9 10H7v2h2v-2zm0 4H7v2h2v-2zm4-4h-2v2h2v-2zm4 0h-2v2h2v-2zm-4 4h-2v2h2v-2zm4 0h-2v2h2v-2z"></path>
+const copyrightIcon = (
+	<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" fillOpacity="0" xmlns="http://www.w3.org/2000/svg">
+		<path d="M14 9C13.5197 8.40081 12.93 8 12 8C10.0769 8 9 9.14286 9 12C9 14.8571 10.0769 16 12 16C12.93 16 13.5197 15.5992 14 15M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 	</svg>
 );
 
@@ -40,6 +35,6 @@ registerBlockType(metadata.name, {
 	/**
 	 * @see ./edit.js
 	 */
-	icon: calendarIcon,
+	icon: copyrightIcon,
 	edit: Edit,
 });

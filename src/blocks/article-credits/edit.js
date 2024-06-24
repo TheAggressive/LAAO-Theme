@@ -12,7 +12,6 @@
  */
 import { useBlockProps } from '@wordpress/block-editor';
 import { useEntityProp } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -29,22 +28,25 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
-	const postType = useSelect((select) => select('core/editor').getCurrentPostType(), []);
-	const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
+export default function Edit({ context }) {
 
-	const [meta, updateMeta] = useEntityProp(
+	const [meta] = useEntityProp(
 		'postType',
-		postType,
+		context.postType,
 		'meta',
-		postId
+		context.postId
 	);
 
-	const { author } = meta;
+	const { author, by_options, photo_credits_types, photo_credit_belongs_to, location, hair_by, make_up_by, grooming_by } = meta;
 
 	return (
-		<p {...useBlockProps()}>
-			{postType} - {postId} - {author}
-		</p>
+		<ul {...useBlockProps()}>
+			{author && by_options && (<li>{by_options} {author}</li>)}
+			{photo_credits_types && photo_credit_belongs_to && (<li>{photo_credits_types} {photo_credit_belongs_to}</li>)}
+			{location && (<li>Location {location}</li>)}
+			{hair_by && (<li>Hair By {hair_by}</li>)}
+			{make_up_by && (<li>Makeup By {make_up_by}</li>)}
+			{grooming_by && (<li>Grooming By {grooming_by}</li>)}
+		</ul>
 	);
 }

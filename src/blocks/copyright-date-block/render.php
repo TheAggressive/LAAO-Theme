@@ -2,6 +2,11 @@
 /**
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}   // Exit if accessed directly
+
 ['showStartingYear' => $show_starting_year, 'startingYear' => $starting_year, 'companyName' => $company_name ] = $attributes;
 $current_year = gmdate( 'Y' );
 
