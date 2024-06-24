@@ -86,7 +86,6 @@ const ImageCreditFields = () => {
 };
 
 registerPlugin('laao-image-credit-options', {
-	icon: 'admin-post',
 	render: () => (
 		<>
 			<ImageCreditFields />
