@@ -24,6 +24,12 @@
 		}
 	}
 
+	.wp-block-social-links {
+		svg {
+			@apply w-[--wp--preset--font-size--xxxlarge] h-[--wp--preset--font-size--xxx-large] fill-current;
+		}
+	}
+
 	.wp-block-laao-copyright-date-tag a {
 		@apply text-[var(--wp--preset--color--laao-white)] underline hover:text-[var(--wp--preset--color--laao-red)] transition-all;
 	}
