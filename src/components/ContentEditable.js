@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import DOMPurify from 'isomorphic-dompurify';
-import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import debounce from 'lodash/debounce';
 
 const ContentEditable = ({ initialContent, onChange }) => {
 	const [content, setContent] = useState(() => DOMPurify.sanitize(initialContent, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'], FORBID_ATTR: ['style'] }));
@@ -10,7 +10,6 @@ const ContentEditable = ({ initialContent, onChange }) => {
 	const debouncedHandleInput = useCallback(
 		debounce((e) => {
 			const sanitizedContent = DOMPurify.sanitize(e.target.innerHTML, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'], FORBID_ATTR: ['style'] });
-			console.log('Sanitized content:', sanitizedContent);
 			setContent(sanitizedContent);
 			if (onChange) {
 				onChange(sanitizedContent);
