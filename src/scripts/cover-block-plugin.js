@@ -8,6 +8,7 @@ import { useSelect } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { registerPlugin } from '@wordpress/plugins';
+import { gallery } from '@wordpress/icons';
 
 const getCurrentPostId = () => {
 	return useSelect((select) => select('core/editor').getCurrentPostId());
@@ -27,6 +28,7 @@ const CoverFields = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="cover-options"
+			icon={gallery}
 			title={__('Cover Images', 'laao')}
 			className="cover-options">
 			<PanelBody>
