@@ -199,7 +199,9 @@
 							"fontFamily": "Roboto Condensed",
 							"fontStyle": "normal",
 							"fontWeight": "400",
-							"src": ["file:./assets/fonts/Roboto-Condensed.ttf"]
+							"src": [
+								"file:./dist/assets/fonts/Roboto-Condensed.ttf"
+							]
 						}
 					]
 				}

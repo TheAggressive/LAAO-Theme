@@ -11,6 +11,7 @@ class LAAO_Setup {
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
 		add_action( 'init', array( $this, 'register_post_meta' ) );
 		add_action( 'init', array( $this, 'register_block_plugins_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block_variations' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_plugins_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ) );
@@ -906,7 +907,7 @@ class LAAO_Setup {
 		if ( is_user_logged_in() ) {
 			return $url;
 		} //don't break WP Admin
-		if ( false === strpos( $url, '.js' ) ) {
+		if ( strpos( $url, '.js' ) === false ) {
 			return $url;
 		}
 		return str_replace( ' src', ' defer src', $url );
@@ -928,5 +929,71 @@ class LAAO_Setup {
 
 			register_block_type( $block_location );
 		}
+	}
+
+	public function register_block_variations() {
+		$block_variations_results = $this->get_theme_block_variations( get_stylesheet_directory() . '/dist/block-variations' );
+
+		if ( ! empty( $block_variations_results ) ) {
+			foreach ( $block_variations_results as $block_variation_file => $block_variation_name ) {
+				wp_enqueue_script(
+					$block_variation_name . '-variation',
+					get_template_directory_uri() . '/dist/block-variations/' . $block_variation_file,
+					array( 'wp-blocks', 'wp-dom-ready' ),
+					wp_get_theme()->get( 'Version' ),
+					false
+				);
+			}
+		}
+	}
+
+	public function extract_block_variation_file_values( $file_path, $key ) {
+		// Read the content of the JavaScript file
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$js_content = file_get_contents( $file_path );
+
+		// Check if the file was read successfully
+		if ( false === $js_content ) {
+			return null;
+		}
+
+		// Use a regular expression to find the 'name' key and its value
+		$pattern = '/\b' . $key . '\s*:\s*[\'"]([^\'"]+)[\'"]/';
+
+		if ( preg_match( $pattern, $js_content, $matches ) ) {
+			// Return the value of the 'name' key
+			return $matches[1];
+		} else {
+			return null;
+		}
+	}
+
+	public function get_theme_block_variations( $directory ) {
+		// Ensure the directory exists
+		if ( ! is_dir( $directory ) ) {
+			return;
+		}
+
+		// Get all JavaScript files in the specified directory
+		$files = glob( $directory . '/*.js' );
+
+		if ( empty( $files ) ) {
+			return;
+		}
+
+		// Array to hold the results
+		$results = array();
+
+		// Loop through each file and search for the 'name' key
+		foreach ( $files as $file ) {
+			$value    = $this->extract_block_variation_file_values( $file, 'name' );
+			$filename = basename( $file );
+			if ( null !== $value ) {
+				$results[ $filename ] = $value;
+			}
+		}
+
+		return $results;
 	}
 }
