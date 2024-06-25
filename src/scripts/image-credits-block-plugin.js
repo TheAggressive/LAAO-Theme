@@ -77,7 +77,7 @@ const ImageCreditFields = () => {
 					}
 				/>
 			</PanelRow>
-			<label style={{ "fontSize": "11px", "paddingTop": "8px", "display": "block", "fontWeight": "600" }} className='components-base-control__label'>CAPTION ID:</label>
+			<label style={{ "fontSize": "11px", "paddingTop": "8px", "display": "block", "fontWeight": "600" }} className='components-base-control__label'>{__('CAPTION ID:')}</label>
 			<PanelRow>
 				<ContentEditable initialContent={pictureID} onChange={handleChange} />
 			</PanelRow>
