@@ -20,12 +20,18 @@
 	}
 }
 
-li:has(.site-article):nth-child(2n) {
-	.article-content {
-		@apply order-1;
-	}
+li:has(.site-article):nth-child(2n) > .site-article {
+	@apply pb-[var(--wp--preset--spacing--32)] !important;
+}
 
-	.article-images {
-		@apply order-2;
+@media (--bp-lg) {
+	li:has(.site-article):nth-child(2n) {
+		.article-content {
+			@apply order-1;
+		}
+
+		.article-images {
+			@apply order-2;
+		}
 	}
 }
