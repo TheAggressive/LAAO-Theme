@@ -20,6 +20,7 @@ import './editor.scss';
 
 import { InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -30,15 +31,27 @@ import { __ } from '@wordpress/i18n';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, context }) {
 	const { placeAfter } = attributes;
 	const blockProps = useBlockProps();
 	const innerBlockProps = useInnerBlocksProps(blockProps, {
-		allowedBlocks: ['core/grid', 'core/group', 'adsanity/ad-group'],
+		allowedBlocks: ['adsanity/ad-group'],
 		template: [['core/paragraph']],
 		templateLock: false,
 	}
 	);
+
+	const { postIndex } = useSelect((select) => {
+		const { getEntityRecords } = select('core');
+		const posts = getEntityRecords('postType', context.postType, { per_page: -1 });
+
+		const currentPostId = context.postId;
+		const postIndex = posts ? posts.findIndex(post => post.id === currentPostId) + 1 : -1;
+
+		return {
+			postIndex
+		};
+	}, []);
 
 	return (
 		<>
@@ -57,7 +70,9 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<div {...innerBlockProps} />
+			{postIndex === placeAfter && (
+				<div {...innerBlockProps} />
+			)}
 		</>
 	);
 }

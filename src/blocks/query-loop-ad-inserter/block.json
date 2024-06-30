@@ -7,6 +7,7 @@
 	"category": "widgets",
 	"description": "Insert Ads in the query loop.",
 	"example": {},
+	"usesContext": ["postType", "postId"],
 	"supports": {
 		"color": {
 			"background": true,

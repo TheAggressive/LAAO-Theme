@@ -9,7 +9,11 @@
 	"description": "Article Post Credits",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
 	},
 	"usesContext": ["postType", "postId"],
 	"textdomain": "laao",

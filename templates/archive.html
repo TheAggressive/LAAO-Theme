@@ -11,11 +11,24 @@
 			<!-- wp:group {"tagName":"article","style":{"spacing":{"padding":{"right":"var:preset|spacing|24","left":"var:preset|spacing|24","top":"var:preset|spacing|24","bottom":"var:preset|spacing|24"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"laao-white","className":"site-article","layout":{"type":"grid","columnCount":"2","minimumColumnWidth":null}} -->
 				<article
 				class="wp-block-group site-article has-laao-white-background-color has-background" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--24);padding-right:var(--wp--preset--spacing--24);padding-bottom:var(--wp--preset--spacing--24);padding-left:var(--wp--preset--spacing--24)"> <!-- wp:group {"className":"article-images","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group article-images"><!-- wp:post-featured-image /--></div>
+				<div class="wp-block-group article-images"><!-- wp:laao/post-featured-image /--></div>
 				<!-- /wp:group -->
 
 				<!-- wp:group {"className":"article-content","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group article-content"><!-- wp:post-title /-->
+				<div class="wp-block-group article-content">
+					<!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"700"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
+
+					<!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"hsl(0, 73.7%, 41.8%)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"hsla(0, 0%, 0%, 0)","style":{"spacing":{"blockGap":{"left":"0"},"margin":{"top":"var:preset|spacing|12","bottom":"0"}}},"layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} --><ul class="wp-block-jetpack-sharing-buttons has-normal-icon-size jetpack-sharing-buttons__services-list" id="jetpack-sharing-serivces-list" style="margin-top:var(--wp--preset--spacing--12);margin-bottom:0"> <!-- wp:jetpack/sharing-button {"service":"x","label":"X"} /-->
+
+						<!-- wp:jetpack/sharing-button {"service":"facebook","label":"Facebook"} /-->
+
+						<!-- wp:jetpack/sharing-button {"service":"linkedin","label":"LinkedIn"} /-->
+
+						<!-- wp:jetpack/sharing-button {"service":"mail","label":"Mail"} /-->
+					</ul>
+					<!-- /wp:jetpack/sharing-buttons -->
+
+				<!-- wp:laao/article-credits {"style":{"spacing":{"margin":{"top":"var:preset|spacing|12"}}}} /-->
 
 					<!-- wp:post-content /-->
 				</div>
@@ -23,8 +36,12 @@
 			</article>
 			<!-- /wp:group -->
 
-			<!-- wp:laao/query-loop-ad-inserter {"placeAfter":2,"align":"center","style":{"spacing":{"margin":{"top":"var:preset|spacing|44","bottom":"var:preset|spacing|44"},"padding":{"top":"var:preset|spacing|24","bottom":"var:preset|spacing|24","left":"var:preset|spacing|24","right":"var:preset|spacing|24"}}},"backgroundColor":"laao-white"} -->
-			<div class="wp-block-laao-query-loop-ad-inserter aligncenter has-laao-white-background-color has-background" style="margin-top:var(--wp--preset--spacing--44);margin-bottom:var(--wp--preset--spacing--44);padding-top:var(--wp--preset--spacing--24);padding-right:var(--wp--preset--spacing--24);padding-bottom:var(--wp--preset--spacing--24);padding-left:var(--wp--preset--spacing--24)"><!-- wp:adsanity/ad-group {"group_ids":[19],"groups":[{"value":19,"label":"728×90 Break","adIds":[48695,48065,48832,48849,48703]}],"ad_ids":[{"classes":"ad-728x90 adsanity-728x90  adsanity- alignnone adsanity-alignnone","markup":"\u003cdiv id=\u0022ad-48695\u0022 class=\u0022ad-728x90 adsanity-728x90  adsanity-\u0022\n\u003e\n\n\u003ca rel=\u0022nofollow\u0022   target=\u0022_blank\u0022\u003e\u003cimg width=\u0022728\u0022 height=\u002290\u0022 src=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg\u0022 class=\u0022no-lazy-load wp-post-image\u0022 alt=\u0022\u0022 decoding=\u0022async\u0022 fetchpriority=\u0022high\u0022 srcset=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg 728w, http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1-300x37.jpg 300w\u0022 sizes=\u0022(max-width: 728px) 100vw, 728px\u0022 /\u003e\u003c/a\u003e\n\u003c/div\u003e","id":48695,"isNetwork":false}]} /--></div>
+			<!-- wp:laao/query-loop-ad-inserter {"placeAfter":2,"align":"center","style":{"spacing":{"margin":{"top":"var:preset|spacing|44","bottom":"var:preset|spacing|44"},"padding":{"top":"var:preset|spacing|28","bottom":"var:preset|spacing|28","left":"var:preset|spacing|28","right":"var:preset|spacing|28"}}},"backgroundColor":"laao-white","className":"ad-break-728x90"} -->
+			<div class="wp-block-laao-query-loop-ad-inserter aligncenter ad-break-728x90 has-laao-white-background-color has-background" style="margin-top:var(--wp--preset--spacing--44);margin-bottom:var(--wp--preset--spacing--44);padding-top:var(--wp--preset--spacing--28);padding-right:var(--wp--preset--spacing--28);padding-bottom:var(--wp--preset--spacing--28);padding-left:var(--wp--preset--spacing--28)"><!-- wp:adsanity/ad-group {"group_ids":[19],"groups":[{"value":19,"label":"728×90 Break","adIds":[48695,48065,48832,48849,48703]}],"ad_ids":[{"classes":"ad-728x90 adsanity-728x90  adsanity- alignnone adsanity-alignnone","markup":"\u003cdiv id=\u0022ad-48695\u0022 class=\u0022ad-728x90 adsanity-728x90  adsanity-\u0022\n\u003e\n\n\u003ca rel=\u0022nofollow\u0022   target=\u0022_blank\u0022\u003e\u003cimg width=\u0022728\u0022 height=\u002290\u0022 src=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg\u0022 class=\u0022no-lazy-load wp-post-image\u0022 alt=\u0022\u0022 decoding=\u0022async\u0022 fetchpriority=\u0022high\u0022 srcset=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1.jpg 728w, http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-728x90-1-300x37.jpg 300w\u0022 sizes=\u0022(max-width: 728px) 100vw, 728px\u0022 /\u003e\u003c/a\u003e\n\u003c/div\u003e","id":48695,"isNetwork":false}]} /--></div>
+			<!-- /wp:laao/query-loop-ad-inserter -->
+
+			<!-- wp:laao/query-loop-ad-inserter {"placeAfter":2,"align":"center","style":{"spacing":{"margin":{"top":"var:preset|spacing|44","bottom":"var:preset|spacing|44"},"padding":{"top":"var:preset|spacing|28","bottom":"var:preset|spacing|28","left":"var:preset|spacing|28","right":"var:preset|spacing|28"}}},"backgroundColor":"laao-white","className":"ad-break-300x250"} -->
+			<div class="wp-block-laao-query-loop-ad-inserter aligncenter ad-break-300x250 has-laao-white-background-color has-background" style="margin-top:var(--wp--preset--spacing--44);margin-bottom:var(--wp--preset--spacing--44);padding-top:var(--wp--preset--spacing--28);padding-right:var(--wp--preset--spacing--28);padding-bottom:var(--wp--preset--spacing--28);padding-left:var(--wp--preset--spacing--28)"><!-- wp:adsanity/ad-group {"group_ids":[34],"groups":[{"value":34,"label":"300x250 Responsive","adIds":[48853,48828,48693,48847]}],"ad_ids":[{"classes":"ad-300x250 adsanity-300x250  adsanity- alignnone adsanity-alignnone","markup":"\u003cdiv id=\u0022ad-48693\u0022 class=\u0022ad-300x250 adsanity-300x250  adsanity-\u0022\n\u003e\n\n\u003ca rel=\u0022nofollow\u0022   target=\u0022_blank\u0022\u003e\u003cimg width=\u0022300\u0022 height=\u0022250\u0022 src=\u0022http://laartsonline.local/wp-content/uploads/2024/05/Theatricum-300x250-1.jpg\u0022 class=\u0022no-lazy-load wp-post-image\u0022 alt=\u0022\u0022 decoding=\u0022async\u0022 fetchpriority=\u0022high\u0022 /\u003e\u003c/a\u003e\n\u003c/div\u003e","id":48693,"isNetwork":false}]} /--></div>
 			<!-- /wp:laao/query-loop-ad-inserter -->
 			<!-- /wp:post-template -->
 

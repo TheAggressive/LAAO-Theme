@@ -1,0 +1,15 @@
+.ad-break-300x250 {
+	@apply block;
+
+	@media (--bp-lg) {
+		@apply hidden;
+	}
+}
+
+.ad-break-728x90 {
+	@apply hidden;
+
+	@media (--bp-lg) {
+		@apply block;
+	}
+}
