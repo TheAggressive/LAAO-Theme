@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "laao/post-featured-image",
+	"version": "0.1.0",
+	"title": "Laao Post Featured Image w/ Caption",
+	"category": "media",
+	"icon": "format-image",
+	"description": "Post featured image with image caption block for Laao theme.",
+	"example": {},
+	"attributes": {
+		"srcSet": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"lock": true
+	},
+	"usesContext": ["postType", "postId"],
+	"textdomain": "laao",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
