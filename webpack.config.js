@@ -34,7 +34,7 @@ module.exports = {
 	...{
 		entry: {
 			// ...blockStylesheets(),
-			...getWebpackEntryPoints(),
+			...defaultConfig.entry(),
 			'scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
 			'scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
 			'scripts/smoothscroll': path.resolve(process.cwd(), 'src/scripts', 'smoothscroll.js'),
