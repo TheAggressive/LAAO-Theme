@@ -11,6 +11,6 @@
 	}
 
 	& .wp-block-laao-post-featured-image-caption {
-		@apply bg-[var(--wp--preset--color--laao-light-gray)] text-center p-[var(--wp--preset--spacing--24)] text-[length:var(--wp--preset--font-size--medium)];
+		@apply bg-[var(--wp--preset--color--laao-light-gray)] text-center p-[var(--wp--preset--spacing--16)] text-[length:var(--wp--preset--font-size--medium)];
 	}
 }

@@ -211,13 +211,13 @@
 					"fluid": false,
 					"size": "0.75rem",
 					"slug": "small",
-					"name": "XS"
+					"name": "XS (0.75rem)"
 				},
 				{
 					"fluid": false,
 					"size": "0.875rem",
 					"slug": "medium",
-					"name": "SM"
+					"name": "SM (0.875rem)"
 				},
 				{
 					"fluid": {
@@ -226,7 +226,7 @@
 					},
 					"size": "1.125rem",
 					"slug": "large",
-					"name": "LG"
+					"name": "LG (1.125rem Fluid)"
 				},
 				{
 					"fluid": {
@@ -235,7 +235,7 @@
 					},
 					"size": "1.25rem",
 					"slug": "x-large",
-					"name": "XL"
+					"name": "XL (1.25rem Fluid)"
 				},
 				{
 					"fluid": {
@@ -244,7 +244,7 @@
 					},
 					"size": "1.5rem",
 					"slug": "xx-large",
-					"name": "2XL"
+					"name": "2XL (1.5rem Fluid)"
 				},
 				{
 					"fluid": {
@@ -253,7 +253,7 @@
 					},
 					"size": "1.875rem",
 					"slug": "xxx-large",
-					"name": "3XL"
+					"name": "3XL (1.875rem Fluid)"
 				},
 				{
 					"fluid": {
@@ -262,7 +262,7 @@
 					},
 					"size": "2.25rem",
 					"slug": "xxxx-large",
-					"name": "4XL"
+					"name": "4XL (2.25rem)"
 				},
 				{
 					"fluid": {
@@ -271,7 +271,7 @@
 					},
 					"size": "3rem",
 					"slug": "xxxxx-large",
-					"name": "5XL"
+					"name": "5XL (3rem)"
 				},
 				{
 					"fluid": {
@@ -280,7 +280,7 @@
 					},
 					"size": "3.75rem",
 					"slug": "xxxxxx-large",
-					"name": "6XL"
+					"name": "6XL (3.75rem)"
 				},
 				{
 					"fluid": {
@@ -289,7 +289,7 @@
 					},
 					"size": "4.5rem",
 					"slug": "xxxxxxx-large",
-					"name": "7XL"
+					"name": "7XL (4.5rem)"
 				},
 				{
 					"fluid": {
@@ -298,7 +298,7 @@
 					},
 					"size": "6rem",
 					"slug": "xxxxxxxx-large",
-					"name": "8XL"
+					"name": "8XL (6rem)"
 				},
 				{
 					"fluid": {
@@ -307,7 +307,7 @@
 					},
 					"size": "8rem",
 					"slug": "xxxxxxxxx-large",
-					"name": "9XL"
+					"name": "9XL (8rem)"
 				}
 			]
 		},

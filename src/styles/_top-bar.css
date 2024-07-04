@@ -8,11 +8,21 @@
 	}
 
 	.site-top-bar-edition {
-		width: 176px;
+		@apply w-[176px] relative;
+
+		&::after {
+			@media (--bp-md) {
+				@apply w-full absolute right-0 content-["Edition"] top-[64px] font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-center uppercase text-[var(--wp--preset--color--laao-black)] bg-[var(--wp--preset--color--laao-white)] tracking-[var(--wp--preset--spacing--8)] text-[0.9rem] py-[var(--wp--preset--spacing--8)];
+			}
+		}
 	}
 
 	.site-top-bar-content-container {
-		@apply col-span-10;
+		@apply col-span-6;
+
+		@media (--bp-sm-max) {
+			@apply justify-self-end px-[var(--wp--preset--spacing--16)];
+		}
 
 		@media (--bp-md) {
 			@apply col-span-10;
