@@ -1,6 +1,5 @@
 // WordPress webpack config.
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
-const { getWebpackEntryPoints } = require('@wordpress/scripts/utils/config');
 
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
@@ -10,30 +9,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 // Utilities.
 const path = require('path');
-// const { globSync } = require('glob');
-
-// Gets all of the block stylesheets, which are enqueued separately and inlined
-// into the `<head>` area by WordPress. These should not be bundled together.
-// const blockStylesheets = () => globSync('./resources/scss/blocks/core/*.scss').reduce(
-//   (files, filepath) => {
-//     const name = path.parse(filepath).name;
-
-//     files[`css/blocks/core/${name}`] = path.resolve(
-//       process.cwd(),
-//       'resources/scss/blocks/core',
-//       `${name}.scss`
-//     );
-
-//     return files;
-//   }, {}
-// );
 
 // Add any a new entry point by extending the webpack config.
 module.exports = {
 	...defaultConfig,
 	...{
 		entry: {
-			// ...blockStylesheets(),
 			...defaultConfig.entry(),
 			'scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
 			'scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
@@ -87,5 +68,6 @@ module.exports = {
 				},
 			),
 		]
-	}
+	},
+	cache: false,
 };
