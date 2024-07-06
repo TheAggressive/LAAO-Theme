@@ -1,5 +1,8 @@
-// WordPress webpack config.
+// Import the original config from the @wordpress/scripts package.
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+
+// Import the helper to find and generate the entry points in the src directory
+const { getWebpackEntryPoints } = require('@wordpress/scripts/utils/config');
 
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
@@ -15,7 +18,7 @@ module.exports = {
 	...defaultConfig,
 	...{
 		entry: {
-			...defaultConfig.entry(),
+			...getWebpackEntryPoints(),
 			'scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
 			'scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
 			'scripts/smoothscroll': path.resolve(process.cwd(), 'src/scripts', 'smoothscroll.js'),

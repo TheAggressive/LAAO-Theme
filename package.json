@@ -60,7 +60,6 @@
 		"@wordpress/data-controls": "^4.2.0",
 		"@wordpress/dataviews": "^2.2.0",
 		"@wordpress/date": "^5.2.0",
-		"@wordpress/dependency-extraction-webpack-plugin": "^6.2.0",
 		"@wordpress/deprecated": "^4.2.0",
 		"@wordpress/dom": "^4.2.0",
 		"@wordpress/dom-ready": "^4.2.0",
