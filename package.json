@@ -4,13 +4,17 @@
 	"description": "Official Block Theme for LAArtsOnline.com",
 	"main": "index.js",
 	"scripts": {
-		"build": "wp-scripts build --output-path=./dist",
+		"build:blocks": "wp-scripts build --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
+		"build:interactivity": "wp-scripts build --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
+		"build": "pnpm build:blocks & pnpm build:interactivity",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --output-path=./dist",
+		"start:blocks": "wp-scripts start --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
+		"start:interactivity": "wp-scripts start --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
+		"start": "concurrently 'pnpm start:interactivity' 'pnpm start:blocks'",
 		"start:hot": "wp-scripts start --output-path=./dist --hot",
 		"start:copy-php": "wp-scripts start --output-path=./dist --webpack-copy-php",
 		"js:watch": "wp-scripts start ./src/scripts/app.js --output-path=dist/scripts"
@@ -36,7 +40,6 @@
 	],
 	"dependencies": {
 		"@wordpress/scripts": "^28.2.0",
-		"concurrently": "^8.0.1",
 		"gsap": "^3.12.5",
 		"isomorphic-dompurify": "^2.12.0",
 		"lenis": "^1.1.5"
@@ -80,6 +83,7 @@
 		"autoprefixer": "^10.4.19",
 		"browser-sync-webpack-plugin": "^2.3.0",
 		"browserslist": "^4.23.1",
+		"concurrently": "^8.2.2",
 		"copy-webpack-plugin": "^12.0.2",
 		"cssnano": "^7.0.3",
 		"lodash": "^4.17.21",

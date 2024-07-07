@@ -4,9 +4,8 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 // Import the helper to find and generate the entry points in the src directory
 const { getWebpackEntryPoints } = require('@wordpress/scripts/utils/config');
 
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-
 // Plugins.
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const CopyPlugin = require('copy-webpack-plugin');
 
@@ -18,18 +17,18 @@ module.exports = {
 	...defaultConfig,
 	...{
 		entry: {
-			...getWebpackEntryPoints(),
-			'scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
-			'scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
-			'scripts/smoothscroll': path.resolve(process.cwd(), 'src/scripts', 'smoothscroll.js'),
-			'scripts/editorial-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'editorial-block-plugin.js'),
-			'scripts/image-credits-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'image-credits-block-plugin.js'),
-			'scripts/cover-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'cover-block-plugin.js'),
-			'scripts/wh-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'wh-block-plugin.js'),
-			'scripts/location-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'location-block-plugin.js'),
-			'scripts/hair-makeup-credits-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'hair-makeup-credits-block-plugin.js'),
-			'styles/app': path.resolve(process.cwd(), 'src/styles', 'app.css'),
-			'styles/editor': path.resolve(process.cwd(), 'src/styles', 'editor.css')
+			...defaultConfig.entry(),
+			'../scripts/app': path.resolve(process.cwd(), 'src/scripts', 'app.js'),
+			'../scripts/gsap': path.resolve(process.cwd(), 'src/scripts', 'gsap.js'),
+			'../scripts/smoothscroll': path.resolve(process.cwd(), 'src/scripts', 'smoothscroll.js'),
+			'../scripts/editorial-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'editorial-block-plugin.js'),
+			'../scripts/image-credits-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'image-credits-block-plugin.js'),
+			'../scripts/cover-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'cover-block-plugin.js'),
+			'../scripts/wh-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'wh-block-plugin.js'),
+			'../scripts/location-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'location-block-plugin.js'),
+			'../scripts/hair-makeup-credits-block-plugin': path.resolve(process.cwd(), 'src/scripts', 'hair-makeup-credits-block-plugin.js'),
+			'../styles/app': path.resolve(process.cwd(), 'src/styles', 'app.css'),
+			'../styles/editor': path.resolve(process.cwd(), 'src/styles', 'editor.css')
 		},
 		plugins: [
 			// Very important! Include WP's plugin config or the
@@ -48,11 +47,11 @@ module.exports = {
 				patterns: [
 					{
 						from: './src/assets',
-						to: './assets'
+						to: '../assets'
 					},
 					{
 						from: './src/block-variations',
-						to: './block-variations'
+						to: '../block-variations'
 					},
 				]
 			}),

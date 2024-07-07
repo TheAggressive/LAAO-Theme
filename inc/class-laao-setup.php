@@ -17,7 +17,18 @@ class LAAO_Setup {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_setup_theme', array( $this, 'add_editor_styles' ) );
-		add_action( 'init', array( $this, 'register_block_types' ) );
+		add_action(
+			'init',
+			function () {
+				$this->register_block_types( '/dist/blocks' );
+			}
+		);
+		add_action(
+			'init',
+			function () {
+				$this->register_block_types( '/dist/blocks-interactivity' );
+			}
+		);
 
 		add_filter( 'xmlrpc_enabled', '__return_false' );
 		add_filter( 'jetpack_sharing_counts', '__return_false', 99 );
@@ -917,8 +928,9 @@ class LAAO_Setup {
 		add_editor_style( 'dist/styles/editor.css' );
 	}
 
-	public function register_block_types() {
-		$build_dir = get_stylesheet_directory() . '/dist/blocks';
+	public function register_block_types( $dir ) {
+
+		$build_dir = get_stylesheet_directory() . $dir;
 
 		foreach ( scandir( $build_dir ) as $result ) {
 			$block_location = $build_dir . '/' . $result;
