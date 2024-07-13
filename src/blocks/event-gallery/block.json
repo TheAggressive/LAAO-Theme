@@ -17,5 +17,6 @@
 			"type": "array",
 			"default": []
 		}
-	}
+	},
+	"viewScript": "file:view.js"
 }
