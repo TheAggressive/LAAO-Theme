@@ -3,11 +3,15 @@
  */
 import { getContext, store } from "@wordpress/interactivity";
 
-store('event-gallery', {
+const { state } = store('laao/event-gallery', {
+	state: {
+		overlayEnabled: false,
+	},
 	actions: {
-		toggle: () => {
+		handleClick: () => {
 			const context = getContext();
-			context.isOpen = !context.isOpen;
+			state.overlayEnabled = !state.overlayEnabled;
+			console.log(`Is active: ${state.overlayEnabled}`);
 		},
 	},
 	callbacks: {
