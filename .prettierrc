@@ -1,0 +1,4 @@
+{
+	"extends": "@wordpress/prettier-config",
+	"plugins": ["prettier-plugin-tailwindcss"]
+}
