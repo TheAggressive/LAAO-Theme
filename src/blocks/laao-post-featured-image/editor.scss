@@ -6,6 +6,6 @@
 
 .wp-block-laao-post-featured-image {
 	& .wp-block-laao-post-featured-image-caption {
-		@apply bg-[var(--wp--preset--color--laao-light-gray)] text-center p-[var(--wp--preset--spacing--12)] text-[length:var(--wp--preset--font-size--small)];
+		@apply bg-[var(--wp--preset--color--laao-light-gray)] p-[var(--wp--preset--spacing--12)] text-center text-[length:var(--wp--preset--font-size--small)];
 	}
 }

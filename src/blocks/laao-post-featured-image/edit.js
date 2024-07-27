@@ -20,7 +20,7 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import './editor.scss';
+import './editor.css';
 
 /**
  * The edit function describes the structure of your block in the context of the
