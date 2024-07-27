@@ -22,56 +22,56 @@
 	position: fixed;
 	z-index: 48;
 
+	a.aggressive-lightbox-close {
+		place-self: center end;
+		color: var(--wp--preset--color--laao-white);
+		padding: 0 var(--ag-spacer-base);
+		transition: all 0.3s ease-in-out;
+		min-width: 60px;
+
+		svg {
+			fill: currentcolor;
+			height: 1.75rem;
+			width: 1.75rem;
+		}
+
+		&:hover,
+		&:focus {
+			color: var(--wp--preset--color--laao-red);
+		}
+	}
+
+	.aggressive-lightbox-next-link,
+	.aggressive-lightbox-previous-link {
+		display: flex;
+		height: 92vh;
+		color: var(--wp--preset--color--laao-white);
+		padding: var(--ag-spacer-xl);
+		position: fixed;
+		width: 3vw;
+		z-index: 64;
+		justify-content: center;
+
+		svg {
+			fill: currentcolor;
+			filter: drop-shadow(2px 2px 6px rgb(0 0 0 / 100%));
+			min-width: 1.75rem;
+			height: auto;
+			transition: var(--ag-transition-base);
+		}
+
+		&:hover svg,
+		&:focus svg {
+			fill: var(--ag-theme-color-primary);
+		}
+	}
+
 	.aggressive-lightbox-previous-link {
 		left: 0;
 	}
 
 	.aggressive-lightbox-next-link {
 		right: 0;
-	}
-}
-
-a.aggressive-lightbox-close {
-	place-self: center end;
-	color: var(--wp--preset--color--laao-white);
-	padding: 0 var(--ag-spacer-base);
-	transition: all 0.3s ease-in-out;
-	min-width: 60px;
-
-	svg {
-		fill: currentcolor;
-		height: 1.75rem;
-		width: 1.75rem;
-	}
-
-	&:hover,
-	&:focus {
-		color: var(--wp--preset--color--laao-red);
-	}
-}
-
-.aggressive-lightbox-next-link,
-.aggressive-lightbox-previous-link {
-	display: flex;
-	height: 92vh;
-	color: var(--wp--preset--color--laao-white);
-	padding: var(--ag-spacer-xl);
-	position: fixed;
-	width: 3vw;
-	z-index: 64;
-	justify-content: center;
-
-	svg {
-		fill: currentcolor;
-		filter: drop-shadow(2px 2px 6px rgb(0 0 0 / 100%));
-		min-width: 1.75rem;
-		height: auto;
-		transition: var(--ag-transition-base);
-	}
-
-	&:hover svg,
-	&:focus svg {
-		fill: var(--ag-theme-color-primary);
 	}
 }
 
