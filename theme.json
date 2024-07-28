@@ -127,7 +127,7 @@
 					"slug": "224"
 				}
 			],
-			"units": [ "px", "em", "rem", "vh", "vw", "%" ]
+			"units": ["px", "em", "rem", "vh", "vw", "%"]
 		},
 		"layout": {
 			"contentSize": "1500px",
@@ -199,9 +199,7 @@
 							"fontFamily": "Roboto Condensed",
 							"fontStyle": "normal",
 							"fontWeight": "400",
-							"src": [
-								"file:./dist/assets/fonts/Roboto-Condensed.ttf"
-							]
+							"src": ["file:./dist/assets/fonts/Roboto-Condensed.ttf"]
 						}
 					]
 				}
@@ -351,7 +349,7 @@
 		{
 			"name": "article-default-template",
 			"title": "Article Default Template",
-			"postTypes": [ "arts", "film", "music", "theater" ]
+			"postTypes": ["arts", "film", "music", "theater"]
 		}
 	]
 }

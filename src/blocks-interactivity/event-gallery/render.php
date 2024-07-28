@@ -35,7 +35,12 @@ if ( ! function_exists( 'laao_render_event_gallery' ) ) {
 if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 	function laao_render_event_gallery_lightbox() {
 		echo <<<HTML
-		<section class="wp-block-laao-event-lightbox" data-wp-interactive="laao/event-gallery" data-wp-bind--hidden="!state.overlayEnabled">
+		<section class="wp-block-laao-event-lightbox"
+		data-wp-interactive="laao/event-gallery"
+		data-wp-class--active="state.isLightboxActive"
+		data-wp-on--keydown="actions.handleKeydown"
+		data-wp-on-async-window--scroll="actions.handleScroll"
+		data-wp-bind--hidden="!state.isLightboxActive">
 			<header class="wp-block-laao-event-lightbox-header">
 				<ul class="wp-block-laao-event-lightbox-social">
 					<li class="wp-block-laao-event-lightbox-social-item">
@@ -67,11 +72,11 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 						</a>
 					</li>
 				</ul>
-				<a class="wp-block-laao-event-lightbox-close" href="#" aria-label="Close lightbox" data-wp-on--click='actions.handleClick'>
+				<button class="wp-block-laao-event-lightbox-close" aria-label="Close lightbox" data-wp-on--click='actions.hideLightbox'>
 					<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
 						<path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path>
 					</svg>
-				</a>
+				</button>
 			</header>
 			<section class="wp-block-laao-event-lightbox-content">
 				<a class="wp-block-laao-event-lightbox-next-link" href="#" aria-label="Next Image">
@@ -89,6 +94,8 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 						<img src="https://laartsonline.com/wp-content/uploads/2024/07/thumbnail-8-1.jpg" loading="lazy">
 					</li>
 				</ul>
+			</section>
+			<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive"></div>
 		</section>
 		HTML;
 	}
@@ -98,6 +105,20 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 ?>
 
-<div data-wp-interactive="laao/event-gallery">
-	<p data-wp-on--click='actions.handleClick'>Click this div to toggle the lightbox.</p>
+<div class="wp-block-event-gallery columns-10" data-wp-interactive="laao/event-gallery">
+	<?php foreach ( $attributes['images'] as $image ) : ?>
+		<figure class="wp-block-event-gallery-item">
+			<?php
+			echo wp_get_attachment_image(
+				$image['id'],
+				'thumbnail',
+				'',
+				array(
+					'class'             => 'img-responsive',
+					'data-wp-on--click' => 'actions.showLightbox',
+				)
+			);
+			?>
+		</figure>
+	<?php endforeach; ?>
 </div>
