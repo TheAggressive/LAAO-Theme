@@ -12,15 +12,12 @@
 	@apply m-0 w-auto rounded-md;
 }
 
+/* Event Gallery Block Lighbox */
 .wp-block-laao-event-lightbox {
 	@apply fixed inset-0 z-50 grid h-screen grid-rows-[8vh_1fr] bg-white/90;
 
 	a.wp-block-laao-event-lightbox-close {
-		@apply min-w-16 place-self-center justify-self-center px-[--wp--preset--spacing--16] py-[--wp--preset--spacing--16] text-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
-
-		@media (--bp-md) {
-			@apply justify-self-end;
-		}
+		@apply mr-4 flex items-center text-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
 
 		svg {
 			@apply h-7 w-7 fill-current;
@@ -68,13 +65,13 @@
 }
 
 .wp-block-laao-event-lightbox-header {
-	@apply z-50 grid max-w-[100vw] grid-cols-[1fr_4vw] items-center justify-between bg-black/70 p-0;
+	@apply z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
 
 	.wp-block-laao-event-lightbox-social {
-		@apply m-0 flex h-full list-none items-center justify-start p-0;
+		@apply -mr-8 flex h-full list-none place-content-center items-center p-0;
 
 		@media (--bp-md) {
-			@apply justify-center pb-0 pl-[5vw] pr-0 pt-0;
+			@apply w-full;
 		}
 
 		.wp-block-laao-event-lightbox-social-item {
@@ -84,16 +81,16 @@
 }
 
 .wp-block-laao-event-lightbox-content {
-	@apply relative flex items-center justify-center;
+	@apply relative flex w-screen items-center justify-center;
 
 	.wp-block-laao-event-lightbox-gallery {
-		@apply relative flex list-none items-center justify-center bg-red-700 pl-0;
+		@apply relative flex w-screen list-none items-center justify-center pl-0;
 
 		.wp-block-laao-event-lightbox-gallery-item {
-			@apply fixed left-0 right-0 flex w-screen items-center justify-center shadow-lg transition-all duration-300 ease-in-out;
+			@apply fixed left-0 right-0 flex w-screen items-center justify-center transition-all duration-300 ease-in-out;
 
 			img {
-				@apply max-h-[80vh] w-auto;
+				@apply max-h-[80vh] max-w-[100vw] shadow-lg;
 			}
 		}
 
@@ -106,7 +103,7 @@
 		}
 
 		.gallery-item-current {
-			@apply h-full w-full translate-x-0;
+			@apply translate-x-0;
 		}
 	}
 }
