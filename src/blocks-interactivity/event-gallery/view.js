@@ -10,20 +10,19 @@ const { state } = store('laao/event-gallery', {
 	},
 	actions: {
 		showLightbox: () => {
-			const imageId = getContext();
-			const ref = getElement();
+			const { imageId } = getContext();
+			const { ref } = getElement();
+
+			console.log('ref', ref?.complete);
+			console.log('ref.currentSrc', ref.currentSrc);
+
+			state.imageRef = ref?.complete;
+			state.currentSrc = ref.currentSrc;
 
 			console.log('context', imageId);
-			console.log('showLightbox', ref.attributes);
-
-			state.currentImageId.id = ref.dataset.id || '';
-			state.currentImageId.src = ref.dataset.id || '';
-
-			console.log('currentImageId', state.currentImageId);
-			console.log('Currentid', state.currentImageId.id);
 
 			// Bails out if the image has not loaded yet.
-			if (!state.metadata[imageId].imageRef?.complete) {
+			if (!state.imageId.imageRef?.complete) {
 				return;
 			}
 

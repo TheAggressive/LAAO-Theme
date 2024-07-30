@@ -14,12 +14,16 @@
 $context = array( 'images' => $attributes['images'] );
 
 if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
-	function laao_render_event_gallery_context( $image ) {
-		return array(
-			'id'  => $image['id'],
-			'url' => wp_get_attachment_image_url( $image['id'], 'full' ),
-			'alt' => get_post_meta( $image['id'], '_wp_attachment_image_alt', true ),
+	function laao_render_event_gallery_context( $image, $key ) {
+		$context = array(
+
+			'uploadedSrc'  => $image['sizes']['full']['url'],
+			'targetWidth'  => $image['sizes']['full']['width'],
+			'targetHeight' => $image['sizes']['full']['height'],
+			'alt'          => $image['alt'] ? $image['alt'] : 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
 		);
+
+		return $context;
 	}
 }
 
@@ -97,15 +101,26 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 ?>
 <pre>
-	<?php print_r( $attributes ); ?>
+	<?php
+	// print_r( get_the_title() );
+	?>
 </pre>
 
 <div class="wp-block-event-gallery columns-10" data-wp-interactive="laao/event-gallery">
-	<?php foreach ( $attributes['images'] as $image ) : ?>
+	<?php foreach ( $attributes['images'] as $key => $image ) : ?>
 
+		<figure class="wp-block-event-gallery-item"
+			data-wp-interactive="laao/event-gallery"
+			<?php
 
+			echo wp_kses_data(
+				wp_interactivity_data_wp_context(
+					laao_render_event_gallery_context( $image, $key ),
+				)
+			);
 
-		<figure class="wp-block-event-gallery-item">
+			?>
+		>
 			<?php
 			echo wp_get_attachment_image(
 				$image['id'],
@@ -115,15 +130,6 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					'class'             => 'img-responsive',
 					'data-id'           => $image['id'],
 					'data-wp-on--click' => 'actions.showLightbox',
-					'data-wp-context'   => json_encode(
-						array(
-							'uploadedSrc'   => $image['sizes']['full']['url'],
-							'imgClassNames' => $image['classNames'],
-							'targetWidth'   => $image['sizes']['full']['width'],
-							'targetHeight'  => $image['sizes']['full']['height'],
-							'alt'           => $image['alt'],
-						),
-					),
 				),
 			);
 			?>
