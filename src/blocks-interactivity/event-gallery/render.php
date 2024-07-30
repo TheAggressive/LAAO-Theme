@@ -13,22 +13,13 @@
 
 $context = array( 'images' => $attributes['images'] );
 
-if ( ! function_exists( 'laao_render_event_gallery' ) ) {
-	function laao_render_event_gallery( $content ) {
-		if ( false === stripos( $content, '<img' ) ) {
-			return '';
-		}
-
-		$p = new WP_HTML_Tag_Processor( $content );
-
-		if ( ! $p->next_tag( 'img' ) || null === $p->get_attribute( 'src' ) ) {
-			return '';
-		}
-
-		$p->seek( 'img' );
-		$p->set_attribute( 'data-wp-init', 'something' );
-
-		return $p->get_updated_html();
+if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
+	function laao_render_event_gallery_context( $image ) {
+		return array(
+			'id'  => $image['id'],
+			'url' => wp_get_attachment_image_url( $image['id'], 'full' ),
+			'alt' => get_post_meta( $image['id'], '_wp_attachment_image_alt', true ),
+		);
 	}
 }
 
@@ -40,6 +31,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-class--active="state.isLightboxActive"
 		data-wp-on--keydown="actions.handleKeydown"
 		data-wp-on-async-window--scroll="actions.handleScroll"
+		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
 		data-wp-bind--hidden="!state.isLightboxActive">
 			<header class="wp-block-laao-event-lightbox-header">
 				<ul class="wp-block-laao-event-lightbox-social">
@@ -91,7 +83,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				</a>
 				<ul class="wp-block-laao-event-lightbox-gallery">
 					<li class="wp-block-laao-event-lightbox-gallery-item gallery-item-current">
-						<img src="https://laartsonline.com/wp-content/uploads/2024/07/thumbnail-8-1.jpg" loading="lazy">
+						<img src="https://laartsonline.com/wp-content/uploads/2024/07/thumbnail-8-1.jpg" loading="lazy" data-wp-bind--style="state.imgStyles">
 					</li>
 				</ul>
 			</section>
@@ -104,9 +96,15 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 }
 
 ?>
+<pre>
+	<?php print_r( $attributes ); ?>
+</pre>
 
 <div class="wp-block-event-gallery columns-10" data-wp-interactive="laao/event-gallery">
 	<?php foreach ( $attributes['images'] as $image ) : ?>
+
+
+
 		<figure class="wp-block-event-gallery-item">
 			<?php
 			echo wp_get_attachment_image(
@@ -115,8 +113,18 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				'',
 				array(
 					'class'             => 'img-responsive',
+					'data-id'           => $image['id'],
 					'data-wp-on--click' => 'actions.showLightbox',
-				)
+					'data-wp-context'   => json_encode(
+						array(
+							'uploadedSrc'   => $image['sizes']['full']['url'],
+							'imgClassNames' => $image['classNames'],
+							'targetWidth'   => $image['sizes']['full']['width'],
+							'targetHeight'  => $image['sizes']['full']['height'],
+							'alt'           => $image['alt'],
+						),
+					),
+				),
 			);
 			?>
 		</figure>
