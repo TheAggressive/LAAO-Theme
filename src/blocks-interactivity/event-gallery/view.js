@@ -5,19 +5,44 @@ import { getContext, getElement, store } from "@wordpress/interactivity";
 
 const { state } = store('laao/event-gallery', {
 	state: {
-		currentImageId: {},
+		currentImageId: null,
 		isLightboxActive: false,
+		get currentImage() {
+			return state.currentImageId;
+		},
+		get getImgStyles() {
+			const { ref } = getElement();
+			return ref.classList.value;
+		},
+		get getParentImgStyles() {
+			const { ref } = getElement();
+			return ref.parentNode.classList.value;
+		},
+		get hasImageLoaded() {
+			return state.imageRef?.complete;
+		}
 	},
 	actions: {
 		showLightbox: () => {
-			const { imageId } = getContext();
-			const { ref } = getElement();
+			const imageId = getContext();
+			const ref = getElement();
 
-			console.log('ref', ref?.complete);
+			state.currentImageId = ref;
+
+			console.log('imgStyles', state.getImgStyles);
+			console.log('parentStyles', state.getParentImgStyles);
+
+			console.log('ref', ref);
+
+			// console.log('refComplete', state.hasImageLoaded);
+			// console.log('refComplete', ref?.children[0].complete);
+
 			console.log('ref.currentSrc', ref.currentSrc);
 
-			state.imageRef = ref?.complete;
-			state.currentSrc = ref.currentSrc;
+			console.log('currentImage', imageId.imageRef?.complete);
+
+			// state.imageRef = ref?.complete;
+			// state.currentSrc = ref.currentSrc;
 
 			console.log('context', imageId);
 

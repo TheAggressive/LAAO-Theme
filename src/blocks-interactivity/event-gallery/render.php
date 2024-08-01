@@ -127,7 +127,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				'thumbnail',
 				'',
 				array(
-					'class'             => 'img-responsive',
+					'class'             => 'wp-block-event-gallery-item-image',
 					'data-id'           => $image['id'],
 					'data-wp-on--click' => 'actions.showLightbox',
 				),
