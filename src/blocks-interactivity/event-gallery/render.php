@@ -127,9 +127,11 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				'thumbnail',
 				'',
 				array(
-					'class'             => 'wp-block-event-gallery-item-image',
-					'data-id'           => $image['id'],
-					'data-wp-on--click' => 'actions.showLightbox',
+					'class'                  => 'wp-block-event-gallery-item-image',
+					'data-id'                => $image['id'],
+					'data-wp-on--click'      => 'actions.showLightbox',
+					'data-wp-on-async--load' => 'callbacks.setOverlayStyles',
+					'data-wp-init'           => 'callbacks.init',
 				),
 			);
 			?>

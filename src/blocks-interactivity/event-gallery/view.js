@@ -3,9 +3,10 @@
  */
 import { getContext, getElement, store } from "@wordpress/interactivity";
 
-const { state } = store('laao/event-gallery', {
+const { state, actions, callbacks } = store('laao/event-gallery', {
 	state: {
-		currentImageId: null,
+		currentImageContext: null,
+		currentImageRef: null,
 		isLightboxActive: false,
 		get currentImage() {
 			return state.currentImageId;
@@ -19,40 +20,23 @@ const { state } = store('laao/event-gallery', {
 			return ref.parentNode.classList.value;
 		},
 		get hasImageLoaded() {
-			return state.imageRef?.complete;
+			return state.currentImageRef?.complete;
 		}
 	},
 	actions: {
+		init: () => {
+
+		},
 		showLightbox: () => {
-			const imageId = getContext();
-			const ref = getElement();
-
-			state.currentImageId = ref;
-
-			console.log('imgStyles', state.getImgStyles);
-			console.log('parentStyles', state.getParentImgStyles);
-
-			console.log('ref', ref);
-
-			// console.log('refComplete', state.hasImageLoaded);
-			// console.log('refComplete', ref?.children[0].complete);
-
-			console.log('ref.currentSrc', ref.currentSrc);
-
-			console.log('currentImage', imageId.imageRef?.complete);
-
-			// state.imageRef = ref?.complete;
-			// state.currentSrc = ref.currentSrc;
-
-			console.log('context', imageId);
+			const imageContext = getContext();
 
 			// Bails out if the image has not loaded yet.
-			if (!state.imageId.imageRef?.complete) {
+			if (!state.currentImageRef?.complete) {
 				return;
 			}
 
 			state.isLightboxActive = true;
-			state.currentImageId = imageId;
+			state.currentImageContext = imageContext
 
 			// Stores the positions of the scroll to fix it until the overlay is
 			// closed.
@@ -95,8 +79,13 @@ const { state } = store('laao/event-gallery', {
 		},
 	},
 	callbacks: {
+		init() {
+			const { ref } = getElement();
+			state.currentImageRef = ref;
+		},
 		setOverlayStyles() {
-			if (!state.currentImage.imageRef) {
+			console.log('loading', !state.currentImageRef);
+			if (!state.currentImageRef) {
 				return;
 			}
 
@@ -105,45 +94,27 @@ const { state } = store('laao/event-gallery', {
 				naturalHeight,
 				offsetWidth: originalWidth,
 				offsetHeight: originalHeight,
-			} = state.currentImage.imageRef;
+			} = state.currentImageRef;
 			let { x: screenPosX, y: screenPosY } =
-				state.currentImage.imageRef.getBoundingClientRect();
+				state.currentImageRef.getBoundingClientRect();
 
 			// Natural ratio of the image clicked to open the lightbox.
 			const naturalRatio = naturalWidth / naturalHeight;
 			// Original ratio of the image clicked to open the lightbox.
 			let originalRatio = originalWidth / originalHeight;
 
-			// If it has object-fit: contain, recalculates the original sizes
-			// and the screen position without the blank spaces.
-			if (state.currentImage.scaleAttr === 'contain') {
-				if (naturalRatio > originalRatio) {
-					const heightWithoutSpace = originalWidth / naturalRatio;
-					// Recalculates screen position without the top space.
-					screenPosY +=
-						(originalHeight - heightWithoutSpace) / 2;
-					originalHeight = heightWithoutSpace;
-				} else {
-					const widthWithoutSpace = originalHeight * naturalRatio;
-					// Recalculates screen position without the left space.
-					screenPosX += (originalWidth - widthWithoutSpace) / 2;
-					originalWidth = widthWithoutSpace;
-				}
-			}
-			originalRatio = originalWidth / originalHeight;
-
 			// Typically, it uses the image's full-sized dimensions. If those
 			// dimensions have not been set (i.e. an external image with only one
 			// size), the image's dimensions in the lightbox are the same
 			// as those of the image in the content.
 			let imgMaxWidth = parseFloat(
-				state.currentImage.targetWidth !== 'none'
-					? state.currentImage.targetWidth
+				state.currentImageContext.targetWidth !== 'none'
+					? state.currentImageContext.targetWidth
 					: naturalWidth
 			);
 			let imgMaxHeight = parseFloat(
-				state.currentImage.targetHeight !== 'none'
-					? state.currentImage.targetHeight
+				state.currentImageContext.targetHeight !== 'none'
+					? state.currentImageContext.targetHeight
 					: naturalHeight
 			);
 
