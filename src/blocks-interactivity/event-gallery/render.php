@@ -15,29 +15,15 @@ $context = array( 'images' => $attributes['images'] );
 
 if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
 	function laao_render_event_gallery_context( $image, $key ) {
-		$unique_image_id = uniqid();
+		$context = array(
 
-		print_r( $unique_image_id );
-
-		wp_interactivity_state(
-			'laao/event-gallery',
-			array(
-				'metadata' => array(
-					$unique_image_id => array(
-						'uploadedSrc'      => $image['sizes']['full']['url'],
-						'figureClassNames' => 'wp-block-event-gallery-item',
-						'targetWidth'      => $image['sizes']['full']['width'],
-						'targetHeight'     => $image['sizes']['full']['height'],
-						'scaleAttr'        => $block['attrs']['scale'] ?? false,
-						'alt'              => $image['sizes']['full']['alt'] ?? 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
-					),
-				),
-			)
+			'uploadedSrc'  => $image['sizes']['full']['url'],
+			'targetWidth'  => $image['sizes']['full']['width'],
+			'targetHeight' => $image['sizes']['full']['height'],
+			'alt'          => $image['alt'] ? $image['alt'] : 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
 		);
 
-		print_r( $unique_image_id );
-
-		return $unique_image_id;
+		return $context;
 	}
 }
 
@@ -51,7 +37,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-on-async-window--scroll="actions.handleScroll"
 		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
 		data-wp-bind--hidden="!state.isLightboxActive">
-		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox"></div>
+		<!-- <div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div> -->
 			<header class="wp-block-laao-event-lightbox-header">
 				<ul class="wp-block-laao-event-lightbox-social">
 					<li class="wp-block-laao-event-lightbox-social-item">
@@ -89,22 +75,29 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					</svg>
 				</button>
 			</header>
-			<div class="wp-block-laao-event-lightbox-container">
-				<!-- <a class="wp-block-laao-event-lightbox-next-link" href="#" aria-label="Next Image">
+			<div class="wp-block-laao-event-lightbox-content">
+				<button class="wp-block-laao-event-lightbox-next" href="#" aria-label="Next Image">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.436 407.436">
 						<polygon points="112.814,0 91.566,21.178 273.512,203.718 91.566,386.258 112.814,407.436 315.869,203.718"></polygon>
 					</svg>
-				</a>
-				<a class="wp-block-laao-event-lightbox-previous-link" href="#" aria-label="Previous Image">
+				</button>
+				<button class="wp-block-laao-event-lightbox-previous" href="#" aria-label="Previous Image">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404.258 404.258">
 						<polygon points="289.927,18 265.927,0 114.331,202.129 265.927,404.258 289.927,386.258 151.831,202.129 "></polygon>
 					</svg>
-				</a> -->
-				<figure class="wp-block-laao-event-lightbox-gallery-item">
-					<img src="https://laartsonline.com/wp-content/uploads/2024/07/thumbnail-8-1.jpg" loading="lazy" data-wp-bind--style="state.imgStyles">
-				</figure>
+				</button>
+				<div class="wp-block-laao-event-lightbox-image-container" hidden>
+					<figure data-wp-bind--class="state.figureStyles" data-wp-bind--style="state.figureStyles">
+						<img data-wp-bind--alt="state.currentImageContext.alt" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgStyles" data-wp-bind--src="state.currentImageRef.currentSrc">
+					</figure>
+				</div>
+				<div class="wp-block-laao-event-lightbox-image-container">
+					<figure  data-wp-bind--class="state.figureStyles" data-wp-bind--style="state.figureStyles">
+						<img data-wp-bind--src="state.currentImageContext.uploadedSrc"  data-wp-bind--style="state.imgStyles" loading="lazy">
+					</figure>
+				</div>
 			</div>
-			<style data-wp-text="state.overlayStyles"></style>
+			<style data-wp-text="state.overlayStyles" ></style>
 		</div>
 		HTML;
 	}
@@ -117,36 +110,16 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 <div class="wp-block-event-gallery columns-10">
 	<?php foreach ( $attributes['images'] as $key => $image ) : ?>
 
-		<figure class="wp-block-event-gallery-item"
+		<figure data-wp-key="<?php echo esc_attr( $image['id'] ); ?>" class="wp-block-event-gallery-item"
 			data-wp-interactive="laao/event-gallery"
-			data-wp-context="
 			<?php
-			$unique_image_id = uniqid();
-			wp_interactivity_state(
-				'laao/event-gallery',
-				array(
-					'metadata' => array(
-						$unique_image_id => array(
-							'uploadedSrc'      => $image['sizes']['full']['url'],
-							'figureClassNames' => 'wp-block-event-gallery-item',
-							'targetWidth'      => $image['sizes']['full']['width'],
-							'targetHeight'     => $image['sizes']['full']['height'],
-							'scaleAttr'        => '',
-							'alt'              => $image['sizes']['full']['alt'] ?? 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
-						),
-					),
+			echo wp_kses_data(
+				wp_interactivity_data_wp_context(
+					laao_render_event_gallery_context( $image, $key ),
 				)
 			);
-
-
-				wp_json_encode(
-					array(
-						'imageId' => $unique_image_id,
-					),
-					JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
-				);
 			?>
-		">
+			>
 			<?php
 			echo wp_get_attachment_image(
 				$image['id'],

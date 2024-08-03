@@ -8,39 +8,41 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		currentImageContext: null,
 		currentImageRef: null,
 		isLightboxActive: false,
+		figureClassNames: null,
+		imgClassNames: null,
 		get currentImage() {
 			return state.currentImageId;
 		},
-		get getImgStyles() {
+		get getImgClassNames() {
 			const { ref } = getElement();
 			return ref.classList.value;
 		},
-		get getParentImgStyles() {
+		get getFigureClassNames() {
 			const { ref } = getElement();
 			return ref.parentNode.classList.value;
 		},
 		get hasImageLoaded() {
 			return state.currentImageRef?.complete;
-		}
+		},
 	},
 	actions: {
-		init: () => {
-
-		},
 		showLightbox: () => {
-			// const imageContext = getContext();
+			const context = getContext();
+			const { ref } = getElement();
 
-			const { imageId } = getContext();
+			state.currentImageRef = ref;
 
-			console.log('showLightbox', imageId);
+			console.log('ref', state.getParentImgStyles);
 
 			// Bails out if the image has not loaded yet.
 			if (!state.currentImageRef?.complete) {
 				return;
 			}
 
+			state.currentImageContext = context
+			state.figureClassNames = state.getFigureClassNames;
+			state.imgClassNames = state.getImgClassNames;
 			state.isLightboxActive = true;
-			state.currentImageContext = imageContext
 
 			// Stores the positions of the scroll to fix it until the overlay is
 			// closed.
@@ -48,11 +50,14 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.scrollLeftReset = document.documentElement.scrollLeft;
 
 			callbacks.setOverlayStyles();
-
 		},
 		hideLightbox: () => {
 			const context = getContext();
 			state.isLightboxActive = false;
+			state.currentImageContext = null;
+			state.currentImageRef = null;
+			state.figureClassNames = null;
+			state.imgClassNames = null;
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
@@ -85,14 +90,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 	callbacks: {
 		init() {
 			const { ref } = getElement();
-			state.currentImageRef = ref;
+			// state.currentImageRef = ref;
+			// console.log('init', ref.getBoundingClientRect());
 		},
 		setOverlayStyles() {
 			if (!state.currentImageRef) {
 				return;
 			}
-
-			console.log('setOverlayStyles', state.currentImageRef.getBoundingClientRect());
 
 			let {
 				naturalWidth,
@@ -235,6 +239,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				--wp--lightbox-scale: ${containerScale};
 				--wp--lightbox-scrollbar-width: ${window.innerWidth - document.documentElement.clientWidth
 				}px;
+				--wp--lightbox-image-initial-width: ${originalWidth}px;
+				--wp--lightbox-image-initial-height: ${originalHeight}px;
 			}
 		`;
 		},
