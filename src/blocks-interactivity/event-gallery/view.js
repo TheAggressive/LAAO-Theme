@@ -28,7 +28,11 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 		},
 		showLightbox: () => {
-			const imageContext = getContext();
+			// const imageContext = getContext();
+
+			const { imageId } = getContext();
+
+			console.log('showLightbox', imageId);
 
 			// Bails out if the image has not loaded yet.
 			if (!state.currentImageRef?.complete) {
@@ -84,10 +88,11 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.currentImageRef = ref;
 		},
 		setOverlayStyles() {
-			console.log('loading', !state.currentImageRef);
 			if (!state.currentImageRef) {
 				return;
 			}
+
+			console.log('setOverlayStyles', state.currentImageRef.getBoundingClientRect());
 
 			let {
 				naturalWidth,

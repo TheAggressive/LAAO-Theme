@@ -39,10 +39,10 @@
 		"extends @wordpress/browserslist-config"
 	],
 	"dependencies": {
-		"@wordpress/scripts": "^28.3.0",
+		"@wordpress/scripts": "^28.4.0",
 		"gsap": "^3.12.5",
-		"isomorphic-dompurify": "^2.13.0",
-		"lenis": "^1.1.6"
+		"isomorphic-dompurify": "^2.14.0",
+		"lenis": "^1.1.9"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.7",
@@ -80,9 +80,9 @@
 		"@wordpress/prettier-config": "^4.4.0",
 		"@wordpress/primitives": "^4.4.0",
 		"@wordpress/server-side-render": "^5.4.0",
-		"autoprefixer": "^10.4.19",
+		"autoprefixer": "^10.4.20",
 		"browser-sync-webpack-plugin": "^2.3.0",
-		"browserslist": "^4.23.2",
+		"browserslist": "^4.23.3",
 		"concurrently": "^8.2.2",
 		"copy-webpack-plugin": "^12.0.2",
 		"cssnano": "^7.0.4",
@@ -97,7 +97,7 @@
 		"postcss-simple-vars": "^7.0.1",
 		"prettier": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.5",
-		"stylelint": "^16.7.0",
+		"stylelint": "^16.8.1",
 		"stylelint-config-standard": "^36.0.1",
 		"stylelint-config-standard-scss": "^13.1.0",
 		"tailwindcss": "^3.4.7",

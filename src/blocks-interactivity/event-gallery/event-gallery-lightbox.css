@@ -28,7 +28,7 @@
 }
 
 .wp-block-laao-event-lightbox-overlay {
-	@apply fixed inset-0 -z-10 bg-black/85 backdrop-blur-sm;
+	@apply fixed inset-0 -z-10 h-screen w-full cursor-zoom-out overflow-hidden bg-black/85 backdrop-blur-sm;
 
 	&.active {
 		@apply animate-[turn-on-visibility_300ms];
@@ -37,7 +37,13 @@
 
 /* Event Gallery Block Lighbox */
 .wp-block-laao-event-lightbox {
-	@apply fixed inset-0 z-[9999] grid h-screen grid-rows-[8vh_1fr];
+	@apply fixed inset-0 z-[9999];
+
+	&.zoom {
+		.wp-block-laao-event-lightbox-container {
+			@apply animate-[lightbox-zoom-in_300ms];
+		}
+	}
 
 	button.wp-block-laao-event-lightbox-close {
 		@apply mr-4 flex items-center text-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
@@ -103,30 +109,26 @@
 	}
 }
 
-.wp-block-laao-event-lightbox-content {
-	@apply relative flex w-screen items-center justify-center;
+.wp-block-laao-event-lightbox-container {
+	/* @apply; */
 
-	.wp-block-laao-event-lightbox-gallery {
-		@apply relative flex w-screen list-none items-center justify-center pl-0;
+	& .wp-block-laao-event-lightbox-gallery-item {
+		@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-container-height] w-[--wp--lightbox-container-width] origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
 
-		.wp-block-laao-event-lightbox-gallery-item {
-			@apply fixed left-0 right-0 flex w-screen items-center justify-center transition-all duration-300 ease-in-out;
-
-			img {
-				@apply max-h-[80vh] max-w-[100vw] shadow-lg;
-			}
+		& img {
+			@apply min-h-[--wp--lightbox-image-height] min-w-[--wp--lightbox-image-width] object-contain;
 		}
+	}
 
-		.gallery-item-previous {
-			@apply translate-x-[-100vw];
-		}
+	.gallery-item-previous {
+		@apply translate-x-[-100vw];
+	}
 
-		.gallery-item-next {
-			@apply translate-x-[100vw];
-		}
+	.gallery-item-next {
+		@apply translate-x-[100vw];
+	}
 
-		.gallery-item-current {
-			@apply translate-x-0;
-		}
+	.gallery-item-current {
+		@apply translate-x-0;
 	}
 }
