@@ -149,7 +149,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					}
 				} else {
 					// If the height is reached before the width, it keeps the maxHeight
-					// and recalculate the width unlesss the difference between the
+					// and recalculate the width unless the difference between the
 					// maxWidth and the reducedWidth is higher than the maxHeight, where
 					// it keeps the reducedWidth and recalculate the height.
 					const reducedWidth = imgMaxHeight * naturalRatio;
