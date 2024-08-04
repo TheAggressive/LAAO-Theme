@@ -21,6 +21,7 @@ if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
 			'targetWidth'  => $image['sizes']['full']['width'],
 			'targetHeight' => $image['sizes']['full']['height'],
 			'alt'          => $image['alt'] ? $image['alt'] : 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
+			'scaleAttr'    => false,
 		);
 
 		return $context;
@@ -37,7 +38,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-on-async-window--scroll="actions.handleScroll"
 		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
 		data-wp-bind--hidden="!state.isLightboxActive">
-		<!-- <div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div> -->
+		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div>
 			<header class="wp-block-laao-event-lightbox-header">
 				<ul class="wp-block-laao-event-lightbox-social">
 					<li class="wp-block-laao-event-lightbox-social-item">
@@ -87,13 +88,13 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					</svg>
 				</button>
 				<div class="wp-block-laao-event-lightbox-image-container" hidden>
-					<figure data-wp-bind--class="state.figureStyles" data-wp-bind--style="state.figureStyles">
-						<img data-wp-bind--alt="state.currentImageContext.alt" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgStyles" data-wp-bind--src="state.currentImageRef.currentSrc">
+					<figure data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
+						<img data-wp-bind--alt="state.currentImageContext.alt" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" data-wp-bind--src="state.currentImageRef.currentSrc">
 					</figure>
 				</div>
 				<div class="wp-block-laao-event-lightbox-image-container">
-					<figure  data-wp-bind--class="state.figureStyles" data-wp-bind--style="state.figureStyles">
-						<img data-wp-bind--src="state.currentImageContext.uploadedSrc"  data-wp-bind--style="state.imgStyles" loading="lazy">
+					<figure  data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
+						<img data-wp-bind--src="state.currentImageContext.uploadedSrc" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" loading="lazy">
 					</figure>
 				</div>
 			</div>
@@ -107,34 +108,42 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 ?>
 
-<div class="wp-block-event-gallery columns-10">
-	<?php foreach ( $attributes['images'] as $key => $image ) : ?>
+<div class="wp-block-event-gallery">
+	<?php
+	foreach ( array_chunk( $attributes['images'], 2, true ) as $images ) :
+		?>
+		<div class="wp-block-event-gallery-row">
+			<?php
+			foreach ( $images as $key => $image ) :
+				?>
+			<figure data-wp-key="<?php echo esc_attr( $image['id'] ); ?>" class="wp-block-event-gallery-item"
+				data-wp-interactive="laao/event-gallery"
+				<?php
+				echo wp_kses_data(
+					wp_interactivity_data_wp_context(
+						laao_render_event_gallery_context( $image, $key ),
+					)
+				);
+				?>
+				>
+				<?php
+				echo wp_get_attachment_image(
+					$image['id'],
+					'large',
+					'',
+					array(
+						'class'                   => 'wp-block-event-gallery-item-image',
+						'data-id'                 => $image['id'],
+						'data-wp-key'             => $image['id'],
+						'data-wp-on-async--click' => 'actions.showLightbox',
+						'data-wp-on-async--load'  => 'callbacks.setOverlayStyles',
+						'data-wp-init'            => 'callbacks.init',
+					),
+				);
+				?>
 
-		<figure data-wp-key="<?php echo esc_attr( $image['id'] ); ?>" class="wp-block-event-gallery-item"
-			data-wp-interactive="laao/event-gallery"
-			<?php
-			echo wp_kses_data(
-				wp_interactivity_data_wp_context(
-					laao_render_event_gallery_context( $image, $key ),
-				)
-			);
-			?>
-			>
-			<?php
-			echo wp_get_attachment_image(
-				$image['id'],
-				'thumbnail',
-				'',
-				array(
-					'class'                   => 'wp-block-event-gallery-item-image',
-					'data-id'                 => $image['id'],
-					'data-wp-key'             => $image['id'],
-					'data-wp-on-async--click' => 'actions.showLightbox',
-					'data-wp-on-async--load'  => 'callbacks.setOverlayStyles',
-					'data-wp-init'            => 'callbacks.init',
-				),
-			);
-			?>
-		</figure>
+			</figure>
+			<?php endforeach; ?>
+		</div>
 	<?php endforeach; ?>
 </div>

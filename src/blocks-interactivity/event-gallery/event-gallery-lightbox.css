@@ -113,7 +113,7 @@
 }
 
 .wp-block-laao-event-lightbox-header {
-	@apply relative z-[20] flex max-w-[100vw] justify-between bg-black/70 px-4;
+	@apply relative z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
 
 	.wp-block-laao-event-lightbox-social {
 		@apply -mr-8 flex h-full list-none place-content-center items-center p-0;
@@ -130,13 +130,11 @@
 
 & .zoom {
 	.wp-block-laao-event-lightbox-content {
-		@apply z-10;
-
 		.wp-block-laao-event-lightbox-image-container {
-			@apply absolute left-[50%] top-[50%] origin-top-left -translate-x-1/2 -translate-y-1/2 animate-[lightbox-zoom-in_600ms] overflow-hidden;
+			@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-container-height] w-[--wp--lightbox-container-width] origin-top-left -translate-x-1/2 -translate-y-1/2 animate-[lightbox-zoom-in_600ms] overflow-hidden;
 
 			& img {
-				@apply h-full w-full object-contain;
+				@apply h-full min-w-full object-contain object-center;
 			}
 		}
 	}

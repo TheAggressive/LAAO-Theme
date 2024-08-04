@@ -1,13 +1,19 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-event-gallery {
-	@apply grid gap-2 md:gap-6;
-
-	&.columns-10 {
-		@apply grid-cols-2 md:grid-cols-5 lg:grid-cols-10;
-	}
+	@apply grid break-inside-avoid grid-cols-2 gap-6 md:grid-cols-5;
 }
 
 .wp-block-event-gallery-item {
-	@apply m-0 w-auto rounded-md;
+	figure {
+		@apply relative overflow-hidden;
+	}
+
+	& img {
+		@apply min-h-full w-full object-cover object-center;
+	}
+}
+
+.wp-block-event-gallery-row {
+	@apply grid gap-6;
 }

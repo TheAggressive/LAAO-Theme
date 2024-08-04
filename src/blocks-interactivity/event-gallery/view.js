@@ -216,12 +216,17 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				containerWidth = containerHeight * originalRatio;
 			}
 
+
+			console.log('containerWidth', containerWidth);
+			console.log('containerHeight', originalWidth);
+
 			const containerScale = originalWidth / containerWidth;
 			const lightboxImgWidth =
 				imgMaxWidth * (containerWidth / containerMaxWidth);
 			const lightboxImgHeight =
 				imgMaxHeight * (containerHeight / containerMaxHeight);
 
+			console.log('containerscale', containerScale);
 			// As of this writing, using the calculations above will render the
 			// lightbox with a small, erroneous whitespace on the left side of the
 			// image in iOS Safari, perhaps due to an inconsistency in how browsers
