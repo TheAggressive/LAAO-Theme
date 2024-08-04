@@ -8,3 +8,5 @@
 @custom-media --bp-lg-max not all and (min-width: 1024px);
 @custom-media --bp-xl-max not all and (min-width: 1280px);
 @custom-media --bp-2xl-max not all and (min-width: 1536px);
+@custom-media --motion-reduce (prefers-reduced-motion: reduce);
+@custom-media --motion-reduce-no-preference (prefers-reduced-motion: no-preference);

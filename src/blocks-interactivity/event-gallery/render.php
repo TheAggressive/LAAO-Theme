@@ -31,7 +31,7 @@ if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
 if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 	function laao_render_event_gallery_lightbox() {
 		echo <<<HTML
-		<div class="wp-block-laao-event-lightbox zoom"
+		<div class="wp-block-laao-event-lightbox"
 		data-wp-interactive="laao/event-gallery"
 		data-wp-class--active="state.isLightboxActive"
 		data-wp-on--keydown="actions.handleKeydown"
@@ -87,18 +87,13 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 						<polygon points="289.927,18 265.927,0 114.331,202.129 265.927,404.258 289.927,386.258 151.831,202.129 "></polygon>
 					</svg>
 				</button>
-				<div class="wp-block-laao-event-lightbox-image-container" hidden>
-					<figure data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
-						<img data-wp-bind--alt="state.currentImageContext.alt" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" data-wp-bind--src="state.currentImageRef.currentSrc">
-					</figure>
-				</div>
 				<div class="wp-block-laao-event-lightbox-image-container">
 					<figure  data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
 						<img data-wp-bind--src="state.currentImageContext.uploadedSrc" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" loading="lazy">
 					</figure>
 				</div>
 			</div>
-			<style data-wp-text="state.overlayStyles" ></style>
+			<style data-wp-text="state.overlayStyles"></style>
 		</div>
 		HTML;
 	}
@@ -133,6 +128,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					'',
 					array(
 						'class'                   => 'wp-block-event-gallery-item-image',
+						'loading'                 => 'lazy',
 						'data-id'                 => $image['id'],
 						'data-wp-key'             => $image['id'],
 						'data-wp-on-async--click' => 'actions.showLightbox',
@@ -141,7 +137,6 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					),
 				);
 				?>
-
 			</figure>
 			<?php endforeach; ?>
 		</div>
