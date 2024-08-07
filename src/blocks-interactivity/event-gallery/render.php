@@ -103,7 +103,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 ?>
 
-<div class="wp-block-event-gallery">
+<div class="wp-block-event-gallery has-event-gallery-images-<?php echo count( $attributes['images'] ); ?>">
 	<?php
 	foreach ( array_chunk( $attributes['images'], 1, true ) as $images ) :
 		?>
