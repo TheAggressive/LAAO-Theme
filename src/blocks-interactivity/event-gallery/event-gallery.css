@@ -1,19 +1,36 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-event-gallery {
-	@apply grid break-inside-avoid grid-cols-2 gap-6 md:grid-cols-5;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 10px;
+	box-sizing: border-box;
 }
 
 .wp-block-event-gallery-item {
-	figure {
-		@apply relative overflow-hidden;
-	}
-
 	& img {
-		@apply min-h-full w-full object-cover object-center;
+		width: 100%;
+		height: 100%;
+		break-inside: avoid; /* Prevents images from breaking across columns */
+		object-position: center; /* Ensures images are centered */
+		object-fit: cover; /* Ensures images cover the item box */
+		display: block;
 	}
 }
 
-.wp-block-event-gallery-row {
-	@apply grid gap-6;
+.wp-block-event-gallery-item:nth-child(odd) {
+	grid-row: span 2 / span 2;
+}
+
+.wp-block-event-gallery-item:nth-last-child(3) {
+	grid-row: span 2 / span 2;
+	border: 5px solid red;
+}
+
+.wp-block-event-gallery-item:nth-last-child(2) {
+	@media (--bp-2xl) {
+		border: 5px solid green;
+
+		/* max-height: 95%; */
+	}
 }

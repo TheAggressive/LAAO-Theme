@@ -105,9 +105,8 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 <div class="wp-block-event-gallery">
 	<?php
-	foreach ( array_chunk( $attributes['images'], 2, true ) as $images ) :
+	foreach ( array_chunk( $attributes['images'], 1, true ) as $images ) :
 		?>
-		<div class="wp-block-event-gallery-row">
 			<?php
 			foreach ( $images as $key => $image ) :
 				?>
@@ -139,6 +138,5 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				?>
 			</figure>
 			<?php endforeach; ?>
-		</div>
 	<?php endforeach; ?>
 </div>

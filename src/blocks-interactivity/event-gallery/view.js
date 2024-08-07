@@ -50,7 +50,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			callbacks.setOverlayStyles();
 		},
 		hideLightbox: () => {
-			const context = getContext();
 			state.isLightboxActive = false;
 			state.currentImageContext = null;
 			state.currentImageRef = null;
