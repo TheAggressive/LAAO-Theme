@@ -91,13 +91,13 @@
 		@apply w-full;
 
 		.wp-block-laao-event-lightbox-image-container {
-			@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-container-height] w-[--wp--lightbox-container-width] max-w-full origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden border-4 border-solid border-red-400;
+			@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-image-initial-height] w-[--wp--lightbox-image-initial-width] max-w-full origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
 
 			& .wp-block-event-gallery-item {
 				@apply relative flex h-full w-full;
 
 				& img {
-					@apply h-[--wp--lightbox-image-height] min-h-[--wp--lightbox-image-height] w-[--wp--lightbox-image-width] min-w-[--wp--lightbox-image-width];
+					@apply min-h-[--wp--lightbox-image-height] min-w-[--wp--lightbox-image-width];
 				}
 			}
 		}
@@ -115,10 +115,17 @@
 				calc(-50vh + var(--wp--lightbox-initial-top-position))
 			)
 			scale(var(--wp--lightbox-scale));
+		width: var(--wp--lightbox-image-width);
+		height: var(--wp--lightbox-image-height);
+	}
+
+	90% {
+		transform: translate(-50%, -50%) scale(1, 1);
 	}
 
 	100% {
-		transform: translate(-50%, -50%) scale(1, 1);
+		height: var(--wp--lightbox-image-initial-height);
+		width: var(--wp--lightbox-image-initial-width);
 	}
 }
 
