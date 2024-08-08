@@ -91,7 +91,7 @@
 		@apply w-full;
 
 		.wp-block-laao-event-lightbox-image-container {
-			@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-image-initial-height] w-[--wp--lightbox-image-initial-width] max-w-full origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
+			@apply absolute left-[50%] top-[50%] h-[--wp--lightbox-image-natural-height] w-[--wp--lightbox-image-natural-width] max-w-full origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
 
 			& .wp-block-event-gallery-item {
 				@apply relative flex h-full w-full;
@@ -124,8 +124,8 @@
 	}
 
 	100% {
-		height: var(--wp--lightbox-image-initial-height);
-		width: var(--wp--lightbox-image-initial-width);
+		height: var(--wp--lightbox-image-natural-height);
+		width: var(--wp--lightbox-image-natural-width);
 	}
 }
 

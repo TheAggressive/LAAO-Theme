@@ -104,8 +104,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			let { x: screenPosX, y: screenPosY } =
 				state.currentImageRef.getBoundingClientRect();
 
-			console.log('naturalWidth', originalWidth, 'naturalHeight', originalHeight);
-
 			// Natural ratio of the image clicked to open the lightbox.
 			const naturalRatio = naturalWidth / naturalHeight;
 			// Original ratio of the image clicked to open the lightbox.
@@ -215,15 +213,11 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				containerWidth = containerHeight * originalRatio;
 			}
 
-			console.log('containerWidth', containerWidth, 'containerHeight', containerHeight);
-
 			const containerScale = originalWidth / containerWidth;
 			const lightboxImgWidth =
 				imgMaxWidth * (containerWidth / containerMaxWidth);
 			const lightboxImgHeight =
 				imgMaxHeight * (containerHeight / containerMaxHeight);
-
-			console.log('lightboxImgWidth', lightboxImgWidth, 'lightboxImgHeight', lightboxImgHeight);
 
 			// As of this writing, using the calculations above will render the
 			// lightbox with a small, erroneous whitespace on the left side of the
@@ -242,8 +236,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				--wp--lightbox-scale: ${containerScale};
 				--wp--lightbox-scrollbar-width: ${window.innerWidth - document.documentElement.clientWidth
 				}px;
-				--wp--lightbox-image-initial-width: ${naturalWidth}px;
-				--wp--lightbox-image-initial-height: ${naturalHeight}px;
+				--wp--lightbox-image-natural-width: ${naturalWidth}px;
+				--wp--lightbox-image-natural-height: ${naturalHeight}px;
 			}
 		`;
 		},
