@@ -1,8 +1,8 @@
 .site-nav {
-	@apply absolute top-0 right-0 z-20 w-full h-screen translate-x-full;
+	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-[var(--wp--preset--color--laao-black)];
 
 	@media (--bp-lg) {
-		@apply relative translate-x-0 -top-16;
+		@apply relative -top-16 translate-x-0;
 	}
 
 	/* Site Search */
@@ -11,7 +11,7 @@
 			@apply relative p-0;
 
 			button {
-				@apply absolute top-1 right-0 p-4 border-none;
+				@apply absolute right-0 top-1 border-none p-4;
 
 				& svg {
 					@apply fill-[var(--wp--preset--color--laao-gray)];
@@ -20,18 +20,18 @@
 		}
 
 		.wp-block-search__input {
-			@apply py-5 pl-4 pr-14 outline-none bg-[var(--wp--preset--color--laao-light-gray)] w-full;
+			@apply w-full bg-[var(--wp--preset--color--laao-light-gray)] py-5 pl-4 pr-14 outline-none;
 		}
 	}
 
 	/* Site Nav Menu */
 	.wp-block-navigation,
 	.wp-block-navigation__container {
-		@apply w-full h-screen mt-0;
+		@apply mt-0 w-full;
 
 		.wp-block-navigation-link {
 			@media (--bp-md) {
-				@apply text-[var(--wp--preset--color--laao-white)] hover:text-[var(--wp--preset--color--laao-red)] transition-all;
+				@apply text-[var(--wp--preset--color--laao-white)] transition-all hover:text-[var(--wp--preset--color--laao-red)];
 			}
 		}
 	}

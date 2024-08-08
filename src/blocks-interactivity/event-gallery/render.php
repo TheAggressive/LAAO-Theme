@@ -88,9 +88,9 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					</svg>
 				</button>
 				<div class="wp-block-laao-event-lightbox-image-container">
-					<!-- <figure  data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
+					<figure  data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
 						<img data-wp-bind--src="state.currentImageContext.uploadedSrc" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" loading="lazy">
-					</figure> -->
+					</figure>
 				</div>
 			</div>
 			<style data-wp-text="state.overlayStyles"></style>
