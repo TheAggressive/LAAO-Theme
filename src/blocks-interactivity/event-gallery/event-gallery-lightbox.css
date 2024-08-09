@@ -70,7 +70,7 @@
 		@apply absolute top-[1.875rem] z-20 flex h-[100vh] w-[10vw] items-center justify-center fill-[--wp--preset--color--laao-red] text-[--wp--preset--color--laao-white];
 
 		svg {
-			@apply h-8 w-8 rounded-full bg-black/70 fill-current drop-shadow-[2px_2px_6px_rgba(0,0,0,100%)] transition-all duration-300 ease-in-out;
+			@apply h-4 w-4 fill-current drop-shadow-[2px_2px_6px_rgba(0,0,0,100%)] transition-all duration-300 ease-in-out;
 		}
 
 		&:hover svg,
