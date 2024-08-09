@@ -17,7 +17,7 @@ responsive.add('(min-width: 1024px)', () => {
 			toggleActions: 'play reverse play reverse',
 			scrub: false,
 			pin: true,
-			markers: true,
+			markers: false,
 		},
 		onComplete: () => {
 			gsap.set('.site-footer', { marginTop: '-64px' });
