@@ -278,8 +278,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// Moves the focus to the dialog when it opens.
 				const { ref } = getElement();
 
-				console.log('setOverlayFocus', ref);
-				ref.focus();
+				ref.focus({ preventScroll: true });
 			}
 		},
 	},
