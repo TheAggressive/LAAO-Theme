@@ -37,10 +37,11 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-bind--aria-label="state.currentImage.ariaLabel"
 		data-wp-bind--aria-modal="state.isAriaModal"
 		data-wp-class--active="state.isLightboxActive"
+		data-wp-class--closing="state.isLightboxClosing"
 		data-wp-on--keydown="actions.handleKeydown"
 		data-wp-on-async-window--scroll="actions.handleScroll"
 		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
-		data-wp-bind--hidden="!state.isLightboxActive">
+		>
 		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div>
 			<header class="wp-block-laao-event-lightbox-header">
 				<ul class="wp-block-laao-event-lightbox-social">

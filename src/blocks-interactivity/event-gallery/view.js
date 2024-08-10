@@ -8,6 +8,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		currentImageContext: null,
 		currentImageRef: null,
 		isLightboxActive: false,
+		isLightboxClosing: false,
 		figureClassNames: null,
 		imgClassNames: null,
 		get currentImage() {
@@ -59,7 +60,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			if (state.isLightboxActive) {
 				// Starts the overlay closing animation. The showClosingAnimation
 				// class is used to avoid showing it on page load.
-				state.showClosingAnimation = true;
+				state.isLightboxClosing = true;
 				state.isLightboxActive = false;
 
 				// Waits until the close animation has completed before allowing a
@@ -80,12 +81,14 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					state.currentImageContext = null;
 					state.currentImageRef = null;
 					state.imgClassNames = null;
-				}, 450);
+					state.isLightboxClosing = false;
+				}, 800);
+
 			}
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
-				state.isLightboxActive = false;
+				actions.hideLightbox();
 			}
 		},
 		handleScroll(event) {
