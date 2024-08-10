@@ -85,7 +85,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					state.currentImageRef = null;
 					state.imgClassNames = null;
 					state.isLightboxClosing = false;
-				}, 600);
+				}, 500);
 
 			}
 		},
@@ -274,9 +274,11 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		`;
 		},
 		setOverlayFocus() {
-			if (state.overlayEnabled) {
+			if (state.isLightboxActive) {
 				// Moves the focus to the dialog when it opens.
 				const { ref } = getElement();
+
+				console.log('setOverlayFocus', ref);
 				ref.focus();
 			}
 		},
