@@ -5,11 +5,11 @@
 
 	@media (--motion-reduce-no-preference) {
 		&.active {
-			@apply animate-[turn-on-visibility_300ms_ease-in-out];
+			@apply animate-[turn-on-visibility_450ms_ease-in-out];
 		}
 
 		&.closing {
-			@apply animate-[turn-off-visibility_300ms_ease-in-out];
+			@apply animate-[turn-off-visibility_450ms_ease-in-out];
 		}
 	}
 }
@@ -18,12 +18,16 @@
 .wp-block-laao-event-lightbox {
 	@apply invisible fixed inset-0 z-[9999] w-screen;
 
+	&:focus {
+		@apply outline-red-500;
+	}
+
 	&.active {
 		@apply visible;
 
 		@media (--motion-reduce-no-preference) {
 			.wp-block-laao-event-lightbox-image-container {
-				@apply animate-[lightbox-zoom-in_300ms_ease-in-out];
+				@apply animate-[lightbox-zoom-in_450ms_ease-in-out];
 			}
 		}
 	}
