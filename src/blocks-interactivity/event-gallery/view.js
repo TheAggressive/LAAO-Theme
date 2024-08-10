@@ -82,7 +82,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					state.currentImageRef = null;
 					state.imgClassNames = null;
 					state.isLightboxClosing = false;
-				}, 800);
+				}, 600);
 
 			}
 		},

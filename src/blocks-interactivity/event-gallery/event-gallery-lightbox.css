@@ -5,7 +5,7 @@
 
 	@media (--motion-reduce-no-preference) {
 		&.active {
-			@apply animate-[turn-on-visibility_800ms];
+			@apply animate-[turn-on-visibility_600ms];
 		}
 	}
 }
@@ -19,14 +19,14 @@
 
 		@media (--motion-reduce-no-preference) {
 			.wp-block-laao-event-lightbox-image-container {
-				@apply animate-[lightbox-zoom-in_800ms];
+				@apply animate-[lightbox-zoom-in_600ms];
 			}
 		}
 	}
 
 	&.closing {
 		.wp-block-laao-event-lightbox-image-container {
-			@apply animate-[lightbox-zoom-out_800ms];
+			@apply animate-[lightbox-zoom-out_600ms];
 		}
 	}
 
