@@ -44,17 +44,20 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				return;
 			}
 
-			state.currentImageContext = context
-			state.figureClassNames = state.getFigureClassNames;
-			state.imgClassNames = state.getImgClassNames;
-			state.isLightboxActive = true;
+			if (state.isLightboxClosing === false) {
 
-			// Stores the positions of the scroll to fix it until the overlay is
-			// closed.
-			state.scrollTopReset = document.documentElement.scrollTop;
-			state.scrollLeftReset = document.documentElement.scrollLeft;
+				state.currentImageContext = context
+				state.figureClassNames = state.getFigureClassNames;
+				state.imgClassNames = state.getImgClassNames;
+				state.isLightboxActive = true;
 
-			callbacks.setOverlayStyles();
+				// Stores the positions of the scroll to fix it until the overlay is
+				// closed.
+				state.scrollTopReset = document.documentElement.scrollTop;
+				state.scrollLeftReset = document.documentElement.scrollLeft;
+
+				callbacks.setOverlayStyles();
+			}
 		},
 		hideLightbox: () => {
 			if (state.isLightboxActive) {
