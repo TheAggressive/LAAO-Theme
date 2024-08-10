@@ -24,6 +24,12 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		get hasImageLoaded() {
 			return state.currentImageRef?.complete;
 		},
+		get isAriaModal() {
+			return state.isLightboxActive ? 'true' : null;
+		},
+		get getRoleAttribute() {
+			return state.isLightboxActive ? 'dialog' : null;
+		},
 	},
 	actions: {
 		showLightbox: () => {
@@ -50,11 +56,32 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			callbacks.setOverlayStyles();
 		},
 		hideLightbox: () => {
-			state.isLightboxActive = false;
-			state.currentImageContext = null;
-			state.currentImageRef = null;
-			state.figureClassNames = null;
-			state.imgClassNames = null;
+			if (state.isLightboxActive) {
+				// Starts the overlay closing animation. The showClosingAnimation
+				// class is used to avoid showing it on page load.
+				state.showClosingAnimation = true;
+				state.isLightboxActive = false;
+
+				// Waits until the close animation has completed before allowing a
+				// user to scroll again. The duration of this animation is defined in
+				// the `styles.scss` file, but in any case we should wait a few
+				// milliseconds longer than the duration, otherwise a user may scroll
+				// too soon and cause the animation to look sloppy.
+				setTimeout(function () {
+					// Delays before changing the focus. Otherwise the focus ring will
+					// appear on Firefox before the image has finished animating, which
+					// looks broken.
+					state.currentImageRef.focus({
+						preventScroll: true,
+					});
+
+					// Resets the current image id to mark the overlay as closed.
+					state.figureClassNames = null;
+					state.currentImageContext = null;
+					state.currentImageRef = null;
+					state.imgClassNames = null;
+				}, 450);
+			}
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
@@ -234,8 +261,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				--wp--lightbox-image-width: ${lightboxImgWidth}px;
 				--wp--lightbox-image-height: ${lightboxImgHeight}px;
 				--wp--lightbox-scale: ${containerScale};
-				--wp--lightbox-scrollbar-width: ${window.innerWidth - document.documentElement.clientWidth
-				}px;
+				--wp--lightbox-scrollbar-width: ${window.innerWidth - document.documentElement.clientWidth}px;
 				--wp--lightbox-image-natural-width: ${naturalWidth}px;
 				--wp--lightbox-image-natural-height: ${naturalHeight}px;
 			}
