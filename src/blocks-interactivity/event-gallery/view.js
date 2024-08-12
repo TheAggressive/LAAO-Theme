@@ -58,7 +58,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				state.scrollTopReset = document.documentElement.scrollTop;
 				state.scrollLeftReset = document.documentElement.scrollLeft;
 
-				callbacks.setOverlayStyles();
+				callbacks.setLightBoxVariables();
 			}
 			document.body.classList.add('scroll-lock');
 		},
@@ -122,7 +122,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 	},
 	callbacks: {
-		setOverlayStyles() {
+		setLightBoxVariables() {
 			if (!state.currentImageRef) {
 				return;
 			}
@@ -257,7 +257,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// handle absolute positioning and CSS transformation. In any case,
 			// adding 1 pixel to the container width and height solves the problem,
 			// though this can be removed if the issue is fixed in the future.
-			state.overlayStyles = `
+			state.lightBoxVariables = `
 			:root {
 				--wp--lightbox-initial-top-position: ${screenPosY}px;
 				--wp--lightbox-initial-left-position: ${screenPosX}px;

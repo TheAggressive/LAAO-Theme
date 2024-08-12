@@ -40,7 +40,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-class--closing="state.isLightboxClosing"
 		data-wp-on--keydown="actions.handleKeydown"
 		data-wp-on-async-window--scroll="actions.handleScroll"
-		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
+		data-wp-on-async-window--resize="callbacks.setLightBoxVariables"
 		data-wp-watch="callbacks.setOverlayFocus"
 		data-lenis-prevent="true"
 		tabindex="-1"
@@ -105,7 +105,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 
 				</div>
 			</div>
-			<style data-wp-text="state.overlayStyles"></style>
+			<style data-wp-text="state.lightBoxVariables"></style>
 		</div>
 		HTML;
 	}
