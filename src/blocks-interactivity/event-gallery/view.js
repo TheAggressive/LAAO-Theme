@@ -44,6 +44,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				return;
 			}
 
+			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+
 			if (state.isLightboxClosing === false) {
 
 				state.currentImageContext = context
@@ -58,6 +60,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 				callbacks.setOverlayStyles();
 			}
+			document.body.classList.add('scroll-lock');
 		},
 		hideLightbox: () => {
 			if (state.isLightboxActive) {
@@ -80,6 +83,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					});
 
 					// Resets the current image id to mark the overlay as closed.
+					document.body.classList.remove('scroll-lock');
 					state.figureClassNames = null;
 					state.currentImageContext = null;
 					state.currentImageRef = null;
@@ -94,7 +98,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				actions.hideLightbox();
 			}
 		},
-		handleScroll(event) {
+		handleScroll() {
 			// Prevents scrolling behaviors that trigger content shift while the
 			// lightbox is open. It would be better to accomplish through CSS alone,
 			// but using overflow: hidden is currently the only way to do so and
@@ -118,11 +122,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 	},
 	callbacks: {
-		init() {
-			const { ref } = getElement();
-			// state.currentImageRef = ref;
-			// console.log('init', ref.getBoundingClientRect());
-		},
 		setOverlayStyles() {
 			if (!state.currentImageRef) {
 				return;
@@ -267,7 +266,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				--wp--lightbox-image-width: ${lightboxImgWidth}px;
 				--wp--lightbox-image-height: ${lightboxImgHeight}px;
 				--wp--lightbox-scale: ${containerScale};
-				--wp--lightbox-scrollbar-width: ${window.innerWidth - document.documentElement.clientWidth}px;
+				--wp--lightbox-scrollbar-width: ${state.scrollBarWidth}px;
+				--wp--lightbox-scroll-position: ${window.scrollY}px;
 				--wp--lightbox-image-natural-width: ${naturalWidth}px;
 				--wp--lightbox-image-natural-height: ${naturalHeight}px;
 			}

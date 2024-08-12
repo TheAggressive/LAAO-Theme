@@ -42,6 +42,8 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-wp-on-async-window--scroll="actions.handleScroll"
 		data-wp-on-async-window--resize="callbacks.setOverlayStyles"
 		data-wp-watch="callbacks.setOverlayFocus"
+		data-lenis-prevent="true"
+		tabindex="-1"
 		>
 		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div>
 			<header class="wp-block-laao-event-lightbox-header">

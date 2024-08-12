@@ -1,5 +1,9 @@
 @import "../../styles/_breakpoints.css";
 
+.scroll-lock {
+	@apply !pr-[--wp--lightbox-scrollbar-width] overflow-hidden;
+}
+
 .wp-block-laao-event-lightbox-overlay {
 	@apply fixed inset-0 -z-10 h-screen w-screen cursor-zoom-out overflow-hidden bg-black/85 backdrop-blur-sm;
 
