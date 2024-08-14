@@ -5,25 +5,27 @@ import { getContext, getElement, store } from "@wordpress/interactivity";
 
 const { state, actions, callbacks } = store('laao/event-gallery', {
 	state: {
-		currentImageContext: null,
-		currentImageRef: null,
-		isLightboxActive: false,
-		isLightboxClosing: false,
-		figureClassNames: null,
-		imgClassNames: null,
+		currentImageId: null,
 		get currentImage() {
 			return state.currentImageId;
 		},
+		get isLightboxActive() {
+			return state.currentImageId !== null;
+		},
 		get getImgClassNames() {
-			const { ref } = getElement();
-			return ref.classList.value;
+			return state.currentImage.ref.classList.value;
 		},
 		get getFigureClassNames() {
-			const { ref } = getElement();
-			return ref.parentNode.classList.value;
+			return state.currentImage.ref.parentNode.classList.value;
+		},
+		get getImgStyles() {
+			return (state.isLightboxActive && state.currentImage.ref.style.cssText);
+		},
+		get getFigureStyles() {
+			return (state.isLightboxActive && state.currentImage.ref.parentNode.style.cssText);
 		},
 		get hasImageLoaded() {
-			return state.currentImageRef?.complete;
+			return state.currentImage.ref?.complete;
 		},
 		get isAriaModal() {
 			return state.isLightboxActive ? 'true' : null;
@@ -37,37 +39,32 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			const context = getContext();
 			const { ref } = getElement();
 
-			state.currentImageRef = ref;
+			actions.setImage(context, ref);
 
 			// Bails out if the image has not loaded yet.
-			if (!state.currentImageRef?.complete) {
+			if (!state.hasImageLoaded) {
 				return;
 			}
 
-			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+			// Set scrollBar width
+			actions.setScrollBarWidth();
 
-			if (state.isLightboxClosing === false) {
+			state.overlayActive = true;
 
-				state.currentImageContext = context
-				state.figureClassNames = state.getFigureClassNames;
-				state.imgClassNames = state.getImgClassNames;
-				state.isLightboxActive = true;
+			// Stores the positions of the scroll to fix it until the overlay is closed.
+			actions.setScrollPositions();
 
-				// Stores the positions of the scroll to fix it until the overlay is
-				// closed.
-				state.scrollTopReset = document.documentElement.scrollTop;
-				state.scrollLeftReset = document.documentElement.scrollLeft;
+			// Sets the lightbox variables to calculate the image size and position.
+			callbacks.setLightBoxVariables();
 
-				callbacks.setLightBoxVariables();
-			}
 			document.body.classList.add('scroll-lock');
 		},
 		hideLightbox: () => {
-			if (state.isLightboxActive) {
+			if (state.overlayActive) {
 				// Starts the overlay closing animation. The showClosingAnimation
 				// class is used to avoid showing it on page load.
 				state.isLightboxClosing = true;
-				state.isLightboxActive = false;
+				state.overlayActive = false;
 
 				// Waits until the close animation has completed before allowing a
 				// user to scroll again. The duration of this animation is defined in
@@ -78,20 +75,31 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					// Delays before changing the focus. Otherwise the focus ring will
 					// appear on Firefox before the image has finished animating, which
 					// looks broken.
-					state.currentImageRef.focus({
+					state.currentImage.ref.focus({
 						preventScroll: true,
 					});
 
 					// Resets the current image id to mark the overlay as closed.
-					document.body.classList.remove('scroll-lock');
-					state.figureClassNames = null;
-					state.currentImageContext = null;
-					state.currentImageRef = null;
-					state.imgClassNames = null;
-					state.isLightboxClosing = false;
-				}, 450);
+					state.currentImageId = null;
 
+					state.isLightboxClosing = false;
+
+					document.body.classList.remove('scroll-lock');
+				}, 400);
 			}
+		},
+		setImage(context, ref) {
+			state.currentImageId = context;
+			state.currentImageId.ref = ref;
+		},
+		updateImage() { },
+		removeImage() { },
+		setScrollPositions() {
+			state.scrollTopReset = document.documentElement.scrollTop;
+			state.scrollLeftReset = document.documentElement.scrollLeft;
+		},
+		setScrollBarWidth() {
+			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
@@ -123,7 +131,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 	},
 	callbacks: {
 		setLightBoxVariables() {
-			if (!state.currentImageRef) {
+			if (!state.currentImage.ref) {
 				return;
 			}
 
@@ -132,9 +140,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				naturalHeight,
 				offsetWidth: originalWidth,
 				offsetHeight: originalHeight,
-			} = state.currentImageRef;
+			} = state.currentImage.ref;
 			let { x: screenPosX, y: screenPosY } =
-				state.currentImageRef.getBoundingClientRect();
+				state.currentImage.ref.getBoundingClientRect();
 
 			// Natural ratio of the image clicked to open the lightbox.
 			const naturalRatio = naturalWidth / naturalHeight;
@@ -146,13 +154,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// size), the image's dimensions in the lightbox are the same
 			// as those of the image in the content.
 			let imgMaxWidth = parseFloat(
-				state.currentImageContext.targetWidth !== 'none'
-					? state.currentImageContext.targetWidth
+				state.currentImage.targetWidth !== 'none'
+					? state.currentImage.targetWidth
 					: naturalWidth
 			);
 			let imgMaxHeight = parseFloat(
-				state.currentImageContext.targetHeight !== 'none'
-					? state.currentImageContext.targetHeight
+				state.currentImage.targetHeight !== 'none'
+					? state.currentImage.targetHeight
 					: naturalHeight
 			);
 

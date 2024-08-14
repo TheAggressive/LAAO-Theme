@@ -45,8 +45,8 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 		data-lenis-prevent="true"
 		tabindex="-1"
 		>
-		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.isLightboxActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div>
-			<header class="wp-block-laao-event-lightbox-header">
+		<div class="wp-block-laao-event-lightbox-overlay" data-wp-class--active="state.overlayActive" data-wp-class--closing="!state.overlayActive" data-wp-on-async--click="actions.hideLightbox" aria-hidden="true"></div>
+			<header class="wp-block-laao-event-lightbox-header" data-wp-class--closing="!state.overlayActive">
 				<ul class="wp-block-laao-event-lightbox-social">
 					<li class="wp-block-laao-event-lightbox-social-item">
 						<a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-twitter-link" href="https://twitter.com/intent/tweet?url=https://laartsonline.com/?attachment_id=49569&amp;via=LAArtsOnlinecom" aria-label="Share this on Twitter">
@@ -84,7 +84,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				</button>
 			</header>
 			<div class="wp-block-laao-event-lightbox-content">
-				<button class="wp-block-laao-event-lightbox-next" href="#" aria-label="Next Image">
+				<button class="wp-block-laao-event-lightbox-next"  href="#" aria-label="Next Image">
 					<span>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.436 407.436">
 							<polygon points="112.814,0 91.566,21.178 273.512,203.718 91.566,386.258 112.814,407.436 315.869,203.718"></polygon>
@@ -99,8 +99,8 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 					</span>
 				</button>
 				<div class="wp-block-laao-event-lightbox-image-container">
-					<figure  data-wp-bind--class="state.figureClassNames" data-wp-bind--style="state.figureStyles">
-						<img data-wp-bind--src="state.currentImageContext.uploadedSrc" data-wp-bind--class="state.currentImageContext.imgClassNames" data-wp-bind--style="state.imgClassNames" loading="lazy">
+					<figure  data-wp-bind--class="state.getFigureClassNames" data-wp-bind--style="state.getFigureStyles">
+						<img data-wp-bind--src="state.currentImage.uploadedSrc" data-wp-bind--class="state.getImgClassNames" data-wp-bind--style="state.getImgStyles" loading="lazy">
 					</figure>
 
 				</div>

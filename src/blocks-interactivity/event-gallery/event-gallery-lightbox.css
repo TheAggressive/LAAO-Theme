@@ -1,7 +1,7 @@
 @import "../../styles/_breakpoints.css";
 
 .scroll-lock {
-	@apply !pr-[--wp--lightbox-scrollbar-width] overflow-hidden;
+	@apply overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
 }
 
 .wp-block-laao-event-lightbox-overlay {
@@ -22,10 +22,6 @@
 .wp-block-laao-event-lightbox {
 	@apply invisible fixed inset-0 z-[9999] w-screen;
 
-	&:focus {
-		@apply outline-red-500;
-	}
-
 	&.active {
 		@apply visible;
 
@@ -36,16 +32,22 @@
 		}
 	}
 
-	&.closing {
-		@media (--motion-reduce-no-preference) {
-			.wp-block-laao-event-lightbox-image-container {
-				@apply animate-[lightbox-zoom-out_400ms_ease-in-out];
+	@media (--motion-reduce-no-preference) {
+		&.closing {
+			@media (--motion-reduce-no-preference) {
+				.wp-block-laao-event-lightbox-image-container {
+					@apply animate-[lightbox-zoom-out_400ms_ease-in-out];
+				}
 			}
 		}
 	}
 
 	.wp-block-laao-event-lightbox-header {
 		@apply relative z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
+
+		&.closing {
+			@apply invisible -translate-y-full animate-[slide-up_250ms_ease-in-out];
+		}
 
 		.wp-block-laao-event-lightbox-social {
 			@apply -mr-8 flex h-full list-none place-content-center items-center p-0;
@@ -105,10 +107,22 @@
 
 	button.wp-block-laao-event-lightbox-previous {
 		@apply left-0;
+
+		@media (--motion-reduce-no-preference) {
+			div:has(.closing) & {
+				@apply -translate-x-full animate-[slide-left_250ms_ease-in-out];
+			}
+		}
 	}
 
 	button.wp-block-laao-event-lightbox-next {
 		@apply right-0;
+
+		@media (--motion-reduce-no-preference) {
+			div:has(.closing) & {
+				@apply translate-x-full animate-[slide-right_250ms_ease-in-out];
+			}
+		}
 	}
 
 	.wp-block-laao-event-lightbox-content {
@@ -187,5 +201,45 @@
 
 	100% {
 		opacity: 0;
+	}
+}
+
+@keyframes slide-up {
+	0% {
+		transform: translateY(0%);
+	}
+
+	100% {
+		transform: translateY(-100%);
+	}
+}
+
+@keyframes slide-down {
+	0% {
+		transform: translateY(-100%);
+	}
+
+	100% {
+		transform: translateY(0%);
+	}
+}
+
+@keyframes slide-left {
+	0% {
+		transform: translateX(0%);
+	}
+
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
+@keyframes slide-right {
+	0% {
+		transform: translateX(0%);
+	}
+
+	100% {
+		transform: translateX(100%);
 	}
 }
