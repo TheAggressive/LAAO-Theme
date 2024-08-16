@@ -6,26 +6,30 @@ import { getContext, getElement, store } from "@wordpress/interactivity";
 const { state, actions, callbacks } = store('laao/event-gallery', {
 	state: {
 		currentImageId: null,
+		currentImageIdRef: null,
 		get currentImage() {
 			return state.currentImageId;
 		},
+		get currentImageRef() {
+			return state.currentImageIdRef;
+		},
 		get isLightboxActive() {
-			return state.currentImageId !== null;
+			return state.currentImage !== null;
 		},
 		get getImgClassNames() {
-			return state.currentImage.ref.classList.value;
+			return state.currentImageRef.classList.value;
 		},
 		get getFigureClassNames() {
-			return state.currentImage.ref.parentNode.classList.value;
+			return state.currentImageRef.parentNode.classList.value;
 		},
 		get getImgStyles() {
-			return (state.isLightboxActive && state.currentImage.ref.style.cssText);
+			return (state.isLightboxActive && state.currentImageRef.style.cssText);
 		},
 		get getFigureStyles() {
-			return (state.isLightboxActive && state.currentImage.ref.parentNode.style.cssText);
+			return (state.isLightboxActive && state.currentImageRef.parentNode.style.cssText);
 		},
 		get hasImageLoaded() {
-			return state.currentImage.ref?.complete;
+			return state.currentImageRef?.complete;
 		},
 		get isAriaModal() {
 			return state.isLightboxActive ? 'true' : null;
@@ -75,12 +79,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					// Delays before changing the focus. Otherwise the focus ring will
 					// appear on Firefox before the image has finished animating, which
 					// looks broken.
-					state.currentImage.ref.focus({
+					state.currentImageRef.focus({
 						preventScroll: true,
 					});
 
 					// Resets the current image id to mark the overlay as closed.
 					state.currentImageId = null;
+					state.currentImageIdRef = null;
 
 					state.isLightboxClosing = false;
 
@@ -90,7 +95,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 		setImage(context, ref) {
 			state.currentImageId = context;
-			state.currentImageId.ref = ref;
+			state.currentImageIdRef = ref;
 		},
 		updateImage() { },
 		removeImage() { },
@@ -131,7 +136,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 	},
 	callbacks: {
 		setLightBoxVariables() {
-			if (!state.currentImage.ref) {
+			if (!state.isLightboxActive) {
 				return;
 			}
 
@@ -140,9 +145,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				naturalHeight,
 				offsetWidth: originalWidth,
 				offsetHeight: originalHeight,
-			} = state.currentImage.ref;
+			} = state.currentImageRef;
 			let { x: screenPosX, y: screenPosY } =
-				state.currentImage.ref.getBoundingClientRect();
+				state.currentImageRef.getBoundingClientRect();
 
 			// Natural ratio of the image clicked to open the lightbox.
 			const naturalRatio = naturalWidth / naturalHeight;
@@ -154,13 +159,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// size), the image's dimensions in the lightbox are the same
 			// as those of the image in the content.
 			let imgMaxWidth = parseFloat(
-				state.currentImage.targetWidth !== 'none'
-					? state.currentImage.targetWidth
+				state.currentImageRef.targetWidth !== undefined && state.currentImageRef.targetWidth !== 'none'
+					? state.currentImageRef.targetWidth
 					: naturalWidth
 			);
 			let imgMaxHeight = parseFloat(
-				state.currentImage.targetHeight !== 'none'
-					? state.currentImage.targetHeight
+				state.currentImageRef.targetHeight !== undefined && state.currentImageRef.targetHeight !== 'none'
+					? state.currentImageRef.targetHeight
 					: naturalHeight
 			);
 
