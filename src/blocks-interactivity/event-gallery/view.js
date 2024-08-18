@@ -138,6 +138,12 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			if (event.key === 'Escape') {
 				actions.hideLightbox();
 			}
+			if (event.key === 'ArrowRight') {
+				actions.handleNextImage();
+			}
+			if (event.key === 'ArrowLeft') {
+				actions.handlePrevImage();
+			}
 		},
 		handleScroll() {
 			// Prevents scrolling behaviors that trigger content shift while the
