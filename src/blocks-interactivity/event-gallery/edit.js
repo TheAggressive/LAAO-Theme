@@ -29,7 +29,7 @@ export default function Edit(props) {
 							return (
 								<figure key={image.id} className='wp-block-event-gallery-item'>
 									<a href={image.url}>
-										<img class={`wp-image-${image.id}`} key={index} loading='lazy' data-link={image.link} data-id={image.id} src={image.sizes.thumbnail.url} />
+										<img className={`wp-image-${image.id}`} key={index} loading='lazy' data-link={image.link} data-id={image.id} src={image.sizes.thumbnail.url} />
 									</a>
 								</figure>
 							);

@@ -140,7 +140,7 @@
 				@apply relative flex h-full w-full;
 
 				& img {
-					@apply h-full max-h-[--wp--lightbox-image-height] w-full max-w-[--wp--lightbox-image-width];
+					@apply h-full max-h-[--wp--lightbox-image-height] w-full max-w-[--wp--lightbox-image-width] cursor-auto;
 				}
 			}
 		}

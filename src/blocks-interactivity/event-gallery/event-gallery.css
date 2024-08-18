@@ -15,6 +15,10 @@
 .wp-block-event-gallery-item {
 	& img {
 		@apply block h-full min-w-full object-cover object-center;
+
+		&:hover {
+			@apply cursor-zoom-in;
+		}
 	}
 }
 
