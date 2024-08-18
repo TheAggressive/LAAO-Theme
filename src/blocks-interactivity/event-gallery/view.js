@@ -104,9 +104,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.currentImageId = context;
 			state.currentImageIdRef = ref;
 		},
-		updateImage() {
-			console.log('updateImage')
-		},
 		setScrollPositions() {
 			state.scrollTopReset = document.documentElement.scrollTop;
 			state.scrollLeftReset = document.documentElement.scrollLeft;
