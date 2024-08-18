@@ -40,6 +40,10 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 	},
 	actions: {
 		showLightbox: () => {
+			if (state.isLightboxActive) {
+				return;
+			}
+
 			const context = getContext();
 			const { ref } = getElement();
 
@@ -112,19 +116,23 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			if (!state.currentImageRef.parentNode.nextElementSibling) {
 				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute('data-wp-context'));
 				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector('img');
+				callbacks.setLightBoxVariables();
 				return;
 			}
 			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.nextElementSibling.getAttribute('data-wp-context'));
 			state.currentImageIdRef = state.currentImageRef.parentNode.nextElementSibling.querySelector('img');
+			callbacks.setLightBoxVariables();
 		},
 		handlePrevImage() {
 			if (!state.currentImageRef.parentNode.previousElementSibling) {
 				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context'));
 				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img');
+				callbacks.setLightBoxVariables();
 				return;
 			}
 			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.previousElementSibling.getAttribute('data-wp-context'));
 			state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img');
+			callbacks.setLightBoxVariables();
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
