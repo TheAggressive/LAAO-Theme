@@ -67,8 +67,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			if (state.overlayActive) {
 				// Starts the overlay closing animation. The showClosingAnimation
 				// class is used to avoid showing it on page load.
-				state.isLightboxClosing = true;
 				state.overlayActive = false;
+				state.isLightboxClosing = true;
 
 				// Waits until the close animation has completed before allowing a
 				// user to scroll again. The duration of this animation is defined in
@@ -90,7 +90,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					state.isLightboxClosing = false;
 
 					document.body.classList.remove('scroll-lock');
-				}, 400);
+				}, 450);
 			}
 		},
 		setImage(context, ref) {

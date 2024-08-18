@@ -94,7 +94,6 @@ const { state, actions } = store('iapi-gallery', {
 	callbacks: {
 		initSlideShow: () => {
 			const ctx = getContext();
-			console.log(ctx.slides);
 			if (ctx.autoplay) {
 				const int = setInterval(
 					withScope(() => {

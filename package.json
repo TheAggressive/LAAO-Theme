@@ -14,7 +14,7 @@
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start:blocks": "wp-scripts start --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
 		"start:interactivity": "wp-scripts start --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
-		"start": "concurrently 'pnpm start:interactivity' 'pnpm start:blocks'",
+		"start": "concurrently 'pnpm start:blocks' 'pnpm start:interactivity'",
 		"start:hot": "wp-scripts start --output-path=./dist --hot",
 		"start:copy-php": "wp-scripts start --output-path=./dist --webpack-copy-php",
 		"js:watch": "wp-scripts start ./src/scripts/app.js --output-path=dist/scripts"
