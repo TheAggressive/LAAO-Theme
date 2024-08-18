@@ -91,7 +91,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 						</svg>
 					</span>
 				</button>
-				<button class="wp-block-laao-event-lightbox-previous" href="#" aria-label="Previous Image">
+				<button class="wp-block-laao-event-lightbox-previous" href="#" aria-label="Previous Image" data-wp-on--click="actions.handlePrevImage">
 					<span>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404.258 404.258">
 							<polygon points="289.927,18 265.927,0 114.331,202.129 265.927,404.258 289.927,386.258 151.831,202.129 "></polygon>

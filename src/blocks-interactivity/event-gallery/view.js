@@ -97,7 +97,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.currentImageId = context;
 			state.currentImageIdRef = ref;
 		},
-		updateImage() { },
+		updateImage() {
+			console.log('updateImage')
+		},
 		removeImage() { },
 		setScrollPositions() {
 			state.scrollTopReset = document.documentElement.scrollTop;
@@ -105,6 +107,24 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 		setScrollBarWidth() {
 			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+		},
+		handleNextImage() {
+			if (!state.currentImageRef.parentNode.nextElementSibling) {
+				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute('data-wp-context'));
+				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector('img');
+				return;
+			}
+			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.nextElementSibling.getAttribute('data-wp-context'));
+			state.currentImageIdRef = state.currentImageRef.parentNode.nextElementSibling.querySelector('img');
+		},
+		handlePrevImage() {
+			if (!state.currentImageRef.parentNode.previousElementSibling) {
+				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context'));
+				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img');
+				return;
+			}
+			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.previousElementSibling.getAttribute('data-wp-context'));
+			state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img');
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
