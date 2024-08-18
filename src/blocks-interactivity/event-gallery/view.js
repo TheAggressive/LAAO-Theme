@@ -37,6 +37,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		get getRoleAttribute() {
 			return state.isLightboxActive ? 'dialog' : null;
 		},
+		get getAltText() {
+			return state.currentImageRef.getAttribute('alt');
+		}
 	},
 	actions: {
 		showLightbox: () => {
@@ -46,8 +49,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 			const context = getContext();
 			const { ref } = getElement();
-
-			console.log(context, ref);
 
 			actions.setImage(context, ref);
 
@@ -124,7 +125,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.currentImageIdRef = state.currentImageRef.parentNode.nextElementSibling.querySelector('img');
 			callbacks.setLightBoxVariables();
 		},
-		handlePrevImage() {
+		handlePreviousImage() {
 			if (!state.currentImageRef.parentNode.previousElementSibling) {
 				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context'));
 				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img');
@@ -149,7 +150,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				actions.handleNextImage();
 			}
 			if (event.key === 'ArrowLeft') {
-				actions.handlePrevImage();
+				actions.handlePreviousImage();
 			}
 		},
 		handleScroll() {
