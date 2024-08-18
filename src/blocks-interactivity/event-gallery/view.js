@@ -47,6 +47,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			const context = getContext();
 			const { ref } = getElement();
 
+			console.log(context, ref);
+
 			actions.setImage(context, ref);
 
 			// Bails out if the image has not loaded yet.
@@ -104,7 +106,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		updateImage() {
 			console.log('updateImage')
 		},
-		removeImage() { },
 		setScrollPositions() {
 			state.scrollTopReset = document.documentElement.scrollTop;
 			state.scrollLeftReset = document.documentElement.scrollLeft;
@@ -134,7 +135,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img');
 			callbacks.setLightBoxVariables();
 		},
+		handleImageKeydown(event) {
+			if (event.key === 'Enter') {
+				actions.showLightbox();
+			}
+		},
 		handleKeydown(event) {
+			console.log(event.key)
 			if (event.key === 'Escape') {
 				actions.hideLightbox();
 			}
