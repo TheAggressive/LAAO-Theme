@@ -1,6 +1,6 @@
 export default function Save(props) {
 	return (
-		<div className='wp-block-event-gallery columns-10'>
+		<div className='wp-block-event-gallery'>
 			{props.attributes.images.map((image, index) => {
 				return (
 					<figure key={image.id} className='wp-block-event-gallery-item'>
