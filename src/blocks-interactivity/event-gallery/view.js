@@ -142,7 +142,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			}
 		},
 		handleKeydown(event) {
-			console.log(event.key)
 			if (event.key === 'Escape') {
 				actions.hideLightbox();
 			}
