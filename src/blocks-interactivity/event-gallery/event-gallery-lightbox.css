@@ -16,8 +16,6 @@
 	}
 
 	&.closing {
-		@apply visible;
-
 		@media (--motion-reduce-no-preference) {
 			@apply invisible animate-[turn-off-visibility_450ms_ease-in-out_forwards];
 		}
@@ -38,12 +36,12 @@
 		}
 	}
 
-	@media (--motion-reduce-no-preference) {
-		&.closing {
-			@media (--motion-reduce-no-preference) {
-				.wp-block-laao-event-lightbox-image-container {
-					@apply animate-[lightbox-zoom-out_400ms_ease-in-out_forwards];
-				}
+	&.closing {
+		@apply invisible;
+
+		@media (--motion-reduce-no-preference) {
+			.wp-block-laao-event-lightbox-image-container {
+				@apply visible animate-[lightbox-zoom-out_400ms_ease-in-out_forwards];
 			}
 		}
 	}
