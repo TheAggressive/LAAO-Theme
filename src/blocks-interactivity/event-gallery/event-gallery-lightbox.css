@@ -32,6 +32,18 @@
 		@media (--motion-reduce-no-preference) {
 			.wp-block-laao-event-lightbox-image-container {
 				@apply animate-[lightbox-zoom-in_450ms_ease-in-out_forwards];
+
+				&.scrolling {
+					@apply animate-none;
+				}
+
+				&.next {
+					@apply origin-center animate-[next-image_900ms_ease-in-out_forwards];
+				}
+
+				&.previous {
+					@apply origin-center animate-[previous-image_900ms_ease-in-out_forwards];
+				}
 			}
 		}
 	}
@@ -140,10 +152,80 @@
 				@apply relative flex h-full w-full;
 
 				& img {
-					@apply h-full max-h-[--wp--lightbox-image-height] w-full max-w-[--wp--lightbox-image-width] cursor-auto;
+					@apply h-full w-full max-w-[--wp--lightbox-image-width] cursor-auto;
 				}
 			}
 		}
+	}
+}
+
+@keyframes previous-image {
+	0% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	25% {
+		transform: translate(-50%, -50%) scale(0.85);
+	}
+
+	50% {
+		transform: translate(100%, -50%) scale(0.85);
+	}
+
+	51% {
+		transform: translate(100%, -50%) scale(0.85);
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	52% {
+		transform: translate(-100%, -50%) scale(0.85);
+		opacity: 0;
+		visibility: visible;
+	}
+
+	75% {
+		transform: translate(-50%, -50%) scale(0.85);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+@keyframes next-image {
+	0% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	25% {
+		transform: translate(-50%, -50%) scale(0.85);
+	}
+
+	50% {
+		transform: translate(-100%, -50%) scale(0.85);
+	}
+
+	51% {
+		transform: translate(-100%, -50%) scale(0.85);
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	52% {
+		transform: translate(100%, -50%) scale(0.85);
+		opacity: 0;
+		visibility: visible;
+	}
+
+	75% {
+		transform: translate(-50%, -50%) scale(0.85);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(-50%, -50%) scale(1);
 	}
 }
 

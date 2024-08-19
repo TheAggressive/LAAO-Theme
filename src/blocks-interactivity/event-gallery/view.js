@@ -39,7 +39,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 		get getAltText() {
 			return state.currentImageRef.getAttribute('alt');
-		}
+		},
+		get isReduced() {
+			return window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+		},
+		get getTimeOut() {
+			return state.isReduced ? 0 : 450;
+		},
 	},
 	actions: {
 		showLightbox: () => {
@@ -68,7 +74,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Sets the lightbox variables to calculate the image size and position.
 			callbacks.setLightBoxVariables();
 
-			document.body.classList.add('scroll-lock');
+			callbacks.setScrollLock();
 		},
 		hideLightbox: () => {
 			if (state.overlayActive) {
@@ -76,6 +82,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// class is used to avoid showing it on page load.
 				state.overlayActive = false;
 				state.isLightboxClosing = true;
+				state.isScrolling = false;
 
 				// Waits until the close animation has completed before allowing a
 				// user to scroll again. The duration of this animation is defined in
@@ -96,8 +103,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 					state.isLightboxClosing = false;
 
-					document.body.classList.remove('scroll-lock');
-				}, 450);
+					callbacks.setScrollLock();
+
+				}, state.getTimeOut);
 			}
 		},
 		setImage(context, ref) {
@@ -112,26 +120,75 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 		},
 		handleNextImage() {
-			if (!state.currentImageRef.parentNode.nextElementSibling) {
-				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute('data-wp-context'));
-				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector('img');
-				callbacks.setLightBoxVariables();
+			// Prevents double clicks from triggering the animation twice.
+			if (state.getNext) {
 				return;
 			}
-			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.nextElementSibling.getAttribute('data-wp-context'));
-			state.currentImageIdRef = state.currentImageRef.parentNode.nextElementSibling.querySelector('img');
-			callbacks.setLightBoxVariables();
+
+			// Activates the scrolling animation.
+			state.getNext = true;
+			// Removes the previous image animation.
+			state.isScrolling = true;
+
+			// Allows image to stay in view while the animation finishes.
+			setTimeout(() => {
+				// If there is no next sibling, it goes back to the first image.
+				if (!state.currentImageRef.parentNode.nextElementSibling) {
+					actions.setImage(
+						JSON.parse(state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute('data-wp-context')),
+						state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector('img')
+					);
+					callbacks.setLightBoxVariables();
+					return;
+				}
+
+				// Sets the next sibling as current image.
+				actions.setImage(
+					JSON.parse(state.currentImageRef.parentNode.nextElementSibling.getAttribute('data-wp-context')),
+					state.currentImageRef.parentNode.nextElementSibling.querySelector('img')
+				);
+				callbacks.setLightBoxVariables();
+			}, state.getTimeOut);
+
+			// Double the amount of time as half way through the "next image" becomes the "current image".
+			setTimeout(() => {
+				state.getNext = false;
+			}, state.getTimeOut * 2);
 		},
 		handlePreviousImage() {
-			if (!state.currentImageRef.parentNode.previousElementSibling) {
-				state.currentImageId = JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context'));
-				state.currentImageIdRef = state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img');
-				callbacks.setLightBoxVariables();
+			// Prevents double clicks from triggering the animation twice.
+			if (state.getPrevious) {
 				return;
 			}
-			state.currentImageId = JSON.parse(state.currentImageRef.parentNode.previousElementSibling.getAttribute('data-wp-context'));
-			state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img');
-			callbacks.setLightBoxVariables();
+
+			// Activates the scrolling animation.
+			state.isScrolling = true;
+			// Removes the previous image animation.
+			state.getPrevious = true;
+
+			// Allows image to stay in view while the animation finishes.
+			setTimeout(() => {
+				if (!state.currentImageRef.parentNode.previousElementSibling) {
+					actions.setImage(
+						JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context')),
+						state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img')
+					);
+					callbacks.setLightBoxVariables();
+					return;
+				}
+
+				// Sets the previous sibling as current image.
+				actions.setImage(
+					JSON.parse(state.currentImageRef.parentNode.previousElementSibling.getAttribute('data-wp-context')),
+					state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img')
+				);
+				callbacks.setLightBoxVariables();
+			}, state.getTimeOut);
+
+			// Double the amount of time as half way through the "previous image" becomes the "current image".
+			setTimeout(() => {
+				state.getPrevious = false;
+			}, state.getTimeOut * 2);
 		},
 		handleImageKeydown(event) {
 			if (event.key === 'Enter') {
@@ -173,6 +230,21 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 	},
 	callbacks: {
+		setScrollLock() {
+			if (state.isLightboxActive) {
+				document.body.classList.add('scroll-lock');
+			} else {
+				document.body.classList.remove('scroll-lock');
+			}
+		},
+		setOverlayFocus() {
+			if (state.isLightboxActive) {
+				// Moves the focus to the dialog when it opens.
+				const { ref } = getElement();
+
+				ref.focus({ preventScroll: true });
+			}
+		},
 		setLightBoxVariables() {
 			if (!state.isLightboxActive) {
 				return;
@@ -323,14 +395,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				--wp--lightbox-image-natural-height: ${naturalHeight}px;
 			}
 		`;
-		},
-		setOverlayFocus() {
-			if (state.isLightboxActive) {
-				// Moves the focus to the dialog when it opens.
-				const { ref } = getElement();
-
-				ref.focus({ preventScroll: true });
-			}
 		},
 	},
 });

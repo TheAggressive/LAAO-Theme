@@ -104,7 +104,12 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
                         </svg>
                     </span>
                 </button>
-                <div class="wp-block-laao-event-lightbox-image-container">
+                <div
+                    class="wp-block-laao-event-lightbox-image-container"
+                    data-wp-class--next="state.getNext"
+                    data-wp-class--previous="state.getPrevious"
+                    data-wp-class--scrolling="state.isScrolling"
+                    >
                     <figure data-wp-bind--class="state.getFigureClassNames" data-wp-bind--style="state.getFigureStyles">
                         <img data-wp-bind--class="state.getImgClassNames" data-wp-bind--src="state.currentImage.uploadedSrc" data-wp-bind--alt="state.getAltText" data-wp-bind--style="state.getImgStyles" loading="lazy" />
                     </figure>
