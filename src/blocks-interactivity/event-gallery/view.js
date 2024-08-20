@@ -44,7 +44,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			return window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
 		},
 		get getTimeOut() {
-			return state.isReduced ? 0 : 450;
+			return state.isReduced ? 0 : 400;
 		},
 	},
 	actions: {

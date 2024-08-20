@@ -11,13 +11,13 @@
 		@apply visible;
 
 		@media (--motion-reduce-no-preference) {
-			@apply animate-[turn-on-visibility_450ms_ease-in-out_forwards];
+			@apply animate-[turn-on-visibility_400ms_ease-in-out_forwards];
 		}
 	}
 
 	&.closing {
 		@media (--motion-reduce-no-preference) {
-			@apply invisible animate-[turn-off-visibility_450ms_ease-in-out_forwards];
+			@apply invisible animate-[turn-off-visibility_400ms_ease-in-out_forwards];
 		}
 	}
 }
@@ -31,18 +31,18 @@
 
 		@media (--motion-reduce-no-preference) {
 			.wp-block-laao-event-lightbox-image-container {
-				@apply animate-[lightbox-zoom-in_450ms_ease-in-out_forwards];
+				@apply animate-[lightbox-zoom-in_400ms_ease-in-out_forwards];
 
 				&.scrolling {
 					@apply animate-none;
 				}
 
 				&.next {
-					@apply origin-center animate-[next-image_900ms_ease-in-out_forwards];
+					@apply origin-center animate-[next-image_800ms_ease-in-out_forwards];
 				}
 
 				&.previous {
-					@apply origin-center animate-[previous-image_900ms_ease-in-out_forwards];
+					@apply origin-center animate-[previous-image_800ms_ease-in-out_forwards];
 				}
 			}
 		}
@@ -62,7 +62,7 @@
 		@apply relative z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
 
 		&.closing {
-			@apply invisible -translate-y-full animate-[slide-up_250ms_ease-in-out];
+			@apply invisible -translate-y-full animate-[slide-up_200ms_ease-in-out];
 		}
 
 		.wp-block-laao-event-lightbox-social {
