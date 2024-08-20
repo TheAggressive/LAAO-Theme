@@ -168,18 +168,17 @@
 		transform: translate(-50%, -50%) scale(0.85);
 	}
 
-	50% {
-		transform: translate(100%, -50%) scale(0.85);
+	49% {
+		transform: translate(-15%, -50%) scale(0.85);
 	}
 
-	51% {
-		transform: translate(100%, -50%) scale(0.85);
+	50% {
 		opacity: 0;
 		visibility: hidden;
 	}
 
-	52% {
-		transform: translate(-100%, -50%) scale(0.85);
+	51% {
+		transform: translate(-85%, -50%) scale(0.85);
 		opacity: 0;
 		visibility: visible;
 	}
@@ -203,20 +202,17 @@
 		transform: translate(-50%, -50%) scale(0.85);
 	}
 
-	50% {
-		transform: translate(-100%, -50%) scale(0.85);
+	49% {
+		transform: translate(-85%, -50%) scale(0.85);
 	}
 
-	51% {
-		transform: translate(-100%, -50%) scale(0.85);
+	50% {
 		opacity: 0;
 		visibility: hidden;
 	}
 
-	52% {
-		transform: translate(100%, -50%) scale(0.85);
-		opacity: 0;
-		visibility: visible;
+	51% {
+		transform: translate(-15%, -50%) scale(0.85);
 	}
 
 	75% {

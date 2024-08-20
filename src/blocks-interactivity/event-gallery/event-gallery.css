@@ -1,7 +1,7 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-event-gallery {
-	@apply grid auto-rows-[repeat(100px)] grid-cols-3 gap-3 overflow-hidden;
+	@apply grid auto-rows-[repeat(100px)] grid-cols-3 gap-3;
 
 	@media (--bp-sm) {
 		@apply grid-cols-3;
@@ -18,6 +18,10 @@
 
 		&:hover {
 			@apply cursor-zoom-in;
+		}
+
+		&:focus {
+			@apply outline-offset-2 outline-red-700;
 		}
 	}
 }
