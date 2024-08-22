@@ -37,3 +37,21 @@
 .wp-block-event-gallery-item:nth-last-child(2) {
 	@apply row-span-1;
 }
+
+.has-event-gallery-images-10 {
+	.wp-block-event-gallery-item:nth-child(odd) {
+		@apply row-span-2;
+	}
+
+	.wp-block-event-gallery-item:nth-child(5) {
+		@apply row-span-3;
+	}
+
+  .wp-block-event-gallery-item:nth-last-child(3) {
+    @apply row-span-1;
+  }
+
+  .wp-block-event-gallery-item:nth-last-child(2) {
+    @apply row-span-1;
+  }
+}
