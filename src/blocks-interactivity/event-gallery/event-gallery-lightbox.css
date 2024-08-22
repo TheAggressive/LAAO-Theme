@@ -1,7 +1,7 @@
 @import "../../styles/_breakpoints.css";
 
 .scroll-lock {
-	@apply overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
+	@apply !overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
 }
 
 .wp-block-laao-event-lightbox-overlay {
