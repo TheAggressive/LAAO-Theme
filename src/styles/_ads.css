@@ -13,3 +13,7 @@
 		@apply block;
 	}
 }
+
+.ad-720x300 {
+	@apply mx-auto my-[--wp--preset--spacing--44] block w-fit bg-[--wp--preset--color--laao-white] p-[--wp--preset--spacing--28];
+}

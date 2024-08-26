@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 const responsive = gsap.matchMedia();
 
 responsive.add('(min-width: 1024px)', () => {
-	const nav = gsap.timeline({
+	gsap.timeline({
 		scrollTrigger: {
 			trigger: '.site-nav',
 			start: 'top-=0 top',
@@ -17,11 +17,9 @@ responsive.add('(min-width: 1024px)', () => {
 			toggleActions: 'play reverse play reverse',
 			scrub: false,
 			pin: true,
+			pinSpacing: false,
 			markers: false,
 		},
-		onComplete: () => {
-			gsap.set('.site-footer', { marginTop: '-64px' });
-		}
 	});
 });
 
