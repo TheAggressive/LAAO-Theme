@@ -8,7 +8,6 @@ if ( class_exists( 'LAAO_Setup' ) ) {
 
 add_filter( 'acf/settings/remove_wp_meta_box', '__return_false' );
 
-
 // function include_feature_image_caption( $block_content, $block ) {
 //  if ( isset( $block['attrs']['className'] ) && 'laao-post-featured-image' === $block['attrs']['className'] ) {
 //      $dom = new DOMDocument();
