@@ -148,7 +148,7 @@
 					"slug": "laao-white"
 				},
 				{
-					"color": "hsl(0, 73.7%, 41.8%)",
+					"color": "hsl(0, 72.2%, 50.6%)",
 					"name": "Red",
 					"slug": "laao-red"
 				},
@@ -331,7 +331,11 @@
 				}
 			}
 		},
-		"blocks": {}
+		"blocks": {
+			"jetpack/sharing-buttons": {
+				"css": "& svg {color: var(--wp--preset--color--laao-red); transition: all 250ms ease-in-out} & svg:hover {color: var(--wp--preset--color--laao-black); transform: scale(1.5)}"
+			}
+		}
 	},
 	"templateParts": [
 		{
