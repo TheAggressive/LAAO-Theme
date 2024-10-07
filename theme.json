@@ -332,6 +332,20 @@
 			}
 		},
 		"blocks": {
+			"core/paragraph": {
+				"elements": {
+					"link": {
+						"color": {
+							"text": "var:preset|color|laao-red"
+						},
+						":hover": {
+							"typography": {
+								"textDecoration": "underline"
+							}
+						}
+					}
+				}
+			},
 			"jetpack/sharing-buttons": {
 				"css": "& svg {color: var(--wp--preset--color--laao-red); transition: all 250ms ease-in-out} & svg:hover {color: var(--wp--preset--color--laao-black); transform: scale(1.5)}"
 			}
