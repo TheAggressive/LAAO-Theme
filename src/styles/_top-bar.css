@@ -8,11 +8,11 @@
 	}
 
 	.site-top-bar-edition {
-		@apply w-[176px] relative;
+		@apply relative w-[176px];
 
 		&::after {
 			@media (--bp-md) {
-				@apply w-full absolute right-0 content-["Edition"] top-[64px] font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-center uppercase text-[var(--wp--preset--color--laao-black)] bg-[var(--wp--preset--color--laao-white)] tracking-[var(--wp--preset--spacing--8)] text-[0.9rem] py-[var(--wp--preset--spacing--8)];
+				@apply absolute right-0 top-[64px] w-full bg-[var(--wp--preset--color--laao-white)] py-[var(--wp--preset--spacing--8)] text-center font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-[0.9rem] uppercase tracking-[var(--wp--preset--spacing--8)] text-[var(--wp--preset--color--laao-black)] content-["Edition"];
 			}
 		}
 	}
@@ -38,14 +38,18 @@
 	}
 
 	.site-top-bar-social {
-		display: none;
+		@apply hidden;
 
 		@media (--bp-sm) {
-			display: initial;
+			@apply block;
+		}
+
+		a {
+			@apply text-[var(--wp--preset--color--laao-red)] transition-all hover:text-[var(--wp--preset--color--laao-black)];
 		}
 
 		svg {
-			@apply w-[--wp--preset--font-size--xxxlarge] h-[--wp--preset--font-size--xxx-large] fill-current;
+			@apply h-[--wp--preset--font-size--xxx-large] w-[--wp--preset--font-size--xxxlarge] fill-current;
 		}
 	}
 }
