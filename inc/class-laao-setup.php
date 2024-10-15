@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 class LAAO_Setup {
 	public $cover_post_type      = array( 'cover' );
 	public $editorial_post_types = array( 'cover', 'arts', 'theatre', 'film', 'television', 'extra', 'music', 'spotlight', 'dining', 'events' );
@@ -17,7 +21,6 @@ class LAAO_Setup {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_setup_theme', array( $this, 'add_editor_styles' ) );
-		add_action( 'admin_init', array( $this, 'theme_updater' ) );
 		add_action(
 			'init',
 			function () {
@@ -1008,88 +1011,5 @@ class LAAO_Setup {
 		}
 
 		return $results;
-	}
-
-	public function theme_updater() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return; // Only allow admin users
-		}
-
-		// GitHub repo details
-		$repo_owner   = 'your-github-username';
-		$repo_name    = 'your-private-repo';
-		$access_token = GITHUB_ACCESS_TOKEN; // Use a constant or environment variable for token
-
-		// Current theme version
-		$current_version = wp_get_theme()->get( 'Version' );
-
-		// GitHub API URL for the latest release
-		$api_url = "https://api.github.com/repos/{$repo_owner}/{$repo_name}/releases/latest";
-
-		// Fetch the latest release details from GitHub
-		$response = wp_remote_get(
-			$api_url,
-			array(
-				'headers'   => array(
-					'Authorization' => "token {$access_token}",
-					'User-Agent'    => $repo_owner, // GitHub requires a user-agent
-				),
-				'sslverify' => true, // Enforce SSL verification
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			error_log( 'GitHub API error: ' . $response->get_error_message() );
-			return;
-		}
-
-		$release_data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( ! isset( $release_data['tag_name'] ) || ! isset( $release_data['zipball_url'] ) ) {
-			error_log( 'Invalid GitHub API response' );
-			return;
-		}
-
-		$latest_version = $release_data['tag_name'];
-
-		// Check if a new version is available
-		if ( version_compare( $current_version, $latest_version, '<' ) ) {
-			// Download the latest theme zip from GitHub
-			$zip_url = $release_data['zipball_url'];
-
-			$downloaded_file = download_url( $zip_url );
-
-			if ( is_wp_error( $downloaded_file ) ) {
-				error_log( 'Error downloading theme: ' . $downloaded_file->get_error_message() );
-				return;
-			}
-
-			// Verify downloaded file is a valid zip
-			$zip = new ZipArchive();
-			if ( $zip->open( $downloaded_file ) !== true ) {
-				error_log( 'Downloaded file is not a valid zip' );
-				unlink( $downloaded_file );
-				return;
-			}
-
-			// Install the downloaded theme
-			$result = wp_update_theme(
-				array(
-					'theme'  => wp_get_theme()->get_stylesheet(),
-					'source' => $downloaded_file,
-				)
-			);
-
-			if ( is_wp_error( $result ) ) {
-				error_log( 'Error updating theme: ' . $result->get_error_message() );
-				return;
-			}
-
-			// Clean up the downloaded file
-			unlink( $downloaded_file );
-
-			// Update the theme version in the database
-			update_option( 'theme_version', $latest_version );
-		}
 	}
 }
