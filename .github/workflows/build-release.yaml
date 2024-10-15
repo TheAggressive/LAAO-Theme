@@ -59,8 +59,8 @@ jobs:
             !.editorconfig
             !.gitignore
             !.prettierrc
-            !stylelintignore
-            !stylelintrc.json
+            !.stylelintignore
+            !.stylelintrc.json
             !laao-webpack.config.js
             !package.json
             !pnpm-lock.yaml
@@ -87,7 +87,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          filename: "laartsonline-v${{ env.VERSION_NUMBER }}.zip"
+          filename: "laao.zip"
 
       - name: Create New Release
         id: create-new-release
