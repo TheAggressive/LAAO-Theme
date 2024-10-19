@@ -11,17 +11,23 @@ import { image } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 import ContentEditable from '../components/ContentEditable';
 
-const getCurrentPostId = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostId());
-};
-
-const getCurrentPostType = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostType());
-};
-
 const ImageCreditFields = () => {
-	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
-	const [pictureID, setPictureID] = useState(meta['picture_id'] || null);
+	const getCurrentPostId = useSelect((select) =>
+		select('core/editor').getCurrentPostId()
+	);
+
+	const getCurrentPostType = useSelect((select) =>
+		select('core/editor').getCurrentPostType()
+	);
+
+	const [meta, setMeta] = useEntityProp(
+		'postType',
+		getCurrentPostType,
+		'meta',
+		getCurrentPostId
+	);
+
+	const [pictureID, setPictureID] = useState(meta.picture_id || null);
 
 	const handleChange = (content) => {
 		setPictureID(content);
@@ -30,7 +36,7 @@ const ImageCreditFields = () => {
 	useEffect(() => {
 		setMeta({
 			...meta,
-			['picture_id']: pictureID,
+			picture_id: pictureID,
 		});
 	}, [pictureID]);
 
@@ -39,51 +45,83 @@ const ImageCreditFields = () => {
 			name="image-credit-options"
 			icon={image}
 			title={__('Image Credits', 'laao')}
-			className="image-credit-options">
+			className="image-credit-options"
+		>
 			<PanelRow>
 				<SelectControl
 					label={__('Credit Types:', 'laao')}
-					value={meta['photo_credits_types'] || 'Please Select'}
+					value={meta.photo_credits_types || 'Please Select'}
 					options={[
 						{ label: 'Please Select', value: 'Please Select' },
-						{ label: 'Photo Courtesy of', value: 'Photo Courtesy of' },
-						{ label: 'Photos Courtesy of', value: 'Photos Courtesy of' },
+						{
+							label: 'Photo Courtesy of',
+							value: 'Photo Courtesy of',
+						},
+						{
+							label: 'Photos Courtesy of',
+							value: 'Photos Courtesy of',
+						},
 						{ label: 'Photo By', value: 'Photo By' },
 						{ label: 'Photos By', value: 'Photos By' },
-						{ label: 'Graphic Courtesy of', value: 'Graphic Courtesy of' },
-						{ label: 'Graphics Courtesy of', value: 'Graphics Courtesy of' },
+						{
+							label: 'Graphic Courtesy of',
+							value: 'Graphic Courtesy of',
+						},
+						{
+							label: 'Graphics Courtesy of',
+							value: 'Graphics Courtesy of',
+						},
 						{ label: 'Graphic By', value: 'Graphic By' },
 						{ label: 'Graphics By', value: 'Graphics By' },
 						{ label: 'Video By', value: 'Video By' },
 						{ label: 'Videos By', value: 'Videos By' },
-						{ label: 'Video Courtesy of', value: 'Video Courtesy of' },
-						{ label: 'Videos Courtesy of', value: 'Videos Courtesy of' },
+						{
+							label: 'Video Courtesy of',
+							value: 'Video Courtesy of',
+						},
+						{
+							label: 'Videos Courtesy of',
+							value: 'Videos Courtesy of',
+						},
 					]}
-					onChange={(value) => setMeta({
-						...meta,
-						['photo_credits_types']: value,
-					})}
-				/>
-			</PanelRow>
-			<PanelRow>
-				<TextControl
-					value={meta['photo_credit_belongs_to'] || ''}
-					label={__('Credit Belongs To:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,
-							['photo_credit_belongs_to']: value,
+							photo_credits_types: value,
 						})
 					}
 				/>
 			</PanelRow>
-			<label style={{ "fontSize": "11px", "paddingTop": "8px", "display": "block", "fontWeight": "600" }} className='components-base-control__label'>
+			<PanelRow>
+				<TextControl
+					value={meta.photo_credit_belongs_to || ''}
+					label={__('Credit Belongs To:', 'laao')}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							photo_credit_belongs_to: value,
+						})
+					}
+				/>
+			</PanelRow>
+			<label
+				style={{
+					fontSize: '11px',
+					paddingTop: '8px',
+					display: 'block',
+					fontWeight: '600',
+				}}
+				className="components-base-control__label"
+			>
 				{__('CAPTION ID:', 'laao')}
 			</label>
 			<PanelRow>
-				<ContentEditable initialContent={pictureID} onChange={handleChange} />
+				<ContentEditable
+					initialContent={pictureID}
+					onChange={handleChange}
+				/>
 			</PanelRow>
-		</PluginDocumentSettingPanel >
+		</PluginDocumentSettingPanel>
 	);
 };
 

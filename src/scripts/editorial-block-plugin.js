@@ -9,46 +9,61 @@ import { __ } from '@wordpress/i18n';
 import { commentAuthorAvatar } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 
-const getCurrentPostId = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostId());
-};
-
-const getCurrentPostType = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostType());
-};
-
 const EditorialFields = () => {
-	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
+	const getCurrentPostId = useSelect((select) =>
+		select('core/editor').getCurrentPostId()
+	);
+
+	const getCurrentPostType = useSelect((select) =>
+		select('core/editor').getCurrentPostType()
+	);
+
+	const [meta, setMeta] = useEntityProp(
+		'postType',
+		getCurrentPostType,
+		'meta',
+		getCurrentPostId
+	);
+
 	return (
 		<PluginDocumentSettingPanel
 			name="editorial-options"
 			icon={commentAuthorAvatar}
 			title={__('Editorial Credits', 'laao')}
-			className="editorial-options">
+			className="editorial-options"
+		>
 			<PanelRow>
 				<SelectControl
 					label={__('Credit Types:', 'laao')}
-					value={meta['by_options'] || 'Please Select'}
+					value={meta.by_options || 'Please Select'}
 					options={[
 						{ label: 'Please Select', value: 'Please Select' },
 						{ label: 'By', value: 'By' },
-						{ label: 'Story / Photo By', value: 'Story / Photo By' },
-						{ label: 'Story / Photos By', value: 'Story / Photos By' },
+						{
+							label: 'Story / Photo By',
+							value: 'Story / Photo By',
+						},
+						{
+							label: 'Story / Photos By',
+							value: 'Story / Photos By',
+						},
 					]}
-					onChange={(value) => setMeta({
-						...meta,
-						['by_options']: value,
-					})}
+					onChange={(value) =>
+						setMeta({
+							...meta,
+							by_options: value,
+						})
+					}
 				/>
 			</PanelRow>
 			<PanelRow>
 				<TextControl
-					value={meta['author'] || ''}
+					value={meta.author || ''}
 					label={__('Author Name:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,
-							['author']: value,
+							author: value,
 						})
 					}
 				/>

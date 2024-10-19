@@ -3,13 +3,21 @@ import DOMPurify from 'isomorphic-dompurify';
 import debounce from 'lodash/debounce';
 
 const ContentEditable = ({ initialContent, onChange }) => {
-	const [content, setContent] = useState(() => DOMPurify.sanitize(initialContent, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'], FORBID_ATTR: ['style'] }));
+	const [content, setContent] = useState(() =>
+		DOMPurify.sanitize(initialContent, {
+			ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
+			FORBID_ATTR: ['style'],
+		})
+	);
 	const ref = useRef(null);
 
 	// Debounced input handler to improve performance
 	const debouncedHandleInput = useCallback(
 		debounce((e) => {
-			const sanitizedContent = DOMPurify.sanitize(e.target.innerHTML, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'], FORBID_ATTR: ['style'] });
+			const sanitizedContent = DOMPurify.sanitize(e.target.innerHTML, {
+				ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
+				FORBID_ATTR: ['style'],
+			});
 			setContent(sanitizedContent);
 			if (onChange) {
 				onChange(sanitizedContent);
@@ -35,15 +43,26 @@ const ContentEditable = ({ initialContent, onChange }) => {
 
 	const handlePaste = (e) => {
 		e.preventDefault();
-		const text = e.clipboardData.getData('text/html') || e.clipboardData.getData('text/plain');
-		const sanitizedText = DOMPurify.sanitize(text, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'], FORBID_ATTR: ['style'] });
+
+		const text =
+			e.clipboardData.getData('text/html') ||
+			e.clipboardData.getData('text/plain');
+
 		const selection = window.getSelection();
-		if (!selection.rangeCount) return;
+
+		if (!selection.rangeCount) {
+			return;
+		}
+
+		const sanitizedText = DOMPurify.sanitize(text, {
+			ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
+			FORBID_ATTR: ['style'],
+		});
 
 		const range = selection.getRangeAt(0);
 		range.deleteContents();
 
-		const tempDiv = document.createElement("div");
+		const tempDiv = document.createElement('div');
 		tempDiv.innerHTML = sanitizedText;
 		const fragment = document.createDocumentFragment();
 		let node;
@@ -74,7 +93,12 @@ const ContentEditable = ({ initialContent, onChange }) => {
 			contentEditable
 			onInput={handleInput}
 			onPaste={handlePaste}
-			style={{ border: '1px solid #949494', padding: '0.5rem', minHeight: '100px', width: '100%' }}
+			style={{
+				border: '1px solid #949494',
+				padding: '0.5rem',
+				minHeight: '100px',
+				width: '100%',
+			}}
 		/>
 	);
 };

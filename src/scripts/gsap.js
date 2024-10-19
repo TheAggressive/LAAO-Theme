@@ -24,19 +24,19 @@ responsive.add('(min-width: 1024px)', () => {
 });
 
 // Site Slogan ///////////////////////////////////////////////////////
-let words = document.querySelectorAll('.site-slogan h3');
+const words = document.querySelectorAll('.site-slogan h3');
 words.forEach((word) => {
-	let letters = word.textContent.split('');
+	const letters = word.textContent.split('');
 	word.textContent = '';
 	letters.forEach((letter) => {
-		let span = document.createElement('span');
+		const span = document.createElement('span');
 		span.textContent = letter;
 		span.className = 'letter';
 		word.append(span);
 	});
 });
 
-let tl = gsap.timeline({
+const tl = gsap.timeline({
 	repeat: -1,
 	defaults: { stagger: 0.05 },
 	paused: true,
@@ -50,7 +50,7 @@ words.forEach((word, i) => {
 				y: -100,
 				ease: 'expo.out',
 			},
-			'+=5',
+			'+=5'
 		);
 		tl.to(
 			words[i - 1].childNodes,
@@ -58,7 +58,7 @@ words.forEach((word, i) => {
 				y: 100,
 				ease: 'expo.in',
 			},
-			'<-=0.85',
+			'<-=0.85'
 		);
 	}
 });
@@ -72,14 +72,14 @@ tl.fromTo(
 		ease: 'expo.out',
 		immediateRender: false,
 	},
-	'+=5',
+	'+=5'
 ).to(
 	words[words.length - 1].childNodes,
 	{
 		y: 100,
 		ease: 'expo.in',
 	},
-	'<-=0.85',
+	'<-=0.85'
 );
 
 gsap.from(words[0].childNodes, {

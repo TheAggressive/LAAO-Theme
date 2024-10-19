@@ -9,30 +9,37 @@ import { __ } from '@wordpress/i18n';
 import { mapMarker } from '@wordpress/icons';
 import { registerPlugin } from '@wordpress/plugins';
 
-const getCurrentPostId = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostId());
-};
-
-const getCurrentPostType = () => {
-	return useSelect((select) => select('core/editor').getCurrentPostType());
-};
-
 const LocationField = () => {
-	const [meta, setMeta] = useEntityProp('postType', getCurrentPostType(), 'meta', getCurrentPostId());
+	const getCurrentPostId = useSelect((select) =>
+		select('core/editor').getCurrentPostId()
+	);
+
+	const getCurrentPostType = useSelect((select) =>
+		select('core/editor').getCurrentPostType()
+	);
+
+	const [meta, setMeta] = useEntityProp(
+		'postType',
+		getCurrentPostType,
+		'meta',
+		getCurrentPostId
+	);
+
 	return (
 		<PluginDocumentSettingPanel
 			name="location-options"
 			icon={mapMarker}
 			title={__('Location', 'laao')}
-			className="location-options">
+			className="location-options"
+		>
 			<PanelRow>
 				<TextControl
-					value={meta['location'] || ''}
+					value={meta.location || ''}
 					label={__('Location:', 'laao')}
 					onChange={(value) =>
 						setMeta({
 							...meta,
-							['location']: value,
+							location: value,
 						})
 					}
 				/>

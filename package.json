@@ -8,8 +8,8 @@
 		"build:interactivity": "wp-scripts build --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
 		"build": "pnpm build:blocks & pnpm build:interactivity",
 		"format": "wp-scripts format",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
+		"lint:css": "wp-scripts lint-style 'src/**/*.css'",
+		"lint:js": "wp-scripts lint-js ./src/**/*.js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start:blocks": "wp-scripts start --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
@@ -69,6 +69,7 @@
 		"@wordpress/edit-post": "^8.9.0",
 		"@wordpress/editor": "^14.9.0",
 		"@wordpress/element": "^6.9.0",
+		"@wordpress/eslint-plugin": "^21.3.0",
 		"@wordpress/hooks": "^4.9.0",
 		"@wordpress/html-entities": "^4.9.0",
 		"@wordpress/i18n": "^5.9.0",
@@ -101,6 +102,7 @@
 		"stylelint-config-standard": "^36.0.1",
 		"stylelint-config-standard-scss": "^13.1.0",
 		"tailwindcss": "^3.4.13",
+		"typescript": "^5.6.3",
 		"webpack-fix-style-only-entries": "^0.6.1",
 		"webpack-remove-empty-scripts": "^1.0.4"
 	}
