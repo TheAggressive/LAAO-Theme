@@ -11,10 +11,9 @@ const ContentEditable = ({ initialContent, onChange }) => {
 	);
 	const ref = useRef(null);
 
-	// Debounced input handler to improve performance
-	const debouncedHandleInput = useCallback(() => {
-		const debounceFunction = debounce((e) => {
-			const sanitizedContent = DOMPurify.sanitize(e.target.innerHTML, {
+	const debouncedInputChange = useRef(
+		debounce((value) => {
+			const sanitizedContent = DOMPurify.sanitize(value, {
 				ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
 				FORBID_ATTR: ['style'],
 			});
@@ -22,19 +21,23 @@ const ContentEditable = ({ initialContent, onChange }) => {
 			if (onChange) {
 				onChange(sanitizedContent);
 			}
-		}, 300);
+		}, 300)
+	);
 
-		return debounceFunction;
-	}, [onChange]);
+	// Debounced input handler to improve performance
+	const debouncedHandleInput = useCallback((e) => {
+		const value = e.target.innerHTML;
+		debouncedInputChange.current(value);
+	}, []);
 
 	useEffect(() => {
-		const handler = debouncedHandleInput();
+		const currentDebounce = debouncedInputChange.current;
 		if (ref.current && ref.current.innerHTML !== content) {
 			ref.current.innerHTML = content;
 		}
 		// Clean up the debounce function on unmount
 		return () => {
-			handler.cancel();
+			currentDebounce.cancel();
 		};
 	}, [content, debouncedHandleInput]);
 
