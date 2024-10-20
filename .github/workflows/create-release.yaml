@@ -58,6 +58,7 @@ jobs:
             !node_modules
             !src
             !.editorconfig
+            !.eslintrc
             !.gitignore
             !.prettierrc
             !.stylelintignore
