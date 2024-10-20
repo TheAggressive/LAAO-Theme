@@ -106,18 +106,20 @@ const ImageCreditFields = () => {
 				/>
 			</PanelRow>
 			<label
+				className="components-base-control__label"
+				htmlFor="caption-id"
 				style={{
 					fontSize: '11px',
 					paddingTop: '8px',
 					display: 'block',
 					fontWeight: '600',
 				}}
-				className="components-base-control__label"
 			>
 				{__('CAPTION ID:', 'laao')}
 			</label>
 			<PanelRow>
 				<ContentEditable
+					id="caption-id"
 					initialContent={pictureID}
 					onChange={handleChange}
 				/>
