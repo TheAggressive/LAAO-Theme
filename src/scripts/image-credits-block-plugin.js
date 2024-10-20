@@ -38,6 +38,7 @@ const ImageCreditFields = () => {
 			...meta,
 			picture_id: pictureID,
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pictureID]);
 
 	return (
