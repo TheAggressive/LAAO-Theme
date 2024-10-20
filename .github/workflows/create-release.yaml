@@ -94,7 +94,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          repository: my_gh_org/my_gh_repo
+          repository: TheAggressive/LAAO
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           files: |
             laao.zip
