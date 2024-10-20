@@ -22,3 +22,8 @@ indent_style = space
 
 [packages/react-native-*/**.xml]
 indent_style = space
+
+[*.{json,js,jsx,ts,tsx}]
+indent_size = 2
+indent_style = tab
+
