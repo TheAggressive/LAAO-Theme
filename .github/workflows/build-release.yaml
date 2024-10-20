@@ -3,8 +3,8 @@ name: Build Release
 # Controls when the action will run.
 on:
   push:
-    branches:
-      - "master"
+    tags:
+      - "v*.*.*"
 
   workflow_dispatch:
 
@@ -90,24 +90,12 @@ jobs:
         with:
           filename: "laao.zip"
 
-      - name: Create New Release
-        id: create-new-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ env.VERSION_NUMBER }}"
-          release_name: "LAAO v${{ env.VERSION_NUMBER }}"
-          draft: false
-          prerelease: false
+          repository: my_gh_org/my_gh_repo
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          files: |
+            laao.zip
 
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-new-release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./laao.zip
-          asset_name: laao.zip
-          asset_content_type: application/zip
+
