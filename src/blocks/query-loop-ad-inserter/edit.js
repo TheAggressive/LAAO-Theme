@@ -18,7 +18,11 @@
  */
 import './editor.scss';
 
-import { InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	useBlockProps,
+	useInnerBlocksProps,
+} from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -27,6 +31,10 @@ import { __ } from '@wordpress/i18n';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param  root0
+ * @param  root0.attributes
+ * @param  root0.setAttributes
+ * @param  root0.context
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
@@ -38,31 +46,35 @@ export default function Edit({ attributes, setAttributes, context }) {
 		allowedBlocks: ['adsanity/ad-group'],
 		template: [['core/paragraph']],
 		templateLock: false,
-	}
+	});
+
+	const { postIndex } = useSelect(
+		(select) => {
+			const { getEntityRecords } = select('core');
+			const posts = getEntityRecords('postType', context.postType, {
+				per_page: -1,
+			});
+
+			const currentPostId = context.postId;
+
+			const getPostIndex = posts
+				? posts.findIndex((post) => post.id === currentPostId) + 1
+				: -1;
+
+			return {
+				postIndex: getPostIndex,
+			};
+		},
+		[context.postId, context.postType]
 	);
-
-	const { postIndex } = useSelect((select) => {
-		const { getEntityRecords } = select('core');
-		const posts = getEntityRecords('postType', context.postType, { per_page: -1 });
-
-		const currentPostId = context.postId;
-		const postIndex = posts ? posts.findIndex(post => post.id === currentPostId) + 1 : -1;
-
-		return {
-			postIndex
-		};
-	}, []);
 
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody title={__('Settings', 'query-loop-ad-inserter')}>
 					<TextControl
-						label={__(
-							'Place Ad After Every Nth Post',
-							'laao'
-						)}
-						type='number'
+						label={__('Place Ad After Every Nth Post', 'laao')}
+						type="number"
 						value={placeAfter}
 						onChange={(value) =>
 							setAttributes({ placeAfter: parseInt(value) })
@@ -70,9 +82,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			{postIndex === placeAfter && (
-				<div {...innerBlockProps} />
-			)}
+			{postIndex === placeAfter && <div {...innerBlockProps} />}
 		</>
 	);
 }
