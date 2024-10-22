@@ -47,11 +47,11 @@
 		@apply row-span-3;
 	}
 
-  .wp-block-event-gallery-item:nth-last-child(3) {
-    @apply row-span-1;
-  }
+	.wp-block-event-gallery-item:nth-last-child(3) {
+		@apply row-span-1;
+	}
 
-  .wp-block-event-gallery-item:nth-last-child(2) {
-    @apply row-span-1;
-  }
+	.wp-block-event-gallery-item:nth-last-child(2) {
+		@apply row-span-1;
+	}
 }

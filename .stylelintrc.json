@@ -1,19 +1,13 @@
 {
-	"extends": ["stylelint-config-standard", "stylelint-config-standard-scss"],
+	"extends": [
+		"@wordpress/stylelint-config",
+		"@wordpress/stylelint-config/scss"
+	],
 	"rules": {
-		"custom-property-pattern": null,
-		"selector-class-pattern": null,
-		"at-rule-no-unknown": [
-			true,
-			{
-				"ignoreAtRules": [
-					"tailwind",
-					"apply",
-					"variants",
-					"responsive",
-					"screen"
-				]
-			}
-		]
+		"at-rule-empty-line-before": null,
+		"comment-empty-line-before": null,
+		"scss/selector-no-redundant-nesting-selector": null,
+		"rule-empty-line-before": null,
+		"selector-class-pattern": null
 	}
 }
