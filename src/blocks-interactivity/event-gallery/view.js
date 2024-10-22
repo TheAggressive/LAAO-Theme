@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { getContext, getElement, store } from "@wordpress/interactivity";
+import { getContext, getElement, store } from '@wordpress/interactivity';
 
 const { state, actions, callbacks } = store('laao/event-gallery', {
 	state: {
@@ -23,10 +23,15 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			return state.currentImageRef.parentNode.classList.value;
 		},
 		get getImgStyles() {
-			return (state.isLightboxActive && state.currentImageRef.style.cssText);
+			return (
+				state.isLightboxActive && state.currentImageRef.style.cssText
+			);
 		},
 		get getFigureStyles() {
-			return (state.isLightboxActive && state.currentImageRef.parentNode.style.cssText);
+			return (
+				state.isLightboxActive &&
+				state.currentImageRef.parentNode.style.cssText
+			);
 		},
 		get hasImageLoaded() {
 			return state.currentImageRef?.complete;
@@ -41,7 +46,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			return state.currentImageRef.getAttribute('alt');
 		},
 		get isReduced() {
-			return window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+			return window.matchMedia(`(prefers-reduced-motion: reduce)`)
+				.matches;
 		},
 		get getTimeOut() {
 			return state.isReduced ? 0 : 400;
@@ -75,7 +81,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			callbacks.setLightBoxVariables();
 
 			callbacks.setScrollLock();
-
 		},
 		hideLightbox: () => {
 			if (state.overlayActive) {
@@ -104,7 +109,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					state.isLightboxClosing = false;
 
 					callbacks.setScrollLock();
-
 				}, state.getTimeOut);
 			}
 		},
@@ -117,7 +121,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.scrollLeftReset = document.documentElement.scrollLeft;
 		},
 		setScrollBarWidth() {
-			state.scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+			state.scrollBarWidth =
+				window.innerWidth - document.documentElement.clientWidth;
 		},
 		handleNextImage() {
 			// Prevents double clicks from triggering the animation twice.
@@ -135,8 +140,14 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// If there is no next sibling, it goes back to the first image.
 				if (!state.currentImageRef.parentNode.nextElementSibling) {
 					actions.setImage(
-						JSON.parse(state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute('data-wp-context')),
-						state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector('img')
+						JSON.parse(
+							state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute(
+								'data-wp-context'
+							)
+						),
+						state.currentImageRef.parentNode.parentNode.firstElementChild.querySelector(
+							'img'
+						)
 					);
 					callbacks.setLightBoxVariables();
 					return;
@@ -144,8 +155,14 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 				// Sets the next sibling as current image.
 				actions.setImage(
-					JSON.parse(state.currentImageRef.parentNode.nextElementSibling.getAttribute('data-wp-context')),
-					state.currentImageRef.parentNode.nextElementSibling.querySelector('img')
+					JSON.parse(
+						state.currentImageRef.parentNode.nextElementSibling.getAttribute(
+							'data-wp-context'
+						)
+					),
+					state.currentImageRef.parentNode.nextElementSibling.querySelector(
+						'img'
+					)
 				);
 				callbacks.setLightBoxVariables();
 			}, state.getTimeOut);
@@ -170,8 +187,14 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			setTimeout(() => {
 				if (!state.currentImageRef.parentNode.previousElementSibling) {
 					actions.setImage(
-						JSON.parse(state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute('data-wp-context')),
-						state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector('img')
+						JSON.parse(
+							state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute(
+								'data-wp-context'
+							)
+						),
+						state.currentImageRef.parentNode.parentNode.lastElementChild.querySelector(
+							'img'
+						)
 					);
 					callbacks.setLightBoxVariables();
 					return;
@@ -179,8 +202,15 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 				// Sets the previous sibling as current image.
 				actions.setImage(
-					JSON.parse(state.currentImageRef.parentNode.previousElementSibling.getAttribute('data-wp-context')),
-					state.currentImageIdRef = state.currentImageRef.parentNode.previousElementSibling.querySelector('img')
+					JSON.parse(
+						state.currentImageRef.parentNode.previousElementSibling.getAttribute(
+							'data-wp-context'
+						)
+					),
+					(state.currentImageIdRef =
+						state.currentImageRef.parentNode.previousElementSibling.querySelector(
+							'img'
+						))
 				);
 				callbacks.setLightBoxVariables();
 			}, state.getTimeOut);
@@ -222,10 +252,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// because the scroll event can't be canceled, so it resets the
 				// position instead.
 
-				window.scrollTo(
-					state.scrollLeftReset,
-					state.scrollTopReset
-				);
+				window.scrollTo(state.scrollLeftReset, state.scrollTopReset);
 			}
 		},
 	},
@@ -250,31 +277,33 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				return;
 			}
 
-			let {
+			const {
 				naturalWidth,
 				naturalHeight,
 				offsetWidth: originalWidth,
 				offsetHeight: originalHeight,
 			} = state.currentImageRef;
-			let { x: screenPosX, y: screenPosY } =
+			const { x: screenPosX, y: screenPosY } =
 				state.currentImageRef.getBoundingClientRect();
 
 			// Natural ratio of the image clicked to open the lightbox.
 			const naturalRatio = naturalWidth / naturalHeight;
 			// Original ratio of the image clicked to open the lightbox.
-			let originalRatio = originalWidth / originalHeight;
+			const originalRatio = originalWidth / originalHeight;
 
 			// Typically, it uses the image's full-sized dimensions. If those
 			// dimensions have not been set (i.e. an external image with only one
 			// size), the image's dimensions in the lightbox are the same
 			// as those of the image in the content.
 			let imgMaxWidth = parseFloat(
-				state.currentImageRef.targetWidth !== undefined && state.currentImageRef.targetWidth !== 'none'
+				state.currentImageRef.targetWidth !== undefined &&
+					state.currentImageRef.targetWidth !== 'none'
 					? state.currentImageRef.targetWidth
 					: naturalWidth
 			);
 			let imgMaxHeight = parseFloat(
-				state.currentImageRef.targetHeight !== undefined && state.currentImageRef.targetHeight !== 'none'
+				state.currentImageRef.targetHeight !== undefined &&
+					state.currentImageRef.targetHeight !== 'none'
 					? state.currentImageRef.targetHeight
 					: naturalHeight
 			);
