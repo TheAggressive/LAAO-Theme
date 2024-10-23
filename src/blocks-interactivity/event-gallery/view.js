@@ -55,17 +55,17 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		get getImageId() {
 			return state.currentImageRef?.dataset.wpKey;
 		},
-		get getEventTitle() {
-			return encodeURIComponent(state.currentImageId?.eventTitle);
+		get facebookShareUrl() {
+			return `https://www.facebook.com/sharer/sharer.php?u=${state.currentImage.attachmentLink}`;
 		},
-		get facebookConstructor() {
-			return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}`)}`;
+		get xShareUrl() {
+			return `https://x.com/intent/tweet?url=${state.currentImage.attachmentLink}`;
 		},
-		get twitterConstructor() {
-			return `https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}`)}`;
+		get linkedinShareUrl() {
+			return `https://www.linkedin.com/sharing/share-offsite/?url=${state.currentImage.attachmentLink}`;
 		},
-		get linkedinConstructor() {
-			return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}&title=${state.getEventTitle}`)}`;
+		get mailShareUrl() {
+			return `mailto:?subject=${encodeURIComponent('Check This Out on LAArtsOnline.com!')}&body=${encodeURIComponent(`I thought you might enjoy this! ${state.currentImage.attachmentLink}`)}`;
 		},
 	},
 	actions: {
