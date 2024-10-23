@@ -52,6 +52,21 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		get getTimeOut() {
 			return state.isReduced ? 0 : 400;
 		},
+		get getImageId() {
+			return state.currentImageRef?.dataset.wpKey;
+		},
+		get getEventTitle() {
+			return encodeURIComponent(state.currentImageId?.eventTitle);
+		},
+		get facebookConstructor() {
+			return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}`)}`;
+		},
+		get twitterConstructor() {
+			return `https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}`)}`;
+		},
+		get linkedinConstructor() {
+			return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://laartsonline.com/?attachment_id=${state.getImageId}&title=${state.getEventTitle}`)}`;
+		},
 	},
 	actions: {
 		showLightbox: () => {

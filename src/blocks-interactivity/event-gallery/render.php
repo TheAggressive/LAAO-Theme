@@ -21,6 +21,7 @@ if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
 			'targetWidth'  => $image['sizes']['full']['width'],
 			'targetHeight' => $image['sizes']['full']['height'],
 			'alt'          => $image['alt'] ? $image['alt'] : 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
+			'eventTitle'   => ucfirst( get_the_title() ),
 			'scaleAttr'    => false,
 		);
 
@@ -69,7 +70,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
                         </a>
                     </li>
                     <li class="wp-block-laao-event-lightbox-social-item">
-                        <a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-linkedin-link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://laartsonline.com/?attachment_id=49569" aria-label="Share on Linkedin">
+                        <a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-linkedin-link" data-wp-bind--href="state.linkedinConstructor" aria-label="Share on Linkedin">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
                                 <path d="M9,25H4V10h5V25z M6.501,8C5.118,8,4,6.879,4,5.499S5.12,3,6.501,3C7.879,3,9,4.121,9,5.499C9,6.879,7.879,8,6.501,8z M27,25h-4.807v-7.3c0-1.741-0.033-3.98-2.499-3.98c-2.503,0-2.888,1.896-2.888,3.854V25H12V9.989h4.614v2.051h0.065 c0.642-1.18,2.211-2.424,4.551-2.424c4.87,0,5.77,3.109,5.77,7.151C27,16.767,27,25,27,25z"></path>
                             </svg>
@@ -154,7 +155,6 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 						'class'                   => 'wp-block-event-gallery-item-image',
 						'loading'                 => 'lazy',
 						'alt'                     => $image['alt'] ? $image['alt'] : 'Image #' . $key + 1 . ' of ' . ucfirst( get_the_title() ),
-						'data-id'                 => $image['id'],
 						'data-wp-key'             => $image['id'],
 						'data-wp-on-async--click' => 'actions.showLightbox',
 						'data-wp-on--keydown'     => 'actions.handleImageKeydown',
