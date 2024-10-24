@@ -17,7 +17,7 @@
 
 	&.closing {
 		@media (--motion-reduce-no-preference) {
-			@apply invisible animate-[turn-off-visibility_400ms_ease-in-out_forwards];
+			@apply animate-[turn-off-visibility_400ms_ease-in-out_forwards];
 		}
 	}
 }
@@ -49,8 +49,6 @@
 	}
 
 	&.closing {
-		@apply invisible;
-
 		@media (--motion-reduce-no-preference) {
 			.wp-block-laao-event-lightbox-image-container {
 				@apply visible animate-[lightbox-zoom-out_400ms_ease-in-out_forwards];
@@ -61,8 +59,18 @@
 	.wp-block-laao-event-lightbox-header {
 		@apply relative z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
 
+		@media (--motion-reduce-no-preference) {
+			div:has(.active) & {
+				@apply animate-[slide-down_200ms_ease-in-out];
+			}
+		}
+
 		&.closing {
-			@apply invisible -translate-y-full animate-[slide-up_200ms_ease-in-out];
+			@apply invisible;
+
+			@media (--motion-reduce-no-preference) {
+				@apply visible -translate-y-full animate-[slide-up_200ms_ease-in-out];
+			}
 		}
 
 		.wp-block-laao-event-lightbox-social {
