@@ -53,7 +53,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
                 data-wp-on-async--click="actions.hideLightbox"
                 aria-hidden="true">
             </div>
-            <header class="wp-block-laao-event-lightbox-header" data-wp-class--closing="!state.overlayActive">
+            <header class="wp-block-laao-event-lightbox-header">
                 <ul class="wp-block-laao-event-lightbox-social">
                     <li class="wp-block-laao-event-lightbox-social-item">
                         <a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-twitter-link" data-wp-bind--href="state.xShareUrl" aria-label="Share on X">
