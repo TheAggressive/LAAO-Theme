@@ -57,11 +57,15 @@
 	}
 
 	.wp-block-laao-event-lightbox-header {
-		@apply invisible relative z-50 flex max-w-[100vw] justify-between bg-black/70 px-4;
+		@apply relative z-50 hidden max-w-[100vw] justify-between bg-black/70 px-4;
+
+		div:has(.active) & {
+			@apply flex;
+		}
 
 		@media (--motion-reduce-no-preference) {
 			div:has(.active) & {
-				@apply visible animate-[slide-down_400ms_ease-in-out_forwards];
+				@apply animate-[slide-down_400ms_ease-in-out_forwards];
 			}
 		}
 
@@ -77,7 +81,7 @@
 			}
 
 			a.wp-block-laao-event-lightbox-social-link {
-				@apply fill-[--wp--preset--color--laao-white];
+				@apply fill-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
 
 				&:hover {
 					@apply fill-[--wp--preset--color--laao-red];
