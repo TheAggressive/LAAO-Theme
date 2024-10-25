@@ -56,7 +56,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
             <header class="wp-block-laao-event-lightbox-header">
                 <ul class="wp-block-laao-event-lightbox-social">
                     <li class="wp-block-laao-event-lightbox-social-item">
-                        <a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-twitter-link" data-wp-bind--href="state.xShareUrl" aria-label="Share on X">
+                        <a class="wp-block-laao-event-lightbox-social-link wp-block-laao-event-lightbox-social-x-link" data-wp-bind--href="state.xShareUrl" aria-label="Share on X">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
                                 <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"></path>
                             </svg>
@@ -84,7 +84,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
                         </a>
                     </li>
                 </ul>
-                <button class="wp-block-laao-event-lightbox-close" aria-label="Close lightbox" data-wp-on--click="actions.hideLightbox">
+                <button class="wp-block-laao-event-lightbox-close" aria-label="Close Lightbox" data-wp-on--click="actions.hideLightbox">
                     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                         <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path>
                     </svg>
