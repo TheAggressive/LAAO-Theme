@@ -6,7 +6,7 @@
 	);
 	position: relative;
 
-	@apply grid place-items-center overflow-hidden h-[3.75rem] w-full;
+	@apply grid h-[3.75rem] w-full place-items-center overflow-hidden;
 
 	h3 {
 		display: flex;
@@ -19,7 +19,7 @@
 	}
 
 	p {
-		@apply flex justify-center items-center m-0 p-0 absolute overflow-hidden uppercase tracking-[1vw] lg:tracking-[1.5vw];
+		@apply absolute m-0 flex items-center justify-center overflow-hidden p-0 uppercase tracking-[1vw] lg:tracking-[1.5vw];
 
 		.letter {
 			/* This will let you apply transforms to the span char elements. */

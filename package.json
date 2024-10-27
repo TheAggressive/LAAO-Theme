@@ -2,7 +2,24 @@
 	"name": "laao",
 	"version": "0.0.1",
 	"description": "Official Block Theme for LAArtsOnline.com",
+	"author": "The Aggressive, LLC",
+	"license": "MIT",
 	"main": "index.js",
+	"keywords": [
+		"Wordpress",
+		"Theme",
+		"Blocks",
+		"LAArtsOnline.com"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TheAggressive/LAAO-Theme.git"
+	},
+	"bugs": {
+		"url": "https://github.com/TheAggressive/LAAO-Theme/issues"
+	},
+	"homepage": "https://github.com/TheAggressive/LAAO-Theme#readme",
+
 	"scripts": {
 		"build:blocks": "wp-scripts build --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
 		"build:interactivity": "wp-scripts build --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
@@ -19,22 +36,6 @@
 		"start:copy-php": "wp-scripts start --output-path=./dist --webpack-copy-php",
 		"js:watch": "wp-scripts start ./src/scripts/app.js --output-path=dist/scripts"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/TheAggressive/LAAO-Theme.git"
-	},
-	"keywords": [
-		"Wordpress",
-		"Theme",
-		"Blocks",
-		"LAArtsOnline.com"
-	],
-	"author": "The Aggressive, LLC",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/TheAggressive/LAAO-Theme/issues"
-	},
-	"homepage": "https://github.com/TheAggressive/LAAO-Theme#readme",
 	"browserslist": [
 		"extends @wordpress/browserslist-config"
 	],
