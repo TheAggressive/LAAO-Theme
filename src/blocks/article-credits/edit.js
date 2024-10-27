@@ -24,12 +24,13 @@ import './editor.scss';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param  root0
+ * @param  root0.context
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
  */
 export default function Edit({ context }) {
-
 	const [meta] = useEntityProp(
 		'postType',
 		context.postType,
@@ -37,16 +38,33 @@ export default function Edit({ context }) {
 		context.postId
 	);
 
-	const { author, by_options, photo_credits_types, photo_credit_belongs_to, location, hair_by, make_up_by, grooming_by } = meta;
+	const {
+		author,
+		by_options,
+		photo_credits_types,
+		photo_credit_belongs_to,
+		location,
+		hair_by,
+		make_up_by,
+		grooming_by,
+	} = meta;
 
 	return (
 		<ul {...useBlockProps()}>
-			{author && by_options && (<li>{by_options} {author}</li>)}
-			{photo_credits_types && photo_credit_belongs_to && (<li>{photo_credits_types} {photo_credit_belongs_to}</li>)}
-			{location && (<li>Location {location}</li>)}
-			{hair_by && (<li>Hair By {hair_by}</li>)}
-			{make_up_by && (<li>Makeup By {make_up_by}</li>)}
-			{grooming_by && (<li>Grooming By {grooming_by}</li>)}
+			{author && by_options && (
+				<li>
+					{by_options} {author}
+				</li>
+			)}
+			{photo_credits_types && photo_credit_belongs_to && (
+				<li>
+					{photo_credits_types} {photo_credit_belongs_to}
+				</li>
+			)}
+			{location && <li>Location {location}</li>}
+			{hair_by && <li>Hair By {hair_by}</li>}
+			{make_up_by && <li>Makeup By {make_up_by}</li>}
+			{grooming_by && <li>Grooming By {grooming_by}</li>}
 		</ul>
 	);
 }

@@ -8,7 +8,7 @@
 	"description": "LAAO Event Gallery",
 	"category": "media",
 	"textdomain": "laao",
-	"keywords": [ "Event Gallery", "LAAO", "Gallery", "Events" ],
+	"keywords": ["Event Gallery", "LAAO", "Gallery", "Events"],
 	"editorScript": "file:index.js",
 	"editorStyle": "file:index.css",
 	"style": "file:style-index.css",
