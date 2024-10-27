@@ -1,4 +1,4 @@
-@import "../../styles/_breakpoints.css";
+@import '../../styles/_breakpoints.css';
 
 .scroll-lock {
 	@apply !overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
@@ -237,8 +237,12 @@
 	0% {
 		transform: translate(
 				/* stylelint-disable-next-line scss/operator-no-newline-after */
-					calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
-				calc(-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem)
+					calc(
+						(-100vw) / 2 + var(--wp--lightbox-initial-left-position)
+					),
+				calc(
+					-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem
+				)
 			)
 			scale(var(--wp--lightbox-scale));
 		width: var(--wp--lightbox-image-width);
@@ -264,8 +268,12 @@
 	99% {
 		transform: translate(
 				/* stylelint-disable-next-line scss/operator-no-newline-after */
-					calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
-				calc(-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem)
+					calc(
+						(-100vw) / 2 + var(--wp--lightbox-initial-left-position)
+					),
+				calc(
+					-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem
+				)
 			)
 			scale(var(--wp--lightbox-scale));
 		width: var(--wp--lightbox-image-width);
