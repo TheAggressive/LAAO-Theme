@@ -19,12 +19,15 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './editor.scss';
+import './editor.css';
 
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param  root0
+ * @param  root0.attributes
+ * @param  root0.setAttributes
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
@@ -47,10 +50,7 @@ export default function Edit({ attributes, setAttributes }) {
 				<PanelBody title={__('Settings', 'copyright-date-block')}>
 					<ToggleControl
 						checked={!!showStartingYear}
-						label={__(
-							'Show starting year',
-							'laao'
-						)}
+						label={__('Show starting year', 'laao')}
 						onChange={() =>
 							setAttributes({
 								showStartingYear: !showStartingYear,
@@ -59,10 +59,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					{showStartingYear && (
 						<TextControl
-							label={__(
-								'Starting year',
-								'laao'
-							)}
+							label={__('Starting year', 'laao')}
 							value={startingYear || ''}
 							onChange={(value) =>
 								setAttributes({ startingYear: value })
@@ -70,10 +67,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					)}
 					<TextControl
-						label={__(
-							'Company name',
-							'laao'
-						)}
+						label={__('Company name', 'laao')}
 						value={companyName || ''}
 						onChange={(value) =>
 							setAttributes({ companyName: value })
@@ -81,7 +75,11 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<p {...useBlockProps()}>Copyright © {displayDate} {companyName}. All Rights Reserved. <a href="/terms">TERMS OF USE</a> <span>|</span> <a href="/privacy">PRIVACY POLICY</a></p>
+			<p {...useBlockProps()}>
+				Copyright © {displayDate} {companyName}. All Rights Reserved.{' '}
+				<a href="/terms">TERMS OF USE</a> <span>|</span>{' '}
+				<a href="/privacy">PRIVACY POLICY</a>
+			</p>
 		</>
 	);
 }

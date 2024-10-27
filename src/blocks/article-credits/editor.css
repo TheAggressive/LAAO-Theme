@@ -4,5 +4,8 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-// .wp-block-laao-article-credits {
-// }
+.wp-block-laao-article-credits {
+	& li {
+		@apply font-semibold uppercase;
+	}
+}

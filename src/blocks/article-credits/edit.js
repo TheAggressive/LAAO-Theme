@@ -18,7 +18,7 @@ import { useEntityProp } from '@wordpress/core-data';
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './editor.scss';
+import './editor.css';
 
 /**
  * The edit function describes the structure of your block in the context of the

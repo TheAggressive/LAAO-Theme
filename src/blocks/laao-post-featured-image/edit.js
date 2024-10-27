@@ -26,20 +26,34 @@ import './editor.css';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param  root0
+ * @param  root0.context
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ context, }) {
-	const [featuredImgID] = useEntityProp('postType', context.postType, 'featured_media', context.postId);
-	const getFeaturedImg = useSelect((select) => featuredImgID ? select('core').getMedia(featuredImgID) : null);
-	const [meta] = useEntityProp('postType', context.postType, 'meta', context.postId);
+export default function Edit({ context }) {
+	const [featuredImgID] = useEntityProp(
+		'postType',
+		context.postType,
+		'featured_media',
+		context.postId
+	);
+	const getFeaturedImg = useSelect((select) =>
+		featuredImgID ? select('core').getMedia(featuredImgID) : null
+	);
+	const [meta] = useEntityProp(
+		'postType',
+		context.postType,
+		'meta',
+		context.postId
+	);
 
-	const { picture_id } = meta;
+	const { pictureId } = meta;
 
 	function generateSrcSet(sizes) {
 		let srcSet = '';
-		for (let size in sizes) {
+		for (const size in sizes) {
 			srcSet += `${sizes[size].source_url} ${sizes[size].width}w, `;
 		}
 		return srcSet;
@@ -48,15 +62,19 @@ export default function Edit({ context, }) {
 	return (
 		<figure {...useBlockProps()}>
 			{getFeaturedImg && (
-				<img src={getFeaturedImg.source_url}
+				<img
+					src={getFeaturedImg.source_url}
 					alt={getFeaturedImg.alt_text}
 					width={getFeaturedImg.media_details.width}
 					height={getFeaturedImg.media_details.height}
 					srcSet={generateSrcSet(getFeaturedImg.media_details.sizes)}
 				/>
 			)}
-			{picture_id && (
-				<figcaption className='wp-block-laao-post-featured-image-caption' dangerouslySetInnerHTML={{ __html: picture_id }} />
+			{pictureId && (
+				<figcaption
+					className="wp-block-laao-post-featured-image-caption"
+					dangerouslySetInnerHTML={{ __html: pictureId }}
+				/>
 			)}
 		</figure>
 	);

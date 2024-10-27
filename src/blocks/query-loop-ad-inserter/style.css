@@ -4,10 +4,6 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-
-.wp-block-laao-article-credits {
-	& li {
-		text-transform: uppercase;
-		font-weight: 600;
-	}
+.wp-block-laao-query-loop-ad-inserter {
+	@apply w-fit;
 }
