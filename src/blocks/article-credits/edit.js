@@ -40,31 +40,31 @@ export default function Edit({ context }) {
 
 	const {
 		author,
-		by_options,
-		photo_credits_types,
-		photo_credit_belongs_to,
+		by_options: byOptions,
+		photo_credits_types: photoCreditsTypes,
+		photo_credit_belongs_to: photoCreditBelongsTo,
 		location,
-		hair_by,
-		make_up_by,
-		grooming_by,
+		hair_by: hairBy,
+		make_up_by: makeUpBy,
+		grooming_by: groomingBy,
 	} = meta;
 
 	return (
 		<ul {...useBlockProps()}>
-			{author && by_options && (
+			{author && byOptions && (
 				<li>
-					{by_options} {author}
+					{byOptions} {author}
 				</li>
 			)}
-			{photo_credits_types && photo_credit_belongs_to && (
+			{photoCreditsTypes && photoCreditBelongsTo && (
 				<li>
-					{photo_credits_types} {photo_credit_belongs_to}
+					{photoCreditsTypes} {photoCreditBelongsTo}
 				</li>
 			)}
 			{location && <li>Location {location}</li>}
-			{hair_by && <li>Hair By {hair_by}</li>}
-			{make_up_by && <li>Makeup By {make_up_by}</li>}
-			{grooming_by && <li>Grooming By {grooming_by}</li>}
+			{hairBy && <li>Hair By {hairBy}</li>}
+			{makeUpBy && <li>Makeup By {makeUpBy}</li>}
+			{groomingBy && <li>Grooming By {groomingBy}</li>}
 		</ul>
 	);
 }
