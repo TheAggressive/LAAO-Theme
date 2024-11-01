@@ -20,6 +20,9 @@
 	},
 	"homepage": "https://github.com/TheAggressive/LAAO-Theme#readme",
 	"scripts": {
+		"create-block": "npx @wordpress/create-block@latest --no-plugin --namespace laao",
+		"create-block-dynamic": "npx @wordpress/create-block@latest --no-plugin --namespace laao --variant dynamic",
+		"create-block-interactive": "npx @wordpress/create-block@latest --no-plugin --namespace laao --template @wordpress/create-block-interactive-template",
 		"build:blocks": "wp-scripts build --config laao-webpack.config.js --webpack-src-dir=./src/blocks --output-path=./dist/blocks",
 		"build:interactivity": "wp-scripts build --webpack-src-dir=./src/blocks-interactivity --output-path=./dist/blocks-interactivity --experimental-modules",
 		"build": "pnpm build:blocks & pnpm build:interactivity",
