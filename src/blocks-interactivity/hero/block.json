@@ -5,13 +5,15 @@
 	"version": "0.1.0",
 	"title": "Hero",
 	"category": "widgets",
-	"icon": "media-interactive",
-	"description": "An interactive block with the Interactivity API.",
+	"textdomain": "hero",
+	"icon": "slides",
+	"description": "The hero block for LAAO that features Ken Burns-style image slideshow.",
 	"example": {},
 	"supports": {
+		"html": false,
 		"interactivity": true
 	},
-	"textdomain": "hero",
+	"attributes": {},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

@@ -10,47 +10,62 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-// Generates a unique id for aria-controls.
-$unique_id = wp_unique_id( 'p-' );
+if ( ! function_exists( 'laao_hero_context' ) ) {
+	function laao_hero_context( $slides, $transition_duration ) {
+		return array(
+			'totalSlides'        => count( $slides ),
+			'transitionDuration' => $transition_duration,
+		);
+	}
+}
 
-// Adds the global state.
-wp_interactivity_state(
-	'laao',
-	array(
-		'isDark'    => false,
-		'darkText'  => esc_html__( 'Switch to Light', 'hero' ),
-		'lightText' => esc_html__( 'Switch to Dark', 'hero' ),
-		'themeText'	=> esc_html__( 'Switch to Dark', 'hero' ),
-	)
-);
-?>
+	$post_type_selector = 'hero-banners';
+	$number_of_slides   = $attributes['numberOfSlides'] ?? 5;
 
-<div
-	<?php echo get_block_wrapper_attributes(); ?>
-	data-wp-interactive="laao"
-	<?php echo wp_interactivity_data_wp_context( array( 'isOpen' => false ) ); ?>
-	data-wp-watch="callbacks.logIsOpen"
-	data-wp-class--dark-theme="state.isDark"
->
-	<button
-		data-wp-on--click="actions.toggleTheme"
-		data-wp-text="state.themeText"
-	></button>
+	$args = array(
+		'post_type' => $post_type_selector,
+	);
 
-	<button
-		data-wp-on--click="actions.toggleOpen"
-		data-wp-bind--aria-expanded="context.isOpen"
-		aria-controls="<?php echo esc_attr( $unique_id ); ?>"
-	>
-		<?php esc_html_e( 'Toggle', 'hero' ); ?>
-	</button>
+	$query  = new WP_Query( $args );
+	$slides = array();
 
-	<p
-		id="<?php echo esc_attr( $unique_id ); ?>"
-		data-wp-bind--hidden="!context.isOpen"
-	>
-		<?php
-			esc_html_e( 'Hero - hello from an interactive block!', 'hero' );
-		?>
-	</p>
-</div>
+	while ( $query->have_posts() ) {
+		$query->the_post();
+		if ( has_post_thumbnail() ) {
+			$slides[] = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+		}
+	}
+	wp_reset_postdata();
+
+	?>
+
+		<div
+		class="kenburns-slider"
+		data-wp-interactive="laao/hero"
+		data-wp-init="actions.init"
+			<?php
+				echo wp_kses_data(
+					wp_interactivity_data_wp_context(
+						laao_hero_context( $slides, $transition_duration ),
+					)
+				);
+				?>
+		>
+			<?php foreach ( $slides as $index => $image_url ) : ?>
+				<div
+					class="kenburns-slide"
+					data-wp-key="<?php echo esc_attr( $index ); ?>"
+					<?php
+					echo wp_kses_data(
+						wp_interactivity_data_wp_context(
+							array(
+								'slideIndex' => $index,
+							)
+						)
+					)
+					?>
+					data-wp-class--is-active="callbacks.isActive"
+					style="background-image: url('<?php echo esc_url( $image_url ); ?>');"
+				></div>
+			<?php endforeach; ?>
+	</div>

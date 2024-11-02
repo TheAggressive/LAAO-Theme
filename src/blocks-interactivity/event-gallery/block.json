@@ -9,9 +9,6 @@
 	"category": "media",
 	"textdomain": "laao",
 	"keywords": ["Event Gallery", "LAAO", "Gallery", "Events"],
-	"editorScript": "file:index.js",
-	"editorStyle": "file:index.css",
-	"style": "file:style-index.css",
 	"supports": {
 		"interactivity": true
 	},
@@ -21,6 +18,9 @@
 			"default": []
 		}
 	},
+	"editorScript": "file:index.js",
+	"editorStyle": "file:index.css",
+	"style": "file:style-index.css",
 	"render": "file:./render.php",
 	"viewScriptModule": "file:view.js"
 }

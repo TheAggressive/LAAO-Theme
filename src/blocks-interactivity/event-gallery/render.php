@@ -13,10 +13,9 @@
 
 $context = array( 'images' => $attributes['images'] );
 
-if ( ! function_exists( 'laao_render_event_gallery_context' ) ) {
-	function laao_render_event_gallery_context( $image, $key ) {
+if ( ! function_exists( 'laao_event_gallery_context' ) ) {
+	function laao_event_gallery_context( $image, $key ) {
 		$context = array(
-
 			'uploadedSrc'    => $image['sizes']['full']['url'],
 			'targetWidth'    => $image['sizes']['full']['width'],
 			'targetHeight'   => $image['sizes']['full']['height'],
@@ -141,7 +140,7 @@ if ( ! function_exists( 'laao_render_event_gallery_lightbox' ) ) {
 				<?php
 				echo wp_kses_data(
 					wp_interactivity_data_wp_context(
-						laao_render_event_gallery_context( $image, $key ),
+						laao_event_gallery_context( $image, $key ),
 					)
 				);
 				?>

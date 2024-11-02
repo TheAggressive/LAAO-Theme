@@ -1,28 +1,39 @@
 /**
  * WordPress dependencies
  */
-import { store, getContext } from '@wordpress/interactivity';
+import { getContext, store } from '@wordpress/interactivity';
 
-const { state } = store( 'laao', {
+const { state, actions, callbacks } = store('laao/hero', {
 	state: {
-		get themeText() {
-			return state.isDark ? state.darkText : state.lightText;
-		}
+		currentSlide: 0,
+		transitionDuration: 8000,
+		isTransitioning: false,
 	},
 	actions: {
-		toggleOpen() {
-			const context = getContext();
-			context.isOpen = ! context.isOpen;
+		nextSlide: () => {
+			if (state.isTransitioning) {
+				return;
+			}
+
+			state.isTransitioning = true;
+			state.currentSlide =
+				(state.currentSlide + 1) % state.context.totalSlides;
+
+			setTimeout(() => {
+				state.isTransitioning = false;
+			}, state.transitionDuration);
 		},
-		toggleTheme() {
-			state.isDark = ! state.isDark;
-		}
+		init: () => {
+			state.context = getContext();
+			setInterval(() => {
+				actions.nextSlide();
+			}, 0);
+		},
 	},
 	callbacks: {
-		logIsOpen: () => {
-			const { isOpen } = getContext();
-			// Log the value of `isOpen` each time it changes.
-			console.log( `Is open: ${ isOpen }` );
+		isActive: () => {
+			const context = getContext();
+			return state.currentSlide === context.slideIndex;
 		},
 	},
-} );
+});

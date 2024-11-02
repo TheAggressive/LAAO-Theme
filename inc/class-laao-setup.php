@@ -295,21 +295,22 @@ class LAAO_Setup {
 			);
 
 			register_post_type(
-				'hero-bg',
+				'hero-banners',
 				array(
 					'labels'              => array(
-						'name'          => 'Hero Image&#039;s',
-						'singular_name' => 'Hero Image',
+						'name'          => 'Hero Banner&#039;s',
+						'singular_name' => 'Hero Banner',
 					),
 					'public'              => true,
 					'exclude_from_search' => true,
 					'show_in_nav_menus'   => false,
 					'show_in_rest'        => true,
 					'menu_position'       => 10,
-					'menu_icon'           => 'dashicons-images-alt2',
+					'menu_icon'           => 'dashicons-slides',
 					'supports'            => array(
-						0 => 'title',
-						1 => 'custom-fields',
+						0 => 'editor',
+						1 => 'thumbnail',
+						2 => 'custom-fields',
 					),
 					'delete_with_user'    => false,
 				)

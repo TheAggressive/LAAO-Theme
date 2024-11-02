@@ -1,36 +1,83 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { PanelBody, RangeControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import './editor.css';
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
-import { useBlockProps } from '@wordpress/block-editor';
+export default function Edit({ attributes, setAttributes }) {
+	const { numberOfSlides, transitionDuration } = attributes;
+	const [images, setImages] = useState([]);
 
-/**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @param {Object}   props               Properties passed to the function.
- * @param {Object}   props.attributes    Available block attributes.
- * @param {Function} props.setAttributes Function that updates individual attributes.
- *
- * @return {Element} Element to render.
- */
-export default function Edit( { attributes, setAttributes } ) {
-	const blockProps = useBlockProps();
-	
+	const posts = useSelect((select) => {
+		return select('core').getEntityRecords('postType', 'hero-banners', {
+			per_page: numberOfSlides,
+		});
+	});
+
+	console.log('posts', posts);
+
+	useEffect(() => {
+		if (!posts) {
+			return;
+		}
+
+		const fetchImages = async () => {
+			const imagePromises = posts
+				.filter((post) => post.featured_media)
+				.map((post) =>
+					wp.apiRequest({
+						path: `/wp/v2/media/${post.featured_media}`,
+					})
+				);
+
+			const fetchedImages = await Promise.all(imagePromises);
+			setImages(fetchedImages.map((img) => img.source_url));
+		};
+
+		console.log('fetching images', images);
+
+		fetchImages();
+	}, [posts]);
+
 	return (
-		<p { ...blockProps }>
-			{ __( 'Hero – hello from the editor!', 'hero' ) }
-		</p>
+		<div {...useBlockProps()}>
+			<InspectorControls>
+				<PanelBody title={__('Slider Settings', 'kenburns-slider')}>
+					<RangeControl
+						label={__('Number of Slides', 'kenburns-slider')}
+						value={numberOfSlides}
+						onChange={(value) =>
+							setAttributes({ numberOfSlides: value })
+						}
+						min={1}
+						max={10}
+					/>
+					<RangeControl
+						label={__(
+							'Transition Duration (ms)',
+							'kenburns-slider'
+						)}
+						value={transitionDuration}
+						onChange={(value) =>
+							setAttributes({ transitionDuration: value })
+						}
+						min={1000}
+						max={10000}
+						step={500}
+					/>
+				</PanelBody>
+			</InspectorControls>
+
+			<div className="kenburns-slider">
+				{images.map((url, index) => (
+					<div
+						key={index}
+						className="kenburns-slide"
+						style={{ backgroundImage: `url(${url})` }}
+					/>
+				))}
+			</div>
+		</div>
 	);
 }
