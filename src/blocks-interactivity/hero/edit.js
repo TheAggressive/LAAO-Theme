@@ -1,80 +1,56 @@
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, RangeControl } from '@wordpress/components';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import './editor.css';
 
-export default function Edit({ attributes, setAttributes }) {
-	const { numberOfSlides, transitionDuration } = attributes;
-	const [images, setImages] = useState([]);
+export default function Edit() {
+	const blockProps = useBlockProps();
+	const innerBlockProps = useInnerBlocksProps(
+		{
+			...blockProps,
+			className: `${blockProps.className} wp-block-laao-hero-content`,
+		},
+		{
+			allowedBlocks: [
+				'adsanity/ad-group',
+				'core/paragraph',
+				'core/image',
+			],
+			template: [['core/group']],
+			templateLock: false,
+		}
+	);
+
+	// return only the featured image src url and the post content
 
 	const posts = useSelect((select) => {
-		return select('core').getEntityRecords('postType', 'hero-banners', {
-			per_page: numberOfSlides,
-		});
-	});
+		const records = select('core').getEntityRecords(
+			'postType',
+			'hero-banners',
+			{
+				per_page: 1,
+				_embed: true,
+			}
+		);
 
-	console.log('posts', posts);
-
-	useEffect(() => {
-		if (!posts) {
-			return;
+		if (!records) {
+			return [];
 		}
 
-		const fetchImages = async () => {
-			const imagePromises = posts
-				.filter((post) => post.featured_media)
-				.map((post) =>
-					wp.apiRequest({
-						path: `/wp/v2/media/${post.featured_media}`,
-					})
-				);
-
-			const fetchedImages = await Promise.all(imagePromises);
-			setImages(fetchedImages.map((img) => img.source_url));
-		};
-
-		console.log('fetching images', images);
-
-		fetchImages();
-	}, [posts]);
+		return records.map((post) => ({
+			image: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '',
+			content: post.content?.rendered || '',
+		}));
+	});
 
 	return (
-		<div {...useBlockProps()}>
-			<InspectorControls>
-				<PanelBody title={__('Slider Settings', 'kenburns-slider')}>
-					<RangeControl
-						label={__('Number of Slides', 'kenburns-slider')}
-						value={numberOfSlides}
-						onChange={(value) =>
-							setAttributes({ numberOfSlides: value })
-						}
-						min={1}
-						max={10}
-					/>
-					<RangeControl
-						label={__(
-							'Transition Duration (ms)',
-							'kenburns-slider'
-						)}
-						value={transitionDuration}
-						onChange={(value) =>
-							setAttributes({ transitionDuration: value })
-						}
-						min={1000}
-						max={10000}
-						step={500}
-					/>
-				</PanelBody>
-			</InspectorControls>
-
-			<div className="kenburns-slider">
-				{images.map((url, index) => (
+		<div {...blockProps}>
+			<div {...innerBlockProps} />
+			<div className="wp-block-laao-hero-slider">
+				{posts.map((post, index) => (
 					<div
 						key={index}
-						className="kenburns-slide"
-						style={{ backgroundImage: `url(${url})` }}
+						className="wp-block-laao-hero-slide"
+						style={{ backgroundImage: `url(${post.image})` }}
 					/>
 				))}
 			</div>

@@ -23,7 +23,8 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	$number_of_slides   = $attributes['numberOfSlides'] ?? 5;
 
 	$args = array(
-		'post_type' => $post_type_selector,
+		'post_type'      => $post_type_selector,
+		'posts_per_page' => -1,
 	);
 
 	$query  = new WP_Query( $args );
@@ -38,6 +39,8 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	wp_reset_postdata();
 
 	?>
+<div class="wp-block-laao-hero">
+	<?php echo wp_kses_post( $content ); ?>
 
 		<div
 		class="wp-block-laao-hero-slider"
@@ -69,3 +72,4 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 				></div>
 			<?php endforeach; ?>
 	</div>
+</div>
