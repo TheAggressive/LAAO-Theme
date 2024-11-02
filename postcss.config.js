@@ -12,7 +12,7 @@ module.exports = {
 	},
 	rules: {
 		'at-rule-no-unknown': [
-			false,
+			true,
 			{ ignoreAtRules: ['extends', 'mixin', 'include', 'apply'] },
 		],
 	},
