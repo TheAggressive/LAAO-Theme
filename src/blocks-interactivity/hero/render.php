@@ -40,7 +40,7 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	?>
 
 		<div
-		class="kenburns-slider"
+		class="wp-block-laao-hero-slider"
 		data-wp-interactive="laao/hero"
 		data-wp-init="actions.init"
 			<?php
@@ -53,7 +53,7 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 		>
 			<?php foreach ( $slides as $index => $image_url ) : ?>
 				<div
-					class="kenburns-slide"
+					class="wp-block-laao-hero-slide"
 					data-wp-key="<?php echo esc_attr( $index ); ?>"
 					<?php
 					echo wp_kses_data(

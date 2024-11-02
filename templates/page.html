@@ -1,15 +1,41 @@
 <!-- wp:template-part {"slug":"header","theme":"laao","area":"header","className":"site-header"} /-->
 
+<!-- wp:group {"tagName":"section","className":"wp-block-laao-hero-container","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"layout":{"type":"default"}} -->
+<section
+	class="wp-block-group wp-block-laao-hero-container"
+	style="margin-top: 0; margin-bottom: 0"
+>
+	<!-- wp:laao/hero /-->
+</section>
+<!-- /wp:group -->
+
 <!-- wp:group {"tagName":"main","className":"site-main","style":{"spacing":{"margin":{"top":"0","bottom":"0"},"padding":{"right":"var:preset|spacing|44","left":"var:preset|spacing|44"}}},"layout":{"type":"grid","columnCount":12,"minimumColumnWidth":null}} -->
-	<main
-	class="wp-block-group site-main" style="margin-top:0;margin-bottom:0;padding-right:var(--wp--preset--spacing--44);padding-left:var(--wp--preset--spacing--44)"> <!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":[]},"layout":{"type":"default"}} -->
-	<section
-		class="wp-block-group site-content">
+<main
+	class="wp-block-group site-main"
+	style="
+		margin-top: 0;
+		margin-bottom: 0;
+		padding-right: var(--wp--preset--spacing--44);
+		padding-left: var(--wp--preset--spacing--44);
+	"
+>
+	<!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":[]},"layout":{"type":"default"}} -->
+	<section class="wp-block-group site-content">
 		<!-- wp:group {"tagName":"article","className":"site-article","style":{"spacing":{"padding":{"right":"var:preset|spacing|24","left":"var:preset|spacing|24","top":"var:preset|spacing|24","bottom":"var:preset|spacing|48"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"laao-white","layout":{"type":"grid","columnCount":1,"minimumColumnWidth":null}} -->
 		<article
-			class="wp-block-group site-article has-laao-white-background-color has-background" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--24);padding-right:var(--wp--preset--spacing--24);padding-bottom:var(--wp--preset--spacing--48);padding-left:var(--wp--preset--spacing--24)">
+			class="wp-block-group site-article has-laao-white-background-color has-background"
+			style="
+				margin-top: 0;
+				margin-bottom: 0;
+				padding-top: var(--wp--preset--spacing--24);
+				padding-right: var(--wp--preset--spacing--24);
+				padding-bottom: var(--wp--preset--spacing--48);
+				padding-left: var(--wp--preset--spacing--24);
+			"
+		>
 			<!-- wp:group {"className":"article-content","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group article-content"><!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"700"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
+			<div class="wp-block-group article-content">
+				<!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"700"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
 
 				<!-- wp:post-content /-->
 			</div>
@@ -22,7 +48,8 @@
 	<!-- /wp:group -->
 
 	<!-- wp:group {"tagName":"aside","className":"site-nav","style":{"layout":[]},"layout":{"type":"default"}} -->
-	<aside class="wp-block-group site-nav"><!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search...","width":100,"widthUnit":"%","buttonText":"Search","buttonPosition":"button-inside","buttonUseIcon":true,"className":"site-nav-search","backgroundColor":"laao-transparent"} /-->
+	<aside class="wp-block-group site-nav">
+		<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search...","width":100,"widthUnit":"%","buttonText":"Search","buttonPosition":"button-inside","buttonUseIcon":true,"className":"site-nav-search","backgroundColor":"laao-transparent"} /-->
 
 		<!-- wp:navigation {"ref":48884,"textColor":"laao-white","backgroundColor":"laao-black","overlayMenu":"never","style":{"typography":{"textTransform":"uppercase"},"spacing":{"blockGap":"var:preset|spacing|8"}},"layout":{"type":"flex","justifyContent":"left","orientation":"vertical","flexWrap":"nowrap"}} /-->
 	</aside>
