@@ -13,7 +13,7 @@ import { InnerBlocks } from '@wordpress/block-editor';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
  *
- * @return {WPElement} Element to render.
+ * @return {import('@wordpress/element').WPElement} Element to render.
  */
 export default function Save() {
 	return (
