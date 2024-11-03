@@ -5,5 +5,5 @@
 ?>
 
 <a <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> href="#" >
-<img src="<?php echo get_template_directory_uri(); ?>/dist/assets/svg/laao-logo.svg" alt="LAAO Logo" />
+	<img src="<?php echo esc_url( get_template_directory_uri() ); ?>/dist/assets/svg/laao-logo.svg" alt="LAAO Logo" />
 </a>
