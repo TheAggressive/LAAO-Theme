@@ -1,7 +1,7 @@
 /* .site-top-bar {
 } */
 .site-top-bar {
-	@apply px-0;
+	@apply px-0 shadow-xl;
 
 	@media (--bp-md) {
 		padding: 0 var(--wp--preset--spacing--44);
@@ -12,7 +12,7 @@
 
 		&::after {
 			@media (--bp-md) {
-				@apply absolute right-0 top-[64px] z-10 w-full bg-[var(--wp--preset--color--laao-white)] py-[var(--wp--preset--spacing--8)] text-center font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-[0.95rem] uppercase tracking-[var(--wp--preset--spacing--8)] text-[var(--wp--preset--color--laao-black)] content-["Edition"];
+				@apply absolute right-0 top-[64px] z-10 w-full rounded-b-md bg-[var(--wp--preset--color--laao-white)] py-[var(--wp--preset--spacing--8)] text-center font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-[0.95rem] uppercase tracking-[var(--wp--preset--spacing--8)] text-[var(--wp--preset--color--laao-black)] shadow-xl content-["Edition"];
 			}
 		}
 	}

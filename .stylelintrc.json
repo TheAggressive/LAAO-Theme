@@ -8,6 +8,7 @@
 		"comment-empty-line-before": null,
 		"scss/selector-no-redundant-nesting-selector": null,
 		"rule-empty-line-before": null,
-		"selector-class-pattern": null
+		"selector-class-pattern": null,
+		"scss/operator-no-unspaced": null
 	}
 }

@@ -2,7 +2,7 @@
 	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-[var(--wp--preset--color--laao-black)];
 
 	@media (--bp-lg) {
-		@apply relative -translate-y-16 translate-x-0;
+		@apply relative -translate-y-[calc(500px+64px)] translate-x-0;
 	}
 
 	/* Site Search */
