@@ -45,7 +45,7 @@
 		}
 
 		a {
-			@apply text-[var(--wp--preset--color--laao-red)] transition-all hover:text-[var(--wp--preset--color--laao-black)];
+			@apply !text-[var(--wp--preset--color--laao-red)] transition-all hover:text-[var(--wp--preset--color--laao-black)];
 		}
 
 		svg {

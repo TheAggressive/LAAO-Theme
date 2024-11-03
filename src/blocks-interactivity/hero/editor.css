@@ -5,7 +5,7 @@
  */
 
 .wp-block-laao-hero {
-	@apply relative m-0 h-[550px] overflow-hidden;
+	@apply relative m-0 h-[500px] overflow-hidden;
 
 	.wp-block-laao-hero-content {
 		@apply relative z-10;
