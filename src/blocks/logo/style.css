@@ -1,0 +1,21 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-laao-site-logo {
+	@apply h-fit w-fit;
+	img {
+		@apply h-full w-full;
+
+		.a {
+			@apply fill-[var(--wp--preset--color--white)];
+		}
+
+		.b {
+			@apply fill-[var(--wp--preset--color--laao-red)];
+		}
+	}
+}

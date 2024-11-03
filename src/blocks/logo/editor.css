@@ -1,0 +1,19 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-laao-site-logo {
+	svg {
+		@apply h-auto w-full;
+
+		.a {
+			@apply fill-[var(--wp--preset--color--white)];
+		}
+
+		.b {
+			@apply fill-[var(--wp--preset--color--laao-red)];
+		}
+	}
+}

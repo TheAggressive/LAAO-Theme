@@ -12,10 +12,11 @@ export default function Edit() {
 		{
 			allowedBlocks: [
 				'adsanity/ad-group',
+				'laao/site-logo',
+				'core/group',
 				'core/paragraph',
-				'core/image',
 			],
-			template: [['core/group']],
+			template: [['core/paragraph']],
 			templateLock: false,
 		}
 	);

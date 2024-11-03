@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "laao/site-logo",
+	"version": "1.0.0",
+	"title": "Site Logo",
+	"category": "media",
+	"icon": "format-image",
+	"description": "LAAO Site Logo Block",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "laao",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
