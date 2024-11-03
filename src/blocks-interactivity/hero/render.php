@@ -11,10 +11,9 @@
  */
 
 if ( ! function_exists( 'laao_hero_context' ) ) {
-	function laao_hero_context( $slides, $transition_duration ) {
+	function laao_hero_context( $slides ) {
 		return array(
-			'totalSlides'        => count( $slides ),
-			'transitionDuration' => $transition_duration,
+			'totalSlides' => count( $slides ),
 		);
 	}
 }
@@ -32,29 +31,37 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 
 	while ( $query->have_posts() ) {
 		$query->the_post();
-		if ( has_post_thumbnail() ) {
-			$slides[] = get_the_post_thumbnail_url( get_the_ID(), 'full' );
-		}
+		// i need to save the url and the content
+		$slides[] = array(
+			'imageUrl' => has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'full' ) : null,
+			'content'  => ! empty( get_the_content() ) ? str_replace( array( '<p>', '</p>' ), '', apply_filters( 'the_content', get_the_content() ) ) : null,
+		);
 	}
+
 	wp_reset_postdata();
 
 	?>
 <div class="wp-block-laao-hero">
+	<div class="wp-block-laao-hero-caption-container">
+		<p class="wp-block-laao-hero-caption"></p>
+	</div>
+
 	<?php echo wp_kses_post( $content ); ?>
 
-		<div
+	<div
 		class="wp-block-laao-hero-slider"
 		data-wp-interactive="laao/hero"
 		data-wp-init="actions.init"
 			<?php
 				echo wp_kses_data(
 					wp_interactivity_data_wp_context(
-						laao_hero_context( $slides, $transition_duration ),
+						laao_hero_context( $slides ),
 					)
 				);
 				?>
 		>
-			<?php foreach ( $slides as $index => $image_url ) : ?>
+
+			<?php foreach ( $slides as $index => $slide ) : ?>
 				<div
 					class="wp-block-laao-hero-slide"
 					data-wp-key="<?php echo esc_attr( $index ); ?>"
@@ -63,12 +70,13 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 						wp_interactivity_data_wp_context(
 							array(
 								'slideIndex' => $index,
+								'caption'    => $slide['content'],
 							)
 						)
 					)
 					?>
 					data-wp-class--is-active="callbacks.isActive"
-					style="background-image: url('<?php echo esc_url( $image_url ); ?>');"
+					style="background-image: url('<?php echo esc_url( $slide['imageUrl'] ); ?>');"
 				></div>
 			<?php endforeach; ?>
 	</div>

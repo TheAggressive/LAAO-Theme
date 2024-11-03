@@ -9,6 +9,13 @@
 .wp-block-laao-hero {
 	@apply relative m-0 h-[500px] overflow-hidden border-b-[length:var(--wp--preset--spacing--24)] border-b-[var(--wp--preset--color--laao-white)];
 
+	.wp-block-laao-hero-caption-container {
+		@apply absolute z-10 grid w-full grid-cols-12 gap-[var(--wp--preset--spacing--24)] px-[var(--wp--preset--spacing--44)];
+
+		.wp-block-laao-hero-caption {
+			@apply col-span-7 col-end-11 mt-[var(--wp--preset--spacing--8)] justify-self-end text-[length:var(--wp--preset--font-size--small)] text-[var(--wp--preset--color--laao-dark-gray)];
+		}
+	}
 	.wp-block-laao-hero-content {
 		@apply relative z-10 grid h-full grid-cols-12 gap-[var(--wp--preset--spacing--24)];
 
