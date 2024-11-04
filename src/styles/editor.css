@@ -9,11 +9,22 @@
 /* This injects Tailwind's utility classes and any utility classes registered by plugins.
 @import "tailwindcss/utilities";
 */
+
+/* Breakpoints */
 @import "./_breakpoints.css";
-@import "./_body.css";
-@import "./_layout.css";
-@import "./_slogan.css";
-@import "./_top-bar.css";
-@import "./_navigation.css";
-@import "./_ads.css";
-@import "./_footer.css";
+
+/* Body */
+@import "./body/_body.css";
+
+/* Layout */
+@import "./layout/_main.css";
+@import "./layout/_site-content.css";
+@import "./layout/_nav.css";
+
+/* Components */
+@import "./components/_slogan.css";
+@import "./components/_top-bar.css";
+@import "./components/_navigation.css";
+@import "./components/_article.css";
+@import "./components/_ads.css";
+@import "./components/_footer.css";

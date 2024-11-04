@@ -1,0 +1,7 @@
+.site-main {
+	@media (--bp-md-max) {
+		--wp--preset--spacing--44: var(--wp--preset--spacing--16);
+
+		@apply px-[--wp--preset--spacing--16];
+	}
+}

@@ -1,0 +1,11 @@
+.site-nav {
+	@apply col-span-12;
+
+	@media (--bp-lg) {
+		@apply col-span-3;
+	}
+
+	@media (--bp-2xl) {
+		@apply col-span-2;
+	}
+}
