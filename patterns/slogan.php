@@ -13,6 +13,6 @@
 <!-- /wp:heading -->
 
 <!-- wp:heading {"textAlign":"center","level":3,"style":{"elements":{"link":{"color":{"text":"var:preset|color|laao-white"}}},"typography":{"fontSize":"1.65rem"},"layout":{"selfStretch":"fit","flexSize":null}},"textColor":"laao-white","className":"est","fontFamily":"roboto-condensed"} -->
-<h3 class="wp-block-heading has-text-align-center est has-laao-white-color has-text-color has-link-color has-roboto-condensed-font-family" style="font-size:1.65rem">CELEBRATING&nbsp;THE&nbsp;ARTS&nbsp;SINCE&nbsp;2012</h3>
+<h3 class="wp-block-heading has-text-align-center est has-laao-white-color has-text-color has-link-color has-roboto-condensed-font-family" style="font-size:1.65rem">CELEBRATING&nbsp;THE&nbsp;ARTS&nbsp;SINCE&nbsp;2012-1</h3>
 <!-- /wp:heading --></section>
 <!-- /wp:group -->

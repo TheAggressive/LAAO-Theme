@@ -44,12 +44,16 @@
 			@apply block;
 		}
 
-		a {
-			@apply !text-[var(--wp--preset--color--laao-red)] transition-all hover:text-[var(--wp--preset--color--laao-black)];
-		}
+		li {
+			@apply text-[var(--wp--preset--color--laao-red)] transition-all;
 
-		svg {
-			@apply h-[--wp--preset--font-size--xxx-large] w-[--wp--preset--font-size--xxxlarge] fill-current;
+			&:hover {
+				@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+			}
+
+			svg {
+				@apply h-[--wp--preset--font-size--xxx-large] w-[--wp--preset--font-size--xxxlarge] fill-current;
+			}
 		}
 	}
 }
