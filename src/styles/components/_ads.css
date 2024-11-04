@@ -6,7 +6,7 @@
 	}
 }
 .ad-728x90 {
-	@apply block w-fit bg-[--wp--preset--color--laao-white] p-[--wp--preset--spacing--6];
+	@apply block w-fit;
 }
 
 .ad-break-728x90 {
@@ -18,5 +18,5 @@
 }
 
 .ad-720x300 {
-	@apply mx-auto my-[--wp--preset--spacing--44] block w-fit bg-[--wp--preset--color--laao-white] p-[--wp--preset--spacing--28];
+	@apply mx-auto block w-fit;
 }

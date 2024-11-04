@@ -9,17 +9,23 @@
 	"example": {},
 	"usesContext": ["postType", "postId"],
 	"supports": {
+		"html": false,
+		"align": true,
+		"layout": true,
+		"__experimentalBorder": {
+			"color": true,
+			"width": true,
+			"style": true,
+			"radius": true
+		},
 		"color": {
 			"background": true,
 			"text": true
 		},
-		"html": false,
 		"spacing": {
 			"padding": true,
 			"margin": true
-		},
-		"align": true,
-		"layout": true
+		}
 	},
 	"attributes": {
 		"placeAfter": {

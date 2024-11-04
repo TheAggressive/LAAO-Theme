@@ -32,7 +32,7 @@
 			@apply order-2 col-span-12 place-self-start justify-self-center;
 
 			@media (--bp-md) {
-				@apply order-1 col-span-4 justify-self-start;
+				@apply order-1 col-span-4 place-self-center justify-self-start;
 			}
 
 			@media (--bp-lg) {
