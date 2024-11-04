@@ -1,0 +1,11 @@
+.wp-block-jetpack-sharing-buttons {
+	li {
+		svg {
+			@apply transition-all;
+
+			&:hover {
+				@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+			}
+		}
+	}
+}

@@ -6,7 +6,7 @@
 		@apply hidden;
 
 		@media (--bp-sm) {
-			@apply flex;
+			@apply block;
 		}
 	}
 
