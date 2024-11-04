@@ -5,6 +5,9 @@
 		@apply hidden;
 	}
 }
+.ad-728x90 {
+	@apply block w-fit bg-[--wp--preset--color--laao-white] p-[--wp--preset--spacing--6];
+}
 
 .ad-break-728x90 {
 	@apply hidden;
