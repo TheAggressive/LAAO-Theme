@@ -1,0 +1,26 @@
+@import "../_breakpoints.css";
+
+*:has(> .wp-block-social-links) {
+	/* Hide the .wp-blocks-social-links if it's not in the .site-footer */
+	& .wp-block-social-links:not(.site-footer .wp-block-social-links) {
+		@apply hidden;
+
+		@media (--bp-sm) {
+			@apply flex;
+		}
+	}
+
+	li {
+		@apply text-[var(--wp--preset--color--laao-red)] transition-all;
+
+		&:hover {
+			@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+		}
+	}
+
+	.wp-social-link {
+		svg {
+			@apply h-8 fill-current;
+		}
+	}
+}

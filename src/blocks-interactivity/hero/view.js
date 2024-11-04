@@ -3,7 +3,7 @@
  */
 import { getContext, store } from '@wordpress/interactivity';
 
-const { state, actions, callbacks } = store('laao/hero', {
+const { state, actions } = store('laao/hero', {
 	state: {
 		currentSlide: 0,
 		transitionDuration: 8000,

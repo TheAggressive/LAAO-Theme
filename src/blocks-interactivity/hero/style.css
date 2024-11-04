@@ -27,7 +27,7 @@
 			@apply content-center px-[var(--wp--preset--spacing--44)];
 		}
 
-		// logo
+		/* Logo */
 		& > *:nth-child(1) {
 			@apply order-2 col-span-12 place-self-start justify-self-center;
 
@@ -40,7 +40,7 @@
 			}
 		}
 
-		// banner ad
+		/* Banner Ad */
 		& > *:nth-child(2) {
 			@apply order-1 col-span-12 flex;
 

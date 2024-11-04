@@ -1,6 +1,5 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import './editor.css';
 
 export default function Edit() {
 	const blockProps = useBlockProps();

@@ -1,5 +1,3 @@
-/* .site-top-bar {
-} */
 .site-top-bar {
 	@apply px-0 shadow-xl;
 
@@ -34,26 +32,6 @@
 
 		@media (--bp-2xl) {
 			@apply col-span-8;
-		}
-	}
-
-	.site-top-bar-social {
-		@apply hidden;
-
-		@media (--bp-sm) {
-			@apply block;
-		}
-
-		li {
-			@apply text-[var(--wp--preset--color--laao-red)] transition-all;
-
-			&:hover {
-				@apply scale-125 text-[var(--wp--preset--color--laao-black)];
-			}
-
-			svg {
-				@apply h-[--wp--preset--font-size--xxx-large] w-[--wp--preset--font-size--xxxlarge] fill-current;
-			}
 		}
 	}
 }

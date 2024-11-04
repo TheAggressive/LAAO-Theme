@@ -25,8 +25,16 @@
 	}
 
 	.wp-block-social-links {
-		svg {
-			@apply h-[--wp--preset--font-size--xxx-large] w-[--wp--preset--font-size--xxxlarge] fill-current;
+		li {
+			@apply h-[--wp--preset--font-size--xx-large] w-[--wp--preset--font-size--xxlarge] text-[var(--wp--preset--color--laao-red)] transition-all;
+
+			&:hover {
+				@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+			}
+
+			svg {
+				@apply fill-current;
+			}
 		}
 	}
 
