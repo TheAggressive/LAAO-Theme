@@ -3,42 +3,44 @@
 
 	.wp-block-navigation,
 	.wp-block-navigation__container {
-		@apply flex-col gap-[var(--wp--preset--spacing--28)];
+		@apply gap-wp-28 flex-col;
 
 		@media (--bp-md) {
-			@apply flex-row gap-[var(--wp--preset--spacing--28)];
+			@apply gap-wp-28 flex-row;
 		}
 
 		.wp-block-navigation-item {
 			@media (--bp-md) {
 				&:not(:last-child)::after {
-					@apply absolute -right-[var(--wp--preset--spacing--16)] bottom-0 top-0 text-[var(--wp--preset--color--laao-red)] content-['|'];
+					@apply -right-wp-16 text-wp-laao-red absolute bottom-0 top-0 content-['|'];
 				}
 			}
 		}
 
 		.wp-block-navigation-link {
 			@media (--bp-md) {
-				@apply flex-row text-[var(--wp--preset--color--laao-white)] transition-all hover:text-[var(--wp--preset--color--laao-red)];
+				@apply text-wp-laao-white hover:text-wp-laao-red flex-row transition-all;
 			}
 		}
 	}
 
 	.wp-block-social-links {
 		li {
-			@apply h-[--wp--preset--font-size--xx-large] w-[--wp--preset--font-size--xxlarge] text-[var(--wp--preset--color--laao-red)] transition-all;
-
 			&:hover {
-				@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+				@apply text-wp-laao-red;
 			}
 
 			svg {
-				@apply fill-current;
+				@apply h-wp-28 w-wp-28 fill-current;
 			}
 		}
 	}
 
 	.wp-block-laao-copyright-date-tag a {
-		@apply text-[var(--wp--preset--color--laao-white)] underline transition-all hover:text-[var(--wp--preset--color--laao-red)];
+		@apply text-wp-laao-white underline transition-all;
+
+		&:hover {
+			@apply text-wp-laao-red;
+		}
 	}
 }

@@ -1,4 +1,4 @@
-@import '../../styles/_breakpoints.css';
+@import "../../styles/_breakpoints.css";
 
 .wp-block-event-gallery {
 	@apply grid auto-rows-[repeat(100px)] grid-cols-3 gap-3;
@@ -21,7 +21,7 @@
 		}
 
 		&:focus {
-			@apply outline-offset-2 outline-red-700;
+			@apply outline-wp-laao-red outline-offset-2;
 		}
 	}
 }

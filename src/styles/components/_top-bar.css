@@ -2,7 +2,7 @@
 	@apply px-0 shadow-xl;
 
 	@media (--bp-md) {
-		padding: 0 var(--wp--preset--spacing--44);
+		@apply px-wp-44 py-0;
 	}
 
 	.site-top-bar-edition {
@@ -10,7 +10,7 @@
 
 		&::after {
 			@media (--bp-md) {
-				@apply absolute right-0 top-[64px] z-10 w-full rounded-b-md bg-[var(--wp--preset--color--laao-white)] py-[var(--wp--preset--spacing--8)] text-center font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-[0.95rem] uppercase tracking-[var(--wp--preset--spacing--8)] text-[var(--wp--preset--color--laao-black)] shadow-xl content-["Edition"];
+				@apply font-wp-roboto-condensed tracking-wp-8 text-wp-laao-black bg-wp-laao-white py-wp-8 absolute right-0 top-[64px] z-10 w-full rounded-b-md text-center text-[0.95rem] uppercase shadow-xl content-["Edition"];
 			}
 		}
 	}
@@ -19,7 +19,7 @@
 		@apply col-span-6;
 
 		@media (--bp-sm-max) {
-			@apply justify-self-end px-[var(--wp--preset--spacing--16)];
+			@apply px-wp-16 justify-self-end;
 		}
 
 		@media (--bp-md) {

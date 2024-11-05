@@ -11,11 +11,11 @@
 		@apply h-full w-full;
 
 		.a {
-			@apply fill-[var(--wp--preset--color--white)];
+			@apply fill-wp-laao-white;
 		}
 
 		.b {
-			@apply fill-[var(--wp--preset--color--laao-red)];
+			@apply fill-wp-laao-red;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-@import '../../styles/_breakpoints.css';
+@import "../../styles/_breakpoints.css";
 
 .scroll-lock {
 	@apply !overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
@@ -81,10 +81,10 @@
 			}
 
 			a.wp-block-laao-event-lightbox-social-link {
-				@apply fill-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
+				@apply fill-wp-laao-white transition-all duration-300 ease-in-out;
 
 				&:hover {
-					@apply fill-[--wp--preset--color--laao-red];
+					@apply fill-wp-laao-red;
 				}
 
 				svg {
@@ -94,7 +94,7 @@
 		}
 
 		button.wp-block-laao-event-lightbox-close {
-			@apply mr-4 flex items-center text-[--wp--preset--color--laao-white] transition-all duration-300 ease-in-out;
+			@apply text-wp-laao-white mr-4 flex items-center transition-all duration-300 ease-in-out;
 
 			svg {
 				@apply h-7 w-7 fill-current;
@@ -102,14 +102,14 @@
 
 			&:hover,
 			&:focus {
-				@apply text-[--wp--preset--color--laao-red];
+				@apply text-wp-laao-red;
 			}
 		}
 	}
 
 	button.wp-block-laao-event-lightbox-next,
 	button.wp-block-laao-event-lightbox-previous {
-		@apply absolute top-[calc(50%_-_1rem)] z-20 flex h-auto w-auto items-center justify-center fill-[--wp--preset--color--laao-red] p-4 text-[--wp--preset--color--laao-white];
+		@apply fill-wp-laao-red text-wp-laao-white absolute top-[calc(50%_-_1rem)] z-20 flex h-auto w-auto items-center justify-center p-4;
 
 		span {
 			@apply flex h-12 w-12 items-center justify-center rounded-full bg-black/70 p-3;
@@ -121,7 +121,7 @@
 
 		&:hover svg,
 		&:focus svg {
-			@apply fill-[--wp--preset--color--laao-red];
+			@apply fill-wp-laao-red;
 		}
 
 		div:has(.closing) & {

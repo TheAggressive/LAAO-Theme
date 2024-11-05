@@ -7,122 +7,122 @@
 			"defaultSpacingSizes": false,
 			"spacingSizes": [
 				{
-					"name": "4",
+					"name": "4 (0.25rem)",
 					"size": "0.25rem",
 					"slug": "4"
 				},
 				{
-					"name": "8",
+					"name": "8 (0.5rem)",
 					"size": "0.5rem",
 					"slug": "8"
 				},
 				{
-					"name": "12",
+					"name": "12 (0.75rem)",
 					"size": "0.75rem",
 					"slug": "12"
 				},
 				{
-					"name": "16",
+					"name": "16 (1rem)",
 					"size": "1rem",
 					"slug": "16"
 				},
 				{
-					"name": "20",
+					"name": "20 (1.25rem)",
 					"size": "1.25rem",
 					"slug": "20"
 				},
 				{
-					"name": "24",
+					"name": "24 (1.5rem)",
 					"size": "1.5rem",
 					"slug": "24"
 				},
 				{
-					"name": "28",
+					"name": "28 (1.75rem)",
 					"size": "1.75rem",
 					"slug": "28"
 				},
 				{
-					"name": "32",
+					"name": "32 (2rem)",
 					"size": "2rem",
 					"slug": "32"
 				},
 				{
-					"name": "36",
+					"name": "36 (2.25rem)",
 					"size": "2.25rem",
 					"slug": "36"
 				},
 				{
-					"name": "40",
+					"name": "40 (2.5rem)",
 					"size": "2.5rem",
 					"slug": "40"
 				},
 				{
-					"name": "44",
+					"name": "44 (2.75rem)",
 					"size": "2.75rem",
 					"slug": "44"
 				},
 				{
-					"name": "48",
+					"name": "48 (3rem)",
 					"size": "3rem",
 					"slug": "48"
 				},
 				{
-					"name": "56",
+					"name": "56 (3.5rem)",
 					"size": "3.5rem",
 					"slug": "56"
 				},
 				{
-					"name": "64",
+					"name": "64 (4rem)",
 					"size": "4rem",
 					"slug": "64"
 				},
 				{
-					"name": "80",
+					"name": "80 (5rem)",
 					"size": "5rem",
 					"slug": "80"
 				},
 				{
-					"name": "96",
+					"name": "96 (6rem)",
 					"size": "6rem",
 					"slug": "96"
 				},
 				{
-					"name": "112",
+					"name": "112 (7rem)",
 					"size": "7rem",
 					"slug": "112"
 				},
 				{
-					"name": "128",
+					"name": "128 (8rem)",
 					"size": "8rem",
 					"slug": "128"
 				},
 				{
-					"name": "144",
+					"name": "144 (9rem)",
 					"size": "9rem",
 					"slug": "144"
 				},
 				{
-					"name": "160",
+					"name": "160 (10rem)",
 					"size": "10rem",
 					"slug": "160"
 				},
 				{
-					"name": "176",
+					"name": "176 (11rem)",
 					"size": "11rem",
 					"slug": "176"
 				},
 				{
-					"name": "192",
+					"name": "192 (12rem)",
 					"size": "12rem",
 					"slug": "192"
 				},
 				{
-					"name": "208",
+					"name": "208 (13rem)",
 					"size": "13rem",
 					"slug": "208"
 				},
 				{
-					"name": "224",
+					"name": "224 (14rem)",
 					"size": "14rem",
 					"slug": "224"
 				}

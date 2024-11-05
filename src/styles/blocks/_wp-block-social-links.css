@@ -11,16 +11,16 @@
 	}
 
 	li {
-		@apply text-[var(--wp--preset--color--laao-red)] transition-all;
+		@apply text-wp-laao-red transition-all;
 
 		&:hover {
-			@apply scale-125 text-[var(--wp--preset--color--laao-black)];
+			@apply text-wp-laao-black scale-125;
 		}
 	}
 
 	.wp-social-link {
 		svg {
-			@apply h-8 fill-current;
+			@apply h-wp-32 w-wp-32 fill-current;
 		}
 	}
 }

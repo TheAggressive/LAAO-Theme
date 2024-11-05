@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
 	prefix: '',
 	content: [
@@ -9,7 +11,94 @@ module.exports = {
 		'./styles/**/*.{css,scss}',
 	],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				'wp-laao-black': 'var(--wp--preset--color--laao-black)',
+				'wp-laao-white': 'var(--wp--preset--color--laao-white)',
+				'wp-laao-red': 'var(--wp--preset--color--laao-red)',
+				'wp-laao-dark-gray': 'var(--wp--preset--color--laao-dark-gray)',
+				'wp-laao-gray': 'var(--wp--preset--color--laao-gray)',
+				'wp-laao-light-gray':
+					'var(--wp--preset--color--laao-light-gray)',
+				'wp-laao-transparent':
+					'var(--wp--preset--color--laao-transparent)',
+			},
+			fontFamily: {
+				'wp-industrial': 'var(--wp--preset--font-family--industrial)',
+				'wp-system-ui': 'var(--wp--preset--font-family--system-ui)',
+				'wp-roboto-condensed':
+					'var(--wp--preset--font-family--roboto-condensed)',
+			},
+			fontSize: {
+				'wp-small': 'var(--wp--preset--font-size--small)',
+				'wp-medium': 'var(--wp--preset--font-size--medium)',
+				'wp-large': 'var(--wp--preset--font-size--large)',
+				'wp-xlarge': 'var(--wp--preset--font-size--x-large)',
+				'wp-xxlarge': 'var(--wp--preset--font-size--xx-large)',
+				'wp-xxxlarge': 'var(--wp--preset--font-size--xxx-large)',
+				'wp-xxxxlarge': 'var(--wp--preset--font-size--xxxx-large)',
+				'wp-xxxxxlarge': 'var(--wp--preset--font-size--xxxxx-large)',
+				'wp-xxxxxxlarge': 'var(--wp--preset--font-size--xxxxxx-large)',
+				'wp-xxxxxxxlarge':
+					'var(--wp--preset--font-size--xxxxxxx-large)',
+				'wp-xxxxxxxxlarge':
+					'var(--wp--preset--font-size--xxxxxxxx-large)',
+				'wp-xxxxxxxxxlarge':
+					'var(--wp--preset--font-size--xxxxxxxxx-large)',
+			},
+			spacing: {
+				'wp-4': 'var(--wp--preset--spacing--4)',
+				'wp-8': 'var(--wp--preset--spacing--8)',
+				'wp-12': 'var(--wp--preset--spacing--12)',
+				'wp-16': 'var(--wp--preset--spacing--16)',
+				'wp-20': 'var(--wp--preset--spacing--20)',
+				'wp-24': 'var(--wp--preset--spacing--24)',
+				'wp-28': 'var(--wp--preset--spacing--28)',
+				'wp-32': 'var(--wp--preset--spacing--32)',
+				'wp-36': 'var(--wp--preset--spacing--36)',
+				'wp-40': 'var(--wp--preset--spacing--40)',
+				'wp-44': 'var(--wp--preset--spacing--44)',
+				'wp-48': 'var(--wp--preset--spacing--48)',
+				'wp-56': 'var(--wp--preset--spacing--56)',
+				'wp-64': 'var(--wp--preset--spacing--64)',
+				'wp-80': 'var(--wp--preset--spacing--80)',
+				'wp-96': 'var(--wp--preset--spacing--96)',
+				'wp-112': 'var(--wp--preset--spacing--112)',
+				'wp-128': 'var(--wp--preset--spacing--128)',
+				'wp-144': 'var(--wp--preset--spacing--144)',
+				'wp-160': 'var(--wp--preset--spacing--160)',
+				'wp-176': 'var(--wp--preset--spacing--176)',
+				'wp-192': 'var(--wp--preset--spacing--192)',
+				'wp-208': 'var(--wp--preset--spacing--208)',
+				'wp-224': 'var(--wp--preset--spacing--224)',
+			},
+			letterSpacing: {
+				'wp-4': 'var(--wp--preset--spacing--4)',
+				'wp-8': 'var(--wp--preset--spacing--8)',
+				'wp-12': 'var(--wp--preset--spacing--12)',
+				'wp-16': 'var(--wp--preset--spacing--16)',
+				'wp-20': 'var(--wp--preset--spacing--20)',
+				'wp-24': 'var(--wp--preset--spacing--24)',
+				'wp-28': 'var(--wp--preset--spacing--28)',
+				'wp-32': 'var(--wp--preset--spacing--32)',
+				'wp-36': 'var(--wp--preset--spacing--36)',
+				'wp-40': 'var(--wp--preset--spacing--40)',
+				'wp-44': 'var(--wp--preset--spacing--44)',
+				'wp-48': 'var(--wp--preset--spacing--48)',
+				'wp-56': 'var(--wp--preset--spacing--56)',
+				'wp-64': 'var(--wp--preset--spacing--64)',
+				'wp-80': 'var(--wp--preset--spacing--80)',
+				'wp-96': 'var(--wp--preset--spacing--96)',
+				'wp-112': 'var(--wp--preset--spacing--112)',
+				'wp-128': 'var(--wp--preset--spacing--128)',
+				'wp-144': 'var(--wp--preset--spacing--144)',
+				'wp-160': 'var(--wp--preset--spacing--160)',
+				'wp-176': 'var(--wp--preset--spacing--176)',
+				'wp-192': 'var(--wp--preset--spacing--192)',
+				'wp-208': 'var(--wp--preset--spacing--208)',
+				'wp-224': 'var(--wp--preset--spacing--224)',
+			},
+		},
 	},
 	plugins: [],
 };
