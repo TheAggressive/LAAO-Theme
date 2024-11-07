@@ -4,9 +4,13 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-laao-animate-on-scroll input[type="text"] {
-	font-size: 1em;
-	color: inherit;
-	background: inherit;
-	border: 0;
+.wp-block-laao-animate-on-scroll {
+	opacity: 1;
+	transform: none;
+	filter: none;
+	animation: none;
+
+	& > * {
+		opacity: 1;
+	}
 }

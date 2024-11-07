@@ -6,7 +6,7 @@
 	"title": "Animate On Scroll",
 	"category": "widgets",
 	"icon": "media-interactive",
-	"description": "An interactive block with the Interactivity API.",
+	"description": "Animate elements on scroll.",
 	"example": {},
 	"supports": {
 		"html": false,
