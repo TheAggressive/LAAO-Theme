@@ -63,7 +63,11 @@ const { state } = store('laao/animate-on-scroll', {
 				const children = Array.from(ref.children);
 				children.forEach((child, index) => {
 					const delay = index * staggerDelay;
-					child.style.setProperty('--stagger-delay', `${delay}s`);
+					// Preserve existing style attribute if it exists
+					const existingStyle = child.getAttribute('style') || '';
+					child.setAttribute('style',
+						`${existingStyle}${existingStyle ? ';' : ''}--stagger-delay: ${delay}s`
+					);
 				});
 			}
 
