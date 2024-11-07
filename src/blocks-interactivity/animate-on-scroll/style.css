@@ -1,0 +1,352 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-laao-animate-on-scroll {
+	opacity: 0;
+	will-change: transform, opacity, filter;
+
+	& > * {
+		opacity: 0;
+		will-change: transform, opacity, filter;
+	}
+
+	&.is-visible > * {
+		animation-name: var(--animation-name);
+		animation-duration: var(--animation-duration, 0.6s);
+		animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		animation-fill-mode: forwards;
+		animation-delay: var(--stagger-delay, 0s);
+	}
+
+	/* Animation classes */
+	&.is-visible.fade {
+		animation: fadeIn var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.slide.up {
+		animation: slideUp var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.slide.down {
+		animation: slideDown var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.slide.left {
+		animation: slideLeft var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.slide.right {
+		animation: slideRight var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.scale {
+		animation: scale var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.flip.up {
+		animation: flipUp var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.flip.down {
+		animation: flipDown var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.flip.left {
+		animation: flipLeft var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.flip.right {
+		animation: flipRight var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.rotate.up {
+		animation: rotateUp var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.rotate.down {
+		animation: rotateDown var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.rotate.left {
+		animation: rotateLeft var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.rotate.right {
+		animation: rotateRight var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.zoom {
+		animation: zoom var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.blur {
+		animation: blur var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.fade-direction.up {
+		animation: fadeDirectionUp var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.fade-direction.down {
+		animation: fadeDirectionDown var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.fade-direction.left {
+		animation: fadeDirectionLeft var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	&.is-visible.fade-direction.right {
+		animation: fadeDirectionRight var(--animation-duration, 0.6s)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+}
+
+/* Keyframes definitions */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideDown {
+	from {
+		transform: translateY(-50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideLeft {
+	from {
+		transform: translateX(50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideRight {
+	from {
+		transform: translateX(-50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes scale {
+	from {
+		transform: scale(0.8);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes flipUp {
+	from {
+		transform: perspective(1000px) rotateX(90deg);
+		opacity: 0;
+	}
+	to {
+		transform: perspective(1000px) rotateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes flipDown {
+	from {
+		transform: perspective(1000px) rotateX(-90deg);
+		opacity: 0;
+	}
+	to {
+		transform: perspective(1000px) rotateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes flipLeft {
+	from {
+		transform: perspective(1000px) rotateY(-90deg);
+		opacity: 0;
+	}
+	to {
+		transform: perspective(1000px) rotateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes flipRight {
+	from {
+		transform: perspective(1000px) rotateY(90deg);
+		opacity: 0;
+	}
+	to {
+		transform: perspective(1000px) rotateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes rotateUp {
+	from {
+		transform: rotate(-180deg);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0);
+		opacity: 1;
+	}
+}
+
+@keyframes rotateDown {
+	from {
+		transform: rotate(180deg);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0);
+		opacity: 1;
+	}
+}
+
+@keyframes rotateLeft {
+	from {
+		transform: rotate(90deg);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0);
+		opacity: 1;
+	}
+}
+
+@keyframes rotateRight {
+	from {
+		transform: rotate(-90deg);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0);
+		opacity: 1;
+	}
+}
+
+@keyframes zoom {
+	from {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes blur {
+	from {
+		filter: blur(20px);
+		opacity: 0;
+	}
+	to {
+		filter: blur(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeDirectionUp {
+	from {
+		transform: translateY(30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeDirectionDown {
+	from {
+		transform: translateY(-30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeDirectionLeft {
+	from {
+		transform: translateX(30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeDirectionRight {
+	from {
+		transform: translateX(-30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* Editor specific styles */
+.editor-styles-wrapper .wp-block-laao-animate-on-scroll {
+	opacity: 1 !important;
+	transform: none !important;
+	filter: none !important;
+	animation: none !important;
+}
