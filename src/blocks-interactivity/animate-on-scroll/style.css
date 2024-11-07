@@ -342,11 +342,3 @@
 		opacity: 1;
 	}
 }
-
-/* Editor specific styles */
-.editor-styles-wrapper .wp-block-laao-animate-on-scroll {
-	opacity: 1 !important;
-	transform: none !important;
-	filter: none !important;
-	animation: none !important;
-}
