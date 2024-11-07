@@ -11,6 +11,7 @@ import { __ } from '@wordpress/i18n';
 
 export default function Edit({ attributes, setAttributes }) {
 	const hasImages = attributes.images.length > 0;
+	const blockProps = useBlockProps();
 
 	return (
 		<>
@@ -37,7 +38,7 @@ export default function Edit({ attributes, setAttributes }) {
 			</BlockControls>
 			{hasImages && (
 				<div
-					{...useBlockProps()}
+					{...blockProps}
 					className={`wp-block-event-gallery has-event-gallery-images-${attributes.images.length}`}
 				>
 					{attributes.images.map((image, index) => {
