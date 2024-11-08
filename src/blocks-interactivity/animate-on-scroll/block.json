@@ -33,9 +33,13 @@
 			"type": "number",
 			"default": 0.5
 		},
+		"threshold": {
+			"type": "string",
+			"default": "0.3"
+		},
 		"rootMargin": {
 			"type": "string",
-			"default": "-30%"
+			"default": "-25%"
 		}
 	},
 	"textdomain": "laao",

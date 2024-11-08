@@ -1,0 +1,8 @@
+{
+    "attributes": {
+        "threshold": {
+            "type": "string",
+            "default": "0.25"
+        }
+    }
+} 

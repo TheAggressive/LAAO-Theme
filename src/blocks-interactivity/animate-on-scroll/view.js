@@ -65,7 +65,8 @@ const { state } = store('laao/animate-on-scroll', {
 					const delay = index * staggerDelay;
 					// Preserve existing style attribute if it exists
 					const existingStyle = child.getAttribute('style') || '';
-					child.setAttribute('style',
+					child.setAttribute(
+						'style',
 						`${existingStyle}${existingStyle ? ';' : ''}--stagger-delay: ${delay}s`
 					);
 				});
@@ -81,8 +82,8 @@ const { state } = store('laao/animate-on-scroll', {
 					});
 				},
 				{
-					threshold: 0.1,
-					rootMargin: `0px 0px ${ref.dataset.rootMargin || '-30%'} 0px`,
+					threshold: parseFloat(ref.dataset.threshold || '0.25'),
+					rootMargin: ref.dataset.rootMargin || '0%',
 				}
 			);
 

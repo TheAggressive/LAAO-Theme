@@ -35,6 +35,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		'data-stagger-delay'        => esc_attr( $attributes['staggerDelay'] ),
 		'data-animation-duration'   => esc_attr( $attributes['duration'] ),
 		'data-root-margin'          => esc_attr( $attributes['rootMargin'] ),
+		'data-threshold'            => esc_attr( $attributes['threshold'] ),
 	)
 );
 

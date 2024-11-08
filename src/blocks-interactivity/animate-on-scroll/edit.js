@@ -110,19 +110,48 @@ export default function Edit({ attributes, setAttributes }) {
 					)}
 
 					<SelectControl
-						label="Trigger Point"
+						label="Visibility Requirement"
+						value={attributes.threshold}
+						options={[
+							{ label: 'Entire element (100%)', value: '1' },
+							{ label: 'Almost entire (90%)', value: '0.9' },
+							{ label: 'Mostly visible (80%)', value: '0.8' },
+							{ label: 'Large portion (70%)', value: '0.7' },
+							{ label: 'More than half (60%)', value: '0.6' },
+							{ label: 'Half element (50%)', value: '0.5' },
+							{ label: 'Some visible (40%)', value: '0.4' },
+							{
+								label: 'Partially visible (30%) Default',
+								value: '0.3',
+							},
+							{ label: 'Small portion (20%)', value: '0.2' },
+							{ label: 'Barely visible (10%)', value: '0.1' },
+						]}
+						onChange={(threshold) => setAttributes({ threshold })}
+						help="How much of the element needs to be in view before the animation triggers"
+					/>
+
+					<SelectControl
+						label="Trigger Distance"
 						value={attributes.rootMargin}
 						options={[
-							{ label: 'Latest', value: '-60%' },
-							{ label: 'Later', value: '-50%' },
-							{ label: 'Late', value: '-40%' },
-							{ label: 'Default', value: '-30%' },
-							{ label: 'Soon', value: '-20%' },
-							{ label: 'Sooner', value: '-10%' },
-							{ label: 'Soonest', value: '0%' },
+							{
+								label: 'Very deep in viewport (-75%)',
+								value: '-75%',
+							},
+							{ label: 'Deep in viewport (-60%)', value: '-60%' },
+							{ label: 'Half viewport (-50%)', value: '-50%' },
+							{ label: 'Near half (-40%)', value: '-40%' },
+							{
+								label: 'Quarter in (-25%) Default',
+								value: '-25%',
+							},
+							{ label: 'Slightly in (-15%)', value: '-15%' },
+							{ label: 'Just inside (-10%)', value: '-10%' },
+							{ label: 'At viewport edge (0%)', value: '0%' },
 						]}
 						onChange={(rootMargin) => setAttributes({ rootMargin })}
-						help="When should the animation trigger relative to the viewport"
+						help="Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering."
 					/>
 				</PanelBody>
 			</InspectorControls>
