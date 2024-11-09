@@ -43,8 +43,6 @@ const { state } = store('laao/animate-on-scroll', {
 				animation = 'zoom';
 			} else if (ref.classList.contains('blur')) {
 				animation = 'blur';
-			} else if (ref.classList.contains('fade-direction')) {
-				animation = `fadeDirection${getDirectionSuffix()}`;
 			}
 
 			// Set animation name as CSS variable

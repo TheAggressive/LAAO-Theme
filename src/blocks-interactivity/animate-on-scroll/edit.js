@@ -46,10 +46,6 @@ export default function Edit({ attributes, setAttributes }) {
 						value={attributes.animation}
 						options={[
 							{ label: 'Fade', value: 'fade' },
-							{
-								label: 'Fade Direction',
-								value: 'fade-direction',
-							},
 							{ label: 'Slide', value: 'slide' },
 							{ label: 'Scale', value: 'scale' },
 							{ label: 'Flip', value: 'flip' },
@@ -60,8 +56,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(animation) => setAttributes({ animation })}
 					/>
 
-					{(attributes.animation === 'fade-direction' ||
-						attributes.animation === 'slide' ||
+					{(attributes.animation === 'slide' ||
 						attributes.animation === 'flip' ||
 						attributes.animation === 'rotate') && (
 						<SelectControl

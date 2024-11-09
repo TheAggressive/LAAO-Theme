@@ -17,7 +17,7 @@ $animation_classes = array( 'wp-block-laao-animate-on-scroll' );
 $animation_classes[] = esc_attr( $attributes['animation'] );
 
 // Add direction for animations that support it
-if ( in_array( $attributes['animation'], array( 'fade-direction', 'slide', 'flip', 'rotate' ) ) ) {
+if ( in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate' ) ) ) {
 	$animation_classes[] = esc_attr( $attributes['direction'] );
 }
 

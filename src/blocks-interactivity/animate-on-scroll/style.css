@@ -102,26 +102,6 @@
 		animation: blur var(--animation-duration, 0.6s)
 			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 	}
-
-	&.is-visible.fade-direction.up {
-		animation: fadeDirectionUp var(--animation-duration, 0.6s)
-			cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
-
-	&.is-visible.fade-direction.down {
-		animation: fadeDirectionDown var(--animation-duration, 0.6s)
-			cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
-
-	&.is-visible.fade-direction.left {
-		animation: fadeDirectionLeft var(--animation-duration, 0.6s)
-			cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
-
-	&.is-visible.fade-direction.right {
-		animation: fadeDirectionRight var(--animation-duration, 0.6s)
-			cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
 }
 
 /* Keyframes definitions */
@@ -295,50 +275,6 @@
 	}
 	to {
 		filter: blur(0);
-		opacity: 1;
-	}
-}
-
-@keyframes fadeDirectionUp {
-	from {
-		transform: translateY(30px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-@keyframes fadeDirectionDown {
-	from {
-		transform: translateY(-30px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-@keyframes fadeDirectionLeft {
-	from {
-		transform: translateX(30px);
-		opacity: 0;
-	}
-	to {
-		transform: translateX(0);
-		opacity: 1;
-	}
-}
-
-@keyframes fadeDirectionRight {
-	from {
-		transform: translateX(-30px);
-		opacity: 0;
-	}
-	to {
-		transform: translateX(0);
 		opacity: 1;
 	}
 }
