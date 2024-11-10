@@ -21,6 +21,11 @@
 	transition: all var(--animation-duration) var(--animation-timing);
 	will-change: transform, opacity, filter;
 
+	/* Remove margin-top for constrained blocks */
+	:root :where(.is-layout-constrained) > & {
+		margin-block-start: 0 !important;
+	}
+
 	/* Initial states for different animations */
 	&.fade {
 		opacity: 0;

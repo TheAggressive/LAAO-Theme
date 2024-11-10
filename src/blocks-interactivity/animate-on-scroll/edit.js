@@ -22,6 +22,59 @@ import {
 	ToggleControl,
 } from '@wordpress/components';
 
+const baseAnimations = {
+	fade: {
+		label: 'Fade',
+		hasDirection: false,
+	},
+	slide: {
+		label: 'Slide',
+		hasDirection: true,
+		directions: [
+			{ label: 'Up', value: 'up' },
+			{ label: 'Down', value: 'down' },
+			{ label: 'Left', value: 'left' },
+			{ label: 'Right', value: 'right' },
+		],
+		defaultDirection: 'up',
+	},
+	zoom: {
+		label: 'Zoom',
+		hasDirection: true,
+		directions: [
+			{ label: 'In', value: 'in' },
+			{ label: 'Out', value: 'out' },
+		],
+		defaultDirection: 'in',
+	},
+	flip: {
+		label: 'Flip',
+		hasDirection: true,
+		directions: [
+			{ label: 'Up', value: 'up' },
+			{ label: 'Down', value: 'down' },
+			{ label: 'Left', value: 'left' },
+			{ label: 'Right', value: 'right' },
+		],
+		defaultDirection: 'up',
+	},
+	rotate: {
+		label: 'Rotate',
+		hasDirection: true,
+		directions: [
+			{ label: 'Up', value: 'up' },
+			{ label: 'Down', value: 'down' },
+			{ label: 'Left', value: 'left' },
+			{ label: 'Right', value: 'right' },
+		],
+		defaultDirection: 'up',
+	},
+	blur: {
+		label: 'Blur',
+		hasDirection: false,
+	},
+};
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -44,46 +97,35 @@ export default function Edit({ attributes, setAttributes }) {
 					<SelectControl
 						label="Animation Type"
 						value={attributes.animation}
-						options={[
-							{ label: 'Fade', value: 'fade' },
-							{ label: 'Slide', value: 'slide' },
-							{ label: 'Zoom', value: 'zoom' },
-							{ label: 'Flip', value: 'flip' },
-							{ label: 'Rotate', value: 'rotate' },
-							{ label: 'Blur', value: 'blur' },
-						]}
-						onChange={(animation) => setAttributes({ animation })}
+						options={Object.entries(baseAnimations).map(
+							([value, config]) => ({
+								value,
+								label: config.label,
+							})
+						)}
+						onChange={(animation) => {
+							const newDirection = baseAnimations[animation]
+								.hasDirection
+								? baseAnimations[animation].defaultDirection
+								: '';
+							setAttributes({
+								animation,
+								direction: newDirection,
+							});
+						}}
 					/>
 
-					{(attributes.animation === 'slide' ||
-						attributes.animation === 'flip' ||
-						attributes.animation === 'rotate') && (
+					{baseAnimations[attributes.animation]?.hasDirection && (
 						<SelectControl
 							label="Direction"
 							value={attributes.direction}
-							options={[
-								{ label: 'Up', value: 'up' },
-								{ label: 'Down', value: 'down' },
-								{ label: 'Left', value: 'left' },
-								{ label: 'Right', value: 'right' },
-							]}
-							onChange={(direction) =>
-								setAttributes({ direction })
+							options={
+								baseAnimations[attributes.animation].directions
 							}
-						/>
-					)}
-
-					{attributes.animation === 'zoom' && (
-						<SelectControl
-							label="Direction"
-							value={attributes.direction}
-							options={[
-								{ label: 'In', value: 'in' },
-								{ label: 'Out', value: 'out' },
-							]}
-							onChange={(direction) =>
-								setAttributes({ direction })
-							}
+							onChange={(direction) => {
+								console.log(direction);
+								setAttributes({ direction });
+							}}
 						/>
 					)}
 

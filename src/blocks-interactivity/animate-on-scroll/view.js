@@ -60,8 +60,7 @@ const { state } = store('laao/animate-on-scroll', {
 				left: 0;
 				right: 0;
 				bottom: 0;
-				background-color: rgba(255, 0, 0, 0.25);
-				border-bottom: 1px dashed red;
+				background-color: rgba(255, 0, 0, 0.1);
 				pointer-events: none;
 				z-index: 999999;
 			`;
@@ -78,7 +77,7 @@ const { state } = store('laao/animate-on-scroll', {
 				left: 0;
 				right: 0;
 				height: 2px;
-				background-color: red;
+				background-color: green;
 				pointer-events: none;
 				z-index: 999999;
 				transform: translateY(-1px);
@@ -90,7 +89,7 @@ const { state } = store('laao/animate-on-scroll', {
 				percentageIndicator.style.cssText = `
 				position: absolute;
 				right: 0;
-				background: red;
+				background: green;
 				color: white;
 				padding: 2px 6px;
 				font-size: 12px;
@@ -98,7 +97,7 @@ const { state } = store('laao/animate-on-scroll', {
 				transform: translateY(-50%);
 			`;
 				percentageIndicator.style.top = `${linePosition}px`;
-				percentageIndicator.textContent = `${threshold * 100}%`;
+				percentageIndicator.textContent = `Trigger ${threshold * 100}%`;
 
 				// Add the indicators to the overlay container
 				overlayContainer.appendChild(intersectionLine);
