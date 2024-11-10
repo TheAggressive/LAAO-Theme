@@ -14,15 +14,21 @@
 $animation_classes = array( 'wp-block-laao-animate-on-scroll' );
 
 // Add the base animation class
-$animation_classes[] = esc_attr( $attributes['animation'] );
+if ( ! empty( $attributes['animation'] ) ) {
+	$animation_classes[] = esc_attr( $attributes['animation'] );
+}
 
 // Add direction for animations that support it
-if ( in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate' ) ) ) {
+if ( ! empty( $attributes['direction'] ) &&
+	in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate', 'zoom' ) ) ) {
 	$animation_classes[] = esc_attr( $attributes['direction'] );
 }
 
 // Join classes with spaces
 $final_classes = implode( ' ', array_filter( $animation_classes ) );
+
+// Debug output
+error_log( 'Animation Classes: ' . $final_classes );
 
 $wrapper_attributes = get_block_wrapper_attributes(
 	array(
@@ -36,11 +42,19 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		'data-animation-duration'   => esc_attr( $attributes['duration'] ),
 		'data-root-margin'          => esc_attr( $attributes['rootMargin'] ),
 		'data-threshold'            => esc_attr( $attributes['threshold'] ),
+		'data-debug-mode'           => $attributes['debugMode'] ? 'true' : 'false',
 	)
 );
 
+$style = sprintf(
+	'style="--animation-duration: %ss; --stagger-delay: %ss;"',
+	esc_attr( $attributes['duration'] ),
+	esc_attr( $attributes['staggerDelay'] )
+);
+
 printf(
-	'<div %1$s>%2$s</div>',
+	'<div %1$s %2$s>%3$s</div>',
 	$wrapper_attributes,
+	$style,
 	$content
 );

@@ -40,6 +40,10 @@
 		"rootMargin": {
 			"type": "string",
 			"default": "-25%"
+		},
+		"debugMode": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"textdomain": "laao",

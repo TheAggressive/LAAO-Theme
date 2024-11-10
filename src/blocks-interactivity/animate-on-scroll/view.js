@@ -6,93 +6,128 @@ import { getContext, getElement, store } from '@wordpress/interactivity';
 const { state } = store('laao/animate-on-scroll', {
 	state: {
 		isVisible: false,
+		intersectionRatio: 0,
 	},
 	callbacks: {
 		initObserver: () => {
 			const ctx = getContext();
 			const { ref } = getElement();
+			const margin = ref.dataset.rootMargin || '0% 0% 0% 0%';
+			const threshold = parseFloat(ref.dataset.threshold || '0.25');
 
-			// Helper function to get direction suffix
-			const getDirectionSuffix = () => {
-				if (ref.classList.contains('up')) {
-					return 'Up';
+			if (ref.dataset.debugMode === 'true') {
+				// Parse all margin values - keep as percentages
+				const [top, right, bottom, left] = margin
+					.split(' ')
+					.map((value) => {
+						if (value.endsWith('%')) {
+							return value;
+						} else if (value.endsWith('px')) {
+							return value;
+						}
+						return '0%';
+					});
+
+				// Create bottom margin indicator if different (only once)
+				if (
+					bottom !== '0%' &&
+					bottom !== '0px' &&
+					!document.querySelector('.bottom-margin-indicator')
+				) {
+					const bottomArea = document.createElement('div');
+					bottomArea.className = 'bottom-margin-indicator';
+					bottomArea.style.cssText = `
+					position: fixed;
+					bottom: ${-parseFloat(bottom) + '%'};
+					left: ${-parseFloat(left) + '%'};
+					right: ${-parseFloat(right) + '%'};
+					top: ${-parseFloat(top) + '%'};
+					height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
+					width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
+					background-color: rgba(255, 0, 0, 0.3);
+					border: 4px dashed red;
+					pointer-events: none;
+					z-index: 999999;
+				`;
+					document.body.appendChild(bottomArea);
 				}
-				if (ref.classList.contains('down')) {
-					return 'Down';
-				}
-				if (ref.classList.contains('left')) {
-					return 'Left';
-				}
-				return 'Right';
-			};
 
-			// Get animation type and direction
-			let animation = 'fadeIn'; // default animation
+				// Create an overlay container that won't be affected by animations
+				const overlayContainer = document.createElement('div');
+				overlayContainer.style.cssText = `
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: rgba(255, 0, 0, 0.25);
+				border-bottom: 1px dashed red;
+				pointer-events: none;
+				z-index: 999999;
+			`;
 
-			if (ref.classList.contains('fade')) {
-				animation = 'fadeIn';
-			} else if (ref.classList.contains('slide')) {
-				animation = `slide${getDirectionSuffix()}`;
-			} else if (ref.classList.contains('scale')) {
-				animation = 'scale';
-			} else if (ref.classList.contains('flip')) {
-				animation = `flip${getDirectionSuffix()}`;
-			} else if (ref.classList.contains('rotate')) {
-				animation = `rotate${getDirectionSuffix()}`;
-			} else if (ref.classList.contains('zoom')) {
-				animation = 'zoom';
-			} else if (ref.classList.contains('blur')) {
-				animation = 'blur';
-			}
+				const elementHeight = ref.offsetHeight;
 
-			// Set animation name as CSS variable
-			ref.style.setProperty('--animation-name', animation);
+				// Calculate line position based on threshold only
+				const linePosition = elementHeight * threshold;
 
-			// Set duration
-			const duration = ref.dataset.animationDuration || 0.6;
-			ref.style.setProperty('--animation-duration', `${duration}s`);
+				// Add intersection line indicator to the overlay
+				const intersectionLine = document.createElement('div');
+				intersectionLine.style.cssText = `
+				position: absolute;
+				left: 0;
+				right: 0;
+				height: 2px;
+				background-color: red;
+				pointer-events: none;
+				z-index: 999999;
+				transform: translateY(-1px);
+			`;
+				intersectionLine.style.top = `${linePosition}px`;
 
-			// Handle stagger children
-			const staggerChildren = ref.dataset.staggerChildren === 'true';
-			const staggerDelay = parseFloat(ref.dataset.staggerDelay || 0.2);
+				// Add percentage indicator to the overlay
+				const percentageIndicator = document.createElement('div');
+				percentageIndicator.style.cssText = `
+				position: absolute;
+				right: 0;
+				background: red;
+				color: white;
+				padding: 2px 6px;
+				font-size: 12px;
+				z-index: 999999;
+				transform: translateY(-50%);
+			`;
+				percentageIndicator.style.top = `${linePosition}px`;
+				percentageIndicator.textContent = `${threshold * 100}%`;
 
-			if (staggerChildren) {
-				// Get direct children
-				const children = Array.from(ref.children);
-				children.forEach((child, index) => {
-					const delay = index * staggerDelay;
-					// Preserve existing style attribute if it exists
-					const existingStyle = child.getAttribute('style') || '';
-					child.setAttribute(
-						'style',
-						`${existingStyle}${existingStyle ? ';' : ''}--stagger-delay: ${delay}s`
-					);
-				});
+				// Add the indicators to the overlay container
+				overlayContainer.appendChild(intersectionLine);
+				overlayContainer.appendChild(percentageIndicator);
+
+				// Add the overlay container next to the target element
+				ref.style.position = 'relative';
+				ref.parentNode.insertBefore(overlayContainer, ref);
 			}
 
 			const observer = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
+						if (entry.intersectionRatio >= threshold) {
 							ctx.isVisible = true;
+							ctx.intersectionRatio = entry.intersectionRatio;
 							observer.unobserve(entry.target);
 						}
 					});
 				},
 				{
-					threshold: parseFloat(ref.dataset.threshold || '0.25'),
-					rootMargin: ref.dataset.rootMargin || '0%',
+					threshold,
+					rootMargin: margin,
 				}
 			);
 
 			observer.observe(ref);
 
 			return () => {
-				if (staggerChildren) {
-					Array.from(ref.children).forEach((child) => {
-						child.style.removeProperty('--stagger-delay');
-					});
-				}
 				observer.disconnect();
 			};
 		},

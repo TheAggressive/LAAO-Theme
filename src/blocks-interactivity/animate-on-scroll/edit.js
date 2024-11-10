@@ -47,10 +47,9 @@ export default function Edit({ attributes, setAttributes }) {
 						options={[
 							{ label: 'Fade', value: 'fade' },
 							{ label: 'Slide', value: 'slide' },
-							{ label: 'Scale', value: 'scale' },
+							{ label: 'Zoom', value: 'zoom' },
 							{ label: 'Flip', value: 'flip' },
 							{ label: 'Rotate', value: 'rotate' },
-							{ label: 'Zoom', value: 'zoom' },
 							{ label: 'Blur', value: 'blur' },
 						]}
 						onChange={(animation) => setAttributes({ animation })}
@@ -67,6 +66,20 @@ export default function Edit({ attributes, setAttributes }) {
 								{ label: 'Down', value: 'down' },
 								{ label: 'Left', value: 'left' },
 								{ label: 'Right', value: 'right' },
+							]}
+							onChange={(direction) =>
+								setAttributes({ direction })
+							}
+						/>
+					)}
+
+					{attributes.animation === 'zoom' && (
+						<SelectControl
+							label="Direction"
+							value={attributes.direction}
+							options={[
+								{ label: 'In', value: 'in' },
+								{ label: 'Out', value: 'out' },
 							]}
 							onChange={(direction) =>
 								setAttributes({ direction })
@@ -132,21 +145,46 @@ export default function Edit({ attributes, setAttributes }) {
 						options={[
 							{
 								label: 'Very deep in viewport (-75%)',
-								value: '-75%',
+								value: '0% 0% -75% 0%',
 							},
-							{ label: 'Deep in viewport (-60%)', value: '-60%' },
-							{ label: 'Half viewport (-50%)', value: '-50%' },
-							{ label: 'Near half (-40%)', value: '-40%' },
+							{
+								label: 'Deep in viewport (-60%)',
+								value: '0% 0% -60% 0%',
+							},
+							{
+								label: 'Half viewport (-50%)',
+								value: '0% 0% -50% 0%',
+							},
+							{
+								label: 'Near half (-40%)',
+								value: '0% 0% -40% 0%',
+							},
 							{
 								label: 'Quarter in (-25%) Default',
-								value: '-25%',
+								value: '0% 0% -25% 0%',
 							},
-							{ label: 'Slightly in (-15%)', value: '-15%' },
-							{ label: 'Just inside (-10%)', value: '-10%' },
-							{ label: 'At viewport edge (0%)', value: '0%' },
+							{
+								label: 'Slightly in (-15%)',
+								value: '0% 0% -15% 0%',
+							},
+							{
+								label: 'Just inside (-10%)',
+								value: '0% 0% -10% 0%',
+							},
+							{
+								label: 'At viewport edge (0%)',
+								value: '0% 0% 0% 0%',
+							},
 						]}
 						onChange={(rootMargin) => setAttributes({ rootMargin })}
 						help="Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering."
+					/>
+
+					<ToggleControl
+						label="Debug Mode"
+						checked={attributes.debugMode}
+						onChange={(debugMode) => setAttributes({ debugMode })}
+						help="Shows visual indicators for animation trigger points"
 					/>
 				</PanelBody>
 			</InspectorControls>
