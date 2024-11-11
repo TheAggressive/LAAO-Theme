@@ -81,8 +81,8 @@ const { state } = store('laao/animate-on-scroll', {
 				pointer-events: none;
 				z-index: 999999;
 				transform: translateY(-1px);
+				top: ${linePosition}px;
 			`;
-				intersectionLine.style.top = `${linePosition}px`;
 
 				// Add percentage indicator to the overlay
 				const percentageIndicator = document.createElement('div');
@@ -95,8 +95,9 @@ const { state } = store('laao/animate-on-scroll', {
 				font-size: 12px;
 				z-index: 999999;
 				transform: translateY(-50%);
+				top: ${linePosition}px;
 			`;
-				percentageIndicator.style.top = `${linePosition}px`;
+
 				percentageIndicator.textContent = `Trigger ${threshold * 100}%`;
 
 				// Add the indicators to the overlay container
