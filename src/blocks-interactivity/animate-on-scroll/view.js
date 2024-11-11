@@ -16,6 +16,11 @@ const { state } = store('laao/animate-on-scroll', {
 			const threshold = parseFloat(ref.dataset.threshold || '0.25');
 
 			if (ref.dataset.debugMode === 'true') {
+				const elementHeight = ref.offsetHeight;
+
+				// Calculate line position based on threshold only
+				const linePosition = elementHeight * threshold;
+
 				// Parse all margin values - keep as percentages
 				const [top, right, bottom, left] = margin
 					.split(' ')
@@ -60,15 +65,10 @@ const { state } = store('laao/animate-on-scroll', {
 				left: 0;
 				right: 0;
 				bottom: 0;
-				background-color: rgba(255, 0, 0, 0.1);
+				background-color: rgba(0, 125, 0, 0.1);
 				pointer-events: none;
 				z-index: 999999;
 			`;
-
-				const elementHeight = ref.offsetHeight;
-
-				// Calculate line position based on threshold only
-				const linePosition = elementHeight * threshold;
 
 				// Add intersection line indicator to the overlay
 				const intersectionLine = document.createElement('div');
