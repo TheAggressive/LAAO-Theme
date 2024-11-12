@@ -94,7 +94,6 @@ const { state, actions } = store('laao/animate-on-scroll', {
 
 			// Add percentage indicator to the overlay
 			const targetIndicator = document.createElement('div');
-
 			targetIndicator.className = `debug-target-indicator-${ctx.id}`;
 			targetIndicator.style.cssText = `
 				--debug-target-indicator: ${parseInt(state.entryHeight * ctx.threshold)}px;
@@ -177,11 +176,13 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			};
 		},
 		handleResize: () => {
-			const ctx = getContext();
-			const { ref } = getElement();
-			state.entryHeight = ref.offsetHeight;
+			if (state.ctx.debugMode === true) {
+				const ctx = getContext();
+				const { ref } = getElement();
+				state.entryHeight = ref.offsetHeight;
 
-			actions.updateDebugIntersectionLine(ctx);
+				actions.updateDebugIntersectionLine(ctx);
+			}
 		},
 	},
 });
