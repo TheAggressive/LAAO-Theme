@@ -34,15 +34,20 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	array(
 		'class'                     => $final_classes,
 		'data-wp-interactive'       => 'laao/animate-on-scroll',
-		'data-wp-context'           => wp_json_encode( array( 'isVisible' => false ) ),
+		'data-wp-context'           => wp_json_encode(
+			array(
+				'isVisible' => false,
+				'debugMode' => $attributes['debugMode'],
+				'threshold' => $attributes['threshold'],
+				'rootMargin' => $attributes['rootMargin'],
+			)
+		),
 		'data-wp-init'              => 'callbacks.initObserver',
 		'data-wp-class--is-visible' => 'context.isVisible',
 		'data-stagger-children'     => $attributes['staggerChildren'] ? 'true' : 'false',
 		'data-stagger-delay'        => esc_attr( $attributes['staggerDelay'] ),
 		'data-animation-duration'   => esc_attr( $attributes['duration'] ),
-		'data-root-margin'          => esc_attr( $attributes['rootMargin'] ),
-		'data-threshold'            => esc_attr( $attributes['threshold'] ),
-		'data-debug-mode'           => $attributes['debugMode'] ? 'true' : 'false',
+		'data-wp-on-window--resize' => 'callbacks.handleResize',
 	)
 );
 

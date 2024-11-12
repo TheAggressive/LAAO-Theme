@@ -3,45 +3,41 @@
  */
 import { getContext, getElement, store } from '@wordpress/interactivity';
 
-const { state } = store('laao/animate-on-scroll', {
+const { state, actions } = store('laao/animate-on-scroll', {
 	state: {
 		isVisible: false,
+		elementRef: null,
 		intersectionRatio: 0,
+		entryHeight: 0,
 	},
-	callbacks: {
-		initObserver: () => {
-			const ctx = getContext();
-			const { ref } = getElement();
-			const margin = ref.dataset.rootMargin || '0% 0% 0% 0%';
-			const threshold = parseFloat(ref.dataset.threshold || '0.25');
+	actions: {
+		debug: () => {
+			const elementHeight = state.elementRef.offsetHeight;
 
-			if (ref.dataset.debugMode === 'true') {
-				const elementHeight = ref.offsetHeight;
+			// Calculate line position based on threshold only
+			const linePosition = elementHeight * state.ctx.threshold;
 
-				// Calculate line position based on threshold only
-				const linePosition = elementHeight * threshold;
+			// Parse all margin values - keep as percentages
+			const [top, right, bottom, left] = state.ctx.rootMargin
+				.split(' ')
+				.map((value) => {
+					if (value.endsWith('%')) {
+						return value;
+					} else if (value.endsWith('px')) {
+						return value;
+					}
+					return '0%';
+				});
 
-				// Parse all margin values - keep as percentages
-				const [top, right, bottom, left] = margin
-					.split(' ')
-					.map((value) => {
-						if (value.endsWith('%')) {
-							return value;
-						} else if (value.endsWith('px')) {
-							return value;
-						}
-						return '0%';
-					});
-
-				// Create bottom margin indicator if different (only once)
-				if (
-					bottom !== '0%' &&
-					bottom !== '0px' &&
-					!document.querySelector('.bottom-margin-indicator')
-				) {
-					const bottomArea = document.createElement('div');
-					bottomArea.className = 'bottom-margin-indicator';
-					bottomArea.style.cssText = `
+			// Create bottom margin indicator if different (only once)
+			if (
+				bottom !== '0%' &&
+				bottom !== '0px' &&
+				!document.querySelector('.bottom-margin-indicator')
+			) {
+				const bottomArea = document.createElement('div');
+				bottomArea.className = 'bottom-margin-indicator';
+				bottomArea.style.cssText = `
 					position: fixed;
 					bottom: ${-parseFloat(bottom) + '%'};
 					left: ${-parseFloat(left) + '%'};
@@ -54,12 +50,12 @@ const { state } = store('laao/animate-on-scroll', {
 					pointer-events: none;
 					z-index: 999999;
 				`;
-					document.body.appendChild(bottomArea);
-				}
+				document.body.appendChild(bottomArea);
+			}
 
-				// Create an overlay container that won't be affected by animations
-				const overlayContainer = document.createElement('div');
-				overlayContainer.style.cssText = `
+			// Create an overlay container that won't be affected by animations
+			const overlayContainer = document.createElement('div');
+			overlayContainer.style.cssText = `
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -70,9 +66,9 @@ const { state } = store('laao/animate-on-scroll', {
 				z-index: 999999;
 			`;
 
-				// Add intersection line indicator to the overlay
-				const intersectionLine = document.createElement('div');
-				intersectionLine.style.cssText = `
+			// Add intersection line indicator to the overlay
+			const intersectionLine = document.createElement('div');
+			intersectionLine.style.cssText = `
 				position: absolute;
 				left: 0;
 				right: 0;
@@ -84,9 +80,9 @@ const { state } = store('laao/animate-on-scroll', {
 				top: ${linePosition}px;
 			`;
 
-				// Add percentage indicator to the overlay
-				const percentageIndicator = document.createElement('div');
-				percentageIndicator.style.cssText = `
+			// Add percentage indicator to the overlay
+			const percentageIndicator = document.createElement('div');
+			percentageIndicator.style.cssText = `
 				position: absolute;
 				right: 0;
 				background: green;
@@ -98,21 +94,36 @@ const { state } = store('laao/animate-on-scroll', {
 				top: ${linePosition}px;
 			`;
 
-				percentageIndicator.textContent = `Trigger ${threshold * 100}%`;
+			percentageIndicator.textContent = `Trigger ${state.ctx.threshold * 100}%`;
 
-				// Add the indicators to the overlay container
-				overlayContainer.appendChild(intersectionLine);
-				overlayContainer.appendChild(percentageIndicator);
+			// Add the indicators to the overlay container
+			overlayContainer.appendChild(intersectionLine);
+			overlayContainer.appendChild(percentageIndicator);
 
-				// Add the overlay container next to the target element
-				ref.style.position = 'relative';
-				ref.parentNode.insertBefore(overlayContainer, ref);
+			// Add the overlay container next to the target element
+			state.elementRef.style.position = 'relative';
+			state.elementRef.parentNode.insertBefore(
+				overlayContainer,
+				state.elementRef
+			);
+		},
+	},
+	callbacks: {
+		initObserver: () => {
+			const ctx = getContext();
+			const { ref } = getElement();
+
+			state.ctx = ctx;
+			state.elementRef = ref;
+
+			if (ctx.debugMode === true) {
+				actions.debug();
 			}
 
 			const observer = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {
-						if (entry.intersectionRatio >= threshold) {
+						if (entry.intersectionRatio >= ctx.threshold) {
 							ctx.isVisible = true;
 							ctx.intersectionRatio = entry.intersectionRatio;
 							observer.unobserve(entry.target);
@@ -120,8 +131,8 @@ const { state } = store('laao/animate-on-scroll', {
 					});
 				},
 				{
-					threshold,
-					rootMargin: margin,
+					threshold: ctx.threshold,
+					rootMargin: ctx.rootMargin,
 				}
 			);
 
@@ -130,6 +141,9 @@ const { state } = store('laao/animate-on-scroll', {
 			return () => {
 				observer.disconnect();
 			};
+		},
+		handleResize: () => {
+			state.ctx.entryHeight = state.elementRef.offsetHeight;
 		},
 	},
 });
