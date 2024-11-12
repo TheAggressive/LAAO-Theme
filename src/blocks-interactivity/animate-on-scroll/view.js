@@ -71,14 +71,14 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				state.elementRef
 			);
 		},
-		debugIntersectionLine: (ctx) => {
+		debugIntersectionLine: () => {
 			const overlayContainer = document.querySelector(
-				`.debug-overlay-${ctx.id}`
+				`.debug-overlay-${state.ctx.id}`
 			);
 
 			// Add intersection line indicator to the overlay
 			const targetLine = document.createElement('div');
-			targetLine.className = `debug-target-line-${ctx.id}`;
+			targetLine.className = `debug-target-line-${state.ctx.id}`;
 			targetLine.style.cssText = `
 				--debug-target-line: ${parseInt(state.getLinePosition)}px;
 				position: absolute;
@@ -94,9 +94,9 @@ const { state, actions } = store('laao/animate-on-scroll', {
 
 			// Add percentage indicator to the overlay
 			const targetIndicator = document.createElement('div');
-			targetIndicator.className = `debug-target-indicator-${ctx.id}`;
+			targetIndicator.className = `debug-target-indicator-${state.ctx.id}`;
 			targetIndicator.style.cssText = `
-				--debug-target-indicator: ${parseInt(state.entryHeight * ctx.threshold)}px;
+				--debug-target-indicator: ${parseInt(state.entryHeight * state.ctx.threshold)}px;
 				position: absolute;
 				right: 0;
 				background: green;
@@ -109,7 +109,7 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				top: var(--debug-target-indicator);
 			`;
 
-			targetIndicator.textContent = `Trigger ${ctx.threshold * 100}%`;
+			targetIndicator.textContent = `Trigger ${state.ctx.threshold * 100}%`;
 
 			// Add the indicators to the overlay container
 			overlayContainer.appendChild(targetLine);
