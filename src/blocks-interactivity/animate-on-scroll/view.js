@@ -49,8 +49,8 @@ const { state } = store('laao/animate-on-scroll', {
 					top: ${-parseFloat(top) + '%'};
 					height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
 					width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
-					background-color: rgba(255, 0, 0, 0.3);
-					border: 4px dashed red;
+					background-color: rgba(255, 0, 0, 0.1);
+					border: 2px dashed red;
 					pointer-events: none;
 					z-index: 999999;
 				`;
