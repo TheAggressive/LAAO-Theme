@@ -9,14 +9,12 @@ const { state, actions } = store('laao/animate-on-scroll', {
 		elementRef: null,
 		intersectionRatio: 0,
 		entryHeight: 0,
+		get getLinePosition() {
+			return state.entryHeight * state.ctx.threshold;
+		},
 	},
 	actions: {
-		debug: () => {
-			const elementHeight = state.elementRef.offsetHeight;
-
-			// Calculate line position based on threshold only
-			const linePosition = elementHeight * state.ctx.threshold;
-
+		debugRootMarginOverlay: () => {
 			// Parse all margin values - keep as percentages
 			const [top, right, bottom, left] = state.ctx.rootMargin
 				.split(' ')
@@ -33,11 +31,11 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			if (
 				bottom !== '0%' &&
 				bottom !== '0px' &&
-				!document.querySelector('.bottom-margin-indicator')
+				!document.querySelector('.root-margin-indicator')
 			) {
-				const bottomArea = document.createElement('div');
-				bottomArea.className = 'bottom-margin-indicator';
-				bottomArea.style.cssText = `
+				const debugRootMargin = document.createElement('div');
+				debugRootMargin.className = 'root-margin-indicator';
+				debugRootMargin.style.cssText = `
 					position: fixed;
 					bottom: ${-parseFloat(bottom) + '%'};
 					left: ${-parseFloat(left) + '%'};
@@ -50,11 +48,13 @@ const { state, actions } = store('laao/animate-on-scroll', {
 					pointer-events: none;
 					z-index: 999999;
 				`;
-				document.body.appendChild(bottomArea);
+				document.body.appendChild(debugRootMargin);
 			}
-
+		},
+		debugContentOverlay: () => {
 			// Create an overlay container that won't be affected by animations
 			const overlayContainer = document.createElement('div');
+			overlayContainer.className = `debug-overlay-${state.ctx.id}`;
 			overlayContainer.style.cssText = `
 				position: absolute;
 				top: 0;
@@ -66,9 +66,21 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				z-index: 999999;
 			`;
 
+			state.elementRef.parentNode.insertBefore(
+				overlayContainer,
+				state.elementRef
+			);
+		},
+		debugIntersectionLine: (ctx) => {
+			const overlayContainer = document.querySelector(
+				`.debug-overlay-${ctx.id}`
+			);
+
 			// Add intersection line indicator to the overlay
-			const intersectionLine = document.createElement('div');
-			intersectionLine.style.cssText = `
+			const targetLine = document.createElement('div');
+			targetLine.className = `debug-target-line-${ctx.id}`;
+			targetLine.style.cssText = `
+				--debug-target-line: ${parseInt(state.getLinePosition)}px;
 				position: absolute;
 				left: 0;
 				right: 0;
@@ -77,12 +89,15 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				pointer-events: none;
 				z-index: 999999;
 				transform: translateY(-1px);
-				top: ${linePosition}px;
+				top: var(--debug-target-line);
 			`;
 
 			// Add percentage indicator to the overlay
-			const percentageIndicator = document.createElement('div');
-			percentageIndicator.style.cssText = `
+			const targetIndicator = document.createElement('div');
+
+			targetIndicator.className = `debug-target-indicator-${ctx.id}`;
+			targetIndicator.style.cssText = `
+				--debug-target-indicator: ${parseInt(state.entryHeight * ctx.threshold)}px;
 				position: absolute;
 				right: 0;
 				background: green;
@@ -90,22 +105,42 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				padding: 2px 6px;
 				font-size: 12px;
 				z-index: 999999;
+				border-radius: 6px;
 				transform: translateY(-50%);
-				top: ${linePosition}px;
+				top: var(--debug-target-indicator);
 			`;
 
-			percentageIndicator.textContent = `Trigger ${state.ctx.threshold * 100}%`;
+			targetIndicator.textContent = `Trigger ${ctx.threshold * 100}%`;
 
 			// Add the indicators to the overlay container
-			overlayContainer.appendChild(intersectionLine);
-			overlayContainer.appendChild(percentageIndicator);
+			overlayContainer.appendChild(targetLine);
+			overlayContainer.appendChild(targetIndicator);
 
 			// Add the overlay container next to the target element
 			state.elementRef.style.position = 'relative';
-			state.elementRef.parentNode.insertBefore(
-				overlayContainer,
-				state.elementRef
-			);
+		},
+		updateDebugIntersectionLine: (ctx) => {
+			const topIntersectionElement = `${state.entryHeight * ctx.threshold}px`;
+			document
+				.querySelector(`.debug-target-line-${ctx.id}`)
+				.style.setProperty(
+					'--debug-target-line',
+					topIntersectionElement
+				);
+
+			document
+				.querySelector(`.debug-target-indicator-${ctx.id}`)
+				.style.setProperty(
+					'--debug-target-indicator',
+					topIntersectionElement
+				);
+		},
+		debug: (ctx) => {
+			if (state.ctx.debugMode === true) {
+				actions.debugRootMarginOverlay();
+				actions.debugContentOverlay();
+				actions.debugIntersectionLine(ctx);
+			}
 		},
 	},
 	callbacks: {
@@ -115,10 +150,9 @@ const { state, actions } = store('laao/animate-on-scroll', {
 
 			state.ctx = ctx;
 			state.elementRef = ref;
+			state.entryHeight = ref.offsetHeight;
 
-			if (ctx.debugMode === true) {
-				actions.debug();
-			}
+			actions.debug(ctx);
 
 			const observer = new IntersectionObserver(
 				(entries) => {
@@ -143,7 +177,11 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			};
 		},
 		handleResize: () => {
-			state.ctx.entryHeight = state.elementRef.offsetHeight;
+			const ctx = getContext();
+			const { ref } = getElement();
+			state.entryHeight = ref.offsetHeight;
+
+			actions.updateDebugIntersectionLine(ctx);
 		},
 	},
 });
