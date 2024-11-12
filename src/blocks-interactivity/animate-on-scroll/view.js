@@ -80,7 +80,7 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			const targetLine = document.createElement('div');
 			targetLine.className = `debug-target-line-${state.ctx.id}`;
 			targetLine.style.cssText = `
-				--debug-target-line: ${parseInt(state.getLinePosition)}px;
+				--debug-target-line: calc(${parseInt(state.getLinePosition)}px);
 				position: absolute;
 				left: 0;
 				right: 0;
