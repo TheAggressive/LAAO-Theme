@@ -27,117 +27,94 @@ const { state, actions } = store('laao/animate-on-scroll', {
 					return '0%';
 				});
 
-			// Create bottom margin indicator if different (only once)
+			// Create rootMargin Overlay (only once)
 			if (
-				bottom !== '0%' &&
-				bottom !== '0px' &&
-				!document.querySelector('.root-margin-indicator')
+				!document.querySelector(
+					'.wp-block-laao-animate-on-scroll-debug-root-margin-overlay'
+				)
 			) {
-				const debugRootMargin = document.createElement('div');
-				debugRootMargin.className = 'root-margin-indicator';
-				debugRootMargin.style.cssText = `
-					position: fixed;
-					bottom: ${-parseFloat(bottom) + '%'};
-					left: ${-parseFloat(left) + '%'};
-					right: ${-parseFloat(right) + '%'};
-					top: ${-parseFloat(top) + '%'};
-					height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
-					width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
-					background-color: rgba(255, 0, 0, 0.1);
-					border: 2px dashed red;
-					pointer-events: none;
-					z-index: 999999;
-				`;
-				document.body.appendChild(debugRootMargin);
+				const debugRootMarginOverlay = document.createElement('div');
+				debugRootMarginOverlay.className =
+					'wp-block-laao-animate-on-scroll-debug-root-margin-overlay';
+
+				document.body.appendChild(debugRootMarginOverlay);
 			}
+
+			// Set CSS variables for Debug rootMargin Overlay
+			document.documentElement.style.cssText += `
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-bottom: ${-parseFloat(bottom) + '%'};
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-left: ${-parseFloat(left) + '%'};
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-right: ${-parseFloat(right) + '%'};
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-top: ${-parseFloat(top) + '%'};
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
+					--wp-block-laao-animate-on-scroll-margin-root-overlay-width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
+					`;
 		},
-		debugContentOverlay: () => {
+		debugContentContainer: () => {
 			// Create an overlay container that won't be affected by animations
-			const overlayContainer = document.createElement('div');
-			overlayContainer.className = `debug-overlay-${state.ctx.id}`;
-			overlayContainer.style.cssText = `
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background-color: rgba(0, 125, 0, 0.1);
-				pointer-events: none;
-				z-index: 999999;
-			`;
+			const debugContentContainer = document.createElement('div');
+			debugContentContainer.className = `wp-block-laao-animate-on-scroll-debug-container-${state.ctx.id}`;
 
 			state.elementRef.parentNode.insertBefore(
-				overlayContainer,
+				debugContentContainer,
 				state.elementRef
 			);
 		},
 		debugIntersectionLine: () => {
-			const overlayContainer = document.querySelector(
-				`.debug-overlay-${state.ctx.id}`
+			const debugContentContainer = document.querySelector(
+				`.wp-block-laao-animate-on-scroll-debug-container-${state.ctx.id}`
 			);
 
 			// Add intersection line indicator to the overlay
-			const targetLine = document.createElement('div');
-			targetLine.className = `debug-target-line-${state.ctx.id}`;
-			targetLine.style.cssText = `
-				--debug-target-line: calc(${parseInt(state.getLinePosition)}px);
-				position: absolute;
-				left: 0;
-				right: 0;
-				height: 2px;
-				background-color: green;
-				pointer-events: none;
-				z-index: 999999;
-				transform: translateY(-1px);
-				top: var(--debug-target-line);
+			const debugIntersectionLine = document.createElement('div');
+			debugIntersectionLine.className = `wp-block-laao-animate-on-scroll-debug-intersection-line-${state.ctx.id}`;
+
+			// Set CSS variables for Debug Intersection Line
+			debugIntersectionLine.style.cssText = `
+			--wp-block-laao-animate-on-scroll-debug-intersection-line-top: calc(${parseInt(state.getLinePosition)}px);
 			`;
 
 			// Add percentage indicator to the overlay
-			const targetIndicator = document.createElement('div');
-			targetIndicator.className = `debug-target-indicator-${state.ctx.id}`;
-			targetIndicator.style.cssText = `
-				--debug-target-indicator: ${parseInt(state.entryHeight * state.ctx.threshold)}px;
-				position: absolute;
-				right: 0;
-				background: green;
-				color: white;
-				padding: 2px 6px;
-				font-size: 12px;
-				z-index: 999999;
-				border-radius: 6px;
-				transform: translateY(-50%);
-				top: var(--debug-target-indicator);
+			const debugIntersectionLineLabel = document.createElement('div');
+			debugIntersectionLineLabel.className = `wp-block-laao-animate-on-scroll-debug-intersection-line-label-${state.ctx.id}`;
+			debugIntersectionLineLabel.style.cssText = `
+				--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top: ${parseInt(state.entryHeight * state.ctx.threshold)}px;
 			`;
 
-			targetIndicator.textContent = `Trigger ${state.ctx.threshold * 100}%`;
+			debugIntersectionLineLabel.textContent = `Intersection Point: ${state.ctx.threshold * 100}%`;
 
 			// Add the indicators to the overlay container
-			overlayContainer.appendChild(targetLine);
-			overlayContainer.appendChild(targetIndicator);
+			debugContentContainer.appendChild(debugIntersectionLine);
+			debugContentContainer.appendChild(debugIntersectionLineLabel);
 
 			// Add the overlay container next to the target element
 			state.elementRef.style.position = 'relative';
 		},
 		updateDebugIntersectionLine: (ctx) => {
-			const topIntersectionElement = `${state.entryHeight * ctx.threshold}px`;
+			const intersectionElementTopOffset = `${state.entryHeight * ctx.threshold}px`;
+
 			document
-				.querySelector(`.debug-target-line-${ctx.id}`)
+				.querySelector(
+					`.wp-block-laao-animate-on-scroll-debug-intersection-line-${ctx.id}`
+				)
 				.style.setProperty(
-					'--debug-target-line',
-					topIntersectionElement
+					'--wp-block-laao-animate-on-scroll-debug-intersection-line-top',
+					intersectionElementTopOffset
 				);
 
 			document
-				.querySelector(`.debug-target-indicator-${ctx.id}`)
+				.querySelector(
+					`.wp-block-laao-animate-on-scroll-debug-intersection-line-label-${ctx.id}`
+				)
 				.style.setProperty(
-					'--debug-target-indicator',
-					topIntersectionElement
+					'--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top',
+					intersectionElementTopOffset
 				);
 		},
 		debug: (ctx) => {
 			if (state.ctx.debugMode === true) {
 				actions.debugRootMarginOverlay();
-				actions.debugContentOverlay();
+				actions.debugContentContainer();
 				actions.debugIntersectionLine(ctx);
 			}
 		},
@@ -179,6 +156,7 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			if (state.ctx.debugMode === true) {
 				const ctx = getContext();
 				const { ref } = getElement();
+
 				state.entryHeight = ref.offsetHeight;
 
 				actions.updateDebugIntersectionLine(ctx);

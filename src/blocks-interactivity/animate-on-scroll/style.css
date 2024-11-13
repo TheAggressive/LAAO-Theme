@@ -25,89 +25,89 @@
 		margin-block-start: 0 !important;
 	}
 
-	/* Initial states for different animations */
-	&.fade {
-		opacity: 0;
-	}
-
-	&.slide {
-		opacity: 0;
-		&.up {
-			transform: translateY(var(--slide-distance));
-		}
-		&.down {
-			transform: translateY(calc(-1 * var(--slide-distance)));
-		}
-		&.left {
-			transform: translateX(var(--slide-distance));
-		}
-		&.right {
-			transform: translateX(calc(-1 * var(--slide-distance)));
-		}
-	}
-
-	&.zoom {
-		opacity: 0;
-		&.in {
-			transform: scale(var(--zoom-in-start));
-		}
-		&.out {
-			transform: scale(var(--zoom-out-start));
-		}
-	}
-
-	&.blur {
-		opacity: 0;
-		filter: blur(var(--blur-amount));
-	}
-
-	&.flip {
-		opacity: 0;
-		transform-style: preserve-3d;
-		&.up {
-			transform: perspective(var(--perspective))
-				rotateX(var(--rotate-angle));
-		}
-		&.down {
-			transform: perspective(var(--perspective))
-				rotateX(calc(-1 * var(--rotate-angle)));
-		}
-		&.left {
-			transform: perspective(var(--perspective))
-				rotateY(calc(-1 * var(--rotate-angle)));
-		}
-		&.right {
-			transform: perspective(var(--perspective))
-				rotateY(var(--rotate-angle));
-		}
-	}
-
-	&.rotate {
-		opacity: 0;
-		&.up {
-			transform: rotate(var(--rotate-angle));
-		}
-		&.down {
-			transform: rotate(calc(-1 * var(--rotate-angle)));
-		}
-		&.left {
-			transform: rotate(var(--rotate-angle));
-		}
-		&.right {
-			transform: rotate(calc(-1 * var(--rotate-angle)));
-		}
-	}
-
-	/* Visible state */
-	&.is-visible {
-		opacity: 1 !important;
-		transform: none !important;
-		filter: none !important;
-	}
-
 	/* No stagger children, apply parent animations */
 	&[data-stagger-children="false"] {
 		transition: all var(--animation-duration) var(--animation-timing);
+
+		/* Initial states for different animations */
+		&.fade {
+			opacity: 0;
+		}
+
+		&.slide {
+			opacity: 0;
+			&.up {
+				transform: translateY(var(--slide-distance));
+			}
+			&.down {
+				transform: translateY(calc(-1 * var(--slide-distance)));
+			}
+			&.left {
+				transform: translateX(var(--slide-distance));
+			}
+			&.right {
+				transform: translateX(calc(-1 * var(--slide-distance)));
+			}
+		}
+
+		&.zoom {
+			opacity: 0;
+			&.in {
+				transform: scale(var(--zoom-in-start));
+			}
+			&.out {
+				transform: scale(var(--zoom-out-start));
+			}
+		}
+
+		&.blur {
+			opacity: 0;
+			filter: blur(var(--blur-amount));
+		}
+
+		&.flip {
+			opacity: 0;
+			transform-style: preserve-3d;
+			&.up {
+				transform: perspective(var(--perspective))
+					rotateX(var(--rotate-angle));
+			}
+			&.down {
+				transform: perspective(var(--perspective))
+					rotateX(calc(-1 * var(--rotate-angle)));
+			}
+			&.left {
+				transform: perspective(var(--perspective))
+					rotateY(calc(-1 * var(--rotate-angle)));
+			}
+			&.right {
+				transform: perspective(var(--perspective))
+					rotateY(var(--rotate-angle));
+			}
+		}
+
+		&.rotate {
+			opacity: 0;
+			&.up {
+				transform: rotate(var(--rotate-angle));
+			}
+			&.down {
+				transform: rotate(calc(-1 * var(--rotate-angle)));
+			}
+			&.left {
+				transform: rotate(var(--rotate-angle));
+			}
+			&.right {
+				transform: rotate(calc(-1 * var(--rotate-angle)));
+			}
+		}
+
+		/* Visible state */
+		&.is-visible {
+			opacity: 1 !important;
+			transform: none !important;
+			filter: none !important;
+		}
 	}
 
 	/* Stagger children, Apply parent animation type to children not parent */
@@ -165,7 +165,10 @@
 			transition-delay: calc(var(--stagger-delay) * 9);
 		}
 
-		&.slide > *, &.zoom > *, &.flip > *, &.rotate > * {
+		&.slide > *,
+		&.zoom > *,
+		&.flip > *,
+		&.rotate > * {
 			transform-origin: center center;
 		}
 
@@ -233,7 +236,44 @@
 			transform: rotate(calc(-1 * var(--rotate-angle)));
 		}
 	}
+}
 
-	/* Visible state for children */
-	&[data-stagger-children="true"]
+.wp-block-laao-animate-on-scroll-debug-root-margin-overlay {
+	position: fixed;
+	bottom: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-bottom);
+	left: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-left);
+	right: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-right);
+	top: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-top);
+	height: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-height);
+	width: var(--wp-block-laao-animate-on-scroll-margin-root-overlay-width);
+	background-color: rgba(255, 0, 0, 0.1);
+	border: 2px dashed red;
+	pointer-events: none;
+	z-index: 999999;
+}
+
+[class*="wp-block-laao-animate-on-scroll-debug-container"] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 125, 0, 0.1);
+	pointer-events: none;
+	z-index: 999999;
+
+	[class*="wp-block-laao-animate-on-scroll-debug-intersection-line-"] {
+		position: absolute;
+		width: 100%;
+		height: 2px;
+		background-color: green;
+		pointer-events: none;
+		z-index: 999999;
+		transform: translateY(-1px);
+		top: var(--wp-block-laao-animate-on-scroll-debug-intersection-line-top);
+	}
+
+	[class*="wp-block-laao-animate-on-scroll-debug-intersection-line-label-"] {
+		@apply absolute left-1/2 right-0 top-[var(--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top)] z-[999999] h-auto w-fit -translate-x-1/2 -translate-y-1/2 rounded-md bg-green-600 px-1 py-1 text-xs text-white;
+	}
 }
