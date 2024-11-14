@@ -65,7 +65,7 @@ const baseAnimations = {
 			{ label: 'Left', value: 'left' },
 			{ label: 'Right', value: 'right' },
 		],
-		defaultDirection: 'up',
+		defaultDirection: 'left',
 	},
 	blur: {
 		label: 'Blur',
