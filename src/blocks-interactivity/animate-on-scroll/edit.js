@@ -62,8 +62,6 @@ const baseAnimations = {
 		label: 'Rotate',
 		hasDirection: true,
 		directions: [
-			{ label: 'Up', value: 'up' },
-			{ label: 'Down', value: 'down' },
 			{ label: 'Left', value: 'left' },
 			{ label: 'Right', value: 'right' },
 		],

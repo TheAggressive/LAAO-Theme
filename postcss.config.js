@@ -3,6 +3,7 @@
 module.exports = {
 	plugins: {
 		'postcss-import': {},
+		'postcss-for': {},
 		'tailwindcss/nesting': 'postcss-nesting',
 		tailwindcss: {},
 		'postcss-preset-env': {
@@ -13,7 +14,7 @@ module.exports = {
 	rules: {
 		'at-rule-no-unknown': [
 			true,
-			{ ignoreAtRules: ['extends', 'mixin', 'include', 'apply'] },
+			{ ignoreAtRules: ['extends', 'mixin', 'include', 'apply', 'for'] },
 		],
 	},
 };
