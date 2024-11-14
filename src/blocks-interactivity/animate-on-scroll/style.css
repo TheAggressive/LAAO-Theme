@@ -165,7 +165,7 @@
 	@apply pointer-events-none fixed bottom-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-bottom)] left-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-left)] right-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-right)] top-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-top)] z-[999] h-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-height)] w-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-width)] border-2 border-dashed border-red-700 bg-red-200/60 backdrop-grayscale;
 
 	&::after {
-		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-red-600 px-2 py-2 text-sm text-white content-["RootMargin_Area"];
+		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-red-600 px-2 py-2 text-sm text-white content-["Detection_Boundary"];
 	}
 }
 

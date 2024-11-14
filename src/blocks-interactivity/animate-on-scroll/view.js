@@ -78,10 +78,10 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			const debugIntersectionLineLabel = document.createElement('div');
 			debugIntersectionLineLabel.className = `wp-block-laao-animate-on-scroll-debug-intersection-line-label-${state.ctx.id}`;
 			debugIntersectionLineLabel.style.cssText = `
-				--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top: ${parseInt(state.entryHeight * state.ctx.threshold)}px;
+				--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top: ${parseInt(state.getLinePosition)}px;
 			`;
 
-			debugIntersectionLineLabel.textContent = `Intersection Point: ${state.ctx.threshold * 100}%`;
+			debugIntersectionLineLabel.textContent = `Visibility Trigger: ${state.ctx.threshold * 100}%`;
 
 			// Add the indicators to the overlay container
 			debugContentContainer.appendChild(debugIntersectionLine);

@@ -158,7 +158,7 @@ export default function Edit({ attributes, setAttributes }) {
 					)}
 
 					<SelectControl
-						label="Visibility Requirement"
+						label="Visibility Trigger"
 						value={attributes.threshold}
 						options={[
 							{ label: 'Entire element (100%)', value: '1' },
@@ -180,7 +180,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 
 					<SelectControl
-						label="Trigger Distance"
+						label="Detection Boundary"
 						value={attributes.rootMargin}
 						options={[
 							{
