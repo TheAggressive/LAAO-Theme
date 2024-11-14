@@ -7,14 +7,20 @@
 
 .wp-block-laao-animate-on-scroll {
 	/* Base variables */
-	--animation-duration: 0.6s;
-	--animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
-	--slide-distance: 50px;
-	--blur-amount: 20px;
-	--zoom-in-start: 0.5;
-	--zoom-out-start: 1.5;
-	--rotate-angle: 90deg;
-	--perspective: 1000px;
+	--wp-block-laao-animate-on-scroll-animation-duration: 0.6s;
+	--wp-block-laao-animate-on-scroll-stagger-delay: 0.1s;
+	--wp-block-laao-animate-on-scroll-animation-timing: cubic-bezier(
+		0.4,
+		0,
+		0.2,
+		1
+	);
+	--wp-block-laao-animate-on-scroll-slide-distance: 50px;
+	--wp-block-laao-animate-on-scroll-blur-amount: 20px;
+	--wp-block-laao-animate-on-scroll-zoom-in-start: 0.5;
+	--wp-block-laao-animate-on-scroll-zoom-out-start: 1.5;
+	--wp-block-laao-animate-on-scroll-rotate-angle: 90deg;
+	--wp-block-laao-animate-on-scroll-perspective: 1000px;
 
 	/* Base styles */
 	display: block;
@@ -27,78 +33,121 @@
 
 	/* No stagger children, apply parent animations */
 	&[data-stagger-children="false"] {
-		transition: all var(--animation-duration) var(--animation-timing);
+		opacity: 1;
+
+		transition: all
+			var(--wp-block-laao-animate-on-scroll-animation-duration)
+			var(--wp-block-laao-animate-on-scroll-animation-timing);
 
 		/* Initial states for different animations */
 		&.fade {
-			opacity: 0;
+			/* opacity: 0; */
 		}
 
 		&.slide {
-			opacity: 0;
 			&.up {
-				transform: translateY(var(--slide-distance));
+				transform: translateY(
+					var(--wp-block-laao-animate-on-scroll-slide-distance)
+				);
 			}
 			&.down {
-				transform: translateY(calc(-1 * var(--slide-distance)));
+				transform: translateY(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-slide-distance)
+					)
+				);
 			}
 			&.left {
-				transform: translateX(var(--slide-distance));
+				transform: translateX(
+					var(--wp-block-laao-animate-on-scroll-slide-distance)
+				);
 			}
 			&.right {
-				transform: translateX(calc(-1 * var(--slide-distance)));
+				transform: translateX(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-slide-distance)
+					)
+				);
 			}
 		}
 
 		&.zoom {
-			opacity: 0;
 			&.in {
-				transform: scale(var(--zoom-in-start));
+				transform: scale(
+					var(--wp-block-laao-animate-on-scroll-zoom-in-start)
+				);
 			}
 			&.out {
-				transform: scale(var(--zoom-out-start));
+				transform: scale(
+					var(--wp-block-laao-animate-on-scroll-zoom-out-start)
+				);
 			}
 		}
 
 		&.blur {
-			opacity: 0;
-			filter: blur(var(--blur-amount));
+			filter: blur(var(--wp-block-laao-animate-on-scroll-blur-amount));
 		}
 
 		&.flip {
-			opacity: 0;
 			transform-style: preserve-3d;
 			&.up {
-				transform: perspective(var(--perspective))
-					rotateX(var(--rotate-angle));
+				transform: perspective(
+						var(--wp-block-laao-animate-on-scroll-perspective)
+					)
+					rotateX(var(--wp-block-laao-animate-on-scroll-rotate-angle));
 			}
 			&.down {
-				transform: perspective(var(--perspective))
-					rotateX(calc(-1 * var(--rotate-angle)));
+				transform: perspective(
+						var(--wp-block-laao-animate-on-scroll-perspective)
+					)
+					rotateX(
+						calc(
+							-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+						)
+					);
 			}
 			&.left {
-				transform: perspective(var(--perspective))
-					rotateY(calc(-1 * var(--rotate-angle)));
+				transform: perspective(
+						var(--wp-block-laao-animate-on-scroll-perspective)
+					)
+					rotateY(
+						calc(
+							-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+						)
+					);
 			}
 			&.right {
-				transform: perspective(var(--perspective))
-					rotateY(var(--rotate-angle));
+				transform: perspective(
+						var(--wp-block-laao-animate-on-scroll-perspective)
+					)
+					rotateY(var(--wp-block-laao-animate-on-scroll-rotate-angle));
 			}
 		}
 
 		&.rotate {
-			opacity: 0;
 			&.up {
-				transform: rotate(var(--rotate-angle));
+				transform: rotate(
+					var(--wp-block-laao-animate-on-scroll-rotate-angle)
+				);
 			}
 			&.down {
-				transform: rotate(calc(-1 * var(--rotate-angle)));
+				transform: rotate(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+					)
+				);
 			}
 			&.left {
-				transform: rotate(var(--rotate-angle));
+				transform: rotate(
+					var(--wp-block-laao-animate-on-scroll-rotate-angle)
+				);
 			}
 			&.right {
-				transform: rotate(calc(-1 * var(--rotate-angle)));
+				transform: rotate(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+					)
+				);
 			}
 		}
 
@@ -116,7 +165,9 @@
 
 		& > * {
 			opacity: 0;
-			transition: all var(--animation-duration) var(--animation-timing);
+			transition: all
+				var(--wp-block-laao-animate-on-scroll-animation-duration)
+				var(--wp-block-laao-animate-on-scroll-animation-timing);
 		}
 
 		&.is-visible > * {
@@ -130,39 +181,57 @@
 		}
 
 		& > *:nth-child(2) {
-			transition-delay: var(--stagger-delay);
+			transition-delay: var(
+				--wp-block-laao-animate-on-scroll-stagger-delay
+			);
 		}
 
 		& > *:nth-child(3) {
-			transition-delay: calc(var(--stagger-delay) * 2);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 2
+			);
 		}
 
 		& > *:nth-child(4) {
-			transition-delay: calc(var(--stagger-delay) * 3);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 3
+			);
 		}
 
 		& > *:nth-child(5) {
-			transition-delay: calc(var(--stagger-delay) * 4);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 4
+			);
 		}
 
 		& > *:nth-child(6) {
-			transition-delay: calc(var(--stagger-delay) * 5);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 5
+			);
 		}
 
 		& > *:nth-child(7) {
-			transition-delay: calc(var(--stagger-delay) * 6);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 6
+			);
 		}
 
 		& > *:nth-child(8) {
-			transition-delay: calc(var(--stagger-delay) * 7);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 7
+			);
 		}
 
 		& > *:nth-child(9) {
-			transition-delay: calc(var(--stagger-delay) * 8);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 8
+			);
 		}
 
 		& > *:nth-child(10) {
-			transition-delay: calc(var(--stagger-delay) * 9);
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) * 9
+			);
 		}
 
 		&.slide > *,
@@ -173,67 +242,103 @@
 		}
 
 		&.blur > * {
-			filter: blur(var(--blur-amount));
+			filter: blur(var(--wp-block-laao-animate-on-scroll-blur-amount));
 		}
 
 		&.slide.up > * {
-			transform: translateY(var(--slide-distance));
+			transform: translateY(
+				var(--wp-block-laao-animate-on-scroll-slide-distance)
+			);
 		}
 
 		&.slide.down > * {
-			transform: translateY(calc(-1 * var(--slide-distance)));
+			transform: translateY(
+				calc(-1 * var(--wp-block-laao-animate-on-scroll-slide-distance))
+			);
 		}
 
 		&.slide.left > * {
-			transform: translateX(var(--slide-distance));
+			transform: translateX(
+				var(--wp-block-laao-animate-on-scroll-slide-distance)
+			);
 		}
 
 		&.slide.right > * {
-			transform: translateX(calc(-1 * var(--slide-distance)));
+			transform: translateX(
+				calc(-1 * var(--wp-block-laao-animate-on-scroll-slide-distance))
+			);
 		}
 
 		&.zoom.in > * {
-			transform: scale(var(--zoom-in-start));
+			transform: scale(
+				var(--wp-block-laao-animate-on-scroll-zoom-in-start)
+			);
 		}
 
 		&.zoom.out > * {
-			transform: scale(var(--zoom-out-start));
+			transform: scale(
+				var(--wp-block-laao-animate-on-scroll-zoom-out-start)
+			);
 		}
 
 		&.flip.up > * {
-			transform: perspective(var(--perspective))
-				rotateX(var(--rotate-angle));
+			transform: perspective(
+					var(--wp-block-laao-animate-on-scroll-perspective)
+				)
+				rotateX(var(--wp-block-laao-animate-on-scroll-rotate-angle));
 		}
 
 		&.flip.down > * {
-			transform: perspective(var(--perspective))
-				rotateX(calc(-1 * var(--rotate-angle)));
+			transform: perspective(
+					var(--wp-block-laao-animate-on-scroll-perspective)
+				)
+				rotateX(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+					)
+				);
 		}
 
 		&.flip.left > * {
-			transform: perspective(var(--perspective))
-				rotateY(calc(-1 * var(--rotate-angle)));
+			transform: perspective(
+					var(--wp-block-laao-animate-on-scroll-perspective)
+				)
+				rotateY(
+					calc(
+						-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle)
+					)
+				);
 		}
 
 		&.flip.right > * {
-			transform: perspective(var(--perspective))
-				rotateY(var(--rotate-angle));
+			transform: perspective(
+					var(--wp-block-laao-animate-on-scroll-perspective)
+				)
+				rotateY(var(--wp-block-laao-animate-on-scroll-rotate-angle));
 		}
 
 		&.rotate.up > * {
-			transform: rotate(var(--rotate-angle));
+			transform: rotate(
+				var(--wp-block-laao-animate-on-scroll-rotate-angle)
+			);
 		}
 
 		&.rotate.down > * {
-			transform: rotate(calc(-1 * var(--rotate-angle)));
+			transform: rotate(
+				calc(-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle))
+			);
 		}
 
 		&.rotate.left > * {
-			transform: rotate(var(--rotate-angle));
+			transform: rotate(
+				var(--wp-block-laao-animate-on-scroll-rotate-angle)
+			);
 		}
 
 		&.rotate.right > * {
-			transform: rotate(calc(-1 * var(--rotate-angle)));
+			transform: rotate(
+				calc(-1 * var(--wp-block-laao-animate-on-scroll-rotate-angle))
+			);
 		}
 	}
 }
@@ -247,7 +352,7 @@
 }
 
 [class*="wp-block-laao-animate-on-scroll-debug-container"] {
-	@apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[999] bg-white/75 backdrop-blur-[1px] backdrop-grayscale;
+	@apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[999] bg-white/65 backdrop-blur-[1px] backdrop-grayscale;
 
 	[class*="wp-block-laao-animate-on-scroll-debug-intersection-line-"] {
 		@apply pointer-events-none absolute top-[var(--wp-block-laao-animate-on-scroll-debug-intersection-line-top)] z-[999] h-[1px] w-full translate-y-[-1px] border-t-2 border-dashed border-red-600;

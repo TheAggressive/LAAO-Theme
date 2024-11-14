@@ -11,24 +11,21 @@
  */
 
 // Build animation class that combines animation type and direction
-$animation_classes = array( 'wp-block-laao-animate-on-scroll' );
+$default_classes = array( 'wp-block-laao-animate-on-scroll' );
 
 // Add the base animation class
 if ( ! empty( $attributes['animation'] ) ) {
-	$animation_classes[] = esc_attr( $attributes['animation'] );
+	$default_classes[] = esc_attr( $attributes['animation'] );
 }
 
 // Add direction for animations that support it
 if ( ! empty( $attributes['direction'] ) &&
-	in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate', 'zoom' ) ) ) {
-	$animation_classes[] = esc_attr( $attributes['direction'] );
+	in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate', 'zoom' ), true ) ) {
+	$default_classes[] = esc_attr( $attributes['direction'] );
 }
 
 // Join classes with spaces
-$final_classes = implode( ' ', array_filter( $animation_classes ) );
-
-// Debug output
-error_log( 'Animation Classes: ' . $final_classes );
+$final_classes = implode( ' ', array_filter( $default_classes ) );
 
 $wrapper_attributes = get_block_wrapper_attributes(
 	array(
@@ -53,15 +50,29 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	)
 );
 
-$style = sprintf(
-	'style="--animation-duration: %ss; --stagger-delay: %ss;"',
-	esc_attr( $attributes['duration'] ),
-	esc_attr( $attributes['staggerDelay'] )
-);
+// $style = sprintf(
+//  'style="--animation-duration: %ss; --stagger-delay: %ss;"',
+//  esc_attr( $attributes['duration'] ),
+//  esc_attr( $attributes['staggerDelay'] )
+// );
 
-printf(
-	'<div %1$s %2$s>%3$s</div>',
-	$wrapper_attributes,
-	$style,
-	$content
-);
+// printf(
+//  '<div %1$s %2$s>%3$s</div>',
+//  $wrapper_attributes,
+//  $style,
+//  $content
+// );
+?>
+
+<div
+	<?php echo wp_kses_post( $wrapper_attributes ); ?>
+	style="
+		--wp-block-laao-animate-on-scroll-animation-duration: <?php echo esc_attr( $attributes['duration'] ); ?>s;
+		--wp-block-laao-animate-on-scroll-stagger-delay: <?php echo esc_attr( $attributes['staggerDelay'] ); ?>s;
+	"
+>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is already escaped by the block editor
+	echo $content;
+	?>
+</div>
