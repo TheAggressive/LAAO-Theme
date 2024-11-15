@@ -9,6 +9,7 @@
 	/* Base variables */
 	--wp-block-laao-animate-on-scroll-animation-duration: 0.6s;
 	--wp-block-laao-animate-on-scroll-stagger-delay: 0.1s;
+	--wp-block-laao-animate-on-scroll-stagger-index: 0;
 	--wp-block-laao-animate-on-scroll-animation-timing: cubic-bezier(
 		0.4,
 		0,
@@ -37,6 +38,16 @@
 		transition: all
 			var(--wp-block-laao-animate-on-scroll-animation-duration)
 			var(--wp-block-laao-animate-on-scroll-animation-timing);
+	}
+
+	/* Stagger children */
+	&[data-stagger-children="true"] {
+		& > * {
+			transition-delay: calc(
+				var(--wp-block-laao-animate-on-scroll-stagger-delay) *
+					var(--wp-block-laao-animate-on-scroll-stagger-index)
+			);
+		}
 	}
 
 	&.is-visible > * {
@@ -147,22 +158,10 @@
 			);
 		}
 	}
-
-	/* Stagger children */
-	&[data-stagger-children="true"] {
-		@for $i from 1 to 12 {
-			& > *:nth-child($i) {
-				transition-delay: calc(
-					var(--wp-block-laao-animate-on-scroll-stagger-delay) *
-						($i - 1)
-				);
-			}
-		}
-	}
 }
 
 .wp-block-laao-animate-on-scroll-debug-root-margin-overlay {
-	@apply pointer-events-none fixed bottom-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-bottom)] left-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-left)] right-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-right)] top-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-top)] z-[999] h-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-height)] w-[var(--wp-block-laao-animate-on-scroll-margin-root-overlay-width)] border-2 border-dashed border-red-700 bg-red-200/60 backdrop-grayscale;
+	@apply pointer-events-none fixed bottom-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-bottom)] left-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-left)] right-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-right)] top-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-top)] z-[999] h-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-height)] w-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-width)] border-2 border-dashed border-red-700 bg-red-200/60 backdrop-grayscale;
 
 	&::after {
 		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-red-600 px-2 py-2 text-sm text-white content-["Detection_Boundary"];

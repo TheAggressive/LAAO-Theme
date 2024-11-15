@@ -158,28 +158,6 @@ export default function Edit({ attributes, setAttributes }) {
 					)}
 
 					<SelectControl
-						label="Visibility Trigger"
-						value={attributes.threshold}
-						options={[
-							{ label: 'Entire element (100%)', value: '1' },
-							{ label: 'Almost entire (90%)', value: '0.9' },
-							{ label: 'Mostly visible (80%)', value: '0.8' },
-							{ label: 'Large portion (70%)', value: '0.7' },
-							{ label: 'More than half (60%)', value: '0.6' },
-							{ label: 'Half element (50%)', value: '0.5' },
-							{ label: 'Some visible (40%)', value: '0.4' },
-							{
-								label: 'Partially visible (30%) Default',
-								value: '0.3',
-							},
-							{ label: 'Small portion (20%)', value: '0.2' },
-							{ label: 'Barely visible (10%)', value: '0.1' },
-						]}
-						onChange={(threshold) => setAttributes({ threshold })}
-						help="How much of the element needs to be in view before the animation triggers"
-					/>
-
-					<SelectControl
 						label="Detection Boundary"
 						value={attributes.rootMargin}
 						options={[
@@ -218,6 +196,28 @@ export default function Edit({ attributes, setAttributes }) {
 						]}
 						onChange={(rootMargin) => setAttributes({ rootMargin })}
 						help="Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering."
+					/>
+
+					<SelectControl
+						label="Visibility Trigger"
+						value={attributes.threshold}
+						options={[
+							{ label: 'Entire element (100%)', value: '1' },
+							{ label: 'Almost entire (90%)', value: '0.9' },
+							{ label: 'Mostly visible (80%)', value: '0.8' },
+							{ label: 'Large portion (70%)', value: '0.7' },
+							{ label: 'More than half (60%)', value: '0.6' },
+							{ label: 'Half element (50%)', value: '0.5' },
+							{ label: 'Some visible (40%)', value: '0.4' },
+							{
+								label: 'Partially visible (30%) Default',
+								value: '0.3',
+							},
+							{ label: 'Small portion (20%)', value: '0.2' },
+							{ label: 'Barely visible (10%)', value: '0.1' },
+						]}
+						onChange={(threshold) => setAttributes({ threshold })}
+						help="How much of the element needs to be in view before the animation triggers"
 					/>
 
 					<ToggleControl

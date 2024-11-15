@@ -42,25 +42,27 @@ const { state, actions } = store('laao/animate-on-scroll', {
 
 			// Set CSS variables for Debug rootMargin Overlay
 			document.documentElement.style.cssText += `
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-bottom: ${-parseFloat(bottom) + '%'};
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-left: ${-parseFloat(left) + '%'};
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-right: ${-parseFloat(right) + '%'};
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-top: ${-parseFloat(top) + '%'};
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
-					--wp-block-laao-animate-on-scroll-margin-root-overlay-width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-bottom: ${-parseFloat(bottom) + '%'};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-left: ${-parseFloat(left) + '%'};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-right: ${-parseFloat(right) + '%'};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-top: ${-parseFloat(top) + '%'};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
 					`;
 		},
 		debugContentContainer: () => {
-			// Create an overlay container that won't be affected by animations
+			// Create the overlay container
 			const debugContentContainer = document.createElement('div');
 			debugContentContainer.className = `wp-block-laao-animate-on-scroll-debug-container-${state.ctx.id}`;
 
+			// Insert the overlay container before the target element
 			state.elementRef.parentNode.insertBefore(
 				debugContentContainer,
 				state.elementRef
 			);
 		},
 		debugIntersectionLine: () => {
+			// Get the overlay container
 			const debugContentContainer = document.querySelector(
 				`.wp-block-laao-animate-on-scroll-debug-container-${state.ctx.id}`
 			);
@@ -74,44 +76,49 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			--wp-block-laao-animate-on-scroll-debug-intersection-line-top: calc(${parseInt(state.getLinePosition)}px);
 			`;
 
-			// Add percentage indicator to the overlay
+			// Create the label for the intersection line
 			const debugIntersectionLineLabel = document.createElement('div');
 			debugIntersectionLineLabel.className = `wp-block-laao-animate-on-scroll-debug-intersection-line-label-${state.ctx.id}`;
 			debugIntersectionLineLabel.style.cssText = `
 				--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top: ${parseInt(state.getLinePosition)}px;
 			`;
 
+			// Add the visibility trigger text to the label
 			debugIntersectionLineLabel.textContent = `Visibility Trigger: ${state.ctx.threshold * 100}%`;
 
 			// Add the indicators to the overlay container
 			debugContentContainer.appendChild(debugIntersectionLine);
 			debugContentContainer.appendChild(debugIntersectionLineLabel);
 
-			// Add the overlay container next to the target element
+			// Make sure the target element is positioned relative
 			state.elementRef.style.position = 'relative';
 		},
 		updateDebugIntersectionLine: (ctx) => {
-			const intersectionElementTopOffset = `${state.entryHeight * ctx.threshold}px`;
+			// Calculate the top offset of the intersection element
+			const elementTopOffset = `${state.entryHeight * ctx.threshold}px`;
 
+			// Set the CSS variable for the intersection line
 			document
 				.querySelector(
 					`.wp-block-laao-animate-on-scroll-debug-intersection-line-${ctx.id}`
 				)
 				.style.setProperty(
 					'--wp-block-laao-animate-on-scroll-debug-intersection-line-top',
-					intersectionElementTopOffset
+					elementTopOffset
 				);
 
+			// Set the CSS variable for the intersection line label
 			document
 				.querySelector(
 					`.wp-block-laao-animate-on-scroll-debug-intersection-line-label-${ctx.id}`
 				)
 				.style.setProperty(
 					'--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top',
-					intersectionElementTopOffset
+					elementTopOffset
 				);
 		},
 		debug: (ctx) => {
+			// If debug mode is enabled, create overlays for debugging
 			if (state.ctx.debugMode === true) {
 				actions.debugRootMarginOverlay();
 				actions.debugContentContainer();
@@ -124,15 +131,32 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			const ctx = getContext();
 			const { ref } = getElement();
 
+			// Store the context and element reference
 			state.ctx = ctx;
 			state.elementRef = ref;
 			state.entryHeight = ref.offsetHeight;
 
+			// If stagger animation is enabled, assign each child element a sequential index
+			// This index can be used in CSS animations to create cascading/staggered effects
+			// where each child animates with a slight delay after the previous one
+			if (ref.dataset.staggerChildren === 'true') {
+				Array.from(ref.children).forEach((child, index) => {
+					child.style.setProperty(
+						'--wp-block-laao-animate-on-scroll-stagger-index',
+						index
+					);
+				});
+			}
+
+			// Call the debug function to create overlays for debugging if enabled
 			actions.debug(ctx);
 
+			// Create a new Intersection Observer to detect when elements enter the viewport
+			// The observer will monitor elements and trigger a callback when they become visible
 			const observer = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {
+						// When element crosses the visibility threshold (e.g., 50% visible)
 						if (entry.intersectionRatio >= ctx.threshold) {
 							ctx.isVisible = true;
 							ctx.intersectionRatio = entry.intersectionRatio;
@@ -146,13 +170,16 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				}
 			);
 
+			// Start observing the target element
 			observer.observe(ref);
 
+			// Clean up the observer when the component unmounts
 			return () => {
 				observer.disconnect();
 			};
 		},
 		handleResize: () => {
+			// If debug mode is enabled, update the intersection line position
 			if (state.ctx.debugMode === true) {
 				const ctx = getContext();
 				const { ref } = getElement();

@@ -44,24 +44,9 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		'data-wp-init'                    => 'callbacks.initObserver',
 		'data-wp-class--is-visible'       => 'context.isVisible',
 		'data-stagger-children'           => $attributes['staggerChildren'] ? 'true' : 'false',
-		'data-stagger-delay'              => esc_attr( $attributes['staggerDelay'] ),
-		'data-animation-duration'         => esc_attr( $attributes['duration'] ),
 		'data-wp-on-async-window--resize' => 'callbacks.handleResize',
 	)
 );
-
-// $style = sprintf(
-//  'style="--animation-duration: %ss; --stagger-delay: %ss;"',
-//  esc_attr( $attributes['duration'] ),
-//  esc_attr( $attributes['staggerDelay'] )
-// );
-
-// printf(
-//  '<div %1$s %2$s>%3$s</div>',
-//  $wrapper_attributes,
-//  $style,
-//  $content
-// );
 ?>
 
 <div
