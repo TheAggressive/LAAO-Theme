@@ -25,18 +25,18 @@ if ( ! empty( $attributes['direction'] ) &&
 }
 
 // Join classes with spaces
-$final_classes = implode( ' ', array_filter( $default_classes ) );
+$combined_classes = implode( ' ', array_filter( $default_classes ) );
 
 $wrapper_attributes = get_block_wrapper_attributes(
 	array(
-		'class'                           => $final_classes,
+		'class'                           => $combined_classes,
 		'data-wp-interactive'             => 'laao/animate-on-scroll',
 		'data-wp-context'                 => wp_json_encode(
 			array(
 				'isVisible'  => false,
 				'debugMode'  => $attributes['debugMode'],
 				'threshold'  => $attributes['threshold'],
-				'rootMargin' => $attributes['rootMargin'],
+				'rootMargin' => $attributes['detectionBoundary'],
 				'id'         => uniqid(),
 
 			)

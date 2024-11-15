@@ -37,9 +37,14 @@
 			"type": "string",
 			"default": "0.3"
 		},
-		"rootMargin": {
-			"type": "string",
-			"default": "-25%"
+		"detectionBoundary": {
+			"type": "object",
+			"default": {
+				"top": "0%",
+				"right": "0%",
+				"bottom": "-25%",
+				"left": "0%"
+			}
 		},
 		"debugMode": {
 			"type": "boolean",

@@ -20,6 +20,7 @@ import {
 	RangeControl,
 	SelectControl,
 	ToggleControl,
+	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
 
 const baseAnimations = {
@@ -91,7 +92,7 @@ export default function Edit({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Animation Settings">
+				<PanelBody title="Animation Settings" initialOpen={true}>
 					<SelectControl
 						label="Animation Type"
 						value={attributes.animation}
@@ -112,7 +113,6 @@ export default function Edit({ attributes, setAttributes }) {
 							});
 						}}
 					/>
-
 					{baseAnimations[attributes.animation]?.hasDirection && (
 						<SelectControl
 							label="Direction"
@@ -126,16 +126,6 @@ export default function Edit({ attributes, setAttributes }) {
 							}}
 						/>
 					)}
-
-					<RangeControl
-						label="Duration (seconds)"
-						value={attributes.duration}
-						onChange={(duration) => setAttributes({ duration })}
-						min={0.1}
-						max={2}
-						step={0.1}
-					/>
-
 					<ToggleControl
 						label="Stagger Children"
 						checked={attributes.staggerChildren}
@@ -143,7 +133,6 @@ export default function Edit({ attributes, setAttributes }) {
 							setAttributes({ staggerChildren })
 						}
 					/>
-
 					{attributes.staggerChildren && (
 						<RangeControl
 							label="Stagger Delay (seconds)"
@@ -156,47 +145,88 @@ export default function Edit({ attributes, setAttributes }) {
 							step={0.1}
 						/>
 					)}
-
-					<SelectControl
-						label="Detection Boundary"
-						value={attributes.rootMargin}
-						options={[
-							{
-								label: 'Very deep in viewport (-75%)',
-								value: '0% 0% -75% 0%',
-							},
-							{
-								label: 'Deep in viewport (-60%)',
-								value: '0% 0% -60% 0%',
-							},
-							{
-								label: 'Half viewport (-50%)',
-								value: '0% 0% -50% 0%',
-							},
-							{
-								label: 'Near half (-40%)',
-								value: '0% 0% -40% 0%',
-							},
-							{
-								label: 'Quarter in (-25%) Default',
-								value: '0% 0% -25% 0%',
-							},
-							{
-								label: 'Slightly in (-15%)',
-								value: '0% 0% -15% 0%',
-							},
-							{
-								label: 'Just inside (-10%)',
-								value: '0% 0% -10% 0%',
-							},
-							{
-								label: 'At viewport edge (0%)',
-								value: '0% 0% 0% 0%',
-							},
-						]}
-						onChange={(rootMargin) => setAttributes({ rootMargin })}
-						help="Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering."
+					<RangeControl
+						label="Duration (seconds)"
+						value={attributes.duration}
+						onChange={(duration) => setAttributes({ duration })}
+						min={0.1}
+						max={2}
+						step={0.1}
 					/>
+
+					<label
+						htmlFor="detection-boundary"
+						className="components-base-control__label"
+						style={{
+							display: 'block',
+							marginBottom: '8px',
+							fontWeight: '500',
+							textTransform: 'uppercase',
+							fontSize: '11px',
+						}}
+					>
+						Detection Boundary
+					</label>
+					<div
+						style={{
+							display: 'flex',
+							flexWrap: 'wrap',
+							gap: '16px',
+						}}
+					>
+						{['top', 'right', 'bottom', 'left'].map((direction) => (
+							<div
+								key={direction}
+								style={{ flex: '0 0 calc(50% - 8px)' }}
+							>
+								<UnitControl
+									id={`boundary-${direction}`}
+									label={
+										direction.charAt(0).toUpperCase() +
+										direction.slice(1)
+									}
+									value={
+										attributes.detectionBoundary[direction]
+									}
+									onChange={(value) =>
+										setAttributes({
+											detectionBoundary: {
+												...attributes.detectionBoundary,
+												[direction]: value,
+											},
+										})
+									}
+									units={[
+										{
+											value: '%',
+											label: '%',
+											default: '0%',
+										},
+										{
+											value: 'px',
+											label: 'px',
+											default: '0%',
+										},
+									]}
+									__next40pxDefaultSize={true}
+								/>
+							</div>
+						))}
+					</div>
+					<p
+						className="components-base-control__help"
+						style={{
+							marginTop: 'calc(8px)',
+							fontSize: '12px',
+							fontStyle: 'normal',
+							color: 'rgb(117,117,117)',
+							marginBottom: 'revert',
+						}}
+					>
+						Negative values delay trigger until element is further
+						in viewport. -50% means element must be halfway into
+						viewport before triggering.
+					</p>
 
 					<SelectControl
 						label="Visibility Trigger"
@@ -219,7 +249,6 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(threshold) => setAttributes({ threshold })}
 						help="How much of the element needs to be in view before the animation triggers"
 					/>
-
 					<ToggleControl
 						label="Debug Mode"
 						checked={attributes.debugMode}

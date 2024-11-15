@@ -3,6 +3,12 @@
  */
 import { getContext, getElement, store } from '@wordpress/interactivity';
 
+// Invert the value of a CSS variable
+const invertValue = (value) => {
+	const [_, num = 0, unit = '%'] = value?.match(/(-?\d+)(px|%)/) || [];
+	return -num + unit;
+};
+
 const { state, actions } = store('laao/animate-on-scroll', {
 	state: {
 		isVisible: false,
@@ -15,39 +21,43 @@ const { state, actions } = store('laao/animate-on-scroll', {
 	},
 	actions: {
 		debugRootMarginOverlay: () => {
-			// Parse all margin values - keep as percentages
-			const [top, right, bottom, left] = state.ctx.rootMargin
-				.split(' ')
-				.map((value) => {
-					if (value.endsWith('%')) {
-						return value;
-					} else if (value.endsWith('px')) {
-						return value;
-					}
-					return '0%';
-				});
+			// Extract and normalize rootMargin values for all four sides
+			// This ensures all values are valid CSS units (either % or px)
+			// If a value is invalid or missing, it defaults to '0%'
+			const { top, right, bottom, left } = Object.entries(
+				state.ctx.rootMargin
+			).reduce(
+				(acc, [key, value]) => ({
+					...acc,
+					[key]:
+						// If value ends with % or px, keep it as-is
+						// Otherwise default to '0%'
+						value?.endsWith('%') || value?.endsWith('px')
+							? value
+							: '0%',
+				}),
+				// Initial values if nothing is provided
+				{ top: '0%', right: '0%', bottom: '0%', left: '0%' }
+			);
 
 			// Create rootMargin Overlay (only once)
 			if (
 				!document.querySelector(
-					'.wp-block-laao-animate-on-scroll-debug-root-margin-overlay'
+					`.wp-block-laao-animate-on-scroll-debug-root-margin-overlay`
 				)
 			) {
 				const debugRootMarginOverlay = document.createElement('div');
-				debugRootMarginOverlay.className =
-					'wp-block-laao-animate-on-scroll-debug-root-margin-overlay';
+				debugRootMarginOverlay.className = `wp-block-laao-animate-on-scroll-debug-root-margin-overlay`;
 
 				document.body.appendChild(debugRootMarginOverlay);
 			}
 
 			// Set CSS variables for Debug rootMargin Overlay
 			document.documentElement.style.cssText += `
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-bottom: ${-parseFloat(bottom) + '%'};
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-left: ${-parseFloat(left) + '%'};
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-right: ${-parseFloat(right) + '%'};
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-top: ${-parseFloat(top) + '%'};
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-height: calc(100vh - ${-parseFloat(top) + '%'} - ${-parseFloat(bottom) + '%'});
-					--wp-block-laao-animate-on-scroll-root-margin-overlay-width: calc(100vw - ${-parseFloat(left) + '%'} - ${-parseFloat(right) + '%'});
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-bottom: ${invertValue(bottom)};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-left: ${invertValue(left)};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-right: ${invertValue(right)};
+					--wp-block-laao-animate-on-scroll-root-margin-overlay-top: ${invertValue(top)};
 					`;
 		},
 		debugContentContainer: () => {
@@ -95,7 +105,7 @@ const { state, actions } = store('laao/animate-on-scroll', {
 		},
 		updateDebugIntersectionLine: (ctx) => {
 			// Calculate the top offset of the intersection element
-			const elementTopOffset = `${state.entryHeight * ctx.threshold}px`;
+			const elementTopOffset = `${state.getLinePosition}px`;
 
 			// Set the CSS variable for the intersection line
 			document
@@ -166,7 +176,7 @@ const { state, actions } = store('laao/animate-on-scroll', {
 				},
 				{
 					threshold: ctx.threshold,
-					rootMargin: ctx.rootMargin,
+					rootMargin: `${ctx.rootMargin.top} ${ctx.rootMargin.right} ${ctx.rootMargin.bottom} ${ctx.rootMargin.left}`,
 				}
 			);
 
@@ -179,11 +189,10 @@ const { state, actions } = store('laao/animate-on-scroll', {
 			};
 		},
 		handleResize: () => {
+			const ctx = getContext();
+			const { ref } = getElement();
 			// If debug mode is enabled, update the intersection line position
-			if (state.ctx.debugMode === true) {
-				const ctx = getContext();
-				const { ref } = getElement();
-
+			if (ctx.debugMode === true) {
 				state.entryHeight = ref.offsetHeight;
 
 				actions.updateDebugIntersectionLine(ctx);
