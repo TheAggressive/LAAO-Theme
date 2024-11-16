@@ -33,11 +33,11 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		'data-wp-interactive'             => 'laao/animate-on-scroll',
 		'data-wp-context'                 => wp_json_encode(
 			array(
-				'isVisible'  => false,
-				'debugMode'  => $attributes['debugMode'],
-				'threshold'  => $attributes['threshold'],
-				'rootMargin' => $attributes['detectionBoundary'],
-				'id'         => uniqid(),
+				'isVisible'         => false,
+				'debugMode'         => $attributes['debugMode'],
+				'visibilityTrigger' => $attributes['threshold'],
+				'detectionBoundary' => $attributes['detectionBoundary'],
+				'id'                => uniqid(),
 
 			)
 		),

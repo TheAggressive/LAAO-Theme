@@ -160,22 +160,22 @@
 	}
 }
 
-.wp-block-laao-animate-on-scroll-debug-root-margin-overlay {
-	@apply pointer-events-none fixed bottom-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-bottom)] left-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-left)] right-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-right)] top-[var(--wp-block-laao-animate-on-scroll-root-margin-overlay-top)] z-[999] border-2 border-dashed border-red-700 bg-red-200/60 backdrop-grayscale;
+.wp-block-laao-animate-on-scroll-debug-detection-boundary-overlay {
+	@apply pointer-events-none fixed bottom-[var(--wp-block-laao-animate-on-scroll-detection-boundary-overlay-bottom)] left-[var(--wp-block-laao-animate-on-scroll-detection-boundary-overlay-left)] right-[var(--wp-block-laao-animate-on-scroll-detection-boundary-overlay-right)] top-[var(--wp-block-laao-animate-on-scroll-detection-boundary-overlay-top)] z-[999] border-2 border-dashed border-red-700 bg-red-200/60 backdrop-grayscale;
 
 	&::after {
-		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-red-600 px-2 py-2 text-sm text-white content-["Detection_Boundary"];
+		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-red-600 px-2 py-2 text-center text-sm text-white content-["Detection_Boundary"];
 	}
 }
 
 [class*="wp-block-laao-animate-on-scroll-debug-container"] {
 	@apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[999] bg-white/65 backdrop-blur-[1px] backdrop-grayscale;
 
-	[class*="wp-block-laao-animate-on-scroll-debug-intersection-line-"] {
-		@apply pointer-events-none absolute top-[var(--wp-block-laao-animate-on-scroll-debug-intersection-line-top)] z-[999] h-[1px] w-full translate-y-[-1px] border-t-2 border-dashed border-red-600;
+	[class*="wp-block-laao-animate-on-scroll-debug-visibility-trigger-line-"] {
+		@apply pointer-events-none absolute top-[var(--wp-block-laao-animate-on-scroll-debug-visibility-trigger-top)] z-[999] h-[1px] w-full translate-y-[-1px] border-t-2 border-dashed border-red-600;
 	}
 
-	[class*="wp-block-laao-animate-on-scroll-debug-intersection-line-label-"] {
-		@apply absolute left-1/2 right-0 top-[var(--wp-block-laao-animate-on-scroll-debug-intersection-line-label-top)] z-[999] flex h-auto w-max -translate-x-1/2 -translate-y-1/2 rounded-md border-none bg-red-600 px-2 py-2 text-sm text-white;
+	[class*="wp-block-laao-animate-on-scroll-debug-visibility-trigger-line-label-"] {
+		@apply absolute left-1/2 right-0 top-[var(--wp-block-laao-animate-on-scroll-debug-visibility-trigger-top)] z-[999] flex h-auto w-max -translate-x-1/2 -translate-y-1/2 rounded-md border-none bg-red-600 px-2 py-2 text-center text-sm text-white;
 	}
 }
