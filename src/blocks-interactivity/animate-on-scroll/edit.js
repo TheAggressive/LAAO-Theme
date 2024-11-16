@@ -22,54 +22,55 @@ import {
 	ToggleControl,
 	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const baseAnimations = {
 	fade: {
-		label: 'Fade',
+		label: __('Fade', 'laao'),
 		hasDirection: false,
 	},
 	slide: {
-		label: 'Slide',
+		label: __('Slide', 'laao'),
 		hasDirection: true,
 		directions: [
-			{ label: 'Up', value: 'up' },
-			{ label: 'Down', value: 'down' },
-			{ label: 'Left', value: 'left' },
-			{ label: 'Right', value: 'right' },
+			{ label: __('Up', 'laao'), value: 'up' },
+			{ label: __('Down', 'laao'), value: 'down' },
+			{ label: __('Left', 'laao'), value: 'left' },
+			{ label: __('Right', 'laao'), value: 'right' },
 		],
 		defaultDirection: 'up',
 	},
 	zoom: {
-		label: 'Zoom',
+		label: __('Zoom', 'laao'),
 		hasDirection: true,
 		directions: [
-			{ label: 'In', value: 'in' },
-			{ label: 'Out', value: 'out' },
+			{ label: __('In', 'laao'), value: 'in' },
+			{ label: __('Out', 'laao'), value: 'out' },
 		],
 		defaultDirection: 'in',
 	},
 	flip: {
-		label: 'Flip',
+		label: __('Flip', 'laao'),
 		hasDirection: true,
 		directions: [
-			{ label: 'Up', value: 'up' },
-			{ label: 'Down', value: 'down' },
-			{ label: 'Left', value: 'left' },
-			{ label: 'Right', value: 'right' },
+			{ label: __('Up', 'laao'), value: 'up' },
+			{ label: __('Down', 'laao'), value: 'down' },
+			{ label: __('Left', 'laao'), value: 'left' },
+			{ label: __('Right', 'laao'), value: 'right' },
 		],
 		defaultDirection: 'up',
 	},
 	rotate: {
-		label: 'Rotate',
+		label: __('Rotate', 'laao'),
 		hasDirection: true,
 		directions: [
-			{ label: 'Left', value: 'left' },
-			{ label: 'Right', value: 'right' },
+			{ label: __('Left', 'laao'), value: 'left' },
+			{ label: __('Right', 'laao'), value: 'right' },
 		],
 		defaultDirection: 'left',
 	},
 	blur: {
-		label: 'Blur',
+		label: __('Blur', 'laao'),
 		hasDirection: false,
 	},
 };
@@ -92,9 +93,12 @@ export default function Edit({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Animation Settings" initialOpen={true}>
+				<PanelBody
+					title={__('Animation Settings', 'laao')}
+					initialOpen={true}
+				>
 					<SelectControl
-						label="Animation Type"
+						label={__('Animation Type', 'laao')}
 						value={attributes.animation}
 						options={Object.entries(baseAnimations).map(
 							([value, config]) => ({
@@ -115,7 +119,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					{baseAnimations[attributes.animation]?.hasDirection && (
 						<SelectControl
-							label="Direction"
+							label={__('Direction', 'laao')}
 							value={attributes.direction}
 							options={
 								baseAnimations[attributes.animation].directions
@@ -127,7 +131,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					)}
 					<ToggleControl
-						label="Stagger Children"
+						label={__('Stagger Children', 'laao')}
 						checked={attributes.staggerChildren}
 						onChange={(staggerChildren) =>
 							setAttributes({ staggerChildren })
@@ -135,7 +139,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					{attributes.staggerChildren && (
 						<RangeControl
-							label="Stagger Delay (seconds)"
+							label={__('Stagger Delay (seconds)', 'laao')}
 							value={attributes.staggerDelay}
 							onChange={(staggerDelay) =>
 								setAttributes({ staggerDelay })
@@ -146,7 +150,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					)}
 					<RangeControl
-						label="Duration (seconds)"
+						label={__('Duration (seconds)', 'laao')}
 						value={attributes.duration}
 						onChange={(duration) => setAttributes({ duration })}
 						min={0.1}
@@ -165,7 +169,7 @@ export default function Edit({ attributes, setAttributes }) {
 							fontSize: '11px',
 						}}
 					>
-						Detection Boundary
+						{__('Detection Boundary', 'laao')}
 					</label>
 					<div
 						style={{
@@ -223,37 +227,74 @@ export default function Edit({ attributes, setAttributes }) {
 							marginBottom: 'revert',
 						}}
 					>
-						Negative values delay trigger until element is further
+						{__(
+							`Negative values delay trigger until element is further
 						in viewport. -50% means element must be halfway into
-						viewport before triggering.
+						viewport before triggering.`,
+							'laao'
+						)}
 					</p>
 
 					<SelectControl
-						label="Visibility Trigger"
+						label={__('Visibility Trigger', 'laao')}
 						value={attributes.threshold}
 						options={[
-							{ label: 'Entire element (100%)', value: '1' },
-							{ label: 'Almost entire (90%)', value: '0.9' },
-							{ label: 'Mostly visible (80%)', value: '0.8' },
-							{ label: 'Large portion (70%)', value: '0.7' },
-							{ label: 'More than half (60%)', value: '0.6' },
-							{ label: 'Half element (50%)', value: '0.5' },
-							{ label: 'Some visible (40%)', value: '0.4' },
 							{
-								label: 'Partially visible (30%) Default',
+								label: __('100% of Element', 'laao'),
+								value: '1',
+							},
+							{
+								label: __('90% of Element', 'laao'),
+								value: '0.9',
+							},
+							{
+								label: __('80% of Element', 'laao'),
+								value: '0.8',
+							},
+							{
+								label: __('70% of Element', 'laao'),
+								value: '0.7',
+							},
+							{
+								label: __('60% of Element', 'laao'),
+								value: '0.6',
+							},
+							{
+								label: __('50% of Element', 'laao'),
+								value: '0.5',
+							},
+							{
+								label: __('40% of Element', 'laao'),
+								value: '0.4',
+							},
+							{
+								label: __('30% of Element (Default)', 'laao'),
 								value: '0.3',
 							},
-							{ label: 'Small portion (20%)', value: '0.2' },
-							{ label: 'Barely visible (10%)', value: '0.1' },
+							{
+								label: __('20% of Element', 'laao'),
+								value: '0.2',
+							},
+							{
+								label: __('10% of Element', 'laao'),
+								value: '0.1',
+							},
+							{ label: __('0% of Element', 'laao'), value: '0' },
 						]}
 						onChange={(threshold) => setAttributes({ threshold })}
-						help="How much of the element needs to be in view before the animation triggers"
+						help={__(
+							"What percentage of the target's visibility should be in the Detection Boundary before the animation triggers. 0% means even if the target is not visible, the animation will trigger. 100% means the animation will trigger when the target is 100% in the Detection Boundary.",
+							'laao'
+						)}
 					/>
 					<ToggleControl
-						label="Debug Mode"
+						label={__('Debug Mode', 'laao')}
 						checked={attributes.debugMode}
 						onChange={(debugMode) => setAttributes({ debugMode })}
-						help="Shows visual indicators for animation trigger points"
+						help={__(
+							'Shows visual indicators for the Detection Boundary & Visibility Trigger',
+							'laao'
+						)}
 					/>
 				</PanelBody>
 			</InspectorControls>
