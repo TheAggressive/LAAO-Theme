@@ -319,11 +319,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				event.preventDefault();
 				event.stopPropagation();
 
-				window.scrollTo(
-					state.getScrollBarLeftPosition,
-					state.getScrollBarTopPosition
-				);
-
 				return false;
 			}
 		},
