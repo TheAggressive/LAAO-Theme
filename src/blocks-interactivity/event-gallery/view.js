@@ -5,16 +5,13 @@ import { getContext, getElement, store } from '@wordpress/interactivity';
 
 const { state, actions, callbacks } = store('laao/event-gallery', {
 	state: {
-		currentImageId: null,
-		currentImageIdRef: null,
+		currentImageCtx: null,
+		currentImageRef: null,
 		get currentImage() {
-			return state.currentImageId;
+			return state.currentImageCtx;
 		},
-		get currentImageRef() {
-			return state.currentImageIdRef;
-		},
-		get isLightboxActive() {
-			return state.currentImage !== null;
+		get isActive() {
+			return state.currentImageCtx !== null;
 		},
 		get getImgClassNames() {
 			return state.currentImageRef.classList.value;
@@ -23,34 +20,31 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			return state.currentImageRef.parentNode.classList.value;
 		},
 		get getImgStyles() {
-			return (
-				state.isLightboxActive && state.currentImageRef.style.cssText
-			);
+			return state.isActive && state.currentImageRef.style.cssText;
 		},
 		get getFigureStyles() {
 			return (
-				state.isLightboxActive &&
-				state.currentImageRef.parentNode.style.cssText
+				state.isActive && state.currentImageRef.parentNode.style.cssText
 			);
 		},
 		get hasImageLoaded() {
 			return state.currentImageRef?.complete;
 		},
 		get isAriaModal() {
-			return state.isLightboxActive ? 'true' : null;
+			return state.isActive ? 'true' : null;
 		},
 		get getRoleAttribute() {
-			return state.isLightboxActive ? 'dialog' : null;
+			return state.isActive ? 'dialog' : null;
 		},
 		get getAltText() {
 			return state.currentImageRef.getAttribute('alt');
 		},
-		get isReduced() {
+		get isReducedMotion() {
 			return window.matchMedia(`(prefers-reduced-motion: reduce)`)
 				.matches;
 		},
 		get getTimeOut() {
-			return state.isReduced ? 0 : 400;
+			return state.isReducedMotion ? 0 : 400;
 		},
 		get getImageId() {
 			return state.currentImageRef?.dataset.wpKey;
@@ -67,42 +61,54 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		get mailShareUrl() {
 			return `mailto:?subject=${encodeURIComponent('Check This Out on LAArtsOnline.com!')}&body=${encodeURIComponent(`I thought you might enjoy this! ${state.currentImage.attachmentLink}`)}`;
 		},
+		get getScrollBarTopPosition() {
+			return document.documentElement.scrollTop;
+		},
+		get getScrollBarLeftPosition() {
+			return document.documentElement.scrollLeft;
+		},
+		get getScrollBarWidth() {
+			return window.innerWidth - document.documentElement.clientWidth;
+		},
+		get getImageLeftPosition() {
+			return state.currentImageRef?.getBoundingClientRect().left;
+		},
+		get getImageTopPosition() {
+			return state.currentImageRef?.getBoundingClientRect().top;
+		},
 	},
 	actions: {
-		showLightbox: () => {
-			if (state.isLightboxActive) {
+		init: () => {
+			if (state.isActive) {
 				return;
 			}
 
 			const context = getContext();
 			const { ref } = getElement();
 
-			actions.setImage(context, ref);
+			actions.setCurrentImage(context, ref);
 
 			// Bails out if the image has not loaded yet.
 			if (!state.hasImageLoaded) {
 				return;
 			}
 
-			// Set scrollBar width
-			actions.setScrollBarWidth();
-
-			state.overlayActive = true;
-
-			// Stores the positions of the scroll to fix it until the overlay is closed.
-			actions.setScrollPositions();
+			// Stores the width the scrollbar to avoid layout shift.
+			state.scrollBarWidth = state.getScrollBarWidth;
 
 			// Sets the lightbox variables to calculate the image size and position.
 			callbacks.setLightBoxVariables();
 
 			callbacks.setScrollLock();
+
+			state.isOverlayActive = true;
 		},
-		hideLightbox: () => {
-			if (state.overlayActive) {
+		destroy: () => {
+			if (state.isOverlayActive) {
 				// Starts the overlay closing animation. The showClosingAnimation
 				// class is used to avoid showing it on page load.
-				state.overlayActive = false;
-				state.isLightboxClosing = true;
+				state.isOverlayActive = false;
+				state.isClosing = true;
 				state.isScrolling = false;
 
 				// Waits until the close animation has completed before allowing a
@@ -119,25 +125,17 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					});
 
 					// Resets the current image id to mark the overlay as closed.
-					actions.setImage(null, null);
+					actions.setCurrentImage(null, null);
 
-					state.isLightboxClosing = false;
+					state.isClosing = false;
 
 					callbacks.setScrollLock();
 				}, state.getTimeOut);
 			}
 		},
-		setImage(context, ref) {
-			state.currentImageId = context;
-			state.currentImageIdRef = ref;
-		},
-		setScrollPositions() {
-			state.scrollTopReset = document.documentElement.scrollTop;
-			state.scrollLeftReset = document.documentElement.scrollLeft;
-		},
-		setScrollBarWidth() {
-			state.scrollBarWidth =
-				window.innerWidth - document.documentElement.clientWidth;
+		setCurrentImage(context, ref) {
+			state.currentImageCtx = context;
+			state.currentImageRef = ref;
 		},
 		handleNextImage() {
 			// Prevents double clicks from triggering the animation twice.
@@ -154,7 +152,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			setTimeout(() => {
 				// If there is no next sibling, it goes back to the first image.
 				if (!state.currentImageRef.parentNode.nextElementSibling) {
-					actions.setImage(
+					actions.setCurrentImage(
 						JSON.parse(
 							state.currentImageRef.parentNode.parentNode.firstElementChild.getAttribute(
 								'data-wp-context'
@@ -169,7 +167,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				}
 
 				// Sets the next sibling as current image.
-				actions.setImage(
+				actions.setCurrentImage(
 					JSON.parse(
 						state.currentImageRef.parentNode.nextElementSibling.getAttribute(
 							'data-wp-context'
@@ -201,7 +199,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
 				if (!state.currentImageRef.parentNode.previousElementSibling) {
-					actions.setImage(
+					actions.setCurrentImage(
 						JSON.parse(
 							state.currentImageRef.parentNode.parentNode.lastElementChild.getAttribute(
 								'data-wp-context'
@@ -216,13 +214,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				}
 
 				// Sets the previous sibling as current image.
-				actions.setImage(
+				actions.setCurrentImage(
 					JSON.parse(
 						state.currentImageRef.parentNode.previousElementSibling.getAttribute(
 							'data-wp-context'
 						)
 					),
-					(state.currentImageIdRef =
+					(state.currentImageRef =
 						state.currentImageRef.parentNode.previousElementSibling.querySelector(
 							'img'
 						))
@@ -237,12 +235,12 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 		handleImageKeydown(event) {
 			if (event.key === 'Enter') {
-				actions.showLightbox();
+				actions.init();
 			}
 		},
 		handleKeydown(event) {
 			if (event.key === 'Escape') {
-				actions.hideLightbox();
+				actions.destroy();
 			}
 			if (event.key === 'ArrowRight') {
 				actions.handleNextImage();
@@ -251,7 +249,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				actions.handlePreviousImage();
 			}
 		},
-		handleScroll() {
+		handleScroll(event) {
 			// Prevents scrolling behaviors that trigger content shift while the
 			// lightbox is open. It would be better to accomplish through CSS alone,
 			// but using overflow: hidden is currently the only way to do so and
@@ -259,7 +257,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// working in some cases because it's not possible to account for the
 			// layout shift when doing the animation calculations. Instead, it uses
 			// JavaScript to prevent and reset the scrolling behavior.
-			if (state.isLightboxActive) {
+			if (state.isActive) {
 				// Avoids overriding the scroll behavior on mobile devices because
 				// doing so breaks the pinch to zoom functionality, and users should
 				// be able to zoom in further on the high-res image.
@@ -267,20 +265,28 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// because the scroll event can't be canceled, so it resets the
 				// position instead.
 
-				window.scrollTo(state.scrollLeftReset, state.scrollTopReset);
+				event.preventDefault();
+				event.stopPropagation();
+
+				window.scrollTo(
+					state.getScrollBarLeftPosition,
+					state.getScrollBarTopPosition
+				);
+
+				return false;
 			}
 		},
 	},
 	callbacks: {
 		setScrollLock() {
-			if (state.isLightboxActive) {
+			if (state.isActive) {
 				document.body.classList.add('scroll-lock');
 			} else {
 				document.body.classList.remove('scroll-lock');
 			}
 		},
 		setOverlayFocus() {
-			if (state.isLightboxActive) {
+			if (state.isActive) {
 				// Moves the focus to the dialog when it opens.
 				const { ref } = getElement();
 
@@ -288,23 +294,32 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			}
 		},
 		setLightBoxVariables() {
-			if (!state.isLightboxActive) {
+			if (!state.isActive) {
 				return;
 			}
 
 			const {
-				naturalWidth,
-				naturalHeight,
-				offsetWidth: originalWidth,
-				offsetHeight: originalHeight,
+				naturalWidth: nativeWidth,
+				naturalHeight: nativeHeight,
+				offsetWidth: displayWidth,
+				offsetHeight: displayHeight,
 			} = state.currentImageRef;
-			const { x: screenPosX, y: screenPosY } =
-				state.currentImageRef.getBoundingClientRect();
 
 			// Natural ratio of the image clicked to open the lightbox.
-			const naturalRatio = naturalWidth / naturalHeight;
+			const nativeRatio = nativeWidth / nativeHeight;
 			// Original ratio of the image clicked to open the lightbox.
-			const originalRatio = originalWidth / originalHeight;
+			const displayRatio = displayWidth / displayHeight;
+
+			// For images taller than viewport height, calculate a scale factor to reduce them to 90% viewport height
+			// If image height <= viewport height, no scaling needed (scale factor = 1)
+			const reduceTallImage =
+				nativeHeight > window.innerHeight
+					? Math.min((window.innerHeight * 0.9) / nativeHeight, 1)
+					: 1;
+
+			// Adjust native dimensions if image is tall
+			const scaledNativeWidth = nativeWidth * reduceTallImage;
+			const scaledNativeHeight = nativeHeight * reduceTallImage;
 
 			// Typically, it uses the image's full-sized dimensions. If those
 			// dimensions have not been set (i.e. an external image with only one
@@ -314,13 +329,13 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				state.currentImageRef.targetWidth !== undefined &&
 					state.currentImageRef.targetWidth !== 'none'
 					? state.currentImageRef.targetWidth
-					: naturalWidth
+					: scaledNativeWidth
 			);
 			let imgMaxHeight = parseFloat(
 				state.currentImageRef.targetHeight !== undefined &&
 					state.currentImageRef.targetHeight !== 'none'
 					? state.currentImageRef.targetHeight
-					: naturalHeight
+					: scaledNativeHeight
 			);
 
 			// Ratio of the biggest image stored in the database.
@@ -332,30 +347,30 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 			// Checks if the target image has a different ratio than the original
 			// one (thumbnail). Recalculates the width and height.
-			if (naturalRatio.toFixed(2) !== imgRatio.toFixed(2)) {
-				if (naturalRatio > imgRatio) {
+			if (nativeRatio.toFixed(2) !== imgRatio.toFixed(2)) {
+				if (nativeRatio > imgRatio) {
 					// If the width is reached before the height, it keeps the maxWidth
 					// and recalculates the height unless the difference between the
 					// maxHeight and the reducedHeight is higher than the maxWidth,
 					// where it keeps the reducedHeight and recalculate the width.
-					const reducedHeight = imgMaxWidth / naturalRatio;
+					const reducedHeight = imgMaxWidth / nativeRatio;
 					if (imgMaxHeight - reducedHeight > imgMaxWidth) {
 						imgMaxHeight = reducedHeight;
-						imgMaxWidth = reducedHeight * naturalRatio;
+						imgMaxWidth = reducedHeight * nativeRatio;
 					} else {
-						imgMaxHeight = imgMaxWidth / naturalRatio;
+						imgMaxHeight = imgMaxWidth / nativeRatio;
 					}
 				} else {
 					// If the height is reached before the width, it keeps the maxHeight
 					// and recalculate the width unless the difference between the
 					// maxWidth and the reducedWidth is higher than the maxHeight, where
 					// it keeps the reducedWidth and recalculate the height.
-					const reducedWidth = imgMaxHeight * naturalRatio;
+					const reducedWidth = imgMaxHeight * nativeRatio;
 					if (imgMaxWidth - reducedWidth > imgMaxHeight) {
 						imgMaxWidth = reducedWidth;
-						imgMaxHeight = reducedWidth / naturalRatio;
+						imgMaxHeight = reducedWidth / nativeRatio;
 					} else {
-						imgMaxWidth = imgMaxHeight * naturalRatio;
+						imgMaxWidth = imgMaxHeight * nativeRatio;
 					}
 				}
 				containerWidth = imgMaxWidth;
@@ -363,22 +378,22 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				imgRatio = imgMaxWidth / imgMaxHeight;
 
 				// Calculates the max size of the container.
-				if (originalRatio > imgRatio) {
+				if (displayRatio > imgRatio) {
 					containerMaxWidth = imgMaxWidth;
-					containerMaxHeight = containerMaxWidth / originalRatio;
+					containerMaxHeight = containerMaxWidth / displayRatio;
 				} else {
 					containerMaxHeight = imgMaxHeight;
-					containerMaxWidth = containerMaxHeight * originalRatio;
+					containerMaxWidth = containerMaxHeight * displayRatio;
 				}
 			}
 
 			// If the image has been pixelated on purpose, it keeps that size.
 			if (
-				originalWidth > containerWidth ||
-				originalHeight > containerHeight
+				displayWidth > containerWidth ||
+				displayHeight > containerHeight
 			) {
-				containerWidth = originalWidth;
-				containerHeight = originalHeight;
+				containerWidth = displayWidth;
+				containerHeight = displayHeight;
 			}
 
 			// Calculates the final lightbox image size and the scale factor.
@@ -390,33 +405,32 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			} else if (window.innerWidth > 1920) {
 				horizontalPadding = 160;
 			}
+
 			const verticalPadding = 80;
 
 			const targetMaxWidth = Math.min(
 				window.innerWidth - horizontalPadding,
 				containerWidth
 			);
+
 			const targetMaxHeight = Math.min(
 				window.innerHeight - verticalPadding,
 				containerHeight
 			);
+
 			const targetContainerRatio = targetMaxWidth / targetMaxHeight;
 
-			if (originalRatio > targetContainerRatio) {
+			if (displayRatio > targetContainerRatio) {
 				// If targetMaxWidth is reached before targetMaxHeight.
 				containerWidth = targetMaxWidth;
-				containerHeight = containerWidth / originalRatio;
+				containerHeight = containerWidth / displayRatio;
 			} else {
 				// If targetMaxHeight is reached before targetMaxWidth.
 				containerHeight = targetMaxHeight;
-				containerWidth = containerHeight * originalRatio;
+				containerWidth = containerHeight * displayRatio;
 			}
 
-			const containerScale = originalWidth / containerWidth;
-			const lightboxImgWidth =
-				imgMaxWidth * (containerWidth / containerMaxWidth);
-			const lightboxImgHeight =
-				imgMaxHeight * (containerHeight / containerMaxHeight);
+			const containerScale = displayWidth / containerWidth;
 
 			// As of this writing, using the calculations above will render the
 			// lightbox with a small, erroneous whitespace on the left side of the
@@ -426,17 +440,16 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// though this can be removed if the issue is fixed in the future.
 			state.lightBoxVariables = `
 			:root {
-				--wp--lightbox-initial-top-position: ${screenPosY}px;
-				--wp--lightbox-initial-left-position: ${screenPosX}px;
+				--wp--lightbox-initial-top-position: ${state.currentImageRef.getBoundingClientRect().top}px;
+				--wp--lightbox-initial-left-position: ${state.currentImageRef.getBoundingClientRect().left}px;
 				--wp--lightbox-container-width: ${containerWidth + 1}px;
 				--wp--lightbox-container-height: ${containerHeight + 1}px;
-				--wp--lightbox-image-width: ${lightboxImgWidth}px;
-				--wp--lightbox-image-height: ${lightboxImgHeight}px;
 				--wp--lightbox-scale: ${containerScale};
 				--wp--lightbox-scrollbar-width: ${state.scrollBarWidth}px;
-				--wp--lightbox-scroll-position: ${window.scrollY}px;
-				--wp--lightbox-image-natural-width: ${naturalWidth}px;
-				--wp--lightbox-image-natural-height: ${naturalHeight}px;
+				--wp--lightbox-image-max-width: ${imgMaxWidth}px;
+				--wp--lightbox-image-max-height: ${imgMaxHeight}px;
+				--wp--lightbox-image-native-aspect-ratio: ${nativeRatio};
+				--wp--lightbox-image-display-aspect-ratio: ${displayRatio};
 			}
 		`;
 		},

@@ -21,7 +21,7 @@
 		}
 
 		&:focus {
-			@apply outline-wp-laao-red outline-offset-2;
+			@apply outline-offset-2 outline-wp-laao-red;
 		}
 	}
 }

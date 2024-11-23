@@ -94,7 +94,7 @@
 		}
 
 		button.wp-block-laao-event-lightbox-close {
-			@apply text-wp-laao-white mr-4 flex items-center transition-all duration-300 ease-in-out;
+			@apply mr-4 flex items-center text-wp-laao-white transition-all duration-300 ease-in-out;
 
 			svg {
 				@apply h-7 w-7 fill-current;
@@ -109,7 +109,7 @@
 
 	button.wp-block-laao-event-lightbox-next,
 	button.wp-block-laao-event-lightbox-previous {
-		@apply fill-wp-laao-red text-wp-laao-white absolute top-[calc(50%_-_1rem)] z-20 flex h-auto w-auto items-center justify-center p-4;
+		@apply absolute top-[calc(50%_-_1rem)] z-20 flex h-auto w-auto items-center justify-center fill-wp-laao-red p-4 text-wp-laao-white;
 
 		span {
 			@apply flex h-12 w-12 items-center justify-center rounded-full bg-black/70 p-3;
@@ -154,14 +154,22 @@
 
 		.wp-block-laao-event-lightbox-image-container {
 			/* stylelint-disable-next-line scss/operator-no-unspaced */
-			@apply absolute left-1/2 top-[calc(50%_+_1.875rem)] h-[--wp--lightbox-image-natural-height] w-[--wp--lightbox-image-natural-width] max-w-full origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
+			@apply absolute left-1/2 top-[calc(50%_+_1.875rem)] h-auto max-h-[var(--wp--lightbox-image-max-height)] w-full max-w-[--wp--lightbox-image-max-width] origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
+
+			@media (--motion-reduce-no-preference) {
+				@apply max-h-[--wp--lightbox-container-height] max-w-[--wp--lightbox-container-width];
+			}
 
 			& .wp-block-event-gallery-item {
 				@apply relative flex h-full w-full;
 
 				& img {
-					@apply h-full w-full max-w-[--wp--lightbox-image-width] cursor-auto;
+					@apply h-full w-full cursor-auto;
 				}
+			}
+
+			&.scrolling {
+				@apply aspect-[--wp--lightbox-image-native-aspect-ratio] max-h-[--wp--lightbox-image-max-height] max-w-[--wp--lightbox-image-max-width];
 			}
 		}
 	}
@@ -236,48 +244,40 @@
 @keyframes lightbox-zoom-in {
 	0% {
 		transform: translate(
-				/* stylelint-disable-next-line scss/operator-no-newline-after */
-					calc(
-						(-100vw) / 2 + var(--wp--lightbox-initial-left-position)
-					),
+				calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
 				calc(
 					-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem
 				)
 			)
 			scale(var(--wp--lightbox-scale));
-		width: var(--wp--lightbox-image-width);
-		height: var(--wp--lightbox-image-height);
-	}
-
-	90% {
-		transform: translate(-50%, -50%) scale(1, 1);
+		aspect-ratio: var(--wp--lightbox-image-display-aspect-ratio);
 	}
 
 	100% {
-		height: var(--wp--lightbox-image-natural-height);
-		width: var(--wp--lightbox-image-natural-width);
+		max-width: var(--wp--lightbox-image-max-width);
+		max-height: var(--wp--lightbox-image-max-height);
+		transform: translate(-50%, -50%) scale(1);
+		aspect-ratio: var(--wp--lightbox-image-native-aspect-ratio);
 	}
 }
 
 @keyframes lightbox-zoom-out {
 	0% {
-		height: var(--wp--lightbox-image-natural-height);
-		width: var(--wp--lightbox-image-natural-width);
+		max-width: var(--wp--lightbox-image-max-width);
+		max-height: var(--wp--lightbox-image-max-height);
+		transform: translate(-50%, -50%) scale(1);
+		aspect-ratio: var(--wp--lightbox-image-native-aspect-ratio);
 	}
 
 	99% {
 		transform: translate(
-				/* stylelint-disable-next-line scss/operator-no-newline-after */
-					calc(
-						(-100vw) / 2 + var(--wp--lightbox-initial-left-position)
-					),
+				calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
 				calc(
 					-50vh + var(--wp--lightbox-initial-top-position) - 1.875rem
 				)
 			)
 			scale(var(--wp--lightbox-scale));
-		width: var(--wp--lightbox-image-width);
-		height: var(--wp--lightbox-image-height);
+		aspect-ratio: var(--wp--lightbox-image-display-aspect-ratio);
 	}
 
 	100% {
