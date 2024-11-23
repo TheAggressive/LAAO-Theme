@@ -101,6 +101,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 			callbacks.setScrollLock();
 
+			// Stores the focusable elements when lightbox opens to lock focus inside the lightbox.
+			actions.focusLock();
+
 			state.isOverlayActive = true;
 		},
 		destroy: () => {
@@ -233,6 +236,18 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				state.getPrevious = false;
 			}, state.getTimeOut * 2);
 		},
+		focusLock() {
+			if (state.isActive) {
+				// Store focusable elements when lightbox opens
+				const lightbox = document.querySelector(
+					'.wp-block-laao-event-lightbox'
+				);
+
+				state.focusableElements = lightbox?.querySelectorAll(
+					'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"]), .wp-block-laao-event-lightbox-social-link'
+				);
+			}
+		},
 		handleImageKeydown(event) {
 			if (event.key === 'Enter') {
 				actions.init();
@@ -247,6 +262,42 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			}
 			if (event.key === 'ArrowLeft') {
 				actions.handlePreviousImage();
+			}
+			if (event.key === 'Tab') {
+				// Always prevent default tab behavior
+				event.preventDefault();
+
+				if (state.focusableElements?.length) {
+					const firstFocusableEl = state.focusableElements[0];
+					const lastFocusableEl =
+						state.focusableElements[
+							state.focusableElements.length - 1
+						];
+					const activeElement =
+						firstFocusableEl.ownerDocument.activeElement;
+
+					if (event.shiftKey) {
+						// If shift+tab, move focus to previous element or wrap to end
+						const currentIndex = Array.from(
+							state.focusableElements
+						).indexOf(activeElement);
+						const nextElement =
+							currentIndex <= 0
+								? lastFocusableEl
+								: state.focusableElements[currentIndex - 1];
+						nextElement.focus();
+					} else {
+						// If tab, move focus to next element or wrap to beginning
+						const currentIndex = Array.from(
+							state.focusableElements
+						).indexOf(activeElement);
+						const nextElement =
+							currentIndex === state.focusableElements.length - 1
+								? firstFocusableEl
+								: state.focusableElements[currentIndex + 1];
+						nextElement.focus();
+					}
+				}
 			}
 		},
 		handleScroll(event) {

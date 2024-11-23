@@ -80,10 +80,14 @@
 				@apply p-4;
 			}
 
-			a.wp-block-laao-event-lightbox-social-link {
-				@apply fill-wp-laao-white transition-all duration-300 ease-in-out;
+			.wp-block-laao-event-lightbox-social-link {
+				@apply h-fit w-fit fill-wp-laao-white transition-all duration-300 ease-in-out;
 
 				&:hover {
+					@apply fill-wp-laao-red;
+				}
+
+				&:focus {
 					@apply fill-wp-laao-red;
 				}
 
@@ -122,6 +126,10 @@
 		&:hover svg,
 		&:focus svg {
 			@apply fill-wp-laao-red;
+		}
+
+		&:focus {
+			@apply h-fit w-fit rounded-full outline outline-1 -outline-offset-[1rem] outline-wp-laao-red;
 		}
 
 		div:has(.closing) & {
