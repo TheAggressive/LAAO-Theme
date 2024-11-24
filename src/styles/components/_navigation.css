@@ -1,5 +1,5 @@
 .site-nav {
-	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-wp-laao-black transition-transform duration-300 ease-in-out;
+	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-wp-laao-black;
 
 	@media (--bp-md) and (--bp-lg-max) {
 		@apply w-[40vw];
@@ -45,6 +45,6 @@
 	}
 
 	.laao-mobile-nav-open & {
-		@apply translate-x-0;
+		@apply translate-x-0 transition-transform duration-300 ease-in-out;
 	}
 }
