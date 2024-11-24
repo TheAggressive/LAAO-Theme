@@ -1,28 +1,20 @@
 /**
  * WordPress dependencies
  */
-import { store, getContext } from '@wordpress/interactivity';
+import { getContext, store } from '@wordpress/interactivity';
 
-const { state } = store( 'laao', {
-	state: {
-		get themeText() {
-			return state.isDark ? state.darkText : state.lightText;
-		}
-	},
+const { state } = store('laao/mobile-nav', {
+	state: {},
 	actions: {
-		toggleOpen() {
-			const context = getContext();
-			context.isOpen = ! context.isOpen;
-		},
-		toggleTheme() {
-			state.isDark = ! state.isDark;
-		}
-	},
-	callbacks: {
-		logIsOpen: () => {
-			const { isOpen } = getContext();
-			// Log the value of `isOpen` each time it changes.
-			console.log( `Is open: ${ isOpen }` );
+		toggleMenu() {
+			const ctx = getContext();
+			ctx.isActive = !ctx.isActive;
+
+			if (ctx.isActive) {
+				document.body.classList.add('laao-mobile-nav-open');
+			} else {
+				document.body.classList.remove('laao-mobile-nav-open');
+			}
 		},
 	},
-} );
+});

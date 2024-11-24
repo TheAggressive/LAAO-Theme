@@ -1,0 +1,28 @@
+@import "../../styles/_breakpoints.css";
+
+.wp-block-laao-mobile-nav {
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			width: 32px;
+			height: 32px;
+			stroke: var(--wp--preset--color--laao-red);
+			transition: all 0.3s ease;
+		}
+
+		&:hover {
+			svg {
+				stroke: var(--wp--preset--color--laao-black);
+			}
+		}
+	}
+
+	@media (--bp-lg) {
+		& {
+			@apply hidden;
+		}
+	}
+}

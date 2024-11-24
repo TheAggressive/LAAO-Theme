@@ -13,44 +13,16 @@
 // Generates a unique id for aria-controls.
 $unique_id = wp_unique_id( 'p-' );
 
-// Adds the global state.
-wp_interactivity_state(
-	'laao',
-	array(
-		'isDark'    => false,
-		'darkText'  => esc_html__( 'Switch to Light', 'mobile-nav' ),
-		'lightText' => esc_html__( 'Switch to Dark', 'mobile-nav' ),
-		'themeText'	=> esc_html__( 'Switch to Dark', 'mobile-nav' ),
-	)
-);
 ?>
 
 <div
-	<?php echo get_block_wrapper_attributes(); ?>
-	data-wp-interactive="laao"
-	<?php echo wp_interactivity_data_wp_context( array( 'isOpen' => false ) ); ?>
-	data-wp-watch="callbacks.logIsOpen"
-	data-wp-class--dark-theme="state.isDark"
+	<?php echo wp_kses_post( get_block_wrapper_attributes() ); ?>
+	data-wp-interactive="laao/mobile-nav"
+	<?php echo wp_kses_post( wp_interactivity_data_wp_context( array( 'isActive' => false ) ) ); ?>
 >
-	<button
-		data-wp-on--click="actions.toggleTheme"
-		data-wp-text="state.themeText"
-	></button>
-
-	<button
-		data-wp-on--click="actions.toggleOpen"
-		data-wp-bind--aria-expanded="context.isOpen"
-		aria-controls="<?php echo esc_attr( $unique_id ); ?>"
-	>
-		<?php esc_html_e( 'Toggle', 'mobile-nav' ); ?>
+	<button data-wp-on--click="actions.toggleMenu">
+		<svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M3 12H21M3 6H21M3 18H21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
 	</button>
-
-	<p
-		id="<?php echo esc_attr( $unique_id ); ?>"
-		data-wp-bind--hidden="!context.isOpen"
-	>
-		<?php
-			esc_html_e( 'Mobile Nav - hello from an interactive block!', 'mobile-nav' );
-		?>
-	</p>
 </div>

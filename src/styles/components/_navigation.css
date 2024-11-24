@@ -1,5 +1,9 @@
 .site-nav {
-	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-wp-laao-black;
+	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-wp-laao-black transition-transform duration-300 ease-in-out;
+
+	@media (--bp-md) and (--bp-lg-max) {
+		@apply w-[40vw];
+	}
 
 	@media (--bp-lg) {
 		@apply relative -translate-y-[calc(500px+64px)] translate-x-0;
@@ -38,5 +42,9 @@
 				}
 			}
 		}
+	}
+
+	.laao-mobile-nav-open & {
+		@apply translate-x-0;
 	}
 }
