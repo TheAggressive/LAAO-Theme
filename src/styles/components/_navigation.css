@@ -1,5 +1,5 @@
 .site-nav {
-	@apply bg-wp-laao-black fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto;
+	@apply fixed bottom-0 right-0 top-0 z-20 h-screen w-full translate-x-full overflow-x-auto bg-wp-laao-black;
 
 	@media (--bp-lg) {
 		@apply relative -translate-y-[calc(500px+64px)] translate-x-0;
@@ -20,7 +20,7 @@
 		}
 
 		.wp-block-search__input {
-			@apply bg-wp-laao-light-gray w-full py-5 pl-4 pr-14 outline-none;
+			@apply w-full bg-wp-laao-light-gray py-5 pl-4 pr-14 outline-none;
 		}
 	}
 
