@@ -19,7 +19,7 @@ const { state } = store('laao/mobile-nav', {
 
 				setTimeout(() => {
 					document.body.classList.remove('laao-mobile-nav-closing');
-				}, 300);
+				}, 450);
 			}
 		},
 	},

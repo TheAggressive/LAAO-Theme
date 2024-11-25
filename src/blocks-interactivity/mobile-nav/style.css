@@ -12,7 +12,7 @@
 			height: 32px;
 			stroke: currentcolor;
 			fill: currentcolor;
-			transition: all 0.3s ease;
+			transition: all 0.45s ease;
 		}
 
 		&:hover {
