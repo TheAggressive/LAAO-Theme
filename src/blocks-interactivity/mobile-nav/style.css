@@ -5,18 +5,18 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		color: var(--wp--preset--color--laao-red);
 
 		svg {
 			width: 32px;
 			height: 32px;
-			stroke: var(--wp--preset--color--laao-red);
+			stroke: currentcolor;
+			fill: currentcolor;
 			transition: all 0.3s ease;
 		}
 
 		&:hover {
-			svg {
-				stroke: var(--wp--preset--color--laao-black);
-			}
+			color: var(--wp--preset--color--laao-black);
 		}
 	}
 

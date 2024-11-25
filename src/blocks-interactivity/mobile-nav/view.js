@@ -1,19 +1,25 @@
 /**
  * WordPress dependencies
  */
-import { getContext, store } from '@wordpress/interactivity';
+import { store } from '@wordpress/interactivity';
 
 const { state } = store('laao/mobile-nav', {
-	state: {},
+	state: {
+		isActive: false,
+	},
 	actions: {
 		toggleMenu() {
-			const ctx = getContext();
-			ctx.isActive = !ctx.isActive;
+			state.isActive = !state.isActive;
 
-			if (ctx.isActive) {
+			if (state.isActive) {
 				document.body.classList.add('laao-mobile-nav-open');
 			} else {
 				document.body.classList.remove('laao-mobile-nav-open');
+				document.body.classList.add('laao-mobile-nav-closing');
+
+				setTimeout(() => {
+					document.body.classList.remove('laao-mobile-nav-closing');
+				}, 300);
 			}
 		},
 	},

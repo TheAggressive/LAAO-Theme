@@ -9,7 +9,17 @@
 	"description": "An interactive block with the Interactivity API.",
 	"example": {},
 	"supports": {
-		"interactivity": true
+		"interactivity": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": "menuIcon"
+		}
 	},
 	"textdomain": "mobile-nav",
 	"editorScript": "file:./index.js",

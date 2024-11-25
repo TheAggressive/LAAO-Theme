@@ -4,9 +4,21 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-laao-mobile-nav input[type="text"] {
-	font-size: 1em;
-	color: inherit;
-	background: inherit;
-	border: 0;
+.wp-block-laao-mobile-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--wp--preset--color--laao-red);
+
+	svg {
+		width: 32px;
+		height: 32px;
+		stroke: currentcolor;
+		fill: currentcolor;
+		transition: all 0.3s ease;
+	}
+
+	&:hover {
+		color: var(--wp--preset--color--laao-black);
+	}
 }

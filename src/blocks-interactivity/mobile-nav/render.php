@@ -18,11 +18,19 @@ $unique_id = wp_unique_id( 'p-' );
 <div
 	<?php echo wp_kses_post( get_block_wrapper_attributes() ); ?>
 	data-wp-interactive="laao/mobile-nav"
-	<?php echo wp_kses_post( wp_interactivity_data_wp_context( array( 'isActive' => false ) ) ); ?>
 >
 	<button data-wp-on--click="actions.toggleMenu">
-		<svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<path d="M3 12H21M3 6H21M3 18H21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-		</svg>
+
+	<?php
+	if ( 'menuIcon' === $attributes['icon'] ) {
+		?>
+			<svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M3 12H21M3 6H21M3 18H21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		<?php } else { ?>
+			<svg width="36" height="36" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+					<path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+		<?php } ?>
 	</button>
 </div>

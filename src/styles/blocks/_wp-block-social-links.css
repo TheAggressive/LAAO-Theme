@@ -2,11 +2,14 @@
 
 *:has(> .wp-block-social-links) {
 	/* Hide the .wp-blocks-social-links if it's not in the .site-footer */
-	& .wp-block-social-links:not(.site-footer .wp-block-social-links) {
+	&
+		.wp-block-social-links:not(.site-footer .wp-block-social-links):not(
+			.site-nav .wp-block-social-links
+		) {
 		@apply hidden;
 
 		@media (--bp-sm) {
-			@apply block;
+			@apply flex;
 		}
 	}
 
