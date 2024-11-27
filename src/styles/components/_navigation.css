@@ -28,12 +28,10 @@
 
 		/* Adjust the mobile nav button for the mobile nav */
 		.wp-block-laao-mobile-nav {
-			button {
-				@apply text-wp-laao-white;
+			@apply text-wp-laao-red;
 
-				&:hover {
-					@apply text-wp-laao-red;
-				}
+			&:hover {
+				@apply text-wp-laao-white;
 			}
 		}
 	}
