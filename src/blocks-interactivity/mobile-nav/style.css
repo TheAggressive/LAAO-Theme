@@ -1,28 +1,26 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-laao-mobile-nav {
-	button {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--wp--preset--color--laao-red);
-
-		svg {
-			width: 32px;
-			height: 32px;
-			stroke: currentcolor;
-			fill: currentcolor;
-			transition: all 0.45s ease;
-		}
-
-		&:hover {
-			color: var(--wp--preset--color--laao-black);
-		}
-	}
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--wp--preset--color--laao-red);
 
 	@media (--bp-lg) {
 		& {
 			@apply hidden;
 		}
+	}
+
+	svg {
+		width: 32px;
+		height: 32px;
+		stroke: currentcolor;
+		fill: currentcolor;
+		transition: all 0.45s ease;
+	}
+
+	&:hover {
+		color: var(--wp--preset--color--laao-black);
 	}
 }

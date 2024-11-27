@@ -74,11 +74,13 @@
 		}
 	}
 
-	.laao-mobile-nav-open & {
-		@apply translate-x-0 transition-transform duration-300 ease-in-out;
-	}
+	@media (--bp-lg-max) {
+		.laao-mobile-nav-open & {
+			@apply translate-x-0 transition-transform duration-300 ease-in-out;
+		}
 
-	.laao-mobile-nav-closing & {
-		@apply translate-x-full transition-transform duration-300 ease-in-out;
+		.laao-mobile-nav-closing & {
+			@apply translate-x-full transition-transform duration-300 ease-in-out;
+		}
 	}
 }
