@@ -6,6 +6,9 @@ import { store } from '@wordpress/interactivity';
 const { state, actions } = store('laao/mobile-nav', {
 	state: {
 		isActive: false,
+		get isMobile() {
+			return window.innerWidth < 1024;
+		},
 	},
 	actions: {
 		toggleMenu() {
