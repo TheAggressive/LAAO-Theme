@@ -17,7 +17,7 @@
 
 <!-- wp:group {"tagName":"main","className":"site-main","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"layout":{"type":"grid","columnCount":12,"minimumColumnWidth":null}} -->
 <main class="wp-block-group site-main" style="margin-top: 0; margin-bottom: 0">
-	<!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":{}},"layout":{"type":"default"}} -->
+	<!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":[]},"layout":{"type":"default"}} -->
 	<section class="wp-block-group site-content">
 		<!-- wp:post-title /-->
 
@@ -25,8 +25,24 @@
 	</section>
 	<!-- /wp:group -->
 
-	<!-- wp:group {"tagName":"aside","className":"site-nav","style":{"layout":{}},"layout":{"type":"default"}} -->
+	<!-- wp:group {"tagName":"aside","metadata":{"name":"Navigation"},"className":"site-nav","style":{"layout":[]},"layout":{"type":"default"}} -->
 	<aside class="wp-block-group site-nav">
+		<!-- wp:group {"className":"site-nav-mobile-links","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+		<div class="wp-block-group site-nav-mobile-links">
+			<!-- wp:social-links {"className":"is-style-logos-only","layout":{"type":"flex","flexWrap":"wrap"}} -->
+			<ul class="wp-block-social-links is-style-logos-only">
+				<!-- wp:social-link {"url":"https://x.com/laartsonlinecom","service":"x"} /-->
+
+				<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook"} /-->
+
+				<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram"} /-->
+			</ul>
+			<!-- /wp:social-links -->
+
+			<!-- wp:laao/mobile-nav {"icon":"closeIcon"} /-->
+		</div>
+		<!-- /wp:group -->
+
 		<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search...","width":100,"widthUnit":"%","buttonText":"Search","buttonPosition":"button-inside","buttonUseIcon":true,"className":"site-nav-search","backgroundColor":"laao-transparent"} /-->
 
 		<!-- wp:navigation {"ref":48884,"textColor":"laao-white","backgroundColor":"laao-black","overlayMenu":"never","style":{"typography":{"textTransform":"uppercase"},"spacing":{"blockGap":"var:preset|spacing|8"}},"layout":{"type":"flex","justifyContent":"left","orientation":"vertical","flexWrap":"nowrap"}} /-->

@@ -10,13 +10,30 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-// Generates a unique id for aria-controls.
-$unique_id = wp_unique_id( 'p-' );
+if ( ! function_exists( 'enhance_mobile_menu_accessibility' ) ) {
+	function enhance_mobile_menu_accessibility( $block_content ) {
+		// Only process blocks that contain aside tags
+		if ( false === strpos( $block_content, '<aside' ) ) {
+			return $block_content;
+		}
+
+		$processor = new WP_HTML_Tag_Processor( $block_content );
+
+		while ( $processor->next_tag( 'aside' ) ) {
+			$processor->set_attribute( 'aria-label', 'Navigation Menu' );
+			$processor->set_attribute( 'data-wp-interactive', 'laao/mobile-nav' );
+			$processor->set_attribute( 'data-wp-bind--aria-modal', 'state.isActive' );
+		}
+
+		return $processor->get_updated_html();
+	}
+	add_filter( 'render_block', 'enhance_mobile_menu_accessibility', 10, 1 );
+}
 
 ?>
 
 <button <?php echo wp_kses_post( get_block_wrapper_attributes() ); ?>
-	data-wp-interactive="laao/mobile-nav" data-wp-on--click="actions.toggleMenu" data-wp-on-async-window--resize="callbacks.handleResize">
+	data-wp-interactive="laao/mobile-nav" data-wp-on--click="actions.toggleMenu" data-wp-on-async-window--resize="callbacks.handleResize" data-wp-on-async-window--keydown="callbacks.handleKeydown">
 
 	<?php
 	if ( 'menuIcon' === $attributes['icon'] ) {

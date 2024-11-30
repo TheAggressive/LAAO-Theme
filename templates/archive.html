@@ -44,12 +44,15 @@
 			>
 				<!-- wp:group {"className":"article-images","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group article-images">
+					<!-- wp:laao/animate-on-scroll {"animation":"slide","threshold":"0.1"} -->
 					<!-- wp:laao/post-featured-image /-->
+					<!-- /wp:laao/animate-on-scroll -->
 				</div>
 				<!-- /wp:group -->
 
 				<!-- wp:group {"className":"article-content","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group article-content">
+					<!-- wp:laao/animate-on-scroll {"animation":"slide","staggerChildren":true,"threshold":"0.1"} -->
 					<!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"700"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
 
 					<!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"hsl(0, 72.2%, 50.6%)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"hsla(0, 0%, 0%, 0)","style":{"spacing":{"blockGap":{"left":"0"},"margin":{"top":"var:preset|spacing|12","bottom":"0"}}},"layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} -->
@@ -73,7 +76,8 @@
 
 					<!-- wp:laao/article-credits {"style":{"spacing":{"margin":{"top":"var:preset|spacing|12"}}}} /-->
 
-					<!-- wp:post-content /-->
+					<!-- wp:post-content {"style":{"spacing":{"padding":{"top":"var:preset|spacing|16"}}}} /-->
+					<!-- /wp:laao/animate-on-scroll -->
 				</div>
 				<!-- /wp:group -->
 			</article>
@@ -116,8 +120,22 @@
 	</section>
 	<!-- /wp:group -->
 
-	<!-- wp:group {"tagName":"aside","className":"site-nav","style":{"layout":[]},"layout":{"type":"default"}} -->
+	<!-- wp:group {"tagName":"aside","metadata":{"name":"Navigation"},"className":"site-nav","style":{"layout":[]},"layout":{"type":"default"}} -->
 	<aside class="wp-block-group site-nav">
+		<!-- wp:group {"className":"site-nav-mobile-links","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+		<div class="wp-block-group site-nav-mobile-links">
+			<!-- wp:social-links {"className":"is-style-logos-only","layout":{"type":"flex","flexWrap":"wrap"}} -->
+			<ul class="wp-block-social-links is-style-logos-only">
+				<!-- wp:social-link {"url":"https://x.com/laartsonlinecom","service":"x"} /-->
+				<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook"} /-->
+				<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram"} /-->
+			</ul>
+			<!-- /wp:social-links -->
+
+			<!-- wp:laao/mobile-nav {"icon":"closeIcon"} /-->
+		</div>
+		<!-- /wp:group -->
+
 		<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search...","width":100,"widthUnit":"%","buttonText":"Search","buttonPosition":"button-inside","buttonUseIcon":true,"className":"site-nav-search","backgroundColor":"laao-transparent"} /-->
 
 		<!-- wp:navigation {"ref":48884,"textColor":"laao-white","backgroundColor":"laao-black","overlayMenu":"never","style":{"typography":{"textTransform":"uppercase"},"spacing":{"blockGap":"var:preset|spacing|8"}},"layout":{"type":"flex","justifyContent":"left","orientation":"vertical","flexWrap":"nowrap"}} /-->
