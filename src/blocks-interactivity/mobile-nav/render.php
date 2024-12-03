@@ -33,7 +33,7 @@
 ?>
 
 <button <?php echo wp_kses_post( get_block_wrapper_attributes() ); ?>
-	data-wp-interactive="laao/mobile-nav" data-wp-on--click="actions.toggleMenu" data-wp-on-async-window--resize="callbacks.handleResize" data-wp-on-async-window--keydown="callbacks.handleKeydown" data-wp-run="callbacks.HandleMobileAccessibility">
+	data-wp-interactive="laao/mobile-nav" data-wp-on--click="actions.toggleMenu" data-wp-run--resize="callbacks.HandleResize" data-wp-on-async-window--keydown="callbacks.handleKeydown" data-wp-run--mobile-accessibility="callbacks.HandleMobileAccessibility">
 
 	<?php
 	if ( 'menuIcon' === $attributes['icon'] ) {

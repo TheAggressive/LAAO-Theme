@@ -30,43 +30,47 @@ const useIsMobile = () => {
 const { state, actions } = store('laao/mobile-nav', {
 	state: {
 		isActive: false,
-		get isMobile() {
-			return window.innerWidth < 1024;
-		},
+		closeTimeout: null,
 	},
 	actions: {
 		toggleMenu() {
 			state.isActive = !state.isActive;
-
+			actions.updateMenuClasses();
+		},
+		updateMenuClasses() {
 			if (state.isActive) {
-				actions.activateMenu();
-			} else {
-				actions.deactivateMenu();
-			}
-		},
-		activateMenu() {
-			document.body.classList.add('laao-mobile-nav-open');
-		},
-		deactivateMenu() {
-			document.body.classList.remove('laao-mobile-nav-open');
-			document.body.classList.add('laao-mobile-nav-closing');
-
-			setTimeout(() => {
+				document.body.classList.add('laao-mobile-nav-open');
 				document.body.classList.remove('laao-mobile-nav-closing');
-			}, 450);
+
+				// Clear any existing timeout
+				if (state.closeTimeout) {
+					clearTimeout(state.closeTimeout);
+					state.closeTimeout = null;
+				}
+			} else {
+				document.body.classList.remove('laao-mobile-nav-open');
+				document.body.classList.add('laao-mobile-nav-closing');
+
+				state.closeTimeout = setTimeout(() => {
+					document.body.classList.remove('laao-mobile-nav-closing');
+					state.closeTimeout = null;
+				}, 450);
+			}
 		},
 	},
 	callbacks: {
-		handleResize() {
-			if (state.isMobile) {
-				if (state.isActive) {
-					actions.toggleMenu();
-				}
+		HandleResize: () => {
+			const isMobile = useIsMobile();
+
+			if (!isMobile && state.isActive) {
+				actions.toggleMenu();
 			}
 		},
 		HandleMobileAccessibility: () => {
 			const isMobile = useIsMobile();
 			const nav = document.querySelector('.site-nav');
+
+			if (!nav) return;
 
 			if (isMobile) {
 				nav.setAttribute('aria-label', 'Navigation Menu');
