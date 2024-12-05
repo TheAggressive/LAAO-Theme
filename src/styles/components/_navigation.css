@@ -1,5 +1,5 @@
 .site-nav {
-	@apply fixed bottom-0 right-0 top-0 z-20 h-full max-h-lvh w-full translate-x-full overflow-x-auto bg-wp-laao-black;
+	@apply fixed bottom-0 right-0 top-0 z-[999] h-full max-h-lvh w-full translate-x-full overflow-x-auto bg-wp-laao-black;
 
 	@media (--bp-md) and (--bp-lg-max) {
 		@apply w-[40vw];

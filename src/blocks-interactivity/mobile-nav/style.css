@@ -24,3 +24,15 @@
 		color: var(--wp--preset--color--laao-black);
 	}
 }
+
+.laao-mobile-nav-overlay {
+	@apply bg-wp-laao-black/50 duration-450 fixed bottom-0 left-0 right-0 top-0 z-[998] opacity-0 transition-opacity;
+}
+
+.laao-mobile-nav-open .laao-mobile-nav-overlay {
+	@apply opacity-100;
+}
+
+.laao-mobile-nav-overlay-closing {
+	@apply opacity-0;
+}

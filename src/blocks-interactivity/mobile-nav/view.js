@@ -45,6 +45,17 @@ const { state, actions } = store('laao/mobile-nav', {
 		},
 		updateMenuClasses() {
 			if (state.isActive) {
+				// Add overlay
+				if (!document.querySelector('.laao-mobile-nav-overlay')) {
+					const overlay = document.createElement('div');
+					overlay.className = 'laao-mobile-nav-overlay';
+					overlay.addEventListener('click', actions.toggleMenu);
+					document.body.appendChild(overlay);
+
+					// Force a reflow before adding the open class
+					overlay.getBoundingClientRect();
+				}
+
 				document.body.classList.add('laao-mobile-nav-open');
 				document.body.classList.remove('laao-mobile-nav-closing');
 
@@ -57,8 +68,17 @@ const { state, actions } = store('laao/mobile-nav', {
 				document.body.classList.remove('laao-mobile-nav-open');
 				document.body.classList.add('laao-mobile-nav-closing');
 
+				// Remove overlay with animation
+				const overlay = document.querySelector(
+					'.laao-mobile-nav-overlay'
+				);
+				if (overlay) {
+					overlay.classList.add('laao-mobile-nav-overlay-closing');
+				}
+
 				state.closeTimeout = setTimeout(() => {
 					document.body.classList.remove('laao-mobile-nav-closing');
+					overlay?.remove();
 					state.closeTimeout = null;
 				}, 450);
 			}
