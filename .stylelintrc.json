@@ -9,6 +9,7 @@
 		"scss/selector-no-redundant-nesting-selector": null,
 		"rule-empty-line-before": null,
 		"selector-class-pattern": null,
-		"scss/operator-no-unspaced": null
+		"scss/operator-no-unspaced": null,
+		"scss/operator-no-newline-after": null
 	}
 }

@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { store, useEffect, useState } from '@wordpress/interactivity';
+import { trapFocus } from '../../utils/focusTrap';
 
 const useIsMobile = () => {
 	const [isMobile, setIsMobile] = useState(false);
@@ -36,6 +37,11 @@ const { state, actions } = store('laao/mobile-nav', {
 		toggleMenu() {
 			state.isActive = !state.isActive;
 			actions.updateMenuClasses();
+
+			const nav = document.querySelector('.site-nav');
+			if (nav) {
+				trapFocus(nav, state.isActive);
+			}
 		},
 		updateMenuClasses() {
 			if (state.isActive) {
@@ -70,7 +76,9 @@ const { state, actions } = store('laao/mobile-nav', {
 			const isMobile = useIsMobile();
 			const nav = document.querySelector('.site-nav');
 
-			if (!nav) return;
+			if (!nav) {
+				return;
+			}
 
 			if (isMobile) {
 				nav.setAttribute('aria-label', 'Navigation Menu');

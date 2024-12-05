@@ -10,7 +10,7 @@
 	}
 
 	.site-nav-mobile-links {
-		@apply flex h-[60px] gap-4 px-wp-16;
+		@apply flex h-[60px] flex-row-reverse gap-4 px-wp-16;
 
 		/* Hide the mobile links for the desktop nav */
 		@media (--bp-lg) {
