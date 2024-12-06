@@ -38,8 +38,6 @@ const CloseIcon = () => {
 export default function Edit({ attributes, setAttributes }) {
 	const blockProps = useBlockProps();
 
-	console.log(attributes.icon);
-
 	return (
 		<>
 			<InspectorControls>
