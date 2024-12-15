@@ -16,5 +16,13 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScriptModule": "file:./view.js"
+	"viewScriptModule": "file:./view.js",
+	"attributes": {
+		"modalContent": {
+			"type": "string"
+		},
+		"triggerSelector": {
+			"type": "string"
+		}
+	}
 }

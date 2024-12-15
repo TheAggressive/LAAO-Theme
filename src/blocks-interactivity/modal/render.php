@@ -11,7 +11,7 @@
  */
 
 // Generates a unique id for aria-controls.
-$unique_id = wp_unique_id( 'p-' );
+$unique_id = wp_unique_id( 'modal-' );
 
 // Adds the global state.
 wp_interactivity_state(
@@ -20,37 +20,48 @@ wp_interactivity_state(
 		'isDark'    => false,
 		'darkText'  => esc_html__( 'Switch to Light', 'modal' ),
 		'lightText' => esc_html__( 'Switch to Dark', 'modal' ),
-		'themeText'	=> esc_html__( 'Switch to Dark', 'modal' ),
+		'themeText' => esc_html__( 'Switch to Dark', 'modal' ),
+	)
+);
+
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'wp-block-laao-modal-wrapper',
 	)
 );
 ?>
 
 <div
-	<?php echo get_block_wrapper_attributes(); ?>
+	<?php echo $wrapper_attributes; ?>
 	data-wp-interactive="laao"
-	<?php echo wp_interactivity_data_wp_context( array( 'isOpen' => false ) ); ?>
-	data-wp-watch="callbacks.logIsOpen"
-	data-wp-class--dark-theme="state.isDark"
+	<?php
+	echo wp_interactivity_data_wp_context(
+		array(
+			'isOpen'          => false,
+			'triggerId'       => $unique_id,
+			'triggerSelector' => $attributes['triggerSelector'],
+		)
+	);
+	?>
+	data-wp-init="actions.initializeModal"
+	data-wp-init="callbacks.initEscapeHandler"
 >
-	<button
-		data-wp-on--click="actions.toggleTheme"
-		data-wp-text="state.themeText"
-	></button>
-
-	<button
-		data-wp-on--click="actions.toggleOpen"
-		data-wp-bind--aria-expanded="context.isOpen"
-		aria-controls="<?php echo esc_attr( $unique_id ); ?>"
-	>
-		<?php esc_html_e( 'Toggle', 'modal' ); ?>
-	</button>
-
-	<p
+	<div
 		id="<?php echo esc_attr( $unique_id ); ?>"
+		class="modal-container"
+		data-wp-class--open="context.isOpen"
 		data-wp-bind--hidden="!context.isOpen"
 	>
-		<?php
-			esc_html_e( 'Modal - hello from an interactive block!', 'modal' );
-		?>
-	</p>
+		<div class="modal-content">
+			<button
+				class="modal-close"
+				data-wp-on--click="actions.toggleOpen"
+				aria-label="<?php esc_attr_e( 'Close modal', 'modal' ); ?>"
+			>×</button>
+
+			<div class="modal-body">
+				<?php echo $content; ?>
+			</div>
+		</div>
+	</div>
 </div>
