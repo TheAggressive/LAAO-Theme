@@ -12,61 +12,29 @@
 
 // Generates a unique id for aria-controls.
 $unique_id = wp_unique_id( 'modal-' );
-
-// Adds the global state.
-wp_interactivity_state(
-	'laao',
-	array(
-		'isDark'    => false,
-		'darkText'  => esc_html__( 'Switch to Light', 'modal' ),
-		'lightText' => esc_html__( 'Switch to Dark', 'modal' ),
-		'themeText' => esc_html__( 'Switch to Dark', 'modal' ),
-	)
-);
-
-$wrapper_attributes = get_block_wrapper_attributes(
-	array(
-		'class' => 'wp-block-laao-modal-wrapper',
-	)
-);
 ?>
 
-<div
-	<?php echo $wrapper_attributes; ?>
-	data-wp-interactive="laao"
-	<?php
-	echo wp_interactivity_data_wp_context(
-		array(
-			'isOpen'          => false,
-			'triggerId'       => $unique_id,
-		)
-	);
-	?>
-	data-wp-init="actions.initializeModal"
->
-	<!-- Trigger -->
-	<div
+<div <?php echo get_block_wrapper_attributes( array( 'data-wp-interactive' => 'laao/modal' ) ); ?>>
+	<button
+		type="button"
 		class="modal-trigger"
-		data-wp-on--click="actions.toggleOpen"
+		data-wp-on--click="actions.toggle"
 	>
-		<?php echo $content; ?>
-	</div>
+		<?php echo esc_html( $attributes['triggerText'] ); ?>
+	</button>
 
-	<!-- Modal -->
 	<div
-		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="modal-container"
-		data-wp-class--open="context.isOpen"
-		data-wp-bind--hidden="!context.isOpen"
+		data-wp-class--isOpen="state.isOpen"
+		data-wp-on--keydown="actions.handleEscape"
 	>
-		<div class="modal-overlay" data-wp-on--click="actions.toggleOpen"></div>
 		<div class="modal-content">
 			<button
+				type="button"
 				class="modal-close"
-				data-wp-on--click="actions.toggleOpen"
-				aria-label="<?php esc_attr_e( 'Close modal', 'modal' ); ?>"
+				data-wp-on--click="actions.close"
 			>×</button>
-			<div class="modal-body">
+			<div class="modal-inner">
 				<?php echo $content; ?>
 			</div>
 		</div>

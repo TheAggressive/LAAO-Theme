@@ -1,63 +1,30 @@
 /**
  * WordPress dependencies
  */
-import { getContext, store } from '@wordpress/interactivity';
+import { store } from '@wordpress/interactivity';
 
-const { state } = store('laao', {
+const { state } = store('laao/modal', {
 	state: {
-		get themeText() {
-			return state.isDark ? state.darkText : state.lightText;
-		},
+		isOpen: false,
 	},
 	actions: {
-		toggleOpen() {
-			const context = getContext();
-			context.isOpen = !context.isOpen;
-
-			if (context.isOpen) {
+		toggle: () => {
+			state.isOpen = !state.isOpen;
+			if (state.isOpen) {
 				document.body.style.overflow = 'hidden';
 			} else {
 				document.body.style.overflow = '';
 			}
 		},
-		initializeModal() {
-			const context = getContext();
-			if (context.triggerSelector) {
-				document
-					.querySelectorAll(context.triggerSelector)
-					.forEach((trigger) => {
-						trigger.addEventListener('click', (e) => {
-							e.preventDefault();
-							context.isOpen = true;
-							document.body.style.overflow = 'hidden';
-						});
-					});
-			}
+		close: () => {
+			state.isOpen = false;
+			document.body.style.overflow = '';
 		},
-		closeOnEscape(event) {
+		handleEscape: ({ event }) => {
 			if (event.key === 'Escape') {
-				const context = getContext();
-				context.isOpen = false;
+				state.isOpen = false;
 				document.body.style.overflow = '';
 			}
-		},
-	},
-	callbacks: {
-		logIsOpen: () => {
-			const { isOpen } = getContext();
-			console.log(`Is open: ${isOpen}`);
-		},
-		initEscapeHandler: () => {
-			document.addEventListener(
-				'keydown',
-				store('laao').actions.closeOnEscape
-			);
-		},
-		cleanupEscapeHandler: () => {
-			document.removeEventListener(
-				'keydown',
-				store('laao').actions.closeOnEscape
-			);
 		},
 	},
 });

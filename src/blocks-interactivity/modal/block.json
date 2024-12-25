@@ -6,23 +6,22 @@
 	"title": "Modal",
 	"category": "widgets",
 	"icon": "media-interactive",
-	"description": "An interactive block with the Interactivity API.",
+	"description": "A reusable modal block",
 	"example": {},
 	"supports": {
+		"html": false,
 		"interactivity": true
+	},
+	"attributes": {
+		"triggerText": {
+			"type": "string",
+			"default": "Open Modal"
+		}
 	},
 	"textdomain": "modal",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScriptModule": "file:./view.js",
-	"attributes": {
-		"modalContent": {
-			"type": "string"
-		},
-		"triggerSelector": {
-			"type": "string"
-		}
-	}
+	"viewScriptModule": "file:./view.js"
 }
