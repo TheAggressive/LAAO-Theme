@@ -13,9 +13,13 @@
 		"interactivity": true
 	},
 	"attributes": {
-		"triggerText": {
+		"triggerBlockId": {
 			"type": "string",
-			"default": "Open Modal"
+			"default": ""
+		},
+		"modalTitle": {
+			"type": "string",
+			"default": "Modal Title"
 		}
 	},
 	"textdomain": "modal",

@@ -4,9 +4,69 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-laao-modal input[type="text"] {
-	font-size: 1em;
-	color: inherit;
-	background: inherit;
-	border: 0;
+/* Overlay styles */
+.modal-trigger-overlay {
+	position: absolute !important;
+	pointer-events: none !important;
+	z-index: 999999 !important;
+	transform-origin: center !important;
+	border: 2px solid #007cba !important;
+	border-radius: 2px !important;
+	background: rgba(0, 124, 186, 0.1) !important;
+	transition: all 0.3s ease-in-out !important;
+	display: block !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+	animation: modalTriggerPulse 1.5s infinite !important;
+}
+
+/* Animation keyframes */
+@keyframes modalTriggerPulse {
+	0% {
+		transform: scale(1);
+		border-color: #007cba;
+		box-shadow: 0 0 0 0 rgba(0, 124, 186, 0.4);
+	}
+
+	50% {
+		transform: scale(1.05);
+		border-color: #00a0d2;
+		box-shadow: 0 0 0 6px rgba(0, 124, 186, 0);
+	}
+
+	100% {
+		transform: scale(1);
+		border-color: #007cba;
+		box-shadow: 0 0 0 0 rgba(0, 124, 186, 0);
+	}
+}
+
+/* Modal styles */
+.wp-block-modal {
+	position: relative;
+}
+
+.wp-block-modal .modal-container {
+	background: #fff;
+	border: 1px solid #ddd;
+	padding: 20px;
+}
+
+.wp-block-modal .modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.wp-block-modal .modal-close {
+	background: none;
+	border: none;
+	font-size: 20px;
+	cursor: pointer;
+	padding: 5px;
+}
+
+.wp-block-modal .modal-body {
+	position: relative;
 }
