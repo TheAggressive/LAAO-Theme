@@ -6,13 +6,15 @@
 
 /* Overlay styles */
 .modal-trigger-overlay {
-	position: absolute !important;
-	pointer-events: none !important;
-	z-index: 999999 !important;
-	transform-origin: center !important;
-	border: 2px solid #007cba !important;
+	position: absolute;
+	pointer-events: none;
+	z-index: 999999;
+	transform-origin: center;
+	border: 2px solid #007cba;
 	border-radius: 2px;
-	transition: all 0.3s ease-in-out !important;
+	background: rgba(0, 124, 186, 0.1);
+	transition: all 0.3s ease-in-out;
+	display: block;
 	opacity: 1;
 	visibility: visible;
 	animation: modalTriggerPulse 1.5s infinite;
@@ -42,6 +44,9 @@
 /* Modal styles */
 .wp-block-modal {
 	position: relative;
+	z-index: 1;
+	pointer-events: all;
+	cursor: pointer;
 }
 
 .wp-block-modal .modal-container {
@@ -67,4 +72,6 @@
 
 .wp-block-modal .modal-body {
 	position: relative;
+	z-index: 2;
+	pointer-events: all;
 }

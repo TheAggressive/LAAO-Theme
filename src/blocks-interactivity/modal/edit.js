@@ -5,15 +5,153 @@ import {
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import { dispatch, select } from '@wordpress/data';
-import { createPortal, useEffect, useState } from '@wordpress/element';
+import {
+	createPortal,
+	useCallback,
+	useEffect,
+	useState,
+} from '@wordpress/element';
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, isSelected }) {
 	const { triggerBlockId, modalTitle } = attributes;
 	const [availableTriggers, setAvailableTriggers] = useState([]);
 	const [highlightRect, setHighlightRect] = useState(null);
-	const blockProps = useBlockProps();
 
-	const findInteractiveBlocks = (blocks, path = '') => {
+	// Extract block selection handler
+	const selectCurrentBlock = () => {
+		const { selectBlock } = dispatch('core/block-editor');
+		selectBlock(blockProps.id);
+	};
+
+	// Consolidated block props with event handlers
+	const blockProps = useBlockProps({
+		onClick: (e) => {
+			e.stopPropagation();
+			e.preventDefault();
+			selectCurrentBlock();
+		},
+	});
+
+	// Extract trigger management logic
+	const handleTriggerAttributes = (blockId, attrs) => {
+		const { updateBlockAttributes } = dispatch('core/block-editor');
+		const { getBlock } = select('core/block-editor');
+		const block = getBlock(blockId);
+
+		// Get current block attributes
+		const currentAttributes = block.attributes;
+		const currentClassName = currentAttributes.className || '';
+		const existingClasses = currentClassName.split(' ').filter(Boolean);
+
+		console.log('Starting update process...');
+		console.log('Current block:', block);
+		console.log('Current className:', currentClassName);
+		console.log('Existing classes array:', existingClasses);
+		console.log('Incoming attrs:', attrs);
+
+		if (!attrs.className) {
+			// Only remove modal-trigger, keep everything else
+			const updatedClassName = existingClasses
+				.filter((className) => className !== 'modal-trigger')
+				.join(' ');
+
+			console.log(
+				'Removing modal-trigger, new className:',
+				updatedClassName
+			);
+
+			updateBlockAttributes(blockId, {
+				...block.attributes,
+				className: updatedClassName,
+			});
+		} else {
+			const hasModalTrigger = existingClasses.includes('modal-trigger');
+
+			if (!hasModalTrigger) {
+				console.log('Adding modal-trigger');
+				console.log('Existing classes before update:', existingClasses);
+
+				// Combine existing classes with modal-trigger
+				const updatedClasses = [...existingClasses];
+				if (!updatedClasses.includes('modal-trigger')) {
+					updatedClasses.push('modal-trigger');
+				}
+
+				const updatedClassName = updatedClasses.join(' ');
+				console.log('Final className to be set:', updatedClassName);
+
+				updateBlockAttributes(blockId, {
+					...block.attributes,
+					'data-modal-target': attrs['data-modal-target'],
+					className: updatedClassName,
+				});
+
+				// Verify the update
+				const finalBlock = getBlock(blockId);
+				console.log('Final block state:', finalBlock.attributes);
+			}
+		}
+	};
+
+	const handleTriggerSelect = (value) => {
+		if (triggerBlockId) {
+			// When removing trigger, preserve existing classes
+			const currentBlock =
+				select('core/block-editor').getBlock(triggerBlockId);
+			const currentClasses = currentBlock.attributes.className || '';
+			handleTriggerAttributes(triggerBlockId, {
+				className: currentClasses.replace('modal-trigger', '').trim(),
+				'data-modal-target': undefined,
+			});
+		}
+
+		if (value) {
+			// When adding trigger, preserve existing classes
+			const newBlock = select('core/block-editor').getBlock(value);
+			const existingClasses = newBlock.attributes.className || '';
+			handleTriggerAttributes(value, {
+				className: existingClasses,
+				'data-modal-target': blockProps.id,
+			});
+		}
+
+		setAttributes({ triggerBlockId: value });
+	};
+
+	// Extract modal content component
+	const ModalContent = () => (
+		<div className="modal-content" aria-modal="true" role="dialog">
+			<div className="modal-header">
+				<h3>{modalTitle}</h3>
+				<button type="button" className="modal-close">
+					×
+				</button>
+			</div>
+			<div className="modal-body">
+				<InnerBlocks />
+			</div>
+		</div>
+	);
+
+	// Extract highlight overlay component
+	const HighlightOverlay = () =>
+		isSelected &&
+		highlightRect &&
+		createPortal(
+			<div
+				className="modal-trigger-overlay"
+				style={{
+					top: `${highlightRect.top}px`,
+					left: `${highlightRect.left}px`,
+					width: `${highlightRect.width}px`,
+					height: `${highlightRect.height}px`,
+				}}
+			/>,
+			document.querySelector('.edit-site-visual-editor__editor-canvas')
+				?.contentDocument?.body || document.body
+		);
+
+	const findInteractiveBlocks = useCallback((blocks, path = '') => {
 		let triggers = [];
 
 		blocks.forEach((block, index) => {
@@ -70,13 +208,13 @@ export default function Edit({ attributes, setAttributes }) {
 		});
 
 		return triggers;
-	};
+	}, []);
 
 	useEffect(() => {
 		const blocks = select('core/block-editor').getBlocks();
 		const triggers = findInteractiveBlocks(blocks);
 		setAvailableTriggers(triggers);
-	}, []);
+	}, [findInteractiveBlocks]);
 
 	useEffect(() => {
 		if (triggerBlockId) {
@@ -99,15 +237,9 @@ export default function Edit({ attributes, setAttributes }) {
 	// Update highlight position
 	const updateHighlight = (blockId) => {
 		if (!blockId) {
-			console.log('No blockId provided');
 			setHighlightRect(null);
 			return;
 		}
-
-		// Log block information from the store
-		const blockEditor = select('core/block-editor');
-		const block = blockEditor.getBlock(blockId);
-		console.log('Block from store:', block);
 
 		setTimeout(() => {
 			// Get the iframe document
@@ -115,10 +247,8 @@ export default function Edit({ attributes, setAttributes }) {
 				'.edit-site-visual-editor__editor-canvas'
 			);
 			const iframeDocument = editorCanvas?.contentDocument;
-			console.log('Editor iframe document:', iframeDocument);
 
 			if (!iframeDocument) {
-				console.log('No iframe document found');
 				return;
 			}
 
@@ -126,11 +256,9 @@ export default function Edit({ attributes, setAttributes }) {
 			const element = iframeDocument.querySelector(
 				`[data-block="${blockId}"]`
 			);
-			console.log('Found element in iframe:', element);
 
 			if (element) {
 				const rect = element.getBoundingClientRect();
-				const canvasRect = editorCanvas.getBoundingClientRect();
 
 				const newRect = {
 					top: rect.top + iframeDocument.defaultView.scrollY,
@@ -139,22 +267,15 @@ export default function Edit({ attributes, setAttributes }) {
 					height: rect.height,
 				};
 
-				console.log('Setting highlight rect:', newRect);
 				setHighlightRect(newRect);
 
 				element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			} else {
-				console.log('No element found for blockId:', blockId);
-				// Debug: log all blocks in the editor
-				const allBlocks = blockEditor.getBlocks();
-				console.log('All blocks in editor:', allBlocks);
 			}
 		}, 100);
 	};
 
 	// Update highlight on trigger change
 	useEffect(() => {
-		console.log('Trigger block ID changed:', triggerBlockId);
 		updateHighlight(triggerBlockId);
 
 		// Update highlight on scroll or resize
@@ -177,15 +298,14 @@ export default function Edit({ attributes, setAttributes }) {
 		};
 	}, [triggerBlockId]);
 
-	// Add effect to monitor highlightRect changes
+	// Only update highlight when modal is selected
 	useEffect(() => {
-		console.log('highlightRect updated:', highlightRect);
-	}, [highlightRect]);
-
-	// Handle trigger selection
-	const handleTriggerSelect = (value) => {
-		setAttributes({ triggerBlockId: value });
-	};
+		if (isSelected && triggerBlockId) {
+			updateHighlight(triggerBlockId);
+		} else {
+			setHighlightRect(null);
+		}
+	}, [isSelected, triggerBlockId]);
 
 	return (
 		<>
@@ -214,47 +334,16 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div {...blockProps} className="wp-block-modal">
+			<div
+				{...blockProps}
+				className={`wp-block-modal ${blockProps.className || ''}`}
+			>
 				<div className="modal-container">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h3>{modalTitle}</h3>
-							<button type="button" className="modal-close">
-								×
-							</button>
-						</div>
-						<div className="modal-body">
-							<InnerBlocks />
-						</div>
-					</div>
+					<ModalContent />
 				</div>
 			</div>
 
-			{/* Updated class name to match editor.css */}
-			{highlightRect &&
-				createPortal(
-					<div
-						className="modal-trigger-overlay"
-						style={{
-							top: highlightRect.top + 'px',
-							left: highlightRect.left + 'px',
-							width: highlightRect.width + 'px',
-							height: highlightRect.height + 'px',
-						}}
-						ref={(el) => {
-							if (el) {
-								console.log('Overlay element created:', {
-									className: el.className,
-									style: el.style,
-									parent: el.parentElement,
-								});
-							}
-						}}
-					/>,
-					document.querySelector(
-						'.edit-site-visual-editor__editor-canvas'
-					)?.contentDocument?.body || document.body
-				)}
+			<HighlightOverlay />
 		</>
 	);
 }
