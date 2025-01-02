@@ -11,13 +11,11 @@
 	z-index: 999999 !important;
 	transform-origin: center !important;
 	border: 2px solid #007cba !important;
-	border-radius: 2px !important;
-	background: rgba(0, 124, 186, 0.1) !important;
+	border-radius: 2px;
 	transition: all 0.3s ease-in-out !important;
-	display: block !important;
-	opacity: 1 !important;
-	visibility: visible !important;
-	animation: modalTriggerPulse 1.5s infinite !important;
+	opacity: 1;
+	visibility: visible;
+	animation: modalTriggerPulse 1.5s infinite;
 }
 
 /* Animation keyframes */
