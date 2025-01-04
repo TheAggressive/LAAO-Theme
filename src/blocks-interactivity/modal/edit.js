@@ -11,19 +11,12 @@ import {
 	useEffect,
 	useState,
 } from '@wordpress/element';
+import debounce from 'lodash/debounce';
 
 export default function Edit({ attributes, setAttributes, isSelected }) {
 	const { triggerBlockId, modalTitle } = attributes;
 	const [availableTriggers, setAvailableTriggers] = useState([]);
 	const [highlightRect, setHighlightRect] = useState(null);
-
-	// Extract block selection handler
-	const selectCurrentBlock = () => {
-		const { selectBlock } = dispatch('core/block-editor');
-		selectBlock(blockProps.id);
-	};
-
-	// Consolidated block props with event handlers
 	const blockProps = useBlockProps({
 		onClick: (e) => {
 			e.stopPropagation();
@@ -32,125 +25,15 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		},
 	});
 
-	// Extract trigger management logic
-	const handleTriggerAttributes = (blockId, attrs) => {
-		const { updateBlockAttributes } = dispatch('core/block-editor');
-		const { getBlock } = select('core/block-editor');
-		const block = getBlock(blockId);
-
-		// Get current block attributes
-		const currentAttributes = block.attributes;
-		const currentClassName = currentAttributes.className || '';
-		const existingClasses = currentClassName.split(' ').filter(Boolean);
-
-		console.log('Starting update process...');
-		console.log('Current block:', block);
-		console.log('Current className:', currentClassName);
-		console.log('Existing classes array:', existingClasses);
-		console.log('Incoming attrs:', attrs);
-
-		if (!attrs.className) {
-			// Only remove modal-trigger, keep everything else
-			const updatedClassName = existingClasses
-				.filter((className) => className !== 'modal-trigger')
-				.join(' ');
-
-			console.log(
-				'Removing modal-trigger, new className:',
-				updatedClassName
-			);
-
-			updateBlockAttributes(blockId, {
-				...block.attributes,
-				className: updatedClassName,
-			});
-		} else {
-			const hasModalTrigger = existingClasses.includes('modal-trigger');
-
-			if (!hasModalTrigger) {
-				console.log('Adding modal-trigger');
-				console.log('Existing classes before update:', existingClasses);
-
-				// Combine existing classes with modal-trigger
-				const updatedClasses = [...existingClasses];
-				if (!updatedClasses.includes('modal-trigger')) {
-					updatedClasses.push('modal-trigger');
-				}
-
-				const updatedClassName = updatedClasses.join(' ');
-				console.log('Final className to be set:', updatedClassName);
-
-				updateBlockAttributes(blockId, {
-					...block.attributes,
-					'data-modal-target': attrs['data-modal-target'],
-					className: updatedClassName,
-				});
-
-				// Verify the update
-				const finalBlock = getBlock(blockId);
-				console.log('Final block state:', finalBlock.attributes);
-			}
-		}
-	};
-
-	const handleTriggerSelect = (value) => {
-		if (triggerBlockId) {
-			// When removing trigger, preserve existing classes
-			const currentBlock =
-				select('core/block-editor').getBlock(triggerBlockId);
-			const currentClasses = currentBlock.attributes.className || '';
-			handleTriggerAttributes(triggerBlockId, {
-				className: currentClasses.replace('modal-trigger', '').trim(),
-				'data-modal-target': undefined,
-			});
-		}
-
-		if (value) {
-			// When adding trigger, preserve existing classes
-			const newBlock = select('core/block-editor').getBlock(value);
-			const existingClasses = newBlock.attributes.className || '';
-			handleTriggerAttributes(value, {
-				className: existingClasses,
-				'data-modal-target': blockProps.id,
-			});
-		}
-
-		setAttributes({ triggerBlockId: value });
-	};
-
-	// Extract modal content component
-	const ModalContent = () => (
-		<div className="modal-content" aria-modal="true" role="dialog">
-			<div className="modal-header">
-				<h3>{modalTitle}</h3>
-				<button type="button" className="modal-close">
-					×
-				</button>
-			</div>
-			<div className="modal-body">
-				<InnerBlocks />
-			</div>
-		</div>
-	);
-
-	// Extract highlight overlay component
-	const HighlightOverlay = () =>
-		isSelected &&
-		highlightRect &&
-		createPortal(
-			<div
-				className="modal-trigger-overlay"
-				style={{
-					top: `${highlightRect.top}px`,
-					left: `${highlightRect.left}px`,
-					width: `${highlightRect.width}px`,
-					height: `${highlightRect.height}px`,
-				}}
-			/>,
-			document.querySelector('.edit-site-visual-editor__editor-canvas')
-				?.contentDocument?.body || document.body
-		);
-
+	/**
+	 * Recursively finds blocks that can be used as modal triggers.
+	 *
+	 * @param {Array}  blocks    - Array of block objects to search through.
+	 * @param {string} [path=''] - Current block path for nested identification.
+	 * @return {Array} Array of objects containing block IDs and labels for trigger selection.
+	 * @return {string} return[].value - The block's client ID.
+	 * @return {string} return[].label - Display label combining block type and path.
+	 */
 	const findInteractiveBlocks = useCallback((blocks, path = '') => {
 		let triggers = [];
 
@@ -210,31 +93,222 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		return triggers;
 	}, []);
 
+	/**
+	 * Updates the list of available trigger blocks in the editor.
+	 *
+	 * Fetches all blocks from the editor and filters for those that can be
+	 * used as modal triggers. Updates the availableTriggers state which
+	 * populates the trigger selection dropdown.
+	 *
+	 * @see findInteractiveBlocks
+	 */
 	useEffect(() => {
 		const blocks = select('core/block-editor').getBlocks();
 		const triggers = findInteractiveBlocks(blocks);
 		setAvailableTriggers(triggers);
 	}, [findInteractiveBlocks]);
 
+	/**
+	 * Manages the lifecycle of modal trigger classes and attributes.
+	 *
+	 * When a trigger block is selected, adds the modal-trigger class and sets
+	 * the data-modal-target attribute. Includes cleanup function to remove
+	 * these when the trigger is deselected or component unmounts.
+	 *
+	 * @see updateBlockClasses
+	 */
 	useEffect(() => {
 		if (triggerBlockId) {
-			const { updateBlockAttributes } = dispatch('core/block-editor');
-
-			updateBlockAttributes(triggerBlockId, {
-				className: 'modal-trigger',
-				'data-modal-target': blockProps.id,
+			updateBlockClasses(triggerBlockId, {
+				addModalTrigger: true,
+				modalTargetId: blockProps.id,
 			});
 
 			return () => {
-				updateBlockAttributes(triggerBlockId, {
-					className: '',
-					'data-modal-target': undefined,
+				updateBlockClasses(triggerBlockId, {
+					addModalTrigger: false,
 				});
 			};
 		}
 	}, [triggerBlockId, blockProps.id]);
 
-	// Update highlight position
+	/**
+	 * Manages highlight overlay position updates on scroll and resize.
+	 *
+	 * Updates the highlight position when the trigger block changes and sets up
+	 * event listeners for scroll and resize events. Uses debounce to optimize
+	 * performance. Includes cleanup to remove event listeners on unmount.
+	 *
+	 * @see updateHighlight
+	 * @see debounce
+	 */
+	useEffect(() => {
+		updateHighlight(triggerBlockId);
+
+		const handleUpdate = () => updateHighlight(triggerBlockId);
+		const debouncedUpdate = debounce(handleUpdate, 100);
+
+		window.addEventListener('scroll', debouncedUpdate, true);
+		window.addEventListener('resize', debouncedUpdate);
+
+		return () => {
+			window.removeEventListener('scroll', debouncedUpdate, true);
+			window.removeEventListener('resize', debouncedUpdate);
+		};
+	}, [triggerBlockId]);
+
+	/**
+	 * Controls highlight visibility based on block selection.
+	 *
+	 * Shows the highlight overlay only when the modal block is selected and
+	 * has a trigger block assigned. Removes the highlight when the block is
+	 * deselected or no trigger is set.
+	 *
+	 * @see updateHighlight
+	 */
+	useEffect(() => {
+		if (isSelected && triggerBlockId) {
+			updateHighlight(triggerBlockId);
+		} else {
+			setHighlightRect(null);
+		}
+	}, [isSelected, triggerBlockId]);
+
+	/**
+	 * Selects the current modal block in the editor.
+	 *
+	 * Uses the block editor's dispatch to programmatically select this block
+	 * when the modal container is clicked.
+	 */
+	const selectCurrentBlock = () => {
+		const { selectBlock } = dispatch('core/block-editor');
+		selectBlock(blockProps.id);
+	};
+
+	/**
+	 * Updates the classes and attributes of a block to make it a modal trigger.
+	 *
+	 * @param {string}      blockId                         - The client ID of the block to update.
+	 * @param {Object}      options                         - Options for updating the block.
+	 * @param {boolean}     [options.addModalTrigger=false] - Whether to add or remove modal trigger classes.
+	 * @param {string|null} [options.modalTargetId=null]    - The ID of the target modal block.
+	 */
+	const updateBlockClasses = (
+		blockId,
+		{ addModalTrigger = false, modalTargetId = null }
+	) => {
+		const { updateBlockAttributes } = dispatch('core/block-editor');
+		const { getBlock } = select('core/block-editor');
+		const block = getBlock(blockId);
+
+		const currentClassName = block.attributes.className || '';
+		const existingClasses = currentClassName.split(' ').filter(Boolean);
+
+		// Create unique modal trigger class using the target modal's ID
+		const uniqueModalClass = modalTargetId
+			? `modal-trigger-${modalTargetId}`
+			: '';
+
+		// Remove any existing modal-trigger classes
+		const cleanedClasses = existingClasses.filter(
+			(className) => !className.startsWith('modal-trigger')
+		);
+
+		const updatedClassName = addModalTrigger
+			? [...cleanedClasses, 'modal-trigger', uniqueModalClass].join(' ')
+			: cleanedClasses.join(' ');
+
+		updateBlockAttributes(blockId, {
+			...block.attributes,
+			className: updatedClassName,
+			'data-modal-target': modalTargetId,
+		});
+	};
+
+	/**
+	 * Handles the selection of a new trigger block for the modal.
+	 *
+	 * Removes modal trigger classes from the previous block (if any) and adds
+	 * them to the newly selected block. Updates the modal's triggerBlockId
+	 * attribute to maintain the connection.
+	 *
+	 * @param {string} value - The client ID of the newly selected trigger block.
+	 * @see updateBlockClasses
+	 */
+	const handleTriggerSelect = (value) => {
+		if (triggerBlockId) {
+			updateBlockClasses(triggerBlockId, {
+				addModalTrigger: false,
+			});
+		}
+
+		if (value) {
+			updateBlockClasses(value, {
+				addModalTrigger: true,
+				modalTargetId: blockProps.id,
+			});
+		}
+
+		setAttributes({ triggerBlockId: value });
+	};
+
+	/**
+	 * Renders the modal content structure.
+	 *
+	 * Creates a dialog with header (title and close button) and body sections.
+	 * The body contains an InnerBlocks component allowing for nested content.
+	 *
+	 * @return {JSX.Element} The modal content structure.
+	 */
+	const ModalContent = () => (
+		<div className="modal-content" aria-modal="true" role="dialog">
+			<div className="modal-header">
+				<h3>{modalTitle}</h3>
+				<button type="button" className="modal-close">
+					×
+				</button>
+			</div>
+			<div className="modal-body">
+				<InnerBlocks />
+			</div>
+		</div>
+	);
+
+	/**
+	 * Renders a highlight overlay for the selected modal trigger.
+	 *
+	 * Creates a portal to render a visual overlay that highlights the trigger block
+	 * in the editor. Only renders when the modal is selected and highlight position
+	 * is available. Uses createPortal to render in the editor canvas.
+	 *
+	 * @return {JSX.Element|null} The highlight overlay element or null if conditions aren't met.
+	 */
+	const HighlightOverlay = () =>
+		isSelected &&
+		highlightRect &&
+		createPortal(
+			<div
+				className="modal-trigger-overlay"
+				style={{
+					top: `${highlightRect.top}px`,
+					left: `${highlightRect.left}px`,
+					width: `${highlightRect.width}px`,
+					height: `${highlightRect.height}px`,
+				}}
+			/>,
+			document.querySelector('.edit-site-visual-editor__editor-canvas')
+				?.contentDocument?.body || document.body
+		);
+
+	/**
+	 * Updates the position and visibility of the highlight overlay.
+	 *
+	 * Calculates the position of the trigger block within the editor iframe
+	 * and updates the highlight rectangle state. Also handles scrolling the
+	 * trigger block into view.
+	 *
+	 * @param {string} blockId - The client ID of the block to highlight.
+	 */
 	const updateHighlight = (blockId) => {
 		if (!blockId) {
 			setHighlightRect(null);
@@ -273,39 +347,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 			}
 		}, 100);
 	};
-
-	// Update highlight on trigger change
-	useEffect(() => {
-		updateHighlight(triggerBlockId);
-
-		// Update highlight on scroll or resize
-		const handleUpdate = () => updateHighlight(triggerBlockId);
-
-		// Debounce the scroll and resize handlers
-		let timeout;
-		const debouncedUpdate = () => {
-			clearTimeout(timeout);
-			timeout = setTimeout(handleUpdate, 100);
-		};
-
-		window.addEventListener('scroll', debouncedUpdate, true);
-		window.addEventListener('resize', debouncedUpdate);
-
-		return () => {
-			window.removeEventListener('scroll', debouncedUpdate, true);
-			window.removeEventListener('resize', debouncedUpdate);
-			clearTimeout(timeout);
-		};
-	}, [triggerBlockId]);
-
-	// Only update highlight when modal is selected
-	useEffect(() => {
-		if (isSelected && triggerBlockId) {
-			updateHighlight(triggerBlockId);
-		} else {
-			setHighlightRect(null);
-		}
-	}, [isSelected, triggerBlockId]);
 
 	return (
 		<>
