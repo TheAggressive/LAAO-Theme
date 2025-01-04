@@ -28,30 +28,84 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	/**
 	 * Recursively finds blocks that can be used as modal triggers.
 	 *
-	 * @param {Array}  blocks    - Array of block objects to search through.
-	 * @param {string} [path=''] - Current block path for nested identification.
+	 * @param {Array} blocks       - Array of block objects to search through.
+	 * @param {Array} [parents=[]] - Array of parent block names for path creation.
 	 * @return {Array} Array of objects containing block IDs and labels for trigger selection.
 	 * @return {string} return[].value - The block's client ID.
 	 * @return {string} return[].label - Display label combining block type and path.
 	 */
-	const findInteractiveBlocks = useCallback((blocks, path = '') => {
+	const findInteractiveBlocks = useCallback((blocks, parents = []) => {
 		let triggers = [];
 
-		blocks.forEach((block, index) => {
-			const currentPath = path ? `${path}-${index}` : `${index}`;
+		blocks.forEach((block) => {
+			// Get proper block name
+			const blockType = block.name.replace('core/', '');
+
+			// Create readable block name
+			const getReadableBlockName = (type, block) => {
+				// Get block type from registry
+				const blockTypeFromRegistry = select(
+					'core/blocks'
+				).getBlockType(block.name);
+
+				// Special handling for group block layouts
+				if (block.name === 'core/group') {
+					const layout = block.attributes.layout || {};
+					if (layout.type === 'grid') {
+						return 'Grid';
+					}
+					if (
+						layout.type === 'flex' &&
+						layout.orientation === 'horizontal'
+					) {
+						return 'Row';
+					}
+					if (
+						layout.type === 'flex' &&
+						layout.orientation === 'vertical'
+					) {
+						return 'Stack';
+					}
+				}
+
+				// Check for block variations
+				const variations = select('core/blocks').getBlockVariations(
+					block.name
+				);
+				let variantName = '';
+
+				if (variations?.length) {
+					// Find matching variation based on attributes
+					const matchingVariation = variations.find((variation) => {
+						// Check if all variation attributes match block attributes
+						return Object.entries(variation.attributes || {}).every(
+							([key, value]) => block.attributes[key] === value
+						);
+					});
+
+					if (matchingVariation) {
+						variantName = matchingVariation.title;
+					}
+				}
+
+				// Use variant name if found, otherwise use block type title
+				return variantName || blockTypeFromRegistry?.title || type;
+			};
+
+			const blockName = getReadableBlockName(blockType, block);
+			const currentPath = [...parents, blockName];
 
 			// Check for template parts
 			if (block.name === 'core/template-part') {
 				const templatePartBlocks = select(
 					'core/block-editor'
 				).getBlocks(block.clientId);
-
 				if (templatePartBlocks.length) {
 					triggers = [
 						...triggers,
 						...findInteractiveBlocks(
 							templatePartBlocks,
-							`${currentPath}-template-part`
+							currentPath
 						),
 					];
 				}
@@ -74,10 +128,15 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						block.attributes.href ||
 						block.attributes.url))
 			) {
-				// Only include necessary properties for the select options
+				// Create readable path with block name first
+				const parentPath = parents.length
+					? ` (${parents.join('>')})`
+					: '';
+				const label = `${blockName}${parentPath}`;
+
 				triggers.push({
 					value: block.clientId,
-					label: `${block.name.replace('core/', '')} (${currentPath})`,
+					label,
 				});
 			}
 
