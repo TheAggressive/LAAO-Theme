@@ -114,7 +114,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 			// Define interactive block types
 			const interactiveTypes = [
 				'core/button',
-				'core/buttons',
 				'core/navigation-link',
 				'core/image',
 				'core/navigation-submenu',
