@@ -44,14 +44,14 @@
 	"dependencies": {
 		"@wordpress/scripts": "^30.8.1",
 		"gsap": "^3.12.5",
-		"isomorphic-dompurify": "^2.19.0",
-		"lenis": "^1.1.18"
+		"isomorphic-dompurify": "^2.20.0",
+		"lenis": "^1.1.19"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.14",
 		"@types/wordpress__block-editor": "^11.5.16",
 		"@types/wordpress__block-library": "^2.6.3",
-		"@types/wordpress__blocks": "^12.5.16",
+		"@types/wordpress__blocks": "^12.5.17",
 		"@wordpress/a11y": "^4.15.1",
 		"@wordpress/api-fetch": "^7.15.1",
 		"@wordpress/autop": "^4.15.0",
@@ -86,7 +86,7 @@
 		"@wordpress/stylelint-config": "^23.7.0",
 		"autoprefixer": "^10.4.20",
 		"browser-sync-webpack-plugin": "^2.3.0",
-		"browserslist": "^4.24.3",
+		"browserslist": "^4.24.4",
 		"concurrently": "^9.1.2",
 		"copy-webpack-plugin": "^12.0.2",
 		"cssnano": "^7.0.5",
@@ -106,7 +106,7 @@
 		"stylelint-config-standard": "^36.0.1",
 		"stylelint-config-standard-scss": "^14.0.0",
 		"tailwindcss": "^3.4.17",
-		"typescript": "^5.7.2",
+		"typescript": "^5.7.3",
 		"webpack-fix-style-only-entries": "^0.6.1",
 		"webpack-remove-empty-scripts": "^1.0.4"
 	}
