@@ -15,26 +15,22 @@ $unique_id = wp_unique_id( 'modal-' );
 ?>
 
 <div <?php echo get_block_wrapper_attributes( array( 'data-wp-interactive' => 'laao/modal' ) ); ?>>
-	<button
-		type="button"
-		class="modal-trigger"
-		data-wp-on--click="actions.toggle"
-	>
-		<?php echo esc_html( $attributes['triggerText'] ); ?>
-	</button>
-
 	<div
 		class="modal-container"
-		data-wp-class--isOpen="state.isOpen"
+		data-wp-class--isOpen="callbacks.isModalOpen"
 		data-wp-on--keydown="actions.handleEscape"
+		id="<?php echo esc_attr( $unique_id ); ?>"
 	>
-		<div class="modal-content">
-			<button
-				type="button"
-				class="modal-close"
-				data-wp-on--click="actions.close"
-			>×</button>
-			<div class="modal-inner">
+		<div class="modal-content" aria-modal="true" role="dialog">
+			<div class="modal-header">
+				<h3><?php echo esc_html( $attributes['modalTitle'] ); ?></h3>
+				<button
+					type="button"
+					class="modal-close"
+					data-wp-on--click="actions.close"
+				>×</button>
+			</div>
+			<div class="modal-body">
 				<?php echo $content; ?>
 			</div>
 		</div>

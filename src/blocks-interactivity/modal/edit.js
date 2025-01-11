@@ -171,7 +171,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	 *
 	 * When a trigger block is selected, adds the modal-trigger class and sets
 	 * the data-modal-target attribute. Includes cleanup function to remove
-	 * these when the trigger is deselected or component unmounts.
+	 * these when the trigger is deselected, changed, or component unmounts.
 	 *
 	 * @see updateBlockClasses
 	 */
@@ -181,13 +181,19 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 				addModalTrigger: true,
 				modalTargetId: blockProps.id,
 			});
+		}
 
-			return () => {
+		// Cleanup function runs when:
+		// 1. Component unmounts (modal block deleted)
+		// 2. triggerBlockId changes
+		// 3. blockProps.id changes
+		return () => {
+			if (triggerBlockId) {
 				updateBlockClasses(triggerBlockId, {
 					addModalTrigger: false,
 				});
-			};
-		}
+			}
+		};
 	}, [triggerBlockId, blockProps.id]);
 
 	/**
@@ -259,6 +265,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		const { getBlock } = select('core/block-editor');
 		const block = getBlock(blockId);
 
+		// Check if block exists before proceeding
+		if (!block) return;
+
 		const currentClassName = block.attributes.className || '';
 		const existingClasses = currentClassName.split(' ').filter(Boolean);
 
@@ -280,6 +289,8 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 			...block.attributes,
 			className: updatedClassName,
 			'data-modal-target': modalTargetId,
+			'data-wp-interactive': addModalTrigger ? 'laao/modal' : undefined,
+			'data-wp-on--click': addModalTrigger ? 'actions.toggle' : undefined,
 		});
 	};
 

@@ -17,32 +17,32 @@
 	padding: 2rem;
 }
 
-.modal-container.isopen {
+.modal-container.is-open {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
 .modal-content {
-	background: #fff;
+	background: white;
 	padding: 2rem;
-	border-radius: 4px;
-	position: relative;
-	max-width: 800px;
+	max-width: 600px;
 	width: 100%;
-	max-height: 90vh;
-	overflow-y: auto;
+	border-radius: 4px;
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
 }
 
 .modal-close {
-	position: absolute;
-	top: 1rem;
-	right: 1rem;
+	cursor: pointer;
 	background: none;
 	border: none;
 	font-size: 1.5rem;
-	cursor: pointer;
-	padding: 0.5rem;
 }
 
 .modal-trigger {
