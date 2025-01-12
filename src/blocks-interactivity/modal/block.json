@@ -14,27 +14,10 @@
 	},
 	"attributes": {
 		"triggerBlockId": {
-			"type": "string",
-			"default": ""
+			"type": "string"
 		},
-		"modalTitle": {
-			"type": "string",
-			"default": "Modal Title"
-		},
-		"data-modal-target": {
-			"type": "string",
-			"source": "attribute",
-			"attribute": "data-modal-target"
-		},
-		"data-wp-interactive": {
-			"type": "string",
-			"source": "attribute",
-			"attribute": "data-wp-interactive"
-		},
-		"data-wp-on--click": {
-			"type": "string",
-			"source": "attribute",
-			"attribute": "data-wp-on--click"
+		"triggerBlockClientId": {
+			"type": "string"
 		}
 	},
 	"textdomain": "modal",

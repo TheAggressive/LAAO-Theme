@@ -13,6 +13,16 @@ import {
 } from '@wordpress/element';
 import debounce from 'lodash/debounce';
 
+// Define interactive block types
+const interactiveTypes = [
+	'core/button',
+	'core/buttons',
+	'core/image',
+	'core/navigation-link',
+	'core/navigation-submenu',
+	'core/social-link',
+];
+
 export default function Edit({ attributes, setAttributes, isSelected }) {
 	const { triggerBlockId, modalTitle } = attributes;
 	const [availableTriggers, setAvailableTriggers] = useState([]);
@@ -36,88 +46,24 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	 */
 	const findInteractiveBlocks = useCallback((blocks, parents = []) => {
 		let triggers = [];
+		let nameCount = {};
 
-		blocks.forEach((block) => {
+		const createUniqueName = (baseName) => {
+			// Initialize counter if not exists
+			nameCount[baseName] = (nameCount[baseName] || 0) + 1;
+			// Add number suffix if more than one instance and lowercase the result
+			return nameCount[baseName] > 1
+				? `${baseName}-${nameCount[baseName]}`.toLowerCase()
+				: baseName.toLowerCase();
+		};
+
+		const processBlock = (block, parents = []) => {
 			// Get proper block name
 			const blockType = block.name.replace('core/', '');
-
-			// Create readable block name
-			const getReadableBlockName = (type, block) => {
-				// Get block type from registry
-				const blockTypeFromRegistry = select(
-					'core/blocks'
-				).getBlockType(block.name);
-
-				// Special handling for group block layouts
-				if (block.name === 'core/group') {
-					const layout = block.attributes.layout || {};
-					if (layout.type === 'grid') {
-						return 'Grid';
-					}
-					if (
-						layout.type === 'flex' &&
-						layout.orientation === 'horizontal'
-					) {
-						return 'Row';
-					}
-					if (
-						layout.type === 'flex' &&
-						layout.orientation === 'vertical'
-					) {
-						return 'Stack';
-					}
-				}
-
-				// Check for block variations
-				const variations = select('core/blocks').getBlockVariations(
-					block.name
-				);
-				let variantName = '';
-
-				if (variations?.length) {
-					// Find matching variation based on attributes
-					const matchingVariation = variations.find((variation) => {
-						// Check if all variation attributes match block attributes
-						return Object.entries(variation.attributes || {}).every(
-							([key, value]) => block.attributes[key] === value
-						);
-					});
-
-					if (matchingVariation) {
-						variantName = matchingVariation.title;
-					}
-				}
-
-				// Use variant name if found, otherwise use block type title
-				return variantName || blockTypeFromRegistry?.title || type;
-			};
-
 			const blockName = getReadableBlockName(blockType, block);
-			const currentPath = [...parents, blockName];
-
-			// Check for template parts
-			if (block.name === 'core/template-part') {
-				const templatePartBlocks = select(
-					'core/block-editor'
-				).getBlocks(block.clientId);
-				if (templatePartBlocks.length) {
-					triggers = [
-						...triggers,
-						...findInteractiveBlocks(
-							templatePartBlocks,
-							currentPath
-						),
-					];
-				}
-			}
-
-			// Define interactive block types
-			const interactiveTypes = [
-				'core/button',
-				'core/navigation-link',
-				'core/image',
-				'core/navigation-submenu',
-			];
+			const displayName = blockName.split(' ')[0]; // Get base name without variants
+			const uniqueName = createUniqueName(displayName);
+			const parentPath = parents.length ? ` (${parents.join('>')})` : '';
 
 			// Check if block is interactive
 			if (
@@ -127,27 +73,44 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						block.attributes.href ||
 						block.attributes.url))
 			) {
-				// Create readable path with block name first
-				const parentPath = parents.length
-					? ` (${parents.join('>')})`
-					: '';
-				const label = `${blockName}${parentPath}`;
-
 				triggers.push({
-					value: block.clientId,
-					label,
+					value: uniqueName,
+					editorId: block.clientId,
+					path: [...parents, block.name].join('>'),
+					label: `${blockName}${parentPath}`,
 				});
 			}
 
-			// Recursively check inner blocks
+			// Process inner blocks
 			if (block.innerBlocks?.length) {
-				triggers = [
-					...triggers,
-					...findInteractiveBlocks(block.innerBlocks, currentPath),
-				];
+				block.innerBlocks.forEach((innerBlock) => {
+					processBlock(innerBlock, [...parents, blockName]);
+				});
 			}
+		};
+
+		// Process all blocks
+		blocks.forEach((block) => {
+			if (block.name === 'core/template-part') {
+				const templatePartBlocks = select(
+					'core/block-editor'
+				).getBlocks(block.clientId);
+				// Get template part name and capitalize first letter
+				const templateName = block.attributes.slug || 'Template Part';
+				const capitalizedName =
+					templateName.charAt(0).toUpperCase() +
+					templateName.slice(1);
+
+				if (templatePartBlocks?.length) {
+					templatePartBlocks.forEach((templateBlock) => {
+						processBlock(templateBlock, [capitalizedName]);
+					});
+				}
+			}
+			processBlock(block, []);
 		});
 
+		console.log('Generated triggers:', triggers); // Debug log
 		return triggers;
 	}, []);
 
@@ -163,8 +126,24 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	useEffect(() => {
 		const blocks = select('core/block-editor').getBlocks();
 		const triggers = findInteractiveBlocks(blocks);
+
+		console.log('Available triggers:', triggers);
+		console.log('Current triggerBlockId:', attributes.triggerBlockId);
+
 		setAvailableTriggers(triggers);
 	}, [findInteractiveBlocks]);
+
+	// Add these debug logs
+	console.log('All triggers:', availableTriggers);
+	console.log('Stored triggerBlockId:', attributes.triggerBlockId);
+
+	// Update the currentValue logic
+	const currentValue =
+		availableTriggers.find(
+			(trigger) => trigger.value === attributes.triggerBlockId
+		)?.value || '';
+
+	console.log('Current SelectControl value:', currentValue);
 
 	/**
 	 * Manages the lifecycle of modal trigger classes and attributes.
@@ -268,6 +247,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		// Check if block exists before proceeding
 		if (!block) return;
 
+		// Generate a permanent ID if one doesn't exist
+		const blockHtmlId = block.attributes.id || `block-${blockId}`;
+
 		const currentClassName = block.attributes.className || '';
 		const existingClasses = currentClassName.split(' ').filter(Boolean);
 
@@ -287,11 +269,20 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
 		updateBlockAttributes(blockId, {
 			...block.attributes,
+			id: blockHtmlId,
 			className: updatedClassName,
 			'data-modal-target': modalTargetId,
 			'data-wp-interactive': addModalTrigger ? 'laao/modal' : undefined,
 			'data-wp-on--click': addModalTrigger ? 'actions.toggle' : undefined,
 		});
+
+		// Store both IDs in the modal block
+		if (addModalTrigger) {
+			setAttributes({
+				triggerBlockId: blockHtmlId,
+				triggerBlockClientId: blockId,
+			});
+		}
 	};
 
 	/**
@@ -305,20 +296,35 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	 * @see updateBlockClasses
 	 */
 	const handleTriggerSelect = (value) => {
-		if (triggerBlockId) {
-			updateBlockClasses(triggerBlockId, {
+		console.log('handleTriggerSelect called with value:', value); // Debug
+
+		const selectedTrigger = availableTriggers.find(
+			(trigger) => trigger.value === value
+		);
+		console.log('Selected trigger:', selectedTrigger); // Debug
+
+		if (attributes.triggerBlockClientId) {
+			updateBlockClasses(attributes.triggerBlockClientId, {
 				addModalTrigger: false,
 			});
 		}
 
-		if (value) {
-			updateBlockClasses(value, {
+		if (selectedTrigger) {
+			updateBlockClasses(selectedTrigger.editorId, {
 				addModalTrigger: true,
 				modalTargetId: blockProps.id,
 			});
-		}
 
-		setAttributes({ triggerBlockId: value });
+			setAttributes({
+				triggerBlockId: selectedTrigger.value, // Store the unique name as the ID
+				triggerBlockClientId: selectedTrigger.editorId,
+			});
+		} else {
+			setAttributes({
+				triggerBlockId: '',
+				triggerBlockClientId: '',
+			});
+		}
 	};
 
 	/**
@@ -372,11 +378,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	/**
 	 * Updates the position and visibility of the highlight overlay.
 	 *
-	 * Calculates the position of the trigger block within the editor iframe
-	 * and updates the highlight rectangle state. Also handles scrolling the
-	 * trigger block into view.
-	 *
-	 * @param {string} blockId - The client ID of the block to highlight.
+	 * @param {string} blockId - The ID of the block to highlight.
 	 */
 	const updateHighlight = (blockId) => {
 		if (!blockId) {
@@ -385,7 +387,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		}
 
 		setTimeout(() => {
-			// Get the iframe document
 			const editorCanvas = document.querySelector(
 				'.edit-site-visual-editor__editor-canvas'
 			);
@@ -396,13 +397,25 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 			}
 
 			// Try to find the block element within the iframe
-			const element = iframeDocument.querySelector(
-				`[data-block="${blockId}"]`
-			);
+			let element;
+
+			// First try by data-block attribute (client ID)
+			if (attributes.triggerBlockClientId) {
+				element = iframeDocument.querySelector(
+					`[data-block="${attributes.triggerBlockClientId}"]`
+				);
+			}
+
+			// If not found and blockId is a valid selector, try by ID
+			if (!element && blockId.includes('block-')) {
+				const cleanId = blockId.replace('block-', '');
+				element = iframeDocument.querySelector(
+					`#${CSS.escape(cleanId)}`
+				);
+			}
 
 			if (element) {
 				const rect = element.getBoundingClientRect();
-
 				const newRect = {
 					top: rect.top + iframeDocument.defaultView.scrollY,
 					left: rect.left + iframeDocument.defaultView.scrollX,
@@ -411,11 +424,58 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 				};
 
 				setHighlightRect(newRect);
-
 				element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			}
 		}, 100);
 	};
+
+	/**
+	 * Gets a readable name for a block type, including variant information.
+	 *
+	 * @param {string} type  - The block type (e.g., 'group', 'button').
+	 * @param {Object} block - The block object containing attributes and name.
+	 * @return {string} A human-readable block name.
+	 */
+	const getReadableBlockName = (type, block) => {
+		// Get block type from registry
+		const blockTypeFromRegistry = select('core/blocks').getBlockType(
+			block.name
+		);
+
+		// Special handling for group block layouts
+		if (block.name === 'core/group') {
+			const layout = block.attributes.layout || {};
+			if (layout.type === 'grid') return 'Grid';
+			if (layout.type === 'flex') {
+				if (layout.orientation === 'horizontal') return 'Row';
+				if (layout.orientation === 'vertical') return 'Stack';
+			}
+		}
+
+		// Check for block variations
+		const variations = select('core/blocks').getBlockVariations(block.name);
+		let variantName = '';
+
+		if (variations?.length) {
+			// Find matching variation based on attributes
+			const matchingVariation = variations.find((variation) => {
+				// Check if all variation attributes match block attributes
+				return Object.entries(variation.attributes || {}).every(
+					([key, value]) => block.attributes[key] === value
+				);
+			});
+
+			if (matchingVariation) {
+				variantName = matchingVariation.title;
+			}
+		}
+
+		// Use variant name if found, otherwise use block type title
+		return variantName || blockTypeFromRegistry?.title || type;
+	};
+
+	// Add this console log in the main component
+	console.log('Current attributes:', attributes); // Debug log
 
 	return (
 		<>
@@ -432,12 +492,20 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 					/>
 					<SelectControl
 						label="Select Trigger Block"
-						value={triggerBlockId}
+						value={currentValue}
 						options={[
 							{ label: 'Select a block...', value: '' },
-							...availableTriggers,
+							...availableTriggers.map(({ value, label }) => {
+								console.log(
+									`Mapping option - value: ${value}, label: ${label}`
+								); // Debug each option
+								return { value, label };
+							}),
 						]}
-						onChange={handleTriggerSelect}
+						onChange={(value) => {
+							console.log('Selected value:', value); // Debug selection
+							handleTriggerSelect(value);
+						}}
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 					/>
