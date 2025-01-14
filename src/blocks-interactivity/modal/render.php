@@ -17,7 +17,7 @@ $unique_id = wp_unique_id( 'modal-' );
 <div <?php echo get_block_wrapper_attributes( array( 'data-wp-interactive' => 'laao/modal' ) ); ?>>
 	<div
 		class="modal-container"
-		data-wp-class--isOpen="callbacks.isModalOpen"
+		data-wp-class--is-open="context.isOpen"
 		data-wp-on--keydown="actions.handleEscape"
 		id="<?php echo esc_attr( $unique_id ); ?>"
 	>
