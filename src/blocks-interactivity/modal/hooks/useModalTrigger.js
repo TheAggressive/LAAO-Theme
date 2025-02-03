@@ -6,8 +6,8 @@ import { dispatch, select } from '@wordpress/data';
 /**
  * Custom hook to handle modal trigger functionality.
  *
- * @param {Object} options - Hook options
- * @param {Object} options.blockProps - Block properties
+ * @param {Object}   options               - Hook options
+ * @param {Object}   options.blockProps    - Block properties
  * @param {Function} options.setAttributes - Function to update block attributes
  * @return {Object} Object containing utility functions for modal trigger handling
  */
@@ -15,21 +15,23 @@ export const useModalTrigger = ({ blockProps, setAttributes }) => {
 	/**
 	 * Updates block classes and attributes for modal trigger functionality.
 	 *
-	 * @param {string} blockId - The ID of the block to update
-	 * @param {Object} options - Update options
-	 * @param {boolean} [options.addModalTrigger=false] - Whether to add modal trigger classes
-	 * @param {string|null} [options.modalTargetId=null] - ID of the target modal
+	 * @param {string}      blockId                         - The ID of the block to update
+	 * @param {Object}      options                         - Update options
+	 * @param {boolean}     [options.addModalTrigger=false] - Whether to add modal trigger classes
+	 * @param {string|null} [options.modalTargetId=null]    - ID of the target modal
 	 */
 	const updateBlockClasses = (
 		blockId,
 		{ addModalTrigger = false, modalTargetId = null }
 	) => {
-		const { updateBlockAttributes } = dispatch('core/block-editor');
 		const { getBlock } = select('core/block-editor');
 		const block = getBlock(blockId);
 
-		if (!block) return;
+		if (!block) {
+			return;
+		}
 
+		const { updateBlockAttributes } = dispatch('core/block-editor');
 		const blockHtmlId = block.attributes.id || `block-${blockId}`;
 		const uniqueModalClass = modalTargetId
 			? `modal-trigger-${modalTargetId}`
@@ -75,9 +77,9 @@ export const useModalTrigger = ({ blockProps, setAttributes }) => {
 	/**
 	 * Handles the selection of a trigger block for the modal.
 	 *
-	 * @param {string} value - Selected trigger value
-	 * @param {Array} availableTriggers - Array of available trigger options
-	 * @param {Object} attributes - Current block attributes
+	 * @param {string} value             - Selected trigger value
+	 * @param {Array}  availableTriggers - Array of available trigger options
+	 * @param {Object} attributes        - Current block attributes
 	 */
 	const handleTriggerSelect = (value, availableTriggers, attributes) => {
 		const selectedTrigger = availableTriggers.find(

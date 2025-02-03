@@ -25,13 +25,12 @@ export const useInteractiveBlocks = () => {
 	 * Main callback function that processes blocks to identify interactive elements.
 	 *
 	 * @param {Array<Object>} blocks - The blocks to process
-	 * @param {Array<string>} [parents=[]] - Parent block names for nested context
 	 * @return {Array<Object>} Array of trigger objects
 	 */
-	return useCallback((blocks, parents = []) => {
-		let triggers = [];
+	return useCallback((blocks) => {
+		const triggers = [];
 		/** @type {Object.<string, number>} Object to track name counts for uniqueness */
-		let nameCount = {};
+		const nameCount = {};
 
 		/**
 		 * Creates a unique name for a block by appending a number if necessary.
@@ -49,12 +48,12 @@ export const useInteractiveBlocks = () => {
 		/**
 		 * Recursively processes a block and its inner blocks to identify interactive elements.
 		 *
-		 * @param {Object} block - The block to process
-		 * @param {Object} block.name - The name of the block
-		 * @param {Object} block.clientId - The client ID of the block
-		 * @param {Object} block.attributes - The block's attributes
+		 * @param {Object}        block               - The block to process
+		 * @param {Object}        block.name          - The name of the block
+		 * @param {Object}        block.clientId      - The client ID of the block
+		 * @param {Object}        block.attributes    - The block's attributes
 		 * @param {Array<Object>} [block.innerBlocks] - The block's inner blocks
-		 * @param {Array<string>} [parents=[]] - Array of parent block names for context
+		 * @param {Array<string>} [parents=[]]        - Array of parent block names for context
 		 */
 		const processBlock = (block, parents = []) => {
 			const blockType = block.name.replace('core/', '');

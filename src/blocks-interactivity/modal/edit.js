@@ -11,10 +11,10 @@ import { useModalTrigger } from './hooks/useModalTrigger';
 /**
  * Modal block edit component.
  *
- * @param {Object} props               Component properties.
- * @param {Object} props.attributes    Block attributes.
+ * @param {Object}   props               Component properties.
+ * @param {Object}   props.attributes    Block attributes.
  * @param {Function} props.setAttributes Function to update block attributes.
- * @param {boolean} props.isSelected   Whether the block is currently selected.
+ * @param {boolean}  props.isSelected    Whether the block is currently selected.
  * @return {JSX.Element} Modal edit interface.
  */
 export default function Edit({ attributes, setAttributes, isSelected }) {
@@ -69,7 +69,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 				});
 			}
 		};
-	}, [triggerBlockId, blockProps.id]);
+	}, [triggerBlockId, blockProps.id, updateBlockClasses]);
 
 	const currentValue =
 		availableTriggers.find(

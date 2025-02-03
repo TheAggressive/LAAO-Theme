@@ -3,30 +3,28 @@ import { select } from '@wordpress/data';
 /**
  * Retrieves a human-readable name for a block based on its type and attributes.
  *
- * @param {string} type - The default block type name to fall back to.
- * @param {Object} block - The block object to get the name for.
- * @param {string} block.name - The registered name of the block.
+ * @param {string} type             - The default block type name to fall back to.
+ * @param {Object} block            - The block object to get the name for.
+ * @param {string} block.name       - The registered name of the block.
  * @param {Object} block.attributes - The block's attributes.
- * @returns {string} The human-readable block name.
+ * @return {string} The human-readable block name.
  */
 export const getReadableBlockName = (type, block) => {
-	/**
-	 * Get the block type information from the blocks registry.
-	 * @type {Object|undefined}
-	 */
+	// Special handling for core/group blocks - moved up before variable declaration
+	if (block.name === 'core/group') {
+		const layout = block.attributes.layout || {};
+		if (layout.type === 'grid') {
+			return 'Grid';
+		}
+		if (layout.type === 'flex') {
+			return layout.orientation === 'horizontal' ? 'Row' : 'Stack';
+		}
+	}
+
+	// Moved blockTypeFromRegistry declaration after early returns
 	const blockTypeFromRegistry = select('core/blocks').getBlockType(
 		block.name
 	);
-
-	// Special handling for core/group blocks
-	if (block.name === 'core/group') {
-		const layout = block.attributes.layout || {};
-		if (layout.type === 'grid') return 'Grid';
-		if (layout.type === 'flex') {
-			if (layout.orientation === 'horizontal') return 'Row';
-			if (layout.orientation === 'vertical') return 'Stack';
-		}
-	}
 
 	/**
 	 * Get all registered variations for this block type.

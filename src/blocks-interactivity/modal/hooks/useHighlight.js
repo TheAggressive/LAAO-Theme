@@ -17,9 +17,9 @@ const EDITOR_CANVAS_SELECTOR = '.edit-site-visual-editor__editor-canvas';
 /**
  * Gets the bounding rectangle of an element relative to the iframe document.
  *
- * @param {HTMLElement} element - The element to get the rect for
- * @param {Document} iframeDocument - The iframe's document object
- * @returns {HighlightRect} The element's bounding rectangle
+ * @param {HTMLElement} element        - The element to get the rect for
+ * @param {Document}    iframeDocument - The iframe's document object
+ * @return {HighlightRect} The element's bounding rectangle
  */
 const getElementRect = (element, iframeDocument) => {
 	const rect = element.getBoundingClientRect();
@@ -36,31 +36,31 @@ const getElementRect = (element, iframeDocument) => {
  *
  * @callback UpdateHighlightCallback
  * @param {string|null} blockId - The ID of the block to highlight
- * @returns {void}
+ * @return {void}
  */
 
 /**
  * Custom hook that manages highlighting and scrolling to a specific block element in the editor.
  *
  * @typedef {Object} HighlightProps
- * @property {string|null} triggerBlockId - The ID of the block to highlight
- * @property {boolean} isSelected - Whether the block is currently selected
- * @property {Object} attributes - Block attributes
- * @property {string} attributes.triggerBlockClientId - Client ID of the trigger block
+ * @property {string|null}    triggerBlockId                  - The ID of the block to highlight
+ * @property {boolean}        isSelected                      - Whether the block is currently selected
+ * @property {Object}         attributes                      - Block attributes
+ * @property {string}         attributes.triggerBlockClientId - Client ID of the trigger block
  *
  * @typedef {Object} HighlightRect
- * @property {number} top - Top position of the highlight
- * @property {number} left - Left position of the highlight
- * @property {number} width - Width of the highlight
- * @property {number} height - Height of the highlight
+ * @property {number}         top                             - Top position of the highlight
+ * @property {number}         left                            - Left position of the highlight
+ * @property {number}         width                           - Width of the highlight
+ * @property {number}         height                          - Height of the highlight
  *
- * @param {HighlightProps} props - Hook properties
- * @returns {{highlightRect: HighlightRect|null}} Object containing the highlight rectangle coordinates
+ * @param    {HighlightProps} props                           - Hook properties
+ * @return {{highlightRect: HighlightRect|null}} Object containing the highlight rectangle coordinates
  */
 export const useHighlight = ({ triggerBlockId, isSelected, attributes }) => {
 	/**
 	 * State to store the current highlight rectangle coordinates
-	 * @type {[HighlightRect|null, function]}
+	 * @type {[HighlightRect | null, Function]}
 	 */
 	const [highlightRect, setHighlightRect] = useState(null);
 
@@ -82,7 +82,9 @@ export const useHighlight = ({ triggerBlockId, isSelected, attributes }) => {
 					);
 					const iframeDocument = editorCanvas?.contentDocument;
 
-					if (!iframeDocument) return;
+					if (!iframeDocument) {
+						return;
+					}
 
 					const element = findBlockElement(
 						blockId,
@@ -99,7 +101,6 @@ export const useHighlight = ({ triggerBlockId, isSelected, attributes }) => {
 						});
 					}
 				} catch (error) {
-					console.error('Error updating highlight:', error);
 					setHighlightRect(null);
 				}
 			}, SCROLL_DELAY);
