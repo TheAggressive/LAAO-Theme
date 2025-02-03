@@ -80,14 +80,6 @@ if (empty($attributes['modalInstanceId']) || !isset($attributes['modalInstanceId
 	}
 }
 
-// Force modal ID format validation
-$block_id = $attributes['triggerBlockClientId'] ?? 'block-' . uniqid();
-
-// Generate unique ID if not set
-if ( empty( $attributes['modalInstanceId'] ) ) {
-	$attributes['modalInstanceId'] = substr( md5( uniqid() ), 0, 9 );
-}
-
 print_r( $attributes );
 ?>
 <div id="<?php echo esc_attr( $block_id ); ?>" <?php echo get_block_wrapper_attributes(); ?>>
@@ -105,14 +97,14 @@ print_r( $attributes );
 	</div>
 
 	<div
-		id="<?php echo esc_attr( $attributes['modalInstanceId'] ); ?>"
+		id="<?php echo esc_attr( $attributes['triggerBlockClientId'] ); ?>"
 		class="modal-container"
 		data-wp-interactive="laao/modal"
 		<?php
 				echo wp_kses_data(
 					wp_interactivity_data_wp_context(
 						array(
-							'modalId' => $attributes['modalInstanceId'],
+							'modalId' => $attributes['triggerBlockClientId'],
 						)
 					)
 				);
@@ -122,7 +114,7 @@ print_r( $attributes );
 		data-wp-on--keydown="actions.handleEscape"
 		data-wp-bind--aria-modal="!state.isOpen"
 		role="dialog"
-		aria-labelledby="modal-title-<?php echo esc_attr( $attributes['modalInstanceId'] ); ?>"
+		aria-labelledby="modal-title-<?php echo esc_attr( 'block-'. $attributes['modalInstanceId'] ); ?>"
 		tabindex="-1"
 	>
 		<div class="modal-content">

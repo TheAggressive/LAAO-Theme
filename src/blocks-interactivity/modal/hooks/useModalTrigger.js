@@ -20,10 +20,7 @@ export const useModalTrigger = ({ blockProps, setAttributes }) => {
 	 * @param {boolean}     [options.addModalTrigger=false] - Whether to add modal trigger classes
 	 * @param {string|null} [options.modalTargetId=null]    - ID of the target modal
 	 */
-	const updateBlockClasses = (
-		blockId,
-		{ addModalTrigger = false, modalTargetId = null }
-	) => {
+	const updateBlockClasses = (blockId, { addModalTrigger = false }) => {
 		const { getBlock } = select('core/block-editor');
 		const block = getBlock(blockId);
 
@@ -32,43 +29,41 @@ export const useModalTrigger = ({ blockProps, setAttributes }) => {
 		}
 
 		const { updateBlockAttributes } = dispatch('core/block-editor');
-		const blockHtmlId = block.attributes.id || `block-${blockId}`;
-		const uniqueModalClass = modalTargetId
-			? `modal-trigger-${modalTargetId}`
-			: '';
+		const prefix = 'modal-trigger';
 
+		// Generate all IDs/classes using the prefix
+		const uniqueClass = `${prefix}-${blockId}`;
+
+		// Class management unified
 		const classes = new Set(
 			block.attributes.className?.split(' ').filter(Boolean) || []
 		);
 
-		// Remove existing modal trigger classes
-		for (const className of classes) {
-			if (className.startsWith('modal-trigger')) {
+		// Remove existing trigger classes in single pass
+		Array.from(classes).forEach((className) => {
+			if (className.startsWith(prefix)) {
 				classes.delete(className);
 			}
-		}
-
-		if (addModalTrigger) {
-			classes.add('modal-trigger');
-			if (uniqueModalClass) {
-				classes.add(uniqueModalClass);
-			}
-		}
-
-		const updatedClassName = Array.from(classes).join(' ');
-
-		updateBlockAttributes(blockId, {
-			...block.attributes,
-			id: blockHtmlId,
-			className: updatedClassName,
-			'data-modal-target': modalTargetId,
-			'data-wp-interactive': addModalTrigger ? 'laao/modal' : undefined,
-			'data-wp-on--click': addModalTrigger ? 'actions.toggle' : undefined,
 		});
 
 		if (addModalTrigger) {
+			classes.add(uniqueClass);
+		}
+
+		// Unified attribute update
+		const updatedAttributes = {
+			...block.attributes,
+			className: Array.from(classes).join(' '),
+		};
+
+		console.log('blockProps', blockProps);
+		console.log('updatedAttributes', updatedAttributes);
+
+		updateBlockAttributes(blockId, updatedAttributes);
+
+		if (addModalTrigger) {
 			setAttributes({
-				triggerBlockId: blockHtmlId,
+				triggerBlockId: blockId,
 				triggerBlockClientId: blockId,
 			});
 		}
