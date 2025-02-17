@@ -65,16 +65,16 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 				<div
 					class="wp-block-laao-hero-slide"
 					data-wp-key="<?php echo esc_attr( $index ); ?>"
-					<?php
-					echo wp_kses_data(
-						wp_interactivity_data_wp_context(
-							array(
-								'slideIndex' => $index,
-								'caption'    => $slide['content'],
-							)
+				<?php
+				echo wp_kses_data(
+					wp_interactivity_data_wp_context(
+						array(
+							'slideIndex' => $index,
+							'caption'    => $slide['content'],
 						)
 					)
-					?>
+				)
+				?>
 					data-wp-class--is-active="callbacks.isActive"
 					style="background-image: url('<?php echo esc_url( $slide['imageUrl'] ); ?>');"
 				></div>

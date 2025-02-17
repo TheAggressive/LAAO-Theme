@@ -47,7 +47,7 @@ if ( ! function_exists( 'add_modal_trigger_interactivity' ) ) {
 		if ( $modified ) {
 			// Clear the buffer and output the modified HTML
 			ob_clean();
-			echo $html->get_updated_html();
+			echo $html->get_updated_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -64,25 +64,26 @@ if ( ! function_exists( 'add_modal_trigger_interactivity' ) ) {
 }
 
 // At the top of render.php, before any HTML output
-if (empty($attributes['modalInstanceId']) || !isset($attributes['modalInstanceId'])) {
-	$attributes['modalInstanceId'] = substr(md5(uniqid()), 0, 9);
+if ( empty( $attributes['modalInstanceId'] ) || ! isset( $attributes['modalInstanceId'] ) ) {
+	$attributes['modalInstanceId'] = substr( md5( uniqid() ), 0, 9 );
 
 	// Update the block attributes if we're in the editor
-	if (is_admin()) {
+	if ( is_admin() ) {
 		wp_add_inline_script(
 			'wp-edit-blocks',
 			sprintf(
 				'wp.data.dispatch("core/block-editor").updateBlockAttributes("%s", { modalInstanceId: "%s" });',
-				esc_js($block->parsed_block['id']),
-				esc_js($attributes['modalInstanceId'])
+				esc_js( $block->parsed_block['id'] ),
+				esc_js( $attributes['modalInstanceId'] )
 			)
 		);
 	}
 }
 
 print_r( $attributes );
+
 ?>
-<div id="<?php echo esc_attr( $block_id ); ?>" <?php echo get_block_wrapper_attributes(); ?>>
+<div id="<?php echo esc_attr( $block_id ); ?>" <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
 	<div class="modal-trigger-wrapper">
 		<button
 			type="button"
@@ -114,7 +115,7 @@ print_r( $attributes );
 		data-wp-on--keydown="actions.handleEscape"
 		data-wp-bind--aria-modal="!state.isOpen"
 		role="dialog"
-		aria-labelledby="modal-title-<?php echo esc_attr( 'block-'. $attributes['modalInstanceId'] ); ?>"
+		aria-labelledby="modal-title-<?php echo esc_attr( 'block-' . $attributes['modalInstanceId'] ); ?>"
 		tabindex="-1"
 	>
 		<div class="modal-content">

@@ -1,0 +1,8 @@
+{
+    "attributes": {
+        "data-modal-persistent-id": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}
