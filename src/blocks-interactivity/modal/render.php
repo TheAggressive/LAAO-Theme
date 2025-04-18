@@ -120,7 +120,11 @@ $inner_content = $content;
 			</button>
 
 			<div class="wp-block-laao-modal-body">
-				<?php echo wp_kses_post( $inner_content ); // InnerBlocks content ?>
+				<?php
+				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $inner_content;
+				// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+				?>
 			</div>
 		</div>
 	</div>
