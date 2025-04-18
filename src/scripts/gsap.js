@@ -1,90 +1,95 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Make sure ScrollTrigger is registered immediately
 gsap.registerPlugin(ScrollTrigger);
 
-// Navigation /////////////////////////////////////////////////
+// Wait for DOM to be fully loaded before initializing animations
+document.addEventListener('DOMContentLoaded', () => {
+	// Navigation /////////////////////////////////////////////////
+	const responsive = gsap.matchMedia();
 
-const responsive = gsap.matchMedia();
-
-responsive.add('(min-width: 1024px)', () => {
-	gsap.timeline({
-		scrollTrigger: {
-			trigger: '.site-nav',
-			start: 'top-=0 top',
-			endTrigger: '.site-footer',
-			end: 'top bottom',
-			toggleActions: 'play reverse play reverse',
-			scrub: false,
-			pin: true,
-			pinSpacing: false,
-			markers: false,
-		},
+	responsive.add('(min-width: 1024px)', () => {
+		gsap.timeline({
+			scrollTrigger: {
+				trigger: '.site-nav',
+				start: 'top-=0 top',
+				endTrigger: '.site-footer',
+				end: 'top bottom',
+				toggleActions: 'play reverse play reverse',
+				scrub: false,
+				pin: true,
+				pinSpacing: false,
+				markers: false,
+			},
+		});
 	});
-});
 
-// Site Slogan ///////////////////////////////////////////////////////
-const words = document.querySelectorAll('.site-slogan h3');
-words.forEach((word) => {
-	const letters = word.textContent.split('');
-	word.textContent = '';
-	letters.forEach((letter) => {
-		const span = document.createElement('span');
-		span.textContent = letter;
-		span.className = 'letter';
-		word.append(span);
-	});
-});
+	// Site Slogan ///////////////////////////////////////////////////////
+	const words = document.querySelectorAll('.site-slogan h3');
+	if (words.length) {
+		words.forEach((word) => {
+			const letters = word.textContent.split('');
+			word.textContent = '';
+			letters.forEach((letter) => {
+				const span = document.createElement('span');
+				span.textContent = letter;
+				span.className = 'letter';
+				word.append(span);
+			});
+		});
 
-const tl = gsap.timeline({
-	repeat: -1,
-	defaults: { stagger: 0.05 },
-	paused: true,
-});
+		const tl = gsap.timeline({
+			repeat: -1,
+			defaults: { stagger: 0.05 },
+			paused: true,
+		});
 
-words.forEach((word, i) => {
-	if (i) {
-		tl.from(
-			word.childNodes,
+		words.forEach((word, i) => {
+			if (i) {
+				tl.from(
+					word.childNodes,
+					{
+						y: -100,
+						ease: 'expo.out',
+					},
+					'+=5'
+				);
+				tl.to(
+					words[i - 1].childNodes,
+					{
+						y: 100,
+						ease: 'expo.in',
+					},
+					'<-=0.85'
+				);
+			}
+		});
+		tl.fromTo(
+			words[0].childNodes,
 			{
 				y: -100,
+			},
+			{
+				y: 0,
 				ease: 'expo.out',
+				immediateRender: false,
 			},
 			'+=5'
-		);
-		tl.to(
-			words[i - 1].childNodes,
+		).to(
+			words[words.length - 1].childNodes,
 			{
 				y: 100,
 				ease: 'expo.in',
 			},
 			'<-=0.85'
 		);
-	}
-});
-tl.fromTo(
-	words[0].childNodes,
-	{
-		y: -100,
-	},
-	{
-		y: 0,
-		ease: 'expo.out',
-		immediateRender: false,
-	},
-	'+=5'
-).to(
-	words[words.length - 1].childNodes,
-	{
-		y: 100,
-		ease: 'expo.in',
-	},
-	'<-=0.85'
-);
 
-gsap.from(words[0].childNodes, {
-	y: -100,
-	ease: 'expo.out',
-	stagger: 0.05,
-	onComplete: () => tl.play(),
+		gsap.from(words[0].childNodes, {
+			y: -100,
+			ease: 'expo.out',
+			stagger: 0.05,
+			onComplete: () => tl.play(),
+		});
+	}
 });

@@ -82,420 +82,420 @@ class LAAO_Setup {
 			)
 		);
 
-			register_post_type(
-				'arts',
-				array(
-					'labels'           => array(
-						'name'          => 'Arts',
-						'singular_name' => 'Art',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-admin-appearance',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'arts',
+			array(
+				'labels'           => array(
+					'name'          => 'Arts',
+					'singular_name' => 'Art',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-admin-appearance',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'contest',
-				array(
-					'labels'              => array(
-						'name'          => 'Contests',
-						'singular_name' => 'Contest',
-						'menu_name'     => 'Contests',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_icon'           => 'dashicons-tickets-alt',
-					'supports'            => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'has_archive'         => true,
-					'rewrite'             => array(
-						'feeds' => false,
-					),
-					'can_export'          => false,
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'contest',
+			array(
+				'labels'              => array(
+					'name'          => 'Contests',
+					'singular_name' => 'Contest',
+					'menu_name'     => 'Contests',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_icon'           => 'dashicons-tickets-alt',
+				'supports'            => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'has_archive'         => true,
+				'rewrite'             => array(
+					'feeds' => false,
+				),
+				'can_export'          => false,
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'cover',
-				array(
-					'labels'           => array(
-						'name'          => 'Cover Stories',
-						'singular_name' => 'Cover Story',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-admin-home',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'cover',
+			array(
+				'labels'           => array(
+					'name'          => 'Cover Stories',
+					'singular_name' => 'Cover Story',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-admin-home',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'dining',
-				array(
-					'labels'           => array(
-						'name'          => 'Dining',
-						'singular_name' => 'Dining',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-food',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'dining',
+			array(
+				'labels'           => array(
+					'name'          => 'Dining',
+					'singular_name' => 'Dining',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-food',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'edition',
-				array(
-					'labels'              => array(
-						'name'          => 'Edition',
-						'singular_name' => 'Edition',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_position'       => 5,
-					'menu_icon'           => 'dashicons-admin-post',
-					'supports'            => array(
-						0 => 'title',
-					),
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'edition',
+			array(
+				'labels'              => array(
+					'name'          => 'Edition',
+					'singular_name' => 'Edition',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_position'       => 5,
+				'menu_icon'           => 'dashicons-admin-post',
+				'supports'            => array(
+					0 => 'title',
+				),
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'events',
-				array(
-					'labels'              => array(
-						'name'          => 'Event Photos',
-						'singular_name' => 'Event Photo',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_position'       => 10,
-					'menu_icon'           => 'dashicons-format-image',
-					'supports'            => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'custom-fields',
-					),
-					'has_archive'         => true,
-					'rewrite'             => array(
-						'feeds' => false,
-					),
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'events',
+			array(
+				'labels'              => array(
+					'name'          => 'Event Photos',
+					'singular_name' => 'Event Photo',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_position'       => 10,
+				'menu_icon'           => 'dashicons-format-image',
+				'supports'            => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'custom-fields',
+				),
+				'has_archive'         => true,
+				'rewrite'             => array(
+					'feeds' => false,
+				),
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'extra',
-				array(
-					'labels'           => array(
-						'name'          => 'Extra',
-						'singular_name' => 'Extra',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-plus',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'can_export'       => false,
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'extra',
+			array(
+				'labels'           => array(
+					'name'          => 'Extra',
+					'singular_name' => 'Extra',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-plus',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'can_export'       => false,
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'film',
-				array(
-					'labels'           => array(
-						'name'          => 'Film',
-						'singular_name' => 'Film',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-editor-video',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'film',
+			array(
+				'labels'           => array(
+					'name'          => 'Film',
+					'singular_name' => 'Film',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-editor-video',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'hero-banners',
-				array(
-					'labels'              => array(
-						'name'          => 'Hero Banner&#039;s',
-						'singular_name' => 'Hero Banner',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_nav_menus'   => false,
-					'show_in_rest'        => true,
-					'menu_position'       => 10,
-					'menu_icon'           => 'dashicons-slides',
-					'supports'            => array(
-						0 => 'editor',
-						1 => 'thumbnail',
-						2 => 'custom-fields',
-					),
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'hero-banners',
+			array(
+				'labels'              => array(
+					'name'          => 'Hero Banner&#039;s',
+					'singular_name' => 'Hero Banner',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_nav_menus'   => false,
+				'show_in_rest'        => true,
+				'menu_position'       => 10,
+				'menu_icon'           => 'dashicons-slides',
+				'supports'            => array(
+					0 => 'editor',
+					1 => 'thumbnail',
+					2 => 'custom-fields',
+				),
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'music',
-				array(
-					'labels'           => array(
-						'name'          => 'Music',
-						'singular_name' => 'Music',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-format-audio',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'music',
+			array(
+				'labels'           => array(
+					'name'          => 'Music',
+					'singular_name' => 'Music',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-format-audio',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'rsvp_events',
-				array(
-					'labels'              => array(
-						'name'          => 'RSVP Events',
-						'singular_name' => 'RSVP Event',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_position'       => 10,
-					'menu_icon'           => 'dashicons-tickets-alt',
-					'supports'            => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'custom-fields',
-					),
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'rsvp_events',
+			array(
+				'labels'              => array(
+					'name'          => 'RSVP Events',
+					'singular_name' => 'RSVP Event',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_position'       => 10,
+				'menu_icon'           => 'dashicons-tickets-alt',
+				'supports'            => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'custom-fields',
+				),
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'spotlight',
-				array(
-					'labels'           => array(
-						'name'          => 'Spotlight',
-						'singular_name' => 'Spotlight',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-lightbulb',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'spotlight',
+			array(
+				'labels'           => array(
+					'name'          => 'Spotlight',
+					'singular_name' => 'Spotlight',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-lightbulb',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'television',
-				array(
-					'labels'           => array(
-						'name'          => 'Television',
-						'singular_name' => 'Television',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-desktop',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'television',
+			array(
+				'labels'           => array(
+					'name'          => 'Television',
+					'singular_name' => 'Television',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-desktop',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'theatre',
-				array(
-					'labels'           => array(
-						'name'          => 'Theatre',
-						'singular_name' => 'Theatre',
-					),
-					'public'           => true,
-					'show_in_rest'     => true,
-					'menu_position'    => 40,
-					'menu_icon'        => 'dashicons-text-page',
-					'supports'         => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'thumbnail',
-						3 => 'custom-fields',
-					),
-					'taxonomies'       => array(
-						0 => 'post_tag',
-					),
-					'has_archive'      => true,
-					'rewrite'          => array(
-						'feeds' => false,
-					),
-					'delete_with_user' => false,
-				)
-			);
+		register_post_type(
+			'theatre',
+			array(
+				'labels'           => array(
+					'name'          => 'Theatre',
+					'singular_name' => 'Theatre',
+				),
+				'public'           => true,
+				'show_in_rest'     => true,
+				'menu_position'    => 40,
+				'menu_icon'        => 'dashicons-text-page',
+				'supports'         => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'thumbnail',
+					3 => 'custom-fields',
+				),
+				'taxonomies'       => array(
+					0 => 'post_tag',
+				),
+				'has_archive'      => true,
+				'rewrite'          => array(
+					'feeds' => false,
+				),
+				'delete_with_user' => false,
+			)
+		);
 
-			register_post_type(
-				'videos',
-				array(
-					'labels'              => array(
-						'name'          => 'Videos',
-						'singular_name' => 'Video',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_position'       => 10,
-					'menu_icon'           => 'dashicons-video-alt2',
-					'supports'            => array(
-						0 => 'title',
-						1 => 'editor',
-						2 => 'custom-fields',
-					),
-					'has_archive'         => true,
-					'rewrite'             => array(
-						'feeds' => false,
-					),
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'videos',
+			array(
+				'labels'              => array(
+					'name'          => 'Videos',
+					'singular_name' => 'Video',
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_position'       => 10,
+				'menu_icon'           => 'dashicons-video-alt2',
+				'supports'            => array(
+					0 => 'title',
+					1 => 'editor',
+					2 => 'custom-fields',
+				),
+				'has_archive'         => true,
+				'rewrite'             => array(
+					'feeds' => false,
+				),
+				'delete_with_user'    => false,
+			)
+		);
 
-			register_post_type(
-				'wh_cover',
-				array(
-					'labels'              => array(
-						'name'          => 'What&amp;#39;s Hot Cover',
-						'singular_name' => 'What&amp;#39;s Hot Cover',
-					),
-					'public'              => true,
-					'exclude_from_search' => true,
-					'show_in_rest'        => true,
-					'menu_position'       => 40,
-					'menu_icon'           => 'dashicons-star-filled',
-					'supports'            => array(
-						0 => 'title',
-						1 => 'thumbnail',
-						2 => 'editor',
-						3 => 'custom-fields',
-					),
-					'can_export'          => false,
-					'delete_with_user'    => false,
-				)
-			);
+		register_post_type(
+			'wh_cover',
+			array(
+				'labels'              => array(
+					'name'          => "What's Hot Cover",
+					'singular_name' => "What's Hot Cover",
+				),
+				'public'              => true,
+				'exclude_from_search' => true,
+				'show_in_rest'        => true,
+				'menu_position'       => 40,
+				'menu_icon'           => 'dashicons-star-filled',
+				'supports'            => array(
+					0 => 'title',
+					1 => 'thumbnail',
+					2 => 'editor',
+					3 => 'custom-fields',
+				),
+				'can_export'          => false,
+				'delete_with_user'    => false,
+			)
+		);
 	}
 
 	/** This is where you can register custom taxonomies. */
@@ -675,6 +675,60 @@ class LAAO_Setup {
 
 		// Loop through each Cover Story meta box configuration
 		foreach ( $cover_stories_meta as $meta_box ) {
+			foreach ( $meta_box['screens'] as $screen ) {
+				register_post_meta( $screen, $meta_box['id'], $meta_box['args'] );
+			}
+		}
+
+		$whats_hot_meta = array(
+			array(
+				'id'      => 'wh_link_to',
+				'screens' => $this->wh_post_types,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Link To',
+					'description'   => '',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+
+			array(
+				'id'      => 'wh_picture_id',
+				'screens' => $this->wh_post_types,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Picture ID',
+					'description'   => '',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+
+			array(
+				'id'      => 'wh_photo_credit',
+				'screens' => $this->wh_post_types,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Photo Credit',
+					'description'   => '',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+		);
+
+		// Loop through each What's Hot meta box configuration
+		foreach ( $whats_hot_meta as $meta_box ) {
 			foreach ( $meta_box['screens'] as $screen ) {
 				register_post_meta( $screen, $meta_box['id'], $meta_box['args'] );
 			}

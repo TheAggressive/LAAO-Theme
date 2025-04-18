@@ -91,6 +91,8 @@ const ImageCreditFields = () => {
 							photo_credits_types: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 			<PanelRow>
@@ -103,6 +105,8 @@ const ImageCreditFields = () => {
 							photo_credit_belongs_to: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 			<label

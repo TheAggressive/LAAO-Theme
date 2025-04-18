@@ -42,6 +42,8 @@ const HairMakeupFields = () => {
 							hair_by: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 			<PanelRow>
@@ -54,6 +56,8 @@ const HairMakeupFields = () => {
 							make_up_by: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 			<PanelRow>
@@ -66,6 +70,8 @@ const HairMakeupFields = () => {
 							grooming_by: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 		</PluginDocumentSettingPanel>

@@ -1,12 +1,12 @@
 .ad-break-300x250 {
-	@apply border-wp-laao-white block border-[1.5rem];
+	@apply block border-[1.5rem] border-wp-laao-white;
 
 	@media (--bp-lg) {
 		@apply hidden;
 	}
 }
 .ad-728x90 {
-	@apply border-wp-laao-white block w-fit border-[1.5rem];
+	@apply block w-fit max-w-[728px] border-[1.5rem] border-wp-laao-white;
 }
 
 .ad-break-728x90 {
@@ -18,5 +18,5 @@
 }
 
 .ad-720x300 {
-	@apply my-wp-44 border-wp-laao-white mx-auto block w-fit border-[1.5rem];
+	@apply mx-auto my-wp-44 block w-fit border-[1.5rem] border-wp-laao-white;
 }

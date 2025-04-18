@@ -55,6 +55,7 @@ const AuthorField = () => {
 						})
 					}
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			</PanelRow>
 			<PanelRow>
@@ -67,6 +68,8 @@ const AuthorField = () => {
 							author: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 		</PluginDocumentSettingPanel>

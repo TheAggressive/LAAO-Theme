@@ -56,6 +56,7 @@ export default function Edit({ attributes, setAttributes }) {
 								showStartingYear: !showStartingYear,
 							})
 						}
+						__nextHasNoMarginBottom
 					/>
 					{showStartingYear && (
 						<TextControl
@@ -64,6 +65,8 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={(value) =>
 								setAttributes({ startingYear: value })
 							}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/>
 					)}
 					<TextControl
@@ -72,6 +75,8 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(value) =>
 							setAttributes({ companyName: value })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</InspectorControls>

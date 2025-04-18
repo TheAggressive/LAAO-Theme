@@ -54,6 +54,8 @@ const EditorialFields = () => {
 							by_options: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 			<PanelRow>
@@ -66,6 +68,8 @@ const EditorialFields = () => {
 							author: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 		</PluginDocumentSettingPanel>

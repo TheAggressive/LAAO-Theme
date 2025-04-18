@@ -42,6 +42,8 @@ const LocationField = () => {
 							location: value,
 						})
 					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelRow>
 		</PluginDocumentSettingPanel>

@@ -25,6 +25,7 @@
   - Utilize WordPress's database abstraction layer (wpdb) for database interactions.
   - Use prepare() statements for secure database queries.
   - Implement proper database schema changes using dbDelta() function.
+  - Always use the most current block theme development API's and conventions
 
   Dependencies
   - WordPress (latest stable version)

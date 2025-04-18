@@ -116,6 +116,7 @@ export default function Edit({ attributes, setAttributes }) {
 								direction: newDirection,
 							});
 						}}
+						__next40pxDefaultSize
 					/>
 					{baseAnimations[attributes.animation]?.hasDirection && (
 						<SelectControl
@@ -128,6 +129,8 @@ export default function Edit({ attributes, setAttributes }) {
 								console.log(direction);
 								setAttributes({ direction });
 							}}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/>
 					)}
 					<ToggleControl
@@ -136,6 +139,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(staggerChildren) =>
 							setAttributes({ staggerChildren })
 						}
+						__nextHasNoMarginBottom
 					/>
 					{attributes.staggerChildren && (
 						<RangeControl
@@ -286,6 +290,8 @@ export default function Edit({ attributes, setAttributes }) {
 							"What percentage of the target's visibility should be in the Detection Boundary before the animation triggers. 0% means even if the target is not visible, the animation will trigger. 100% means the animation will trigger when the target is 100% in the Detection Boundary.",
 							'laao'
 						)}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
 						label={__('Debug Mode', 'laao')}
@@ -295,6 +301,7 @@ export default function Edit({ attributes, setAttributes }) {
 							'Shows visual indicators for the Detection Boundary & Visibility Trigger',
 							'laao'
 						)}
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</InspectorControls>

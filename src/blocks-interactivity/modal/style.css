@@ -5,46 +5,124 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.modal-container {
+/* Base modal styling */
+.wp-block-laao-modal {
+	font-size: 1em;
+	background: #ffff001a;
+	padding: 1em;
+}
+
+/* Modal container */
+.wp-block-laao-modal-container {
 	display: none;
+	position: fixed;
+	z-index: 1000;
+	overflow: auto;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.wp-block-laao-modal-container.is-open {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+/* Modal overlay */
+.wp-block-laao-modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.5);
-	z-index: 1000;
-	padding: 2rem;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	cursor: pointer;
+	display: none;
 }
 
-.modal-container.is-open {
-	display: flex;
+.wp-block-laao-modal-overlay.is-open {
+	display: block;
+}
+
+/* Modal content styling */
+.wp-block-laao-modal-content {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	max-width: 800px;
+	width: 100%;
+	position: relative;
+	max-height: 90vh;
+	overflow-y: auto;
+}
+
+.wp-block-laao-modal-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	border: none;
+	background: transparent;
+	padding: 5px;
+	font-size: 24px;
+	line-height: 1;
+	color: #333;
+}
+
+.wp-block-laao-modal-close:hover {
+	color: #000;
+}
+
+.wp-block-laao-modal-trigger {
+	cursor: pointer;
+}
+
+/* Position variants */
+.modal-position-center {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 	align-items: center;
 	justify-content: center;
 }
 
-.modal-content {
-	background: white;
-	padding: 2rem;
-	max-width: 600px;
-	width: 100%;
-	border-radius: 4px;
+.modal-position-top-left {
+	top: 30px;
+	left: 30px;
+	max-width: 400px;
 }
 
-.modal-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
+.modal-position-top-right {
+	top: 30px;
+	right: 30px;
+	max-width: 400px;
 }
 
-.modal-close {
-	cursor: pointer;
-	background: none;
-	border: none;
-	font-size: 1.5rem;
+.modal-position-bottom-left {
+	bottom: 30px;
+	left: 30px;
+	max-width: 400px;
 }
 
-.modal-trigger {
-	cursor: pointer;
+.modal-position-bottom-right {
+	bottom: 30px;
+	right: 30px;
+	max-width: 400px;
+}
+
+/* Responsive adjustment */
+@media screen and (max-width: 600px) {
+	.modal-position-top-left,
+	.modal-position-top-right,
+	.modal-position-bottom-left,
+	.modal-position-bottom-right {
+		max-width: 90%;
+		top: 5%;
+		right: 5%;
+		bottom: auto;
+		left: 5%;
+	}
 }

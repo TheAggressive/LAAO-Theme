@@ -60,6 +60,8 @@ export default function Edit({ attributes, setAttributes }) {
 						]}
 						onChange={(icon) => setAttributes({ icon })}
 						help={__('Select the icon to be displayed.', 'laao')}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</InspectorControls>

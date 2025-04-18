@@ -8,7 +8,7 @@
 .wp-block-laao-site-logo {
 	@apply h-fit w-fit;
 	img {
-		@apply h-full w-full;
+		@apply h-full w-64;
 
 		.a {
 			@apply fill-wp-laao-white;

@@ -79,6 +79,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 						onChange={(value) =>
 							setAttributes({ placeAfter: parseInt(value) })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</InspectorControls>
