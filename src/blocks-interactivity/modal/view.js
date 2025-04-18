@@ -265,109 +265,343 @@ store('laao/modal', {
 		/**
 		 * Toggles a modal open/closed
 		 *
-		 * @param {Object} storeApi - The WordPress Interactivity store
-		 * @param {Object} context  - The context object
+		 * @param {Object} storeApiOrContext - The WordPress Interactivity store or context object
+		 * @param {Object} [contextOrNone]   - The context object (if called programmatically)
 		 */
-		toggleModal: (storeApi, context) => {
-			console.log('toggleModal called with context:', context);
+		toggleModal: (storeApiOrContext, contextOrNone) => {
+			console.log(
+				'🔄 toggleModal called with:',
+				storeApiOrContext,
+				contextOrNone
+			);
 
-			// Safety checks
-			if (!storeApi || !context) {
-				console.warn('toggleModal: Missing required parameters');
-				return;
+			let storeApi, context, id;
+
+			// Handle different calling patterns
+			if (contextOrNone === undefined) {
+				// Called directly from interactivity API with a single context object
+				context = storeApiOrContext || {};
+
+				// Try to get store from interactivity API
+				try {
+					if (window.wp?.interactivity?.store) {
+						storeApi = window.wp.interactivity.store('laao/modal');
+					}
+				} catch (error) {
+					console.warn(
+						'Unable to get store from interactivity API:',
+						error
+					);
+				}
+			} else {
+				// Called programmatically with (storeApi, context)
+				storeApi = storeApiOrContext;
+				context = contextOrNone || {};
 			}
 
-			const { ref } = context;
-			const id = ref?.id;
-			console.log('Modal ID from context:', id);
+			console.log('🔍 Context after normalization:', context);
 
-			if (!id) {
-				console.error('No modal ID found in context');
-				return;
+			// Try to get ID from context in multiple ways
+			id = context?.ref?.id || context?.id;
+
+			// If we still don't have an ID but have an element reference, try to get ID from element
+			if (!id && context?.element) {
+				console.log('🔍 Looking for ID in element:', context.element);
+
+				// Try to get ID from data-context attribute
+				const contextAttr =
+					context.element.getAttribute('data-wp-context');
+				if (contextAttr) {
+					try {
+						const contextObj = JSON.parse(contextAttr);
+						if (contextObj?.id) {
+							id = contextObj.id;
+							console.log('✅ Found ID in data-wp-context:', id);
+						}
+					} catch (e) {
+						console.warn('Failed to parse context attribute:', e);
+					}
+				}
+
+				// Look for data-modal-id attribute on element or parents
+				if (!id) {
+					const modalParent =
+						context.element.closest('[data-modal-id]');
+					if (modalParent) {
+						id = modalParent.getAttribute('data-modal-id');
+						console.log('✅ Found ID in parent data-modal-id:', id);
+					}
+				}
+
+				// Look for aria-controls attribute
+				if (!id) {
+					const ariaControls =
+						context.element.getAttribute('aria-controls');
+					if (ariaControls) {
+						id = ariaControls;
+						console.log('✅ Found ID in aria-controls:', id);
+					}
+				}
 			}
 
-			// Try to use the interactivity store
-			try {
-				const { state } = storeApi;
-
-				// Safety check for state
-				if (!state) {
-					throw new Error('State is undefined');
-				}
-
-				// Initialize if not exists
-				if (!state.modals) {
-					state.modals = {};
-				}
-
-				if (!state.modals[id]) {
-					state.modals[id] = { isOpen: false };
-				}
-
-				// Toggle modal state
-				const isCurrentlyOpen = state.modals[id].isOpen;
-				state.modals[id].isOpen = !isCurrentlyOpen;
+			// If we have a DOM event, check if it's on a modal trigger
+			if (!id && context instanceof Event) {
 				console.log(
-					'Modal state after toggle:',
-					JSON.stringify(state.modals[id])
+					'🔍 Context is a DOM event, looking for trigger in target:',
+					context.target
 				);
 
-				// Update body overflow based on new state
-				if (!isCurrentlyOpen) {
-					// If opening, disable scrolling
-					document.body.style.overflow = 'hidden';
-				} else {
-					// If closing, re-enable scrolling
-					document.body.style.overflow = '';
-				}
-			} catch (error) {
-				// If the interactivity store fails, fall back to direct DOM manipulation
-				console.warn(
-					'Interactivity store failed, falling back to DOM manipulation'
+				const triggerElement = context.target.closest(
+					'[class*="modal-trigger-"]'
 				);
+				if (triggerElement) {
+					// Get trigger classes
+					const triggerClasses = triggerElement.className.split(' ');
 
-				// Get the modal and overlay elements
-				const modalElement = document.getElementById(id);
-				const modalOverlay = document.querySelector(
-					'.wp-block-laao-modal-overlay'
-				);
+					// Find modal ID from class
+					const modalTriggerClass = triggerClasses.find((className) =>
+						className.startsWith('modal-trigger-')
+					);
 
-				if (!modalElement) {
-					console.error('Modal element not found:', id);
-					return;
+					if (modalTriggerClass) {
+						id = modalTriggerClass.replace('modal-trigger-', '');
+						console.log('✅ Found ID in trigger class:', id);
+					}
 				}
 
-				// Check if it's currently visible
-				const isCurrentlyVisible =
-					window.getComputedStyle(modalElement).display !== 'none' ||
-					modalElement.classList.contains('is-open');
-
-				if (isCurrentlyVisible) {
-					// Close the modal
-					modalElement.style.display = 'none';
-					modalElement.classList.remove('is-open');
-
-					if (modalOverlay) {
-						modalOverlay.style.display = 'none';
-						modalOverlay.classList.remove('is-open');
+				// Check if clicked element has aria-controls
+				if (!id) {
+					const clickedElement =
+						context.target.closest('[aria-controls]');
+					if (clickedElement) {
+						id = clickedElement.getAttribute('aria-controls');
+						console.log('✅ Found ID in aria-controls:', id);
 					}
-
-					// Re-enable scrolling
-					document.body.style.overflow = '';
-				} else {
-					// Open the modal
-					modalElement.style.display = 'flex';
-					modalElement.classList.add('is-open');
-
-					if (modalOverlay) {
-						modalOverlay.style.display = 'block';
-						modalOverlay.classList.add('is-open');
-					}
-
-					// Disable scrolling
-					document.body.style.overflow = 'hidden';
 				}
 			}
+
+			// As a last resort, look for a visible modal-trigger button on the page
+			if (!id) {
+				console.log(
+					'⚠️ Still no ID found, looking for default trigger button'
+				);
+				const defaultTrigger = document.querySelector(
+					'.wp-block-laao-modal-trigger'
+				);
+				if (defaultTrigger) {
+					// Try to get ID from context
+					const contextAttr =
+						defaultTrigger.getAttribute('data-wp-context');
+					if (contextAttr) {
+						try {
+							const contextObj = JSON.parse(contextAttr);
+							if (contextObj?.id) {
+								id = contextObj.id;
+								console.log(
+									'✅ Found ID in default trigger data-context:',
+									id
+								);
+							}
+						} catch (e) {
+							console.warn(
+								'Failed to parse default trigger context:',
+								e
+							);
+						}
+					}
+
+					// Try aria-controls
+					if (!id && defaultTrigger.hasAttribute('aria-controls')) {
+						id = defaultTrigger.getAttribute('aria-controls');
+						console.log(
+							'✅ Found ID in default trigger aria-controls:',
+							id
+						);
+					}
+				}
+			}
+
+			// Final check for ID - if still none, look for ANY modal on the page
+			if (!id) {
+				console.log(
+					'⚠️ Last resort: looking for any modal on the page'
+				);
+				const anyModal = document.querySelector('.wp-block-laao-modal');
+				if (anyModal && anyModal.id) {
+					id = anyModal.id;
+					console.log('✅ Found ID from any modal on page:', id);
+				} else {
+					console.error(
+						'❌ Could not find any modal ID using any method'
+					);
+					return; // Cannot proceed without an ID
+				}
+			}
+
+			console.log('🎯 Final modal ID for toggle:', id);
+
+			// Now we have a valid ID, proceed with toggle logic
+			try {
+				// APPROACH 1: Try using the store API if available
+				if (storeApi && storeApi.state) {
+					console.log('🔄 Using store API approach');
+
+					// Initialize if not exists
+					if (!storeApi.state.modals) {
+						storeApi.state.modals = {};
+					}
+
+					if (!storeApi.state.modals[id]) {
+						storeApi.state.modals[id] = { isOpen: false };
+					}
+
+					// Toggle modal state
+					const isCurrentlyOpen = storeApi.state.modals[id].isOpen;
+					storeApi.state.modals[id].isOpen = !isCurrentlyOpen;
+					console.log(
+						'🔄 Modal state toggled through store. Now:',
+						!isCurrentlyOpen
+					);
+
+					// Update body overflow based on new state
+					if (!isCurrentlyOpen) {
+						// If opening, disable scrolling
+						document.body.style.overflow = 'hidden';
+					} else {
+						// If closing, re-enable scrolling
+						document.body.style.overflow = '';
+					}
+				} else {
+					// APPROACH 2: Fall back to direct DOM manipulation
+					console.log(
+						'⚠️ Store API not available, using DOM manipulation'
+					);
+
+					// Get the modal and overlay elements
+					const modalElement = document.getElementById(id);
+					const modalOverlay = document.querySelector(
+						'.wp-block-laao-modal-overlay'
+					);
+
+					if (!modalElement) {
+						console.error('❌ Modal element not found:', id);
+						return;
+					}
+
+					// Check if it's currently visible
+					const isCurrentlyVisible =
+						window.getComputedStyle(modalElement).display !==
+							'none' ||
+						modalElement.classList.contains('is-open');
+
+					console.log(
+						'🔍 Modal visibility status:',
+						isCurrentlyVisible
+					);
+
+					if (isCurrentlyVisible) {
+						// Close the modal
+						console.log('🔄 Closing modal via DOM');
+						modalElement.style.display = 'none';
+						modalElement.classList.remove('is-open');
+
+						if (modalOverlay) {
+							modalOverlay.style.display = 'none';
+							modalOverlay.classList.remove('is-open');
+						}
+
+						// Re-enable scrolling
+						document.body.style.overflow = '';
+					} else {
+						// Open the modal
+						console.log('🔄 Opening modal via DOM');
+						modalElement.style.display = 'flex';
+						modalElement.classList.add('is-open');
+
+						if (modalOverlay) {
+							modalOverlay.style.display = 'block';
+							modalOverlay.classList.add('is-open');
+						}
+
+						// Disable scrolling
+						document.body.style.overflow = 'hidden';
+					}
+				}
+
+				// APPROACH 3: After both attempts, verify the result and force if needed
+				setTimeout(() => {
+					const modalElement = document.getElementById(id);
+					if (!modalElement) {
+						return;
+					}
+
+					// Check whether we wanted to open or close
+					const shouldBeOpen =
+						!modalElement.classList.contains('is-open');
+
+					if (shouldBeOpen) {
+						// Forcibly open
+						console.log('🛠️ Force opening modal as final fallback');
+						modalElement.style.display = 'flex';
+						modalElement.classList.add('is-open');
+
+						const modalOverlay = document.querySelector(
+							'.wp-block-laao-modal-overlay'
+						);
+						if (modalOverlay) {
+							modalOverlay.style.display = 'block';
+							modalOverlay.classList.add('is-open');
+						}
+
+						document.body.style.overflow = 'hidden';
+					}
+				}, 100);
+			} catch (error) {
+				console.error('❌ Error in toggleModal:', error);
+
+				// Ultimate fallback - direct DOM manipulation without any checks
+				try {
+					console.log(
+						'🆘 Ultimate fallback: direct DOM manipulation'
+					);
+					const modalElement = document.getElementById(id);
+					if (modalElement) {
+						const isVisible =
+							modalElement.classList.contains('is-open');
+
+						if (isVisible) {
+							modalElement.style.display = 'none';
+							modalElement.classList.remove('is-open');
+							document.body.style.overflow = '';
+						} else {
+							modalElement.style.display = 'flex';
+							modalElement.classList.add('is-open');
+							document.body.style.overflow = 'hidden';
+						}
+
+						// Handle overlay
+						const overlay = document.querySelector(
+							'.wp-block-laao-modal-overlay'
+						);
+						if (overlay) {
+							if (isVisible) {
+								overlay.style.display = 'none';
+								overlay.classList.remove('is-open');
+							} else {
+								overlay.style.display = 'block';
+								overlay.classList.add('is-open');
+							}
+						}
+					}
+				} catch (ultimateError) {
+					console.error(
+						'💥 Ultimate fallback failed:',
+						ultimateError
+					);
+				}
+			}
+
+			console.log('🏁 toggleModal completed for ID:', id);
 		},
 
 		/**
