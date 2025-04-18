@@ -49,10 +49,14 @@ $trigger_label = esc_html( $attributes['triggerLabel'] );
 
 // Initialize the interactive state
 wp_interactivity_state(
-	'laao_modal_' . $unique_id,
+	'laao/modal',
 	array(
-		'isOpen'    => $open_on_load,
-		'triggerId' => $trigger_block_id,
+		'modals' => array(
+			$unique_id => array(
+				'isOpen'    => $open_on_load,
+				'triggerId' => $trigger_block_id,
+			),
+		),
 	)
 );
 
@@ -65,16 +69,19 @@ $inner_content = $content;
 
 <div
 	<?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>
-	data-wp-interactive="laao_modal_<?php echo esc_attr( $unique_id ); ?>"
-	data-wp-watch="callbacks.initModal"
+	data-wp-interactive="laao/modal"
+	data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
+	data-wp-on--mounted="effects.setupModalListeners"
 	data-modal-id="<?php echo esc_attr( $unique_id ); ?>"
+	<?php echo $open_on_load ? 'data-open-on-load="true"' : ''; ?>
 >
 	<?php if ( empty( $trigger_block_id ) ) : ?>
 	<!-- Default trigger button if no external trigger block is set -->
 	<button
 		class="wp-block-laao-modal-trigger"
 		data-wp-on--click="actions.toggleModal"
-		data-wp-bind--aria-expanded="state.isOpen"
+		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
+		data-wp-bind--aria-expanded="state.modals.<?php echo esc_attr( $unique_id ); ?>.isOpen"
 		aria-controls="<?php echo esc_attr( $unique_id ); ?>"
 	>
 		<?php echo esc_html( $trigger_label ); ?>
@@ -85,14 +92,20 @@ $inner_content = $content;
 	<div
 		class="wp-block-laao-modal-overlay"
 		data-wp-on--click="actions.closeModal"
-		data-wp-class--is-open="state.isOpen"
+		data-wp-on--keydown--escape="actions.handleKeydown"
+		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
+		data-wp-class--is-open="state.modals.<?php echo esc_attr( $unique_id ); ?>.isOpen"
 	></div>
 
 	<!-- Modal container -->
 	<div
 		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?>"
-		data-wp-class--is-open="state.isOpen"
+		data-wp-class--is-open="state.modals.<?php echo esc_attr( $unique_id ); ?>.isOpen"
+		data-wp-on--mounted="callbacks.focusTrapModal"
+		data-wp-on--unmounted="callbacks.focusTrapModal"
+		data-wp-watch="callbacks.focusTrapModal"
+		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="<?php echo esc_attr( $unique_id ); ?>-title"
@@ -101,6 +114,7 @@ $inner_content = $content;
 			<button
 				class="wp-block-laao-modal-close"
 				data-wp-on--click="actions.closeModal"
+				data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 				aria-label="<?php esc_attr_e( 'Close modal', 'modal' ); ?>"
 			>
 				&times;
@@ -199,15 +213,116 @@ $inner_content = $content;
 					trigger.setAttribute('aria-controls', modalId);
 					// Only prevent default for elements that might have default actions
 					trigger.addEventListener('click', function(e) {
+						console.log('🔵 Trigger clicked for modal:', modalId);
 						if (trigger.tagName === 'A' || trigger.tagName === 'BUTTON' ||
 							trigger.getAttribute('role') === 'button' || trigger.hasAttribute('href')) {
 							e.preventDefault();
 						}
+
+						// Debug the state before dispatching event
+						console.log('⚡ Current interactivity state before trigger:',
+							window.wp?.interactivity?.state?.['laao/modal']);
+
+						// Dispatch the event to open the modal
+						console.log('📣 Dispatching laao_modal_trigger event for modal ID:', modalId);
 						window.dispatchEvent(
 							new CustomEvent('laao_modal_trigger', {
 								detail: { modalId: modalId }
 							})
 						);
+
+						// Also try direct store manipulation as a fallback
+						try {
+							if (window.wp?.interactivity?.store) {
+								console.log('🔍 Attempting direct store manipulation');
+								const store = window.wp.interactivity.store;
+								const actions = store('laao/modal').actions;
+								if (actions && actions.openModal) {
+									console.log('📣 Calling openModal action directly');
+									actions.openModal(modalId);
+								}
+							}
+						} catch (error) {
+							console.error('❌ Error calling store directly:', error);
+						}
+
+						// DIRECT DOM MANIPULATION FALLBACK (most reliable)
+						const modalToOpen = document.getElementById(modalId);
+						if (modalToOpen) {
+							console.log('⚙️ Applying direct DOM manipulation');
+							// Find the overlay associated with this modal
+							const modalOverlay = document.querySelector('.wp-block-laao-modal-overlay');
+
+							// Set the modal visible with inline styles (overrides all CSS)
+							modalToOpen.style.display = 'flex';
+							modalToOpen.classList.add('is-open');
+
+							// Also show the overlay
+							if (modalOverlay) {
+								modalOverlay.style.display = 'block';
+								modalOverlay.classList.add('is-open');
+							}
+
+							// Disable body scrolling
+							document.body.style.overflow = 'hidden';
+
+							// Add close handlers to the overlay and close button
+							if (modalOverlay) {
+								modalOverlay.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									modalOverlay.style.display = 'none';
+									modalOverlay.classList.remove('is-open');
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add close handler to close button
+							const closeButton = modalToOpen.querySelector('.wp-block-laao-modal-close');
+							if (closeButton) {
+								closeButton.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add ESC key handler
+							document.addEventListener('keydown', function closeOnEsc(e) {
+								if (e.key === 'Escape') {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+									// Remove this event listener once modal is closed
+									document.removeEventListener('keydown', closeOnEsc);
+								}
+							});
+						}
+
+						// Check modal state after action
+						setTimeout(() => {
+							console.log('⏱️ Checking state after 100ms:',
+								window.wp?.interactivity?.state?.['laao/modal']);
+
+							// Check if modal is visible
+							const modalElement = document.getElementById(modalId);
+							if (modalElement) {
+								console.log('🔍 Modal element:', modalElement);
+								const modalContainer = modalElement.closest('.wp-block-laao-modal-container');
+								if (modalContainer) {
+									console.log('🔍 Modal container style:', modalContainer.style.display);
+									console.log('🔍 Modal container classes:', modalContainer.className);
+								}
+							}
+						}, 100);
 					});
 				});
 
@@ -249,15 +364,116 @@ $inner_content = $content;
 					el.setAttribute('aria-controls', modalId);
 					// Only prevent default for elements that might have default actions
 					el.addEventListener('click', function(e) {
+						console.log('🔵 Trigger clicked for modal:', modalId);
 						if (el.tagName === 'A' || el.tagName === 'BUTTON' ||
 							el.getAttribute('role') === 'button' || el.hasAttribute('href')) {
 							e.preventDefault();
 						}
+
+						// Debug the state before dispatching event
+						console.log('⚡ Current interactivity state before trigger:',
+							window.wp?.interactivity?.state?.['laao/modal']);
+
+						// Dispatch the event to open the modal
+						console.log('📣 Dispatching laao_modal_trigger event for modal ID:', modalId);
 						window.dispatchEvent(
 							new CustomEvent('laao_modal_trigger', {
 								detail: { modalId: modalId }
 							})
 						);
+
+						// Also try direct store manipulation as a fallback
+						try {
+							if (window.wp?.interactivity?.store) {
+								console.log('🔍 Attempting direct store manipulation');
+								const store = window.wp.interactivity.store;
+								const actions = store('laao/modal').actions;
+								if (actions && actions.openModal) {
+									console.log('📣 Calling openModal action directly');
+									actions.openModal(modalId);
+								}
+							}
+						} catch (error) {
+							console.error('❌ Error calling store directly:', error);
+						}
+
+						// DIRECT DOM MANIPULATION FALLBACK (most reliable)
+						const modalToOpen = document.getElementById(modalId);
+						if (modalToOpen) {
+							console.log('⚙️ Applying direct DOM manipulation');
+							// Find the overlay associated with this modal
+							const modalOverlay = document.querySelector('.wp-block-laao-modal-overlay');
+
+							// Set the modal visible with inline styles (overrides all CSS)
+							modalToOpen.style.display = 'flex';
+							modalToOpen.classList.add('is-open');
+
+							// Also show the overlay
+							if (modalOverlay) {
+								modalOverlay.style.display = 'block';
+								modalOverlay.classList.add('is-open');
+							}
+
+							// Disable body scrolling
+							document.body.style.overflow = 'hidden';
+
+							// Add close handlers to the overlay and close button
+							if (modalOverlay) {
+								modalOverlay.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									modalOverlay.style.display = 'none';
+									modalOverlay.classList.remove('is-open');
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add close handler to close button
+							const closeButton = modalToOpen.querySelector('.wp-block-laao-modal-close');
+							if (closeButton) {
+								closeButton.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add ESC key handler
+							document.addEventListener('keydown', function closeOnEsc(e) {
+								if (e.key === 'Escape') {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+									// Remove this event listener once modal is closed
+									document.removeEventListener('keydown', closeOnEsc);
+								}
+							});
+						}
+
+						// Check modal state after action
+						setTimeout(() => {
+							console.log('⏱️ Checking state after 100ms:',
+								window.wp?.interactivity?.state?.['laao/modal']);
+
+							// Check if modal is visible
+							const modalElement = document.getElementById(modalId);
+							if (modalElement) {
+								console.log('🔍 Modal element:', modalElement);
+								const modalContainer = modalElement.closest('.wp-block-laao-modal-container');
+								if (modalContainer) {
+									console.log('🔍 Modal container style:', modalContainer.style.display);
+									console.log('🔍 Modal container classes:', modalContainer.className);
+								}
+							}
+						}, 100);
 					});
 				});
 
@@ -274,15 +490,116 @@ $inner_content = $content;
 					trigger.setAttribute('aria-controls', modalId);
 					// Only prevent default for elements that might have default actions
 					trigger.addEventListener('click', function(e) {
+						console.log('🔵 Trigger clicked for modal:', modalId);
 						if (trigger.tagName === 'A' || trigger.tagName === 'BUTTON' ||
 							trigger.getAttribute('role') === 'button' || trigger.hasAttribute('href')) {
 							e.preventDefault();
 						}
+
+						// Debug the state before dispatching event
+						console.log('⚡ Current interactivity state before trigger:',
+							window.wp?.interactivity?.state?.['laao/modal']);
+
+						// Dispatch the event to open the modal
+						console.log('📣 Dispatching laao_modal_trigger event for modal ID:', modalId);
 						window.dispatchEvent(
 							new CustomEvent('laao_modal_trigger', {
 								detail: { modalId: modalId }
 							})
 						);
+
+						// Also try direct store manipulation as a fallback
+						try {
+							if (window.wp?.interactivity?.store) {
+								console.log('🔍 Attempting direct store manipulation');
+								const store = window.wp.interactivity.store;
+								const actions = store('laao/modal').actions;
+								if (actions && actions.openModal) {
+									console.log('📣 Calling openModal action directly');
+									actions.openModal(modalId);
+								}
+							}
+						} catch (error) {
+							console.error('❌ Error calling store directly:', error);
+						}
+
+						// DIRECT DOM MANIPULATION FALLBACK (most reliable)
+						const modalToOpen = document.getElementById(modalId);
+						if (modalToOpen) {
+							console.log('⚙️ Applying direct DOM manipulation');
+							// Find the overlay associated with this modal
+							const modalOverlay = document.querySelector('.wp-block-laao-modal-overlay');
+
+							// Set the modal visible with inline styles (overrides all CSS)
+							modalToOpen.style.display = 'flex';
+							modalToOpen.classList.add('is-open');
+
+							// Also show the overlay
+							if (modalOverlay) {
+								modalOverlay.style.display = 'block';
+								modalOverlay.classList.add('is-open');
+							}
+
+							// Disable body scrolling
+							document.body.style.overflow = 'hidden';
+
+							// Add close handlers to the overlay and close button
+							if (modalOverlay) {
+								modalOverlay.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									modalOverlay.style.display = 'none';
+									modalOverlay.classList.remove('is-open');
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add close handler to close button
+							const closeButton = modalToOpen.querySelector('.wp-block-laao-modal-close');
+							if (closeButton) {
+								closeButton.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add ESC key handler
+							document.addEventListener('keydown', function closeOnEsc(e) {
+								if (e.key === 'Escape') {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+									// Remove this event listener once modal is closed
+									document.removeEventListener('keydown', closeOnEsc);
+								}
+							});
+						}
+
+						// Check modal state after action
+						setTimeout(() => {
+							console.log('⏱️ Checking state after 100ms:',
+								window.wp?.interactivity?.state?.['laao/modal']);
+
+							// Check if modal is visible
+							const modalElement = document.getElementById(modalId);
+							if (modalElement) {
+								console.log('🔍 Modal element:', modalElement);
+								const modalContainer = modalElement.closest('.wp-block-laao-modal-container');
+								if (modalContainer) {
+									console.log('🔍 Modal container style:', modalContainer.style.display);
+									console.log('🔍 Modal container classes:', modalContainer.className);
+								}
+							}
+						}, 100);
 					});
 				});
 				// We found at least one trigger with the data attribute, so we're done
@@ -320,15 +637,116 @@ $inner_content = $content;
 					el.setAttribute('aria-controls', modalId);
 					// Only prevent default for elements that might have default actions
 					el.addEventListener('click', function(e) {
+						console.log('🔵 Trigger clicked for modal:', modalId);
 						if (el.tagName === 'A' || el.tagName === 'BUTTON' ||
 							el.getAttribute('role') === 'button' || el.hasAttribute('href')) {
 							e.preventDefault();
 						}
+
+						// Debug the state before dispatching event
+						console.log('⚡ Current interactivity state before trigger:',
+							window.wp?.interactivity?.state?.['laao/modal']);
+
+						// Dispatch the event to open the modal
+						console.log('📣 Dispatching laao_modal_trigger event for modal ID:', modalId);
 						window.dispatchEvent(
 							new CustomEvent('laao_modal_trigger', {
 								detail: { modalId: modalId }
 							})
 						);
+
+						// Also try direct store manipulation as a fallback
+						try {
+							if (window.wp?.interactivity?.store) {
+								console.log('🔍 Attempting direct store manipulation');
+								const store = window.wp.interactivity.store;
+								const actions = store('laao/modal').actions;
+								if (actions && actions.openModal) {
+									console.log('📣 Calling openModal action directly');
+									actions.openModal(modalId);
+								}
+							}
+						} catch (error) {
+							console.error('❌ Error calling store directly:', error);
+						}
+
+						// DIRECT DOM MANIPULATION FALLBACK (most reliable)
+						const modalToOpen = document.getElementById(modalId);
+						if (modalToOpen) {
+							console.log('⚙️ Applying direct DOM manipulation');
+							// Find the overlay associated with this modal
+							const modalOverlay = document.querySelector('.wp-block-laao-modal-overlay');
+
+							// Set the modal visible with inline styles (overrides all CSS)
+							modalToOpen.style.display = 'flex';
+							modalToOpen.classList.add('is-open');
+
+							// Also show the overlay
+							if (modalOverlay) {
+								modalOverlay.style.display = 'block';
+								modalOverlay.classList.add('is-open');
+							}
+
+							// Disable body scrolling
+							document.body.style.overflow = 'hidden';
+
+							// Add close handlers to the overlay and close button
+							if (modalOverlay) {
+								modalOverlay.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									modalOverlay.style.display = 'none';
+									modalOverlay.classList.remove('is-open');
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add close handler to close button
+							const closeButton = modalToOpen.querySelector('.wp-block-laao-modal-close');
+							if (closeButton) {
+								closeButton.onclick = function() {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+								};
+							}
+
+							// Add ESC key handler
+							document.addEventListener('keydown', function closeOnEsc(e) {
+								if (e.key === 'Escape') {
+									modalToOpen.style.display = 'none';
+									modalToOpen.classList.remove('is-open');
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove('is-open');
+									}
+									document.body.style.overflow = '';
+									// Remove this event listener once modal is closed
+									document.removeEventListener('keydown', closeOnEsc);
+								}
+							});
+						}
+
+						// Check modal state after action
+						setTimeout(() => {
+							console.log('⏱️ Checking state after 100ms:',
+								window.wp?.interactivity?.state?.['laao/modal']);
+
+							// Check if modal is visible
+							const modalElement = document.getElementById(modalId);
+							if (modalElement) {
+								console.log('🔍 Modal element:', modalElement);
+								const modalContainer = modalElement.closest('.wp-block-laao-modal-container');
+								if (modalContainer) {
+									console.log('🔍 Modal container style:', modalContainer.style.display);
+									console.log('🔍 Modal container classes:', modalContainer.className);
+								}
+							}
+						}, 100);
 					});
 				});
 			}

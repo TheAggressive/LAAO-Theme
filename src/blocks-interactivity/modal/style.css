@@ -7,14 +7,14 @@
 
 /* Base modal styling */
 .wp-block-laao-modal {
-	font-size: 1em;
-	background: #ffff001a;
-	padding: 1em;
+	/* Make sure the base block is invisible by default */
+	background: transparent;
+	padding: 0;
 }
 
 /* Modal container */
 .wp-block-laao-modal-container {
-	display: none;
+	display: none !important; /* Use !important to ensure it's hidden by default */
 	position: fixed;
 	z-index: 1000;
 	overflow: auto;
@@ -23,7 +23,7 @@
 }
 
 .wp-block-laao-modal-container.is-open {
-	display: flex;
+	display: flex !important; /* Use !important to override display:none */
 	align-items: flex-start;
 	justify-content: center;
 }
@@ -38,11 +38,11 @@
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 999;
 	cursor: pointer;
-	display: none;
+	display: none !important; /* Use !important to ensure it's hidden by default */
 }
 
 .wp-block-laao-modal-overlay.is-open {
-	display: block;
+	display: block !important; /* Use !important to override display:none */
 }
 
 /* Modal content styling */
