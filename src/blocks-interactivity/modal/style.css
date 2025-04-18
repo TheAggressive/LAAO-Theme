@@ -7,25 +7,26 @@
 
 /* Base modal styling */
 .wp-block-laao-modal {
-	/* Make sure the base block is invisible by default */
-	background: transparent;
 	padding: 0;
 }
 
 /* Modal container */
 .wp-block-laao-modal-container {
-	display: none !important; /* Use !important to ensure it's hidden by default */
+	display: none;
 	position: fixed;
 	z-index: 1000;
 	overflow: auto;
 	padding: 20px;
-	box-sizing: border-box;
-}
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 
-.wp-block-laao-modal-container.is-open {
-	display: flex !important; /* Use !important to override display:none */
-	align-items: flex-start;
-	justify-content: center;
+	&.is-active {
+		display: flex;
+	}
 }
 
 /* Modal overlay */
@@ -38,20 +39,20 @@
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 999;
 	cursor: pointer;
-	display: none !important; /* Use !important to ensure it's hidden by default */
-}
+	display: none; /* Use !important to ensure it's hidden by default */
 
-.wp-block-laao-modal-overlay.is-open {
-	display: block !important; /* Use !important to override display:none */
+	&.is-active {
+		display: block; /* Use !important to override display:none */
+	}
 }
 
 /* Modal content styling */
-.wp-block-laao-modal-content {
+[class*="wp-block-laao-modal-"][class$="-content"] {
 	background-color: #fff;
 	padding: 20px;
 	border-radius: 5px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	max-width: 800px;
+	max-width: 600px;
 	width: 100%;
 	position: relative;
 	max-height: 90vh;
@@ -81,36 +82,28 @@
 
 /* Position variants */
 .modal-position-center {
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
 	align-items: center;
 	justify-content: center;
 }
 
 .modal-position-top-left {
-	top: 30px;
-	left: 30px;
-	max-width: 400px;
+	align-items: flex-start;
+	justify-content: flex-start;
 }
 
 .modal-position-top-right {
-	top: 30px;
-	right: 30px;
-	max-width: 400px;
+	align-items: flex-start;
+	justify-content: flex-end;
 }
 
 .modal-position-bottom-left {
-	bottom: 30px;
-	left: 30px;
-	max-width: 400px;
+	align-items: flex-end;
+	justify-content: flex-start;
 }
 
 .modal-position-bottom-right {
-	bottom: 30px;
-	right: 30px;
-	max-width: 400px;
+	align-items: flex-end;
+	justify-content: flex-end;
 }
 
 /* Responsive adjustment */
