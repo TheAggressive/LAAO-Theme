@@ -6,11 +6,11 @@ import { getContext, store } from '@wordpress/interactivity';
 /**
  * Internal dependencies
  */
-import { focusTrap } from './helpers';
+import { trapFocus } from '../../utils/focusTrap';
 
 /**
  * Force open a modal by directly manipulating DOM
- * @param modalId
+ * @param {string} modalId - The ID of the modal to open
  */
 const forceOpenModal = (modalId) => {
 	try {
@@ -45,6 +45,9 @@ const forceOpenModal = (modalId) => {
 
 		// Disable body scrolling
 		document.body.style.overflow = 'hidden';
+
+		// Apply focus trap directly
+		trapFocus(modalContainer);
 
 		console.log('✅ Modal forced open');
 		return true;
@@ -250,14 +253,16 @@ store('laao/modal', {
 			// Check if modal actually opened after a short delay
 			setTimeout(() => {
 				const modalContainer = document.getElementById(id);
-				if (
-					modalContainer &&
-					!modalContainer.classList.contains('is-open')
-				) {
-					console.warn(
-						'⚠️ Modal did not open through state. Trying force open...'
-					);
-					forceOpenModal(id);
+				if (modalContainer) {
+					if (!modalContainer.classList.contains('is-open')) {
+						console.warn(
+							'⚠️ Modal did not open through state. Trying force open...'
+						);
+						forceOpenModal(id);
+					} else {
+						// Apply focus trap directly to the opened modal
+						trapFocus(modalContainer);
+					}
 				}
 			}, 200);
 		},
@@ -723,7 +728,7 @@ store('laao/modal', {
 
 			// Only trap focus when modal is open
 			if (isOpen && element) {
-				focusTrap(element);
+				trapFocus(element);
 			}
 		},
 	},
@@ -865,7 +870,13 @@ store('laao/modal', {
 			document.addEventListener('keydown', (event) => {
 				// Close open modals on escape key
 				if (event.key === 'Escape') {
+					// Try multiple approaches to close any open modal
+
+					// APPROACH 1: Use the interactivity state if available
 					const { modals } = getContext('laao/modal');
+
+					let modalClosed = false;
+
 					if (modals) {
 						Object.entries(modals).forEach(([id, modal]) => {
 							if (modal.isOpen) {
@@ -875,6 +886,7 @@ store('laao/modal', {
 									const context = { ref: { id } };
 									// Call closeModal with this context
 									modalStore.actions.closeModal(context);
+									modalClosed = true;
 								} catch (error) {
 									// If store approach fails, try direct DOM manipulation
 									try {
@@ -901,6 +913,7 @@ store('laao/modal', {
 
 											// Re-enable scrolling
 											document.body.style.overflow = '';
+											modalClosed = true;
 										}
 									} catch (fallbackError) {
 										console.error(
@@ -911,11 +924,15 @@ store('laao/modal', {
 								}
 							}
 						});
-					} else {
-						// If we can't get modals from context, try to find open modal in DOM
+					}
+
+					// APPROACH 2: If we couldn't close a modal through the state, look for any open modal in the DOM
+					if (!modalClosed) {
+						// Use DOM to find any open modal container
 						const openModal = document.querySelector(
 							'.wp-block-laao-modal-container.is-open'
 						);
+
 						if (openModal && openModal.id) {
 							try {
 								const modalStore = storeApi('laao/modal');
@@ -925,25 +942,112 @@ store('laao/modal', {
 								modalStore.actions.closeModal(context);
 							} catch (error) {
 								// Direct DOM manipulation as fallback
-								openModal.style.display = 'none';
-								openModal.classList.remove('is-open');
+								try {
+									openModal.style.display = 'none';
+									openModal.classList.remove('is-open');
 
-								// Also close overlay
-								const modalOverlay = document.querySelector(
-									'.wp-block-laao-modal-overlay'
-								);
-								if (modalOverlay) {
-									modalOverlay.style.display = 'none';
-									modalOverlay.classList.remove('is-open');
+									// Also close overlay
+									const modalOverlay = document.querySelector(
+										'.wp-block-laao-modal-overlay'
+									);
+									if (modalOverlay) {
+										modalOverlay.style.display = 'none';
+										modalOverlay.classList.remove(
+											'is-open'
+										);
+									}
+
+									// Re-enable scrolling
+									document.body.style.overflow = '';
+								} catch (innerError) {
+									console.error(
+										'Error in DOM fallback for Escape key:',
+										innerError
+									);
 								}
-
-								// Re-enable scrolling
-								document.body.style.overflow = '';
 							}
+						} else {
+							// APPROACH 3: Last resort - find any element with modal styling
+							const modalElements = document.querySelectorAll(
+								'.wp-block-laao-modal-content'
+							);
+
+							modalElements.forEach((element) => {
+								// Find the parent container
+								const container = element.closest(
+									'.wp-block-laao-modal-container'
+								);
+								if (container) {
+									container.style.display = 'none';
+									container.classList.remove('is-open');
+								}
+							});
+
+							// Always try to reset overlay and body
+							const modalOverlay = document.querySelector(
+								'.wp-block-laao-modal-overlay'
+							);
+							if (modalOverlay) {
+								modalOverlay.style.display = 'none';
+								modalOverlay.classList.remove('is-open');
+							}
+
+							// Re-enable scrolling
+							document.body.style.overflow = '';
 						}
 					}
+
+					// Ensure the event doesn't propagate
+					event.preventDefault();
+					event.stopPropagation();
 				}
 			});
 		},
 	},
+});
+
+// Add direct document-level handler for Escape key
+document.addEventListener('keydown', function (event) {
+	if (event.key === 'Escape') {
+		// Find any open modal in the DOM
+		const openModal = document.querySelector(
+			'.wp-block-laao-modal-container.is-open'
+		);
+		if (openModal) {
+			// Get the modal ID
+			const modalId = openModal.id;
+			if (modalId) {
+				try {
+					// Try to use the store if it's available
+					if (window.wp?.interactivity?.store) {
+						const store =
+							window.wp.interactivity.store('laao/modal');
+						if (store?.actions?.closeModal) {
+							// Close using the store
+							store.actions.closeModal({ ref: { id: modalId } });
+							return;
+						}
+					}
+				} catch (error) {
+					// Silently continue to fallback
+				}
+
+				// Direct DOM fallback
+				openModal.style.display = 'none';
+				openModal.classList.remove('is-open');
+
+				// Close overlay
+				const modalOverlay = document.querySelector(
+					'.wp-block-laao-modal-overlay'
+				);
+				if (modalOverlay) {
+					modalOverlay.style.display = 'none';
+					modalOverlay.classList.remove('is-open');
+				}
+
+				// Re-enable scrolling
+				document.body.style.overflow = '';
+			}
+		}
+	}
 });
