@@ -45,25 +45,6 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* More specific selector for the label when modal is selected */
-.wp-block-laao-modal.is-selected .modal-highlight-target::before {
-	content: "MODAL TRIGGER" !important;
-	position: absolute !important;
-	top: -22px !important;
-	left: 50% !important;
-	transform: translateX(-50%) !important;
-	background: rgba(0, 124, 186, 0.8) !important;
-	color: #fff !important;
-	padding: 2px 6px !important;
-	border-radius: 3px !important;
-	font-size: 10px !important;
-	font-weight: 700 !important;
-	white-space: nowrap !important;
-	z-index: 10 !important;
-	pointer-events: none !important;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-}
-
 @keyframes modal-direct-pulse {
 	0% {
 		outline-color: #007cba;
@@ -352,32 +333,25 @@
 	align-items: center;
 }
 
-.modal-position-center .modal-editor-content {
-	margin: 0 auto;
+/* Position variants */
+.modal-position-center {
+	@apply left-0 top-0 -translate-x-0 -translate-y-0;
 }
 
-.modal-position-top-left .modal-editor-content {
-	margin-left: 0;
-	margin-right: auto;
-	margin-top: 0;
+.modal-position-top-left {
+	@apply left-0 top-0;
 }
 
-.modal-position-top-right .modal-editor-content {
-	margin-left: auto;
-	margin-right: 0;
-	margin-top: 0;
+.modal-position-top-right {
+	@apply right-0 top-0;
 }
 
-.modal-position-bottom-left .modal-editor-content {
-	margin-left: 0;
-	margin-right: auto;
-	margin-top: auto;
+.modal-position-bottom-left {
+	@apply bottom-0 left-0;
 }
 
-.modal-position-bottom-right .modal-editor-content {
-	margin-left: auto;
-	margin-right: 0;
-	margin-top: auto;
+.modal-position-bottom-right {
+	@apply bottom-0 right-0;
 }
 
 .modal-button-debug-panel .modal-detected-buttons {
@@ -572,22 +546,6 @@
 	box-shadow: 0 0 0 1px #007cba;
 	outline: none;
 	border-radius: 4px;
-}
-
-.editor-styles-wrapper [class*="modal-trigger-"]::before {
-	content: "Modal Trigger";
-	position: absolute;
-	top: -20px;
-	left: 50%;
-	transform: translateX(-50%);
-	background: rgba(0, 124, 186, 0.8);
-	color: #fff;
-	font-size: 9px;
-	padding: 1px 4px;
-	border-radius: 2px;
-	display: none;
-	z-index: 5;
-	pointer-events: none;
 }
 
 .editor-styles-wrapper .modal-block [class*="modal-trigger-"]::before,

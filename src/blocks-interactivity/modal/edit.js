@@ -1738,14 +1738,14 @@ export default function Edit({
 						)}
 
 						{safeTriggerBlockId ? (
-							<div className="modal-trigger-indicator">
+							<div>
 								<span>
 									{__('Has trigger block', 'modal')}{' '}
 									<Icon icon={linkIcon} size={14} />
 								</span>
 							</div>
 						) : (
-							<div className="modal-trigger-indicator">
+							<div>
 								<span>
 									{__('Trigger label:', 'modal')}{' '}
 									{triggerLabel}

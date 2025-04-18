@@ -2,12 +2,6 @@ export const trapFocus = (element, isActive) => {
 	const focusableSelector =
 		'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-	console.log('trapFocus called with:', element, isActive);
-	console.log(
-		'focusable elements:',
-		element.querySelectorAll(focusableSelector)
-	);
-
 	if (!isActive) {
 		// Remove event listeners when inactive
 		return;
