@@ -1,15 +1,25 @@
 export const trapFocus = (element, isActive) => {
-	const focusableElements =
+	const focusableSelector =
 		'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-	const firstFocusableElement =
-		element.querySelectorAll(focusableElements)[0];
-	const focusableContent = element.querySelectorAll(focusableElements);
-	const lastFocusableElement = focusableContent[focusableContent.length - 1];
+
+	console.log('trapFocus called with:', element, isActive);
+	console.log(
+		'focusable elements:',
+		element.querySelectorAll(focusableSelector)
+	);
+
+	if (!isActive) {
+		// Remove event listeners when inactive
+		return;
+	}
+
+	const focusableElements = element.querySelectorAll(focusableSelector);
+	const firstFocusableElement = focusableElements[0];
+	const lastFocusableElement =
+		focusableElements[focusableElements.length - 1];
 
 	// Store the previously focused element
-	if (isActive) {
-		element._previouslyFocusedElement = element.ownerDocument.activeElement;
-	}
+	element._previouslyFocusedElement = element.ownerDocument.activeElement;
 
 	const handleKeyDown = (e) => {
 		const isTabPressed = e.key === 'Tab';
@@ -33,12 +43,15 @@ export const trapFocus = (element, isActive) => {
 	// Clean up any existing listener
 	element.removeEventListener('keydown', element._trapFocusHandler);
 
-	if (isActive) {
-		element._trapFocusHandler = handleKeyDown;
-		element.addEventListener('keydown', handleKeyDown);
-		firstFocusableElement?.focus();
+	element._trapFocusHandler = handleKeyDown;
+	element.addEventListener('keydown', handleKeyDown);
+
+	// Set initial focus on first focusable element
+	if (focusableElements.length > 0) {
+		firstFocusableElement.focus();
 	} else {
-		// Restore focus to the previously focused element
-		element._previouslyFocusedElement?.focus();
+		// If no focusable elements, focus the container itself
+		element.setAttribute('tabindex', '-1');
+		element.focus();
 	}
 };

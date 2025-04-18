@@ -55,9 +55,10 @@ wp_interactivity_state(
 	array(
 		'modals' => array(
 			$unique_id => array(
-				'isActive'  => $open_on_load,
-				'triggerId' => $trigger_block_id,
-				'id'        => $unique_id,
+				'isActive'   => false,
+				'triggerId'  => $trigger_block_id,
+				'id'         => $unique_id,
+				'openOnLoad' => $open_on_load,
 			),
 		),
 	)
@@ -74,7 +75,7 @@ $inner_content = $content;
 	<?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>
 	data-wp-interactive="laao/modal"
 	data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
-	data-modal-id="<?php echo esc_attr( $unique_id ); ?>"
+	data-wp-init="actions.init"
 	<?php echo $open_on_load ? 'data-open-on-load="true"' : ''; ?>
 >
 	<?php if ( empty( $trigger_block_id ) ) : ?>
@@ -94,8 +95,7 @@ $inner_content = $content;
 	<div
 		class="wp-block-laao-modal-overlay"
 		data-wp-on--click="actions.closeModal"
-		data-wp-on--keydown--escape="actions.handleKeydown"
-		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
+		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 	></div>
 
@@ -104,6 +104,7 @@ $inner_content = $content;
 		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?>"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		role="dialog"
 		aria-modal="true"
@@ -115,6 +116,7 @@ $inner_content = $content;
 				data-wp-on--click="actions.closeModal"
 				data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 				aria-label="<?php esc_attr_e( 'Close modal', 'laao' ); ?>"
+				tabindex="-1"
 			>
 				&times;
 			</button>

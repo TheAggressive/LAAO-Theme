@@ -14,33 +14,76 @@ import { getContext, store } from '@wordpress/interactivity';
 import { trapFocus } from '../../utils/focusTrap';
 
 const { state, actions } = store('laao/modal', {
-	state: {},
+	state: {
+		modals: {},
+	},
 	actions: {
+		init: () => {
+			const ctx = getContext();
+
+			if (state.modals[ctx.id].openOnLoad) {
+				actions.openModal();
+			}
+		},
 		openModal: () => {
 			const ctx = getContext();
+			if (!ctx || !ctx.id) {
+				return;
+			}
+
+			if (!state.modals[ctx.id]) {
+				state.modals[ctx.id] = { isActive: false };
+			}
+
+			const modalContainer = document.querySelector(
+				`.wp-block-laao-${ctx.id}-content`
+			);
+
+			if (!modalContainer) {
+				return;
+			}
+
 			state.modals[ctx.id].isActive = true;
 
-			console.log(state);
-
-			const nav = document.querySelector(
-				`.wp-block-laao-modal-${state.id}-content`
-			);
-			if (nav) {
-				trapFocus(nav, state.isOpen);
-			}
+			setTimeout(() => {
+				trapFocus(modalContainer, true);
+			}, 10);
 		},
 		closeModal: () => {
 			const ctx = getContext();
+			if (!ctx || !ctx.id) {
+				return;
+			}
+
+			if (!state.modals[ctx.id]) {
+				state.modals[ctx.id] = { isActive: false };
+				return;
+			}
+
 			state.modals[ctx.id].isActive = false;
+
+			const modalContainer = document.querySelector(
+				`.wp-block-laao-modal-${ctx.id}-content`
+			);
+			if (modalContainer && modalContainer._previouslyFocusedElement) {
+				modalContainer._previouslyFocusedElement.focus();
+			}
 		},
 	},
 	callbacks: {
 		handleKeydown(event) {
 			const ctx = getContext();
-			if (ctx.isActive) {
-				if (event.key === 'Escape') {
-					actions.closeModal();
-				}
+			if (!ctx || !ctx.id) {
+				return;
+			}
+
+			if (!state.modals[ctx.id]) {
+				state.modals[ctx.id] = { isActive: false };
+				return;
+			}
+
+			if (state.modals[ctx.id].isActive && event.key === 'Escape') {
+				actions.closeModal();
 			}
 		},
 	},
