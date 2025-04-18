@@ -31,34 +31,37 @@ import { link as linkIcon } from '@wordpress/icons';
  * Internal dependencies
  */
 import './editor.css';
-import {
-	cleanupAllHighlights,
-	findBlockDomElement,
-	highlightModalTrigger,
-} from './highlights';
+import { cleanupAllHighlights, highlightModalTrigger } from './highlights';
 
 /**
  * Simple debug utility for development
  */
 const Debug = {
 	messages: [],
-	enabled: true,
+	enabled: false, // Disable debug output by default
 
 	/**
 	 * Add a debug message
-	 * @param {string} message - The message to add
+	 * @param {string}  message  - The message to add
+	 * @param {boolean} critical - Whether this is a critical error message
 	 */
-	add(message) {
-		if (!this.enabled) {
+	add(message, critical = false) {
+		// Always log critical errors, regardless of enabled state
+		if (!this.enabled && !critical) {
 			return;
 		}
+
 		this.messages.push({
 			time: Date.now(),
 			message,
+			critical,
 		});
-		// Log to console too for immediate feedback
-		// eslint-disable-next-line no-console
-		console.log('[Modal Debug]', message);
+
+		// Log to console only if enabled or critical
+		if (this.enabled || critical) {
+			// eslint-disable-next-line no-console
+			console.log('[Modal Debug]', message);
+		}
 	},
 
 	/**
@@ -102,10 +105,10 @@ const copyTextFallback = (text) => {
 		// Execute the copy command
 		successful = document.execCommand('copy');
 		if (!successful) {
-			Debug.add('Fallback clipboard copy failed');
+			Debug.add('Fallback clipboard copy failed', true);
 		}
 	} catch (err) {
-		Debug.add(`Fallback clipboard copy error: ${err.message}`);
+		Debug.add(`Fallback clipboard copy error: ${err.message}`, true);
 	}
 
 	// Clean up
@@ -216,12 +219,11 @@ const findTriggerElements = (blocksOrIncludeFlag = true, modalId = '') => {
 	);
 
 	// Get the WordPress data API objects
-	const blockEditor = window.wp?.data?.select('core/block-editor');
-	const coreEditor = window.wp?.data?.select('core/editor');
-	const editSite = window.wp?.data?.select('core/edit-site');
+	const { select } = wp.data;
+	const blockEditor = select('core/block-editor');
 
 	if (!blockEditor && !isDirectBlocksArray) {
-		Debug.add('Block editor API not available');
+		Debug.add('Block editor API not available', true);
 		return [];
 	}
 
@@ -285,33 +287,55 @@ const findTriggerElements = (blocksOrIncludeFlag = true, modalId = '') => {
 		try {
 			let templateParts = [];
 
-			// In site editor
-			if (editSite) {
-				const templateEntities = editSite.getEditedEntityRecords(
-					'postType',
-					'wp_template_part'
-				);
-
-				if (templateEntities && templateEntities.length) {
-					Debug.add(
-						`Found ${templateEntities.length} template parts in site editor`
+			// In site editor - only access when needed
+			const editSite = select('core/edit-site');
+			if (
+				editSite &&
+				typeof editSite.getEditedEntityRecords === 'function'
+			) {
+				try {
+					const templateEntities = editSite.getEditedEntityRecords(
+						'postType',
+						'wp_template_part'
 					);
-					templateParts = templateParts.concat(templateEntities);
+
+					if (templateEntities && templateEntities.length) {
+						Debug.add(
+							`Found ${templateEntities.length} template parts in site editor`
+						);
+						templateParts = templateParts.concat(templateEntities);
+					}
+				} catch (siteEditorError) {
+					Debug.add(
+						`Error accessing site editor: ${siteEditorError.message}`,
+						true
+					);
 				}
 			}
 
-			// In post editor
-			if (coreEditor) {
-				const coreTemplates = coreEditor.getEditedEntityRecords(
-					'postType',
-					'wp_template_part'
-				);
-
-				if (coreTemplates && coreTemplates.length) {
-					Debug.add(
-						`Found ${coreTemplates.length} template parts in post editor`
+			// In post editor - only access when needed
+			const coreEditor = select('core/editor');
+			if (
+				coreEditor &&
+				typeof coreEditor.getEditedEntityRecords === 'function'
+			) {
+				try {
+					const coreTemplates = coreEditor.getEditedEntityRecords(
+						'postType',
+						'wp_template_part'
 					);
-					templateParts = templateParts.concat(coreTemplates);
+
+					if (coreTemplates && coreTemplates.length) {
+						Debug.add(
+							`Found ${coreTemplates.length} template parts in post editor`
+						);
+						templateParts = templateParts.concat(coreTemplates);
+					}
+				} catch (coreEditorError) {
+					Debug.add(
+						`Error accessing core editor: ${coreEditorError.message}`,
+						true
+					);
 				}
 			}
 
@@ -333,7 +357,7 @@ const findTriggerElements = (blocksOrIncludeFlag = true, modalId = '') => {
 				}
 			});
 		} catch (error) {
-			Debug.add(`Error getting template parts: ${error.message}`);
+			Debug.add(`Error getting template parts: ${error.message}`, true);
 		}
 	}
 
@@ -358,7 +382,7 @@ const processBlocksForTriggers = (
 	modalId = ''
 ) => {
 	if (!blocks || !Array.isArray(blocks)) {
-		Debug.add('No blocks to process or invalid blocks array');
+		Debug.add('No blocks to process or invalid blocks array', true);
 		return;
 	}
 
@@ -482,44 +506,57 @@ const processBlocksForTriggers = (
 };
 
 /**
- * Get a human-readable label for a block
+ * Get a human readable label for a block
  *
- * @param {Object} block - The block object
- * @return {string} - A human-readable label
+ * @param {Object} block - The block to get a label for
+ * @return {string} A label for the block
  */
 const getBlockLabel = (block) => {
-	// Try to get the most relevant label
+	// Always return empty string for missing blocks
+	if (!block) {
+		return '';
+	}
+
+	// Try to find a meaningful label based on block type
 	let label = '';
 
-	if (block.attributes) {
+	if (block.name === 'core/button') {
 		// For buttons, use the text content
-		if (block.attributes.text) {
-			label = block.attributes.text;
-		}
+		label = block.attributes?.text || 'Button';
+	} else if (block.name === 'core/paragraph') {
+		// For paragraphs, use a trimmed version of the content
+		const content = block.attributes?.content || '';
+		// Strip HTML tags and trim
+		const plainText = content.replace(/<[^>]*>/g, '').trim();
+		// Truncate if too long
+		label =
+			plainText.length > 30
+				? plainText.substring(0, 30) + '...'
+				: plainText || 'Paragraph';
+	} else if (block.name === 'core/heading') {
+		// For headings, use the content
+		const content = block.attributes?.content || '';
+		// Strip HTML tags and trim
+		const plainText = content.replace(/<[^>]*>/g, '').trim();
+		// Truncate if too long
+		label =
+			plainText.length > 30
+				? plainText.substring(0, 30) + '...'
+				: plainText || 'Heading';
+	} else if (block.name === 'core/navigation-link') {
 		// For navigation links, use the label
-		else if (block.attributes.label) {
-			label = block.attributes.label;
-		}
-		// For others, try to find a title or content
-		else if (block.attributes.title) {
-			label = block.attributes.title;
-		} else if (block.attributes.content) {
-			// If content is HTML, strip tags
-			if (typeof block.attributes.content === 'string') {
-				label = block.attributes.content.replace(/<[^>]*>/g, '');
-			}
-		}
-	}
-
-	// Truncate if too long
-	if (label && label.length > 30) {
-		label = label.substring(0, 27) + '...';
-	}
-
-	// If we didn't find a good label, use the block name + id
-	if (!label) {
-		const blockName = block.name.split('/').pop();
-		label = `${blockName} (${block.clientId.slice(-8)})`;
+		label = block.attributes?.label || 'Navigation Link';
+	} else if (block.name === 'core/image') {
+		// For images, use the alt text or a generic label
+		label = block.attributes?.alt || 'Image';
+	} else {
+		// Default to the block name for other blocks
+		label = block.name.replace('core/', '').replace(/-/g, ' ');
+		// Capitalize first letter of each word
+		label = label
+			.split(' ')
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
 	}
 
 	return label;
@@ -569,63 +606,136 @@ export default function Edit({
 	const updateBlockTriggerClass = useCallback(
 		(blockId, modalVal, add = true) => {
 			if (!blockId) {
-				Debug.add('updateBlockTriggerClass: Missing blockId');
+				Debug.add('updateBlockTriggerClass: Missing blockId', true);
+				return;
+			}
+
+			// Check if the block exists first
+			const blockEditor = wp.data.select('core/block-editor');
+
+			// Get the block itself first to verify it exists
+			const block = blockEditor.getBlock(blockId);
+
+			if (!block) {
+				Debug.add(`Block ${blockId} not found in editor`, true);
 				return;
 			}
 
 			// Get the block's current attributes
-			const blockEditor = wp.data.select('core/block-editor');
 			const blockAttributes = blockEditor.getBlockAttributes(blockId);
 
 			if (!blockAttributes) {
-				Debug.add(`Could not get attributes for block ${blockId}`);
+				Debug.add(
+					`Could not get attributes for block ${blockId}`,
+					true
+				);
+				// Still attempt to get attributes directly from the block object as fallback
+				if (block.attributes) {
+					Debug.add(
+						`Using attributes from block object as fallback`,
+						true
+					);
+					const currentClassName = block.attributes.className || '';
+
+					// Continue with the class update using the block object's attributes
+					if (!add) {
+						// Remove all modal-trigger classes regardless of modal ID
+						const cleanedClassName = currentClassName
+							.split(' ')
+							.filter((cls) => !cls.startsWith('modal-trigger-'))
+							.join(' ');
+
+						try {
+							updateBlockAttributes(blockId, {
+								className: cleanedClassName,
+							});
+							Debug.add(
+								`Removed modal trigger classes using fallback method`
+							);
+						} catch (error) {
+							Debug.add(
+								`Failed to update block: ${error.message}`,
+								true
+							);
+						}
+					} else {
+						// Add the new class
+						const updatedClassName = addOrUpdateClassWithPrefix(
+							currentClassName,
+							'modal-trigger-',
+							modalVal
+						);
+
+						// Only update if the class has actually changed
+						if (updatedClassName !== currentClassName) {
+							try {
+								updateBlockAttributes(blockId, {
+									className: updatedClassName,
+								});
+								Debug.add(
+									`Added modal-trigger class using fallback method`
+								);
+							} catch (error) {
+								Debug.add(
+									`Failed to update block: ${error.message}`,
+									true
+								);
+							}
+						}
+					}
+					return;
+				}
 				return;
 			}
 
-			const currentClasses = blockAttributes.className || '';
-			Debug.add(
-				`Current classes for block ${blockId}: "${currentClasses}"`
-			);
+			// Get the current className or empty string
+			const currentClassName = blockAttributes.className || '';
 
-			// Update the class based on whether we're adding or removing
-			let newClassName;
-			if (add) {
-				// Check if the class is already there
-				if (currentClasses.includes(`modal-trigger-${modalVal}`)) {
-					Debug.add(
-						`Class modal-trigger-${modalVal} already exists, not adding again`
-					);
-					return; // Don't add it again
-				}
-
-				// Add the class
-				newClassName = addOrUpdateClassWithPrefix(
-					currentClasses,
-					'modal-trigger-',
-					modalVal
-				);
-				Debug.add(`Adding class modal-trigger-${modalVal}`);
-			} else {
-				// Remove all modal trigger classes, not just for this specific modal
-				newClassName = currentClasses
+			// If removing, strip all modal-trigger classes, not just one specific class
+			if (!add) {
+				// Remove all modal-trigger classes regardless of modal ID
+				const cleanedClassName = currentClassName
 					.split(' ')
 					.filter((cls) => !cls.startsWith('modal-trigger-'))
 					.join(' ');
-				Debug.add(`Removing all modal-trigger classes`);
-			}
-
-			// Only update if the classes have actually changed
-			if (newClassName !== currentClasses) {
-				// Update the block attributes
-				updateBlockAttributes(blockId, {
-					className: newClassName,
-				});
 
 				Debug.add(
-					`Updated block ${blockId} class to: "${newClassName}"`
+					`Removing all modal trigger classes from block ${blockId}`
 				);
+				try {
+					updateBlockAttributes(blockId, {
+						className: cleanedClassName,
+					});
+				} catch (error) {
+					Debug.add(
+						`Failed to update block attributes: ${error.message}`,
+						true
+					);
+				}
 			} else {
-				Debug.add(`No class changes needed for block ${blockId}`);
+				// Add the new class
+				const updatedClassName = addOrUpdateClassWithPrefix(
+					currentClassName,
+					'modal-trigger-',
+					modalVal
+				);
+
+				// Only update if the class has actually changed
+				if (updatedClassName !== currentClassName) {
+					Debug.add(
+						`Adding modal-trigger-${modalVal} class to block ${blockId}`
+					);
+					try {
+						updateBlockAttributes(blockId, {
+							className: updatedClassName,
+						});
+					} catch (error) {
+						Debug.add(
+							`Failed to update block attributes: ${error.message}`,
+							true
+						);
+					}
+				}
 			}
 		},
 		[updateBlockAttributes]
@@ -689,7 +799,7 @@ export default function Edit({
 					innerBlocks,
 				});
 			} catch (e) {
-				Debug.add(`Error processing template part: ${e.message}`);
+				Debug.add(`Error processing template part: ${e.message}`, true);
 			}
 		});
 
@@ -713,7 +823,27 @@ export default function Edit({
 
 	// Add options from the triggers state if available
 	if (triggers && triggers.length > 0) {
+		// Get the block editor to verify blocks
+		const blockEditor = wp.data.select('core/block-editor');
+
 		triggers.forEach((trigger) => {
+			// Skip triggers that don't have a valid clientId
+			if (!trigger.clientId) {
+				return;
+			}
+
+			// Verify the block still exists (if we have access to the editor)
+			if (blockEditor) {
+				const blockExists = blockEditor.getBlock(trigger.clientId);
+				if (!blockExists) {
+					Debug.add(
+						`Trigger candidate ${trigger.clientId} no longer exists - skipping`,
+						true
+					);
+					return;
+				}
+			}
+
 			let label = trigger.text || 'Unnamed trigger';
 
 			// Add icon based on trigger type
@@ -734,6 +864,34 @@ export default function Edit({
 			});
 		});
 	}
+
+	// Check if the saved trigger block still exists when the component loads
+	useEffect(() => {
+		if (safeTriggerBlockId) {
+			const blockEditor = wp.data.select('core/block-editor');
+			if (!blockEditor) {
+				return;
+			}
+
+			const triggerBlockExists = blockEditor.getBlock(safeTriggerBlockId);
+
+			if (!triggerBlockExists) {
+				Debug.add(
+					`Saved trigger block ${safeTriggerBlockId} no longer exists, clearing reference`,
+					true
+				);
+				// Clear the trigger block reference since it no longer exists
+				setAttributes({
+					triggerBlockId: '',
+				});
+				// Also update the ref to avoid cleanup attempts on a non-existent block
+				previousTriggerBlockId.current = null;
+				// Clean up highlight state
+				setIsHighlightActive(false);
+				cleanupAllHighlights();
+			}
+		}
+	}, [safeTriggerBlockId, setAttributes]);
 
 	// Initialize modal ID once
 	useEffect(() => {
@@ -773,7 +931,8 @@ export default function Edit({
 					updateBlockTriggerClass(safeTriggerBlockId, modalId, false);
 				} catch (error) {
 					Debug.add(
-						`Error cleaning up trigger class: ${error.message}`
+						`Error cleaning up trigger class: ${error.message}`,
+						true
 					);
 				}
 			}
@@ -1091,6 +1250,24 @@ export default function Edit({
 		const { subscribe } = wp.data;
 		const unsubscribe = subscribe(() => {
 			const blockEditor = wp.data.select('core/block-editor');
+			if (!blockEditor) {
+				return;
+			}
+
+			// First check if the trigger block still exists
+			const triggerBlockExists = blockEditor.getBlock(safeTriggerBlockId);
+			if (!triggerBlockExists) {
+				Debug.add(
+					`Trigger block ${safeTriggerBlockId} no longer exists - clearing reference`,
+					true
+				);
+				setAttributes({ triggerBlockId: '' });
+				previousTriggerBlockId.current = null;
+				cleanupAllHighlights();
+				setIsHighlightActive(false);
+				return;
+			}
+
 			const selectedBlockId = blockEditor?.getSelectedBlockClientId();
 
 			// If the selected block exists and it's not our modal or a parent of our modal
@@ -1119,7 +1296,72 @@ export default function Edit({
 		return () => {
 			unsubscribe();
 		};
-	}, [safeTriggerBlockId, clientId, isHighlightActive]);
+	}, [safeTriggerBlockId, clientId, isHighlightActive, setAttributes]);
+
+	/**
+	 * Refresh the trigger highlight manually
+	 */
+	const handleRefreshHighlight = useCallback(() => {
+		// Only refresh the highlight if the modal is selected
+		if (isSelected && safeTriggerBlockId) {
+			// Verify the trigger block still exists
+			const blockEditor = wp.data.select('core/block-editor');
+			const blockExists =
+				blockEditor && blockEditor.getBlock(safeTriggerBlockId);
+
+			if (!blockExists) {
+				Debug.add(
+					`Trigger block ${safeTriggerBlockId} no longer exists - cannot highlight`,
+					true
+				);
+				// Clear the highlight state since the block no longer exists
+				setIsHighlightActive(false);
+				return;
+			}
+
+			// Cleanup existing highlights first
+			cleanupAllHighlights();
+
+			// Make sure the trigger class is still applied
+			try {
+				updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
+			} catch (error) {
+				Debug.add(
+					`Error refreshing trigger class: ${error.message}`,
+					true
+				);
+				return;
+			}
+
+			// Use the direct highlighting function
+			setTimeout(() => {
+				try {
+					highlightModalTrigger(null, modalId, safeTriggerBlockId, {
+						discreet: true,
+					});
+					setIsHighlightActive(true);
+
+					// Store any newly highlighted elements
+					document
+						.querySelectorAll('.modal-highlight-target')
+						.forEach((el) => {
+							previousHighlightedElements.current.add(el);
+						});
+				} catch (error) {
+					Debug.add(
+						`Error highlighting trigger: ${error.message}`,
+						true
+					);
+					setIsHighlightActive(false);
+				}
+			}, 100);
+		} else if (!isSelected) {
+			// If the modal is not selected, inform the user
+			Debug.add('Cannot refresh highlight when modal is not selected');
+		} else if (!safeTriggerBlockId) {
+			Debug.add('No trigger block is selected to highlight');
+		}
+	}, [safeTriggerBlockId, modalId, isSelected, updateBlockTriggerClass]);
 
 	/**
 	 * Handle trigger selection change
@@ -1141,88 +1383,51 @@ export default function Edit({
 					`Removing trigger class from previous block: ${prevTriggerId}`
 				);
 
-				// Remove all modal-trigger classes from previous trigger using our helper function
-				// This is more reliable than direct attribute manipulation
-				updateBlockTriggerClass(prevTriggerId, modalId, false);
+				// Verify if previous block still exists before trying to remove classes
+				const blockEditor = wp.data.select('core/block-editor');
+				const prevBlockExists =
+					blockEditor && blockEditor.getBlock(prevTriggerId);
 
-				// Force cleanup of any highlights on the previous element
-				const prevElement = findBlockDomElement(prevTriggerId);
-				if (prevElement) {
-					// Remove all highlight-related classes manually
-					prevElement.classList.remove(
-						'modal-highlight-target',
-						'modal-trigger-highlight',
-						'modal-trigger-highlight-discreet',
-						'no-layout-shift'
-					);
-
-					// Reset highlight-specific styles
-					prevElement.style.outline = '';
-					prevElement.style.outlineOffset = '';
-					prevElement.style.boxShadow = '';
-					prevElement.style.animation = '';
-					prevElement.style.zIndex = '';
-				}
-			}
-
-			// Cleanup previously tracked elements
-			if (previousHighlightedElements.current.size > 0) {
-				previousHighlightedElements.current.forEach((element) => {
-					if (element && document.contains(element)) {
-						element.classList.remove(
-							'modal-highlight-target',
-							'modal-trigger-highlight',
-							'modal-trigger-highlight-discreet',
-							'no-layout-shift'
+				if (prevBlockExists) {
+					// Remove all modal-trigger classes from previous trigger
+					try {
+						updateBlockTriggerClass(prevTriggerId, modalId, false);
+					} catch (error) {
+						Debug.add(
+							`Error removing trigger class: ${error.message}`,
+							true
 						);
-						element.style.outline = '';
-						element.style.outlineOffset = '';
-						element.style.boxShadow = '';
-						element.style.animation = '';
-						element.style.zIndex = '';
 					}
-				});
-				previousHighlightedElements.current.clear();
+				} else {
+					Debug.add(
+						`Previous block ${prevTriggerId} no longer exists - skipping cleanup`,
+						true
+					);
+				}
 			}
 
 			// If removing the trigger or selecting the same trigger
 			if (!selectedBlockId || selectedBlockId === prevTriggerId) {
-				Debug.add(
-					'Clearing trigger selection or re-selecting same trigger'
-				);
-
-				// If there was a previous trigger and we're clearing it, make sure to remove all modal-trigger classes
-				if (prevTriggerId && !selectedBlockId) {
-					Debug.add(
-						`Removing all modal-trigger classes from previous trigger ${prevTriggerId} due to selection clearing`
-					);
-
-					// Use the helper function to reliably remove all modal trigger classes
-					updateBlockTriggerClass(prevTriggerId, modalId, false);
-				}
-
 				// Clear the trigger settings
 				setAttributes({
 					triggerBlockId: '',
-					triggerBlockKey: '',
-					triggerBlockAnchor: '',
 				});
 
 				previousTriggerBlockId.current = null;
 				return;
 			}
 
-			// Check if this is a template part trigger by looking for it in the triggers list
-			const selectedTrigger = triggers.find(
-				(t) => t.clientId === selectedBlockId
-			);
-			const isTemplatePart =
-				selectedTrigger && selectedTrigger.fromTemplatePart;
+			// Verify selected block exists before proceeding
+			const blockEditor = wp.data.select('core/block-editor');
+			const newBlockExists =
+				blockEditor && blockEditor.getBlock(selectedBlockId);
 
-			if (isTemplatePart) {
+			if (!newBlockExists) {
 				Debug.add(
-					`Selected trigger is from template part: ${selectedTrigger.templatePartSlug || 'unknown'}`
+					`Selected block ${selectedBlockId} not found - cannot set as trigger`,
+					true
 				);
+				return;
 			}
 
 			// Update the trigger in attributes
@@ -1230,97 +1435,35 @@ export default function Edit({
 				triggerBlockId: selectedBlockId,
 			});
 
-			// Update the class on the new trigger block - THIS IS KEY FOR PERSISTENCE
-			updateBlockTriggerClass(selectedBlockId, modalId, true);
-
-			// Double check to ensure the class was added (sometimes the update function is async)
-			setTimeout(() => {
-				const blockEditor = wp.data.select('core/block-editor');
-				const blockAttributes =
-					blockEditor.getBlockAttributes(selectedBlockId);
-				const currentClasses = blockAttributes?.className || '';
-
-				if (!currentClasses.includes(`modal-trigger-${modalId}`)) {
-					Debug.add(
-						`Class was not applied, trying again: modal-trigger-${modalId}`
-					);
-					updateBlockTriggerClass(selectedBlockId, modalId, true);
-				} else {
-					Debug.add(
-						`Confirmed class was applied: modal-trigger-${modalId}`
-					);
-				}
-			}, 500);
+			// Update the class on the new trigger block
+			try {
+				updateBlockTriggerClass(selectedBlockId, modalId, true);
+			} catch (error) {
+				Debug.add(`Error adding trigger class: ${error.message}`, true);
+			}
 
 			// Highlight the new trigger only if the modal is selected
 			if (isSelected) {
 				setTimeout(() => {
-					highlightModalTrigger(null, modalId, selectedBlockId, {
-						discreet: true,
-					});
-					setIsHighlightActive(true);
-
-					// Store any newly highlighted elements
-					document
-						.querySelectorAll('.modal-highlight-target')
-						.forEach((el) => {
-							previousHighlightedElements.current.add(el);
+					try {
+						highlightModalTrigger(null, modalId, selectedBlockId, {
+							discreet: true,
 						});
+						setIsHighlightActive(true);
+					} catch (error) {
+						Debug.add(
+							`Error highlighting trigger: ${error.message}`,
+							true
+						);
+					}
 				}, 100);
-			}
-
-			// If it's a template part trigger, show a notice to the user
-			if (isTemplatePart) {
-				// Show a notice for template parts, since they might not be visible in the current editor
-				Debug.add(
-					`Template part trigger selected: ${selectedTrigger.templatePartSlug || 'unknown'}`
-				);
 			}
 
 			// Store for next time
 			previousTriggerBlockId.current = selectedBlockId;
 		},
-		[
-			modalId,
-			setAttributes,
-			isSelected,
-			triggers,
-			updateBlockAttributes,
-			updateBlockTriggerClass,
-		]
+		[modalId, setAttributes, isSelected, updateBlockTriggerClass]
 	);
-
-	/**
-	 * Refresh the trigger highlight manually
-	 */
-	const handleRefreshHighlight = useCallback(() => {
-		// Only refresh the highlight if the modal is selected
-		if (isSelected && safeTriggerBlockId) {
-			// Cleanup existing highlights first
-			cleanupAllHighlights();
-
-			// Make sure the trigger class is still applied
-			updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
-
-			// Use the direct highlighting function instead of refreshHighlight
-			setTimeout(() => {
-				highlightModalTrigger(null, modalId, safeTriggerBlockId, {
-					discreet: true,
-				});
-				setIsHighlightActive(true);
-
-				// Store any newly highlighted elements
-				document
-					.querySelectorAll('.modal-highlight-target')
-					.forEach((el) => {
-						previousHighlightedElements.current.add(el);
-					});
-			}, 100);
-		} else if (!isSelected) {
-			// If the modal is not selected, inform the user
-			Debug.add('Cannot refresh highlight when modal is not selected');
-		}
-	}, [safeTriggerBlockId, modalId, isSelected, updateBlockTriggerClass]);
 
 	/**
 	 * Render the inspector controls

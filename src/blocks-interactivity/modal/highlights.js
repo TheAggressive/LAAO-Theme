@@ -48,7 +48,7 @@ const highlightData = {
  */
 export const findBlockDomElement = (clientId) => {
 	if (!clientId) {
-		Debug.add('findBlockDomElement: No clientId provided');
+		Debug.add('findBlockDomElement: No clientId provided', true);
 		return null;
 	}
 
@@ -127,7 +127,7 @@ export const findBlockDomElement = (clientId) => {
 				}
 			}
 		} catch (error) {
-			Debug.add(`Error accessing iframe: ${error.message}`);
+			Debug.add(`Error accessing iframe: ${error.message}`, true);
 		}
 	}
 
@@ -158,10 +158,10 @@ export const findBlockDomElement = (clientId) => {
 			}
 		}
 	} catch (error) {
-		Debug.add(`Error accessing block store: ${error.message}`);
+		Debug.add(`Error accessing block store: ${error.message}`, true);
 	}
 
-	Debug.add(`Could not find DOM element for block: ${clientId}`);
+	Debug.add(`Could not find DOM element for block: ${clientId}`, true);
 	return null;
 };
 
@@ -280,7 +280,10 @@ export const cleanupAllHighlights = (modalId = null) => {
 				}
 			});
 	} catch (error) {
-		Debug.add(`Error cleaning up highlights in iframe: ${error.message}`);
+		Debug.add(
+			`Error cleaning up highlights in iframe: ${error.message}`,
+			true
+		);
 	}
 
 	// Step 3: Clean up specific elements we've tracked in our maps
@@ -341,7 +344,7 @@ export const cleanupAllHighlights = (modalId = null) => {
 			}
 		}
 	} catch (error) {
-		Debug.add(`Error in final cleanup pass: ${error.message}`);
+		Debug.add(`Error in final cleanup pass: ${error.message}`, true);
 	}
 
 	// Reset the current highlight
@@ -711,7 +714,7 @@ export const getBlockInfo = (clientId) => {
  */
 export const createDirectHighlight = (targetElement, modalId) => {
 	if (!targetElement) {
-		Debug.add('Cannot create direct highlight - no target element');
+		Debug.add('Cannot create direct highlight - no target element', true);
 		return null;
 	}
 
@@ -839,7 +842,7 @@ export const createDirectHighlight = (targetElement, modalId) => {
 			originalStyles,
 		};
 	} catch (error) {
-		Debug.add(`Error in createDirectHighlight: ${error.message}`);
+		Debug.add(`Error in createDirectHighlight: ${error.message}`, true);
 		return null;
 	}
 };

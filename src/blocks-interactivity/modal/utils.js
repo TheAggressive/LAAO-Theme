@@ -9,26 +9,42 @@ export class Debug {
 	static enabled = false;
 	static logs = [];
 	static maxLogs = 100;
+	static showCritical = true; // Always show critical messages
 
 	/**
 	 * Add a debug message
 	 *
 	 * @param {string} message The debug message
+	 * @param {boolean} critical Whether this is a critical message that should be shown even when debug is disabled
 	 */
-	static add(message) {
-		if (!this.enabled) {
+	static add(message, critical = false) {
+		// Skip non-critical messages when debugging is disabled
+		if (!this.enabled && !critical) {
+			return;
+		}
+
+		// Skip critical messages if explicitly disabled
+		if (critical && !this.showCritical) {
 			return;
 		}
 
 		// Add timestamp
 		const timestamp = new Date().toISOString().split('T')[1].slice(0, -1);
-		const logMessage = `[${timestamp}] ${message}`;
+		const logMessage = `[${timestamp}] ${critical ? '[CRITICAL] ' : ''}${message}`;
 
 		// Log to console
-		console.log(`%c MODAL DEBUG `, 'background: #335c67; color: #fff', logMessage);
+		console.log(
+			`%c MODAL ${critical ? 'ERROR' : 'DEBUG'} `,
+			`background: ${critical ? '#e63946' : '#335c67'}; color: #fff`,
+			logMessage
+		);
 
 		// Store in array
-		this.logs.push(logMessage);
+		this.logs.push({
+			message: logMessage,
+			critical,
+			timestamp: new Date().getTime(),
+		});
 
 		// Trim array if needed
 		if (this.logs.length > this.maxLogs) {
@@ -53,6 +69,15 @@ export class Debug {
 	}
 
 	/**
+	 * Enable or disable critical messages
+	 *
+	 * @param {boolean} show Whether to show critical messages
+	 */
+	static setCritical(show) {
+		this.showCritical = show;
+	}
+
+	/**
 	 * Clear debug logs
 	 */
 	static clear() {
@@ -70,6 +95,15 @@ export class Debug {
 	 */
 	static getLogs() {
 		return this.logs;
+	}
+
+	/**
+	 * Get only critical logs
+	 *
+	 * @return {Array} Array of critical log messages
+	 */
+	static getCriticalLogs() {
+		return this.logs.filter(log => log.critical);
 	}
 }
 
