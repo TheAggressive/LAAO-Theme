@@ -1,3 +1,5 @@
+@import "../../styles/_breakpoints.css";
+
 /**
  * The following styles get applied both on the front of your site
  * and in the editor.
@@ -10,100 +12,60 @@
 	padding: 0;
 }
 
-/* Modal container */
-.wp-block-laao-modal-container {
-	display: none;
-	position: fixed;
-	z-index: 1000;
-	overflow: auto;
-	padding: 20px;
-	width: 100vw;
-	height: 100vh;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+/* Modal overlay */
+.wp-block-laao-modal-overlay {
+	@apply fixed bottom-0 left-0 right-0 top-0 z-[999] hidden cursor-pointer bg-black/85;
 
 	&.is-active {
-		display: flex;
+		@apply block;
 	}
 }
 
-/* Modal overlay */
-.wp-block-laao-modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 999;
-	cursor: pointer;
-	display: none; /* Use !important to ensure it's hidden by default */
+/* Modal container */
+.wp-block-laao-modal-container {
+	@apply fixed z-[1000] hidden overflow-auto p-wp-16;
 
 	&.is-active {
-		display: block; /* Use !important to override display:none */
+		@apply block;
 	}
 }
 
 /* Modal content styling */
 [class*="wp-block-laao-modal-"][class$="-content"] {
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 5px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	max-width: 600px;
-	width: 100%;
-	position: relative;
-	max-height: 90vh;
-	overflow-y: auto;
+	@apply relative max-h-[90vh] w-full max-w-[600px] overflow-y-auto rounded-md bg-wp-laao-white p-wp-16 shadow-lg;
 }
 
 .wp-block-laao-modal-close {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	cursor: pointer;
-	border: none;
-	background: transparent;
-	padding: 5px;
-	font-size: 24px;
-	line-height: 1;
-	color: #333;
+	@apply absolute -top-2 right-1 cursor-pointer border-none bg-transparent p-1 text-4xl text-wp-laao-black;
 }
 
 .wp-block-laao-modal-close:hover {
-	color: #000;
+	@apply text-wp-laao-red;
 }
 
 .wp-block-laao-modal-trigger {
-	cursor: pointer;
+	@apply cursor-pointer;
 }
 
 /* Position variants */
 .modal-position-center {
-	align-items: center;
-	justify-content: center;
+	@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
 .modal-position-top-left {
-	align-items: flex-start;
-	justify-content: flex-start;
+	@apply left-0 top-0;
 }
 
 .modal-position-top-right {
-	align-items: flex-start;
-	justify-content: flex-end;
+	@apply right-0 top-0;
 }
 
 .modal-position-bottom-left {
-	align-items: flex-end;
-	justify-content: flex-start;
+	@apply bottom-0 left-0;
 }
 
 .modal-position-bottom-right {
-	align-items: flex-end;
-	justify-content: flex-end;
+	@apply bottom-0 right-0;
 }
 
 /* Responsive adjustment */

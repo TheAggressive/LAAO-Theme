@@ -35,8 +35,6 @@ $position = esc_attr( $attributes['position'] );
 // Get open on load setting
 $open_on_load = $attributes['openOnLoad'] ? true : false;
 
-print_r( $attributes['openOnLoad'] );
-
 // Get trigger block ID if any
 $trigger_block_id = esc_attr( $attributes['triggerBlockId'] );
 
