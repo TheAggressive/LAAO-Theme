@@ -1,0 +1,19 @@
+#mc_embed_shell {
+	margin-top: 2rem;
+	background-color: yellow;
+
+	.indicates-required {
+		display: none;
+	}
+
+	label {
+	}
+
+	input {
+		background-color: red;
+	}
+
+	input[type="submit"] {
+		margin-top: 2rem;
+	}
+}

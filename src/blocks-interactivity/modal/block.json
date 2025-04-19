@@ -11,7 +11,28 @@
 	"supports": {
 		"interactivity": true,
 		"html": false,
-		"align": true
+		"align": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
+		},
+		"shadow": true,
+		"color": {
+			"background": true,
+			"text": false
+		}
 	},
 	"textdomain": "modal",
 	"editorScript": "file:./index.js",
@@ -28,6 +49,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"disableOverlay": {
+			"type": "boolean",
+			"default": false
+		},
 		"modalId": {
 			"type": "string",
 			"default": ""
@@ -40,10 +65,23 @@
 			"type": "string",
 			"default": ""
 		},
-
 		"triggerLabel": {
 			"type": "string",
 			"default": "Open Modal"
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"border": {
+					"radius": "0px",
+					"width": "1.5rem",
+					"style": "solid",
+					"color": "var(--wp--preset--color--laao-white)"
+				},
+				"color": {
+					"background": "var(--wp--preset--color--laao-light-gray)"
+				}
+			}
 		}
 	}
 }

@@ -63,6 +63,7 @@ export default function Edit({
 		triggerBlockId = '',
 		triggerBlockKey = '',
 		triggerLabel = 'Open Modal',
+		disableOverlay = false,
 	} = attributes;
 
 	const updateBlockTriggerClass = useUpdateBlockTriggerClass();
@@ -71,6 +72,7 @@ export default function Edit({
 	const [isHighlightActive, setIsHighlightActive] = useState(false);
 	const previousHighlightedElements = useRef(new Set());
 	const lastSelectedBlock = useRef(null);
+	const triggerClassApplied = useRef(false);
 
 	// Create safe values (never null)
 	const safePosition = position || 'center';
@@ -97,7 +99,9 @@ export default function Edit({
 			Debug.add(`Using existing modal ID: ${modalId}`);
 
 			// If we have a saved trigger block ID, ensure the class is applied to it
-			if (safeTriggerBlockId) {
+			// Only apply this on initial render, not on every change
+			if (safeTriggerBlockId && !triggerClassApplied.current) {
+				triggerClassApplied.current = true;
 				// Make sure the trigger class is applied to the block
 				updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
 				Debug.add(
@@ -315,6 +319,20 @@ export default function Edit({
 					__nextHasNoMarginBottom
 				/>
 
+				{/* Disable overlay */}
+				<ToggleControl
+					label={__('Disable Overlay', 'laao')}
+					checked={disableOverlay}
+					onChange={(value) =>
+						setAttributes({ disableOverlay: value })
+					}
+					help={__(
+						'When enabled, the modal will not have a background overlay',
+						'laao'
+					)}
+					__nextHasNoMarginBottom
+				/>
+
 				{/* Trigger block select */}
 				<SelectControl
 					label={__('Trigger Block', 'laao')}
@@ -437,76 +455,68 @@ export default function Edit({
 	);
 
 	// Block props
-	const blockProps = useBlockProps({
-		className: `modal-block modal-position-${safePosition}`,
-	});
+	const blockProps = useBlockProps();
 
 	return (
 		<>
 			{renderInspectorControls()}
 
 			<div {...blockProps}>
-				<div className="modal-editor-wrapper">
-					<div className="modal-editor-content">
-						<InnerBlocks
-							template={[
-								[
-									'core/heading',
-									{
-										level: 3,
-										content: __('Modal Title', 'laao'),
-									},
-								],
-								[
-									'core/paragraph',
-									{
-										content: __(
-											'Add your modal content here…',
-											'laao'
-										),
-									},
-								],
-							]}
-							templateLock={false}
-						/>
+				<div className="wp-block-laao-modal-container">
+					<InnerBlocks
+						template={[
+							[
+								'core/heading',
+								{
+									level: 3,
+									content: __('Modal Title', 'laao'),
+								},
+							],
+							[
+								'core/paragraph',
+								{
+									content: __(
+										'Add your modal content here…',
+										'laao'
+									),
+								},
+							],
+						]}
+						templateLock={false}
+					/>
+				</div>
+
+				<div className="modal-editor-footer">
+					<div className="modal-position-indicator">
+						<span>
+							{__('Position:', 'laao')}{' '}
+							{safePosition.charAt(0).toUpperCase() +
+								safePosition.slice(1)}
+						</span>
 					</div>
 
-					<div className="modal-editor-footer">
-						<div className="modal-position-indicator">
+					{openOnLoad && (
+						<div className="modal-auto-open-indicator">
 							<span>
-								{__('Position:', 'laao')}{' '}
-								{safePosition.charAt(0).toUpperCase() +
-									safePosition.slice(1)}
+								{__('Opens Automatically on Page Load', 'laao')}
 							</span>
 						</div>
+					)}
 
-						{openOnLoad && (
-							<div className="modal-auto-open-indicator">
-								<span>
-									{__(
-										'Opens Automatically on Page Load',
-										'laao'
-									)}
-								</span>
-							</div>
-						)}
-
-						{safeTriggerBlockId ? (
-							<div>
-								<span>
-									<Icon icon={linkIcon} size={14} />
-									{__('Has Trigger Block', 'laao')}{' '}
-								</span>
-							</div>
-						) : (
-							<div>
-								<span>
-									{__('Trigger Label:', 'laao')}{' '}
-									{triggerLabel}
-								</span>
-							</div>
-						)}
-					</div>
+					{safeTriggerBlockId ? (
+						<div>
+							<span>
+								<Icon icon={linkIcon} size={14} />
+								{__('Has Trigger Block', 'laao')}{' '}
+							</span>
+						</div>
+					) : (
+						<div>
+							<span>
+								{__('Trigger Label:', 'laao')} {triggerLabel}
+							</span>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

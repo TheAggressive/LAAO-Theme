@@ -8,76 +8,45 @@
  */
 
 /* Base modal styling */
-.wp-block-laao-modal {
-	padding: 0;
-}
+.wp-block-laao-modal-wrapper {
+	/* Modal overlay */
+	.wp-block-laao-modal-overlay {
+		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85;
 
-/* Modal overlay */
-.wp-block-laao-modal-overlay {
-	@apply fixed bottom-0 left-0 right-0 top-0 z-[999] hidden cursor-pointer bg-black/85;
-
-	&.is-active {
-		@apply block;
+		&.is-active {
+			@apply block;
+		}
 	}
-}
 
-/* Modal container */
-.wp-block-laao-modal-container {
-	@apply fixed z-[1000] hidden overflow-auto p-wp-16;
+	.wp-block-laao-modal-container {
+		@apply fixed z-[9999] hidden;
 
-	&.is-active {
-		@apply block;
-	}
-}
+		&.is-active {
+			@apply block;
+		}
 
-/* Modal content styling */
-[class*="wp-block-laao-modal-"][class$="-content"] {
-	@apply relative max-h-[90vh] w-full max-w-[600px] overflow-y-auto rounded-md bg-wp-laao-white p-wp-16 shadow-lg;
-}
+		&.modal-position-center {
+			@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+		}
 
-.wp-block-laao-modal-close {
-	@apply absolute -top-2 right-1 cursor-pointer border-none bg-transparent p-1 text-4xl text-wp-laao-black;
-}
+		&.modal-position-top-left {
+			@apply left-0 top-0;
+		}
 
-.wp-block-laao-modal-close:hover {
-	@apply text-wp-laao-red;
-}
+		&.modal-position-top-right {
+			@apply right-0 top-0;
+		}
 
-.wp-block-laao-modal-trigger {
-	@apply cursor-pointer;
-}
+		&.modal-position-bottom-left {
+			@apply bottom-0 left-0;
+		}
 
-/* Position variants */
-.modal-position-center {
-	@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
-}
+		&.modal-position-bottom-right {
+			@apply bottom-0 right-0;
+		}
 
-.modal-position-top-left {
-	@apply left-0 top-0;
-}
-
-.modal-position-top-right {
-	@apply right-0 top-0;
-}
-
-.modal-position-bottom-left {
-	@apply bottom-0 left-0;
-}
-
-.modal-position-bottom-right {
-	@apply bottom-0 right-0;
-}
-
-/* Responsive adjustment */
-@media screen and (max-width: 600px) {
-	.modal-position-top-left,
-	.modal-position-top-right,
-	.modal-position-bottom-left,
-	.modal-position-bottom-right {
-		max-width: 90%;
-		top: 5%;
-		right: 5%;
-		bottom: auto;
-		left: 5%;
+		.wp-block-laao-modal-close {
+			@apply absolute right-0 top-0;
+		}
 	}
 }

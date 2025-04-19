@@ -443,6 +443,12 @@ export const useTriggerManagement = ({
 			// Store the previous trigger for cleanup
 			const prevTriggerId = previousTriggerBlockId.current;
 
+			// *** FIX: Prevent infinite update by checking if selection is the same ***
+			// If the selected block ID is the same as the current triggerBlockId, just return
+			if (selectedBlockId === triggerBlockId) {
+				return;
+			}
+
 			// Always clean up the previous trigger if it exists and it's different from the newly selected one
 			if (prevTriggerId && prevTriggerId !== selectedBlockId) {
 				Debug.add(
@@ -510,7 +516,7 @@ export const useTriggerManagement = ({
 			// Store for next time
 			previousTriggerBlockId.current = selectedBlockId;
 		},
-		[modalId, setAttributes, updateBlockTriggerClass]
+		[modalId, setAttributes, updateBlockTriggerClass, triggerBlockId]
 	);
 
 	// Return the trigger management API

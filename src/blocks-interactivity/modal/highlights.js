@@ -5,11 +5,6 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 import { select } from '@wordpress/data';
 
 /**
- * External dependencies
- */
-import './highlights.css';
-
-/**
  * Highlight and visual feedback functionality for modal trigger blocks
  */
 
@@ -800,14 +795,6 @@ export const createDirectHighlight = (targetElement, modalId) => {
 			'important'
 		);
 
-		// Add a debug element to show the trigger is highlighted
-		const debugElement = document.createElement('div');
-		debugElement.className = 'modal-highlight-debug';
-		debugElement.style.cssText =
-			'position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 10px; z-index: 999999;';
-		debugElement.textContent = `Highlighted trigger for Modal ${modalId}`;
-		document.body.appendChild(debugElement);
-
 		// Scroll the element into view
 		setTimeout(() => {
 			// Only scroll if the element isn't already in view
@@ -838,7 +825,6 @@ export const createDirectHighlight = (targetElement, modalId) => {
 		return {
 			targetElement,
 			styleTag,
-			debugElement,
 			originalStyles,
 		};
 	} catch (error) {

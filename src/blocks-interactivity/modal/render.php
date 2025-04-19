@@ -17,6 +17,7 @@ $attributes = wp_parse_args(
 		'modalId'        => '',
 		'position'       => 'center',
 		'openOnLoad'     => false,
+		'disableOverlay' => false,
 		'triggerBlockId' => '',
 		'triggerLabel'   => __( 'Open Modal', 'laao' ),
 	)
@@ -31,6 +32,7 @@ $unique_id = ! empty( $attributes['modalId'] )
 $position         = esc_attr( $attributes['position'] );
 $position_class   = 'modal-position-' . $position;
 $open_on_load     = $attributes['openOnLoad'] ? true : false;
+$disable_overlay  = $attributes['disableOverlay'] ? true : false;
 $trigger_block_id = ! empty( $attributes['triggerBlockId'] ) ? esc_attr( $attributes['triggerBlockId'] ) : '';
 $trigger_label    = esc_html( $attributes['triggerLabel'] );
 
@@ -98,8 +100,10 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 }
 ?>
 
+
+
 <div
-	<?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>
+	class="wp-block-laao-modal-wrapper"
 	data-wp-interactive="laao/modal"
 	data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 	data-wp-init="actions.init"
@@ -107,7 +111,7 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	<?php if ( empty( $trigger_block_id ) ) : ?>
 	<!-- Default trigger button -->
 	<button
-		class="wp-block-laao-modal-trigger"
+		class="wp-block-laao-modal-button-trigger"
 		data-wp-on--click="actions.openModal"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		data-wp-bind--aria-expanded="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
@@ -117,6 +121,7 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	</button>
 	<?php endif; ?>
 
+	<?php if ( ! $disable_overlay ) : ?>
 	<!-- Modal overlay -->
 	<div
 		class="wp-block-laao-modal-overlay"
@@ -124,11 +129,13 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		aria-hidden="true"
 	></div>
+	<?php endif; ?>
 
 	<!-- Modal container -->
 	<div
 		id="<?php echo esc_attr( $unique_id ); ?>"
-		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?>"
+		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?> wp-block-laao-<?php echo esc_attr( $unique_id ); ?>-content"
+	
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
@@ -136,8 +143,6 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		aria-modal="true"
 		aria-labelledby="<?php echo esc_attr( $unique_id ); ?>-title"
 	>
-		<!-- Modal content -->
-		<div class="wp-block-laao-<?php echo esc_attr( $unique_id ); ?>-content">
 			<!-- Close button -->
 			<button
 				class="wp-block-laao-modal-close"
@@ -148,10 +153,6 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 				&times;
 			</button>
 
-			<!-- Modal body content -->
-			<div class="wp-block-laao-modal-body">
 				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</div>
-		</div>
 	</div>
 </div>
