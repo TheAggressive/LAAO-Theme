@@ -818,7 +818,7 @@ export default function Edit({
 
 	// Create a basic definition for availableTriggers
 	const availableTriggers = [
-		{ label: __('— Select a trigger —', 'modal'), value: '' },
+		{ label: __('— Select a trigger —', 'laao'), value: '' },
 	];
 
 	// Add options from the triggers state if available
@@ -1472,15 +1472,15 @@ export default function Edit({
 	 */
 	const renderInspectorControls = () => (
 		<InspectorControls>
-			<PanelBody title={__('Modal Settings', 'modal')} initialOpen={true}>
+			<PanelBody title={__('Modal Settings', 'laao')} initialOpen={true}>
 				{/* Modal ID */}
 				<TextControl
-					label={__('Modal ID', 'modal')}
+					label={__('Modal ID', 'laao')}
 					value={modalId}
 					onChange={(value) => setAttributes({ modalId: value })}
 					help={__(
 						'Unique identifier for this modal. Used to link triggers to this modal.',
-						'modal'
+						'laao'
 					)}
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
@@ -1488,18 +1488,18 @@ export default function Edit({
 
 				{/* Position */}
 				<SelectControl
-					label={__('Modal Position', 'modal')}
+					label={__('Modal Position', 'laao')}
 					value={safePosition}
 					options={[
-						{ label: __('Center', 'modal'), value: 'center' },
-						{ label: __('Top Left', 'modal'), value: 'top-left' },
-						{ label: __('Top Right', 'modal'), value: 'top-right' },
+						{ label: __('Center', 'laao'), value: 'center' },
+						{ label: __('Top Left', 'laao'), value: 'top-left' },
+						{ label: __('Top Right', 'laao'), value: 'top-right' },
 						{
-							label: __('Bottom Left', 'modal'),
+							label: __('Bottom Left', 'laao'),
 							value: 'bottom-left',
 						},
 						{
-							label: __('Bottom Right', 'modal'),
+							label: __('Bottom Right', 'laao'),
 							value: 'bottom-right',
 						},
 					]}
@@ -1510,23 +1510,23 @@ export default function Edit({
 
 				{/* Open on load */}
 				<ToggleControl
-					label={__('Open on Page Load', 'modal')}
+					label={__('Open on Page Load', 'laao')}
 					checked={openOnLoad}
 					onChange={(value) => setAttributes({ openOnLoad: value })}
 					help={__(
 						'When enabled, the modal will automatically open when the page loads',
-						'modal'
+						'laao'
 					)}
 					__nextHasNoMarginBottom
 				/>
 
 				{/* Trigger block select */}
 				<SelectControl
-					label={__('Trigger Block', 'modal')}
+					label={__('Trigger Block', 'laao')}
 					value={safeTriggerBlockId}
 					options={availableTriggers}
 					onChange={handleTriggerBlockChange}
-					help={__('Select a block to trigger this modal', 'modal')}
+					help={__('Select a block to trigger this modal', 'laao')}
 				/>
 
 				{/* Show highlight status */}
@@ -1534,7 +1534,7 @@ export default function Edit({
 					<Notice status="info" isDismissible={false}>
 						{__(
 							'Trigger block is highlighted in the editor',
-							'modal'
+							'laao'
 						)}
 					</Notice>
 				)}
@@ -1544,7 +1544,7 @@ export default function Edit({
 					<Notice status="warning" isDismissible={false}>
 						{__(
 							'Select this modal to highlight the trigger block',
-							'modal'
+							'laao'
 						)}
 					</Notice>
 				)}
@@ -1556,7 +1556,7 @@ export default function Edit({
 							!isSelected
 								? __(
 										'Select the modal first to use this button',
-										'modal'
+										'laao'
 									)
 								: ''
 						}
@@ -1568,7 +1568,7 @@ export default function Edit({
 								className="refresh-highlight-button"
 								disabled={!isSelected}
 							>
-								{__('Refresh Highlight', 'modal')}
+								{__('Refresh Highlight', 'laao')}
 							</Button>
 						</div>
 					</Tooltip>
@@ -1577,7 +1577,7 @@ export default function Edit({
 				{/* Trigger label (only if no block selected) */}
 				{!safeTriggerBlockId && (
 					<TextControl
-						label={__('Trigger Button Label', 'modal')}
+						label={__('Trigger Button Label', 'laao')}
 						value={triggerLabel}
 						onChange={(value) =>
 							setAttributes({ triggerLabel: value })
@@ -1590,13 +1590,13 @@ export default function Edit({
 
 			{/* Manual connection panel */}
 			<PanelBody
-				title={__('Manual Connection', 'modal')}
+				title={__('Manual Connection', 'laao')}
 				initialOpen={false}
 			>
 				<p>
 					{__(
 						'To connect any HTML element to this modal, add this class:',
-						'modal'
+						'laao'
 					)}
 				</p>
 				{modalId && (
@@ -1605,7 +1605,7 @@ export default function Edit({
 							modal-trigger-{modalId}
 						</code>
 						<p className="modal-connection-example">
-							{__('Example:', 'modal')}
+							{__('Example:', 'laao')}
 							<br />
 							<code>{`<a href="#" class="modal-trigger-${modalId}">Open Modal</a>`}</code>
 						</p>
@@ -1631,7 +1631,7 @@ export default function Edit({
 								}
 							}}
 						>
-							{__('Copy to Clipboard', 'modal')}
+							{__('Copy to Clipboard', 'laao')}
 						</Button>
 					</>
 				)}
@@ -1652,57 +1652,27 @@ export default function Edit({
 				<div className="modal-editor-wrapper">
 					<div className="modal-editor-header">
 						<Icon icon="media-interactive" />
-						<h2>{__('Modal Block', 'modal')}</h2>
+						<h2>{__('Modal Block', 'laao')}</h2>
 						<Tooltip
 							text={__(
 								'Modal ID - Used to connect trigger elements',
-								'modal'
+								'laao'
 							)}
 						>
 							<p className="modal-id">
-								{__('ID:', 'modal')} {modalId}
+								{__('ID:', 'laao')} {modalId}
 							</p>
 						</Tooltip>
 					</div>
 
 					<div className="modal-editor-content">
-						{safeTriggerBlockId && (
-							<div className="modal-trigger-notice">
-								<p>
-									{__('Connected to trigger block', 'modal')}
-								</p>
-								<Tooltip
-									text={
-										!isSelected
-											? __(
-													'Select the modal first to use this button',
-													'modal'
-												)
-											: ''
-									}
-								>
-									<div>
-										<Button
-											variant="secondary"
-											className="find-trigger-button"
-											onClick={handleRefreshHighlight}
-											disabled={!isSelected}
-										>
-											<span>🔍</span>{' '}
-											{__('Find Trigger Block', 'modal')}
-										</Button>
-									</div>
-								</Tooltip>
-							</div>
-						)}
-
 						<InnerBlocks
 							template={[
 								[
 									'core/heading',
 									{
 										level: 3,
-										content: __('Modal Title', 'modal'),
+										content: __('Modal Title', 'laao'),
 									},
 								],
 								[
@@ -1710,7 +1680,7 @@ export default function Edit({
 									{
 										content: __(
 											'Add your modal content here…',
-											'modal'
+											'laao'
 										),
 									},
 								],
@@ -1722,7 +1692,9 @@ export default function Edit({
 					<div className="modal-editor-footer">
 						<div className="modal-position-indicator">
 							<span>
-								{__('Position:', 'modal')} {safePosition}
+								{__('Position:', 'laao')}{' '}
+								{safePosition.charAt(0).toUpperCase() +
+									safePosition.slice(1)}
 							</span>
 						</div>
 
@@ -1730,8 +1702,8 @@ export default function Edit({
 							<div className="modal-auto-open-indicator">
 								<span>
 									{__(
-										'Opens automatically on page load',
-										'modal'
+										'Opens Automatically on Page Load',
+										'laao'
 									)}
 								</span>
 							</div>
@@ -1740,14 +1712,14 @@ export default function Edit({
 						{safeTriggerBlockId ? (
 							<div>
 								<span>
-									{__('Has trigger block', 'modal')}{' '}
 									<Icon icon={linkIcon} size={14} />
+									{__('Has Trigger Block', 'laao')}{' '}
 								</span>
 							</div>
 						) : (
 							<div>
 								<span>
-									{__('Trigger label:', 'modal')}{' '}
+									{__('Trigger Label:', 'laao')}{' '}
 									{triggerLabel}
 								</span>
 							</div>
