@@ -22,7 +22,7 @@ import {
 	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { link as linkIcon } from '@wordpress/icons';
@@ -39,6 +39,8 @@ import { cleanupAllHighlights, highlightModalTrigger } from './highlights';
 const Debug = {
 	messages: [],
 	enabled: false, // Disable debug output by default
+	// Track critical messages we've already logged to prevent duplication
+	loggedCritical: new Set(),
 
 	/**
 	 * Add a debug message
@@ -49,6 +51,40 @@ const Debug = {
 		// Always log critical errors, regardless of enabled state
 		if (!this.enabled && !critical) {
 			return;
+		}
+
+		// For critical messages, check if we've already logged this exact message or similar
+		if (critical) {
+			// Check if this is a block existence message and extract the block ID
+			if (
+				message.includes('no longer exists') ||
+				message.includes('not found') ||
+				message.includes('clearing reference')
+			) {
+				// Extract block ID if present using regex (looks for format matching UUIDs)
+				const blockIdMatch = message.match(
+					/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
+				);
+
+				if (blockIdMatch) {
+					const blockId = blockIdMatch[0];
+					const blockMessageKey = `block-not-exists:${blockId}`;
+
+					// If we've already logged about this block, skip it
+					if (this.loggedCritical.has(blockMessageKey)) {
+						return;
+					}
+
+					// Mark this block as processed
+					this.loggedCritical.add(blockMessageKey);
+				}
+			} else {
+				// For other critical messages, use the full message as key
+				if (this.loggedCritical.has(message)) {
+					return;
+				}
+				this.loggedCritical.add(message);
+			}
 		}
 
 		this.messages.push({
@@ -77,7 +113,31 @@ const Debug = {
 	 */
 	clear() {
 		this.messages = [];
+		this.loggedCritical.clear();
 	},
+};
+
+/**
+ * Safely check if a block exists
+ * @param {string} blockId - The client ID of the block to check
+ * @return {boolean} Whether the block exists
+ */
+const blockExists = (blockId) => {
+	if (!blockId) {
+		return false;
+	}
+
+	// Skip if editor isn't fully initialized
+	if (!wp.data || !wp.data.select || !wp.data.select('core/block-editor')) {
+		return false;
+	}
+
+	try {
+		const blockEditor = wp.data.select('core/block-editor');
+		return blockEditor && blockEditor.getBlock(blockId) !== undefined;
+	} catch (error) {
+		return false;
+	}
 };
 
 /**
@@ -288,13 +348,10 @@ const findTriggerElements = (blocksOrIncludeFlag = true, modalId = '') => {
 			let templateParts = [];
 
 			// In site editor - only access when needed
-			const editSite = select('core/edit-site');
-			if (
-				editSite &&
-				typeof editSite.getEditedEntityRecords === 'function'
-			) {
+			const { getEditedEntityRecords } = select('core/editor') || {};
+			if (getEditedEntityRecords) {
 				try {
-					const templateEntities = editSite.getEditedEntityRecords(
+					const templateEntities = getEditedEntityRecords(
 						'postType',
 						'wp_template_part'
 					);
@@ -594,7 +651,7 @@ export default function Edit({
 	} = attributes;
 
 	// Get the update function from the store for use in updateBlockTriggerClass
-	const { updateBlockAttributes } = useDispatch('core/block-editor');
+	// No longer needed since we use dispatch directly in the updateBlockTriggerClass function
 
 	/**
 	 * Updates a block's className to include or remove a trigger class
@@ -606,139 +663,65 @@ export default function Edit({
 	const updateBlockTriggerClass = useCallback(
 		(blockId, modalVal, add = true) => {
 			if (!blockId) {
-				Debug.add('updateBlockTriggerClass: Missing blockId', true);
 				return;
 			}
 
-			// Check if the block exists first
-			const blockEditor = wp.data.select('core/block-editor');
-
-			// Get the block itself first to verify it exists
-			const block = blockEditor.getBlock(blockId);
-
-			if (!block) {
-				Debug.add(`Block ${blockId} not found in editor`, true);
+			// Check if the block exists using our utility function
+			if (!blockExists(blockId)) {
 				return;
 			}
 
-			// Get the block's current attributes
-			const blockAttributes = blockEditor.getBlockAttributes(blockId);
+			try {
+				// Get the block editor
+				const blockEditor = wp.data.select('core/block-editor');
+				// Get the block's current attributes
+				const blockAttributes = blockEditor.getBlockAttributes(blockId);
 
-			if (!blockAttributes) {
-				Debug.add(
-					`Could not get attributes for block ${blockId}`,
-					true
-				);
-				// Still attempt to get attributes directly from the block object as fallback
-				if (block.attributes) {
-					Debug.add(
-						`Using attributes from block object as fallback`,
-						true
-					);
-					const currentClassName = block.attributes.className || '';
-
-					// Continue with the class update using the block object's attributes
-					if (!add) {
-						// Remove all modal-trigger classes regardless of modal ID
-						const cleanedClassName = currentClassName
-							.split(' ')
-							.filter((cls) => !cls.startsWith('modal-trigger-'))
-							.join(' ');
-
-						try {
-							updateBlockAttributes(blockId, {
-								className: cleanedClassName,
-							});
-							Debug.add(
-								`Removed modal trigger classes using fallback method`
-							);
-						} catch (error) {
-							Debug.add(
-								`Failed to update block: ${error.message}`,
-								true
-							);
-						}
-					} else {
-						// Add the new class
-						const updatedClassName = addOrUpdateClassWithPrefix(
-							currentClassName,
-							'modal-trigger-',
-							modalVal
-						);
-
-						// Only update if the class has actually changed
-						if (updatedClassName !== currentClassName) {
-							try {
-								updateBlockAttributes(blockId, {
-									className: updatedClassName,
-								});
-								Debug.add(
-									`Added modal-trigger class using fallback method`
-								);
-							} catch (error) {
-								Debug.add(
-									`Failed to update block: ${error.message}`,
-									true
-								);
-							}
-						}
-					}
+				if (!blockAttributes) {
 					return;
 				}
-				return;
-			}
 
-			// Get the current className or empty string
-			const currentClassName = blockAttributes.className || '';
+				// Get the current className or empty string
+				const currentClassName = blockAttributes.className || '';
 
-			// If removing, strip all modal-trigger classes, not just one specific class
-			if (!add) {
-				// Remove all modal-trigger classes regardless of modal ID
-				const cleanedClassName = currentClassName
-					.split(' ')
-					.filter((cls) => !cls.startsWith('modal-trigger-'))
-					.join(' ');
+				// Get the update function from the store
+				const dispatch = wp.data.dispatch('core/block-editor');
+				if (!dispatch || !dispatch.updateBlockAttributes) {
+					return;
+				}
 
-				Debug.add(
-					`Removing all modal trigger classes from block ${blockId}`
-				);
-				try {
-					updateBlockAttributes(blockId, {
+				// If removing, strip all modal-trigger classes, not just one specific class
+				if (!add) {
+					// Remove all modal-trigger classes regardless of modal ID
+					const cleanedClassName = currentClassName
+						.split(' ')
+						.filter((cls) => !cls.startsWith('modal-trigger-'))
+						.join(' ');
+
+					dispatch.updateBlockAttributes(blockId, {
 						className: cleanedClassName,
 					});
-				} catch (error) {
-					Debug.add(
-						`Failed to update block attributes: ${error.message}`,
-						true
+				} else {
+					// Add the new class
+					const updatedClassName = addOrUpdateClassWithPrefix(
+						currentClassName,
+						'modal-trigger-',
+						modalVal
 					);
-				}
-			} else {
-				// Add the new class
-				const updatedClassName = addOrUpdateClassWithPrefix(
-					currentClassName,
-					'modal-trigger-',
-					modalVal
-				);
 
-				// Only update if the class has actually changed
-				if (updatedClassName !== currentClassName) {
-					Debug.add(
-						`Adding modal-trigger-${modalVal} class to block ${blockId}`
-					);
-					try {
-						updateBlockAttributes(blockId, {
+					// Only update if the class has actually changed
+					if (updatedClassName !== currentClassName) {
+						dispatch.updateBlockAttributes(blockId, {
 							className: updatedClassName,
 						});
-					} catch (error) {
-						Debug.add(
-							`Failed to update block attributes: ${error.message}`,
-							true
-						);
 					}
 				}
+			} catch (error) {
+				// Silently fail
 			}
 		},
-		[updateBlockAttributes]
+		// No external dependencies for this function
+		[]
 	);
 
 	// Component state
@@ -747,6 +730,10 @@ export default function Edit({
 	const previousTriggerBlockId = useRef(triggerBlockId);
 	// Store the previously highlighted elements to ensure proper cleanup
 	const previousHighlightedElements = useRef(new Set());
+	// Track which trigger IDs we've already processed for cleanup
+	const clearedTriggerIDs = useRef(new Set());
+	// Track the last selected block to avoid repeated processing
+	const lastSelectedBlock = useRef(null);
 
 	// Get block editor data, including template parts
 	const { blocks, templateParts } = useSelect((select) => {
@@ -834,8 +821,8 @@ export default function Edit({
 
 			// Verify the block still exists (if we have access to the editor)
 			if (blockEditor) {
-				const blockExists = blockEditor.getBlock(trigger.clientId);
-				if (!blockExists) {
+				const blockStillExists = blockEditor.getBlock(trigger.clientId);
+				if (!blockStillExists) {
 					Debug.add(
 						`Trigger candidate ${trigger.clientId} no longer exists - skipping`,
 						true
@@ -867,29 +854,30 @@ export default function Edit({
 
 	// Check if the saved trigger block still exists when the component loads
 	useEffect(() => {
-		if (safeTriggerBlockId) {
-			const blockEditor = wp.data.select('core/block-editor');
-			if (!blockEditor) {
-				return;
-			}
+		// Skip if no trigger ID or if we've already processed this ID
+		if (
+			!safeTriggerBlockId ||
+			clearedTriggerIDs.current.has(safeTriggerBlockId)
+		) {
+			return;
+		}
 
-			const triggerBlockExists = blockEditor.getBlock(safeTriggerBlockId);
+		// Check if the block exists using our utility function
+		if (!blockExists(safeTriggerBlockId)) {
+			// Mark this ID as processed to prevent repeated handling
+			clearedTriggerIDs.current.add(safeTriggerBlockId);
 
-			if (!triggerBlockExists) {
-				Debug.add(
-					`Saved trigger block ${safeTriggerBlockId} no longer exists, clearing reference`,
-					true
-				);
-				// Clear the trigger block reference since it no longer exists
-				setAttributes({
-					triggerBlockId: '',
-				});
-				// Also update the ref to avoid cleanup attempts on a non-existent block
-				previousTriggerBlockId.current = null;
-				// Clean up highlight state
-				setIsHighlightActive(false);
-				cleanupAllHighlights();
-			}
+			// Clear the trigger block reference since it no longer exists
+			setAttributes({
+				triggerBlockId: '',
+			});
+
+			// Also update the ref to avoid cleanup attempts on a non-existent block
+			previousTriggerBlockId.current = null;
+
+			// Clean up highlight state
+			setIsHighlightActive(false);
+			cleanupAllHighlights();
 		}
 	}, [safeTriggerBlockId, setAttributes]);
 
@@ -941,230 +929,235 @@ export default function Edit({
 
 	// Load and scan for triggers when blocks change or on initial load
 	useEffect(() => {
-		if (blocks?.length && modalId) {
-			Debug.add(
-				`Scanning ${blocks.length} blocks and ${templateParts?.length || 0} template parts for potential triggers`
-			);
+		// Skip if editor isn't ready or required data is missing
+		if (!blocks?.length || !modalId) {
+			return;
+		}
 
-			// Find triggers in main content blocks and all available template parts
-			const detectedTriggers = findTriggerElements(true, modalId);
+		// Add a ready check before validating blocks
+		if (
+			!wp.data ||
+			!wp.data.select ||
+			!wp.data.select('core/block-editor')
+		) {
+			return;
+		}
 
-			// Additionally process the inner blocks of any template parts known to the editor
-			if (templateParts && templateParts.length > 0) {
-				templateParts.forEach((templatePart) => {
-					Debug.add(
-						`Scanning local template part: ${templatePart.slug || templatePart.clientId}`
-					);
+		Debug.add(
+			`Scanning ${blocks.length} blocks and ${templateParts?.length || 0} template parts for potential triggers`
+		);
 
-					// Process the template part's inner blocks directly if they exist
-					if (
-						templatePart.innerBlocks &&
-						templatePart.innerBlocks.length > 0
-					) {
-						// Process these blocks directly as a separate source
-						const templatePartTriggers = [];
-						processBlocksForTriggers(
-							templatePart.innerBlocks,
-							templatePartTriggers,
-							true, // These are from template part
-							templatePart.slug ||
-								templatePart.area ||
-								'template-part',
-							modalId
-						);
+		// Find triggers in main content blocks and all available template parts
+		const detectedTriggers = findTriggerElements(true, modalId);
 
-						// Add metadata to identify these as template part blocks and add to main list
-						templatePartTriggers.forEach((trigger) => {
-							trigger.fromTemplatePart = true;
-							trigger.templatePartId = templatePart.clientId;
-							trigger.templatePartSlug =
-								templatePart.slug || templatePart.area;
-							trigger.templatePartArea = templatePart.area;
-
-							// Make sure we don't have duplicates (by clientId)
-							if (
-								!detectedTriggers.some(
-									(t) => t.clientId === trigger.clientId
-								)
-							) {
-								detectedTriggers.push(trigger);
-							}
-						});
-
-						Debug.add(
-							`Found ${templatePartTriggers.length} triggers in local template part ${templatePart.slug || templatePart.clientId}`
-						);
-					}
-				});
-			}
-
-			// First look for a block that already has the modal-trigger class
-			const triggerWithClass = detectedTriggers.find(
-				(trigger) => trigger.isTrigger === true
-			);
-
-			if (triggerWithClass) {
+		// Additionally process the inner blocks of any template parts known to the editor
+		if (templateParts && templateParts.length > 0) {
+			templateParts.forEach((templatePart) => {
 				Debug.add(
-					`Found block with modal-trigger-${modalId} class: ${triggerWithClass.clientId}`
+					`Scanning local template part: ${templatePart.slug || templatePart.clientId}`
 				);
 
-				// If we found a trigger by class but it's not the current one, update it
-				if (triggerWithClass.clientId !== safeTriggerBlockId) {
-					Debug.add(
-						`Updating trigger block ID to ${triggerWithClass.clientId} based on class`
+				// Process the template part's inner blocks directly if they exist
+				if (
+					templatePart.innerBlocks &&
+					templatePart.innerBlocks.length > 0
+				) {
+					// Process these blocks directly as a separate source
+					const templatePartTriggers = [];
+					processBlocksForTriggers(
+						templatePart.innerBlocks,
+						templatePartTriggers,
+						true, // These are from template part
+						templatePart.slug ||
+							templatePart.area ||
+							'template-part',
+						modalId
 					);
-					setAttributes({
-						triggerBlockId: triggerWithClass.clientId,
-						triggerBlockKey: '', // Reset this since we're using the class
+
+					// Add metadata to identify these as template part blocks and add to main list
+					templatePartTriggers.forEach((trigger) => {
+						trigger.fromTemplatePart = true;
+						trigger.templatePartId = templatePart.clientId;
+						trigger.templatePartSlug =
+							templatePart.slug || templatePart.area;
+						trigger.templatePartArea = templatePart.area;
+
+						// Make sure we don't have duplicates (by clientId)
+						if (
+							!detectedTriggers.some(
+								(t) => t.clientId === trigger.clientId
+							)
+						) {
+							detectedTriggers.push(trigger);
+						}
 					});
 
-					// Update the current trigger block ID ref
-					previousTriggerBlockId.current = triggerWithClass.clientId;
-
-					// Make sure the class is still applied
-					updateBlockTriggerClass(
-						triggerWithClass.clientId,
-						modalId,
-						true
+					Debug.add(
+						`Found ${templatePartTriggers.length} triggers in local template part ${templatePart.slug || templatePart.clientId}`
 					);
-
-					return; // Exit early since we've updated the attributes
 				}
-			}
+			});
+		}
 
-			// Check if saved trigger is in our detected triggers
-			const savedTriggerFound =
-				safeTriggerBlockId &&
-				detectedTriggers.some((t) => t.clientId === safeTriggerBlockId);
+		// First look for a block that already has the modal-trigger class
+		const triggerWithClass = detectedTriggers.find(
+			(trigger) => trigger.isTrigger === true
+		);
 
-			if (savedTriggerFound) {
+		if (triggerWithClass) {
+			Debug.add(
+				`Found block with modal-trigger-${modalId} class: ${triggerWithClass.clientId}`
+			);
+
+			// If we found a trigger by class but it's not the current one, update it
+			if (triggerWithClass.clientId !== safeTriggerBlockId) {
 				Debug.add(
-					`Saved trigger ID ${safeTriggerBlockId} found in detected triggers`
+					`Updating trigger block ID to ${triggerWithClass.clientId} based on class`
 				);
+				setAttributes({
+					triggerBlockId: triggerWithClass.clientId,
+					triggerBlockKey: '', // Reset this since we're using the class
+				});
+
+				// Update the current trigger block ID ref
+				previousTriggerBlockId.current = triggerWithClass.clientId;
 
 				// Make sure the class is still applied
-				updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
+				updateBlockTriggerClass(
+					triggerWithClass.clientId,
+					modalId,
+					true
+				);
+
+				return; // Exit early since we've updated the attributes
 			}
+		}
 
-			// Only update if triggers have changed - but be careful not to create an infinite loop
-			const currentTriggersJSON = JSON.stringify(
-				triggers.map((t) => ({
-					clientId: t.clientId,
-					type: t.type,
-					name: t.name,
-				}))
-			);
-			const detectedTriggersJSON = JSON.stringify(
-				detectedTriggers.map((t) => ({
-					clientId: t.clientId,
-					type: t.type,
-					name: t.name,
-				}))
+		// Check if saved trigger is in our detected triggers
+		const savedTriggerFound =
+			safeTriggerBlockId &&
+			detectedTriggers.some((t) => t.clientId === safeTriggerBlockId);
+
+		if (savedTriggerFound) {
+			Debug.add(
+				`Saved trigger ID ${safeTriggerBlockId} found in detected triggers`
 			);
 
-			if (currentTriggersJSON !== detectedTriggersJSON) {
-				// We need to check if we should add our saved trigger
-				if (safeTriggerBlockId && !savedTriggerFound) {
-					Debug.add(
-						`Saved trigger ID ${safeTriggerBlockId} NOT found in detected triggers, attempting to add it`
-					);
+			// Make sure the class is still applied
+			updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
+		}
 
-					// Look up the block directly in the registry
-					try {
-						const { select: wpSelect } = wp.data;
-						if (wpSelect) {
-							const savedBlock =
-								wpSelect('core/block-editor').getBlock(
-									safeTriggerBlockId
-								);
+		// Only update if triggers have changed - but be careful not to create an infinite loop
+		const currentTriggersJSON = JSON.stringify(
+			triggers.map((t) => ({
+				clientId: t.clientId,
+				type: t.type,
+				name: t.name,
+			}))
+		);
+		const detectedTriggersJSON = JSON.stringify(
+			detectedTriggers.map((t) => ({
+				clientId: t.clientId,
+				type: t.type,
+				name: t.name,
+			}))
+		);
 
-							if (savedBlock) {
-								Debug.add(
-									`Successfully found saved block: ${savedBlock.name}`
-								);
+		if (currentTriggersJSON !== detectedTriggersJSON) {
+			// We need to check if we should add our saved trigger
+			if (safeTriggerBlockId && !savedTriggerFound) {
+				Debug.add(
+					`Saved trigger ID ${safeTriggerBlockId} NOT found in detected triggers, attempting to add it`
+				);
 
-								// Determine if it's a button or link type
-								const name = savedBlock.name || '';
-								const blockAttributes =
-									savedBlock.attributes || {};
-								const blockType = name.split('/')[1] || name;
-								const isButton =
-									name.includes('button') ||
-									name.includes('Button');
-
-								// Add it to the detected triggers before setting state
-								detectedTriggers.push({
-									clientId: safeTriggerBlockId,
-									name,
-									type: isButton ? 'button' : 'link',
-									text:
-										blockAttributes.text ||
-										blockAttributes.content ||
-										blockType ||
-										'Saved Trigger',
-									isTrigger: true, // Mark it as a trigger
-								});
-
-								Debug.add(
-									`Added saved trigger to detected triggers list`
-								);
-
-								// Make sure the class is applied
-								updateBlockTriggerClass(
-									safeTriggerBlockId,
-									modalId,
-									true
-								);
-							} else {
-								Debug.add(
-									`Could not find saved block with ID: ${safeTriggerBlockId}`
-								);
-							}
-						}
-					} catch (err) {
-						Debug.add(
-							`Error looking up saved block: ${err.message}`
-						);
-					}
-				}
-
-				// Attempt to find by key first, then fallback to ID
-				if (attributes.triggerBlockKey && !savedTriggerFound) {
-					let foundByKey = false;
-
-					// Try to find block by the persistent key
-					blocks.forEach((block) => {
-						const blockKey = generateBlockKey(block);
-						if (blockKey === attributes.triggerBlockKey) {
-							// We found a match by key, update the clientId
-							Debug.add(
-								`Found block by persistent key ${attributes.triggerBlockKey}`
+				// Look up the block directly in the registry
+				try {
+					const { select: wpSelect } = wp.data;
+					if (wpSelect) {
+						const savedBlock =
+							wpSelect('core/block-editor').getBlock(
+								safeTriggerBlockId
 							);
-							setAttributes({ triggerBlockId: block.clientId });
 
-							// Update the class for this block
+						if (savedBlock) {
+							Debug.add(
+								`Successfully found saved block: ${savedBlock.name}`
+							);
+
+							// Determine if it's a button or link type
+							const name = savedBlock.name || '';
+							const blockAttributes = savedBlock.attributes || {};
+							const blockType = name.split('/')[1] || name;
+							const isButton =
+								name.includes('button') ||
+								name.includes('Button');
+
+							// Add it to the detected triggers before setting state
+							detectedTriggers.push({
+								clientId: safeTriggerBlockId,
+								name,
+								type: isButton ? 'button' : 'link',
+								text:
+									blockAttributes.text ||
+									blockAttributes.content ||
+									blockType ||
+									'Saved Trigger',
+								isTrigger: true, // Mark it as a trigger
+							});
+
+							Debug.add(
+								`Added saved trigger to detected triggers list`
+							);
+
+							// Make sure the class is applied
 							updateBlockTriggerClass(
-								block.clientId,
+								safeTriggerBlockId,
 								modalId,
 								true
 							);
-
-							foundByKey = true;
+						} else {
+							Debug.add(
+								`Could not find saved block with ID: ${safeTriggerBlockId}`
+							);
 						}
-					});
-
-					if (foundByKey) {
-						// We've updated the triggerBlockId, don't need further processing
-						return;
 					}
+				} catch (err) {
+					Debug.add(`Error looking up saved block: ${err.message}`);
 				}
-
-				// Now set the triggers with our potentially modified list
-				setTriggers(detectedTriggers);
-				Debug.add(
-					`Updated triggers list with ${detectedTriggers.length} items`
-				);
 			}
+
+			// Attempt to find by key first, then fallback to ID
+			if (attributes.triggerBlockKey && !savedTriggerFound) {
+				let foundByKey = false;
+
+				// Try to find block by the persistent key
+				blocks.forEach((block) => {
+					const blockKey = generateBlockKey(block);
+					if (blockKey === attributes.triggerBlockKey) {
+						// We found a match by key, update the clientId
+						Debug.add(
+							`Found block by persistent key ${attributes.triggerBlockKey}`
+						);
+						setAttributes({ triggerBlockId: block.clientId });
+
+						// Update the class for this block
+						updateBlockTriggerClass(block.clientId, modalId, true);
+
+						foundByKey = true;
+					}
+				});
+
+				if (foundByKey) {
+					// We've updated the triggerBlockId, don't need further processing
+					return;
+				}
+			}
+
+			// Now set the triggers with our potentially modified list
+			setTriggers(detectedTriggers);
+			Debug.add(
+				`Updated triggers list with ${detectedTriggers.length} items`
+			);
 		}
 	}, [
 		blocks,
@@ -1179,33 +1172,46 @@ export default function Edit({
 
 	// Handle highlighting when selection changes
 	useEffect(() => {
-		if (isSelected && safeTriggerBlockId) {
-			// First make sure the trigger class is applied correctly
-			updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
-
-			// When the modal is selected and has a trigger, highlight that trigger
-			setTimeout(() => {
-				// Clean up any existing highlights first to prevent duplicates
-				cleanupAllHighlights();
-
-				// Use a small timeout to ensure the DOM is ready
-				highlightModalTrigger(null, modalId, safeTriggerBlockId, {
-					discreet: true,
-				});
-				setIsHighlightActive(true);
-
-				// Store any newly highlighted elements
-				document
-					.querySelectorAll('.modal-highlight-target')
-					.forEach((el) => {
-						previousHighlightedElements.current.add(el);
-					});
-			}, 100);
-		} else {
+		// Skip if not selected or no trigger block
+		if (!isSelected || !safeTriggerBlockId) {
 			// Clean up highlights when deselected
-			cleanupAllHighlights();
-			setIsHighlightActive(false);
+			if (!isSelected) {
+				cleanupAllHighlights();
+				setIsHighlightActive(false);
+			}
+			return;
 		}
+
+		// Add a ready check before using block editor
+		if (
+			!wp.data ||
+			!wp.data.select ||
+			!wp.data.select('core/block-editor')
+		) {
+			return;
+		}
+
+		// First make sure the trigger class is applied correctly
+		updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
+
+		// When the modal is selected and has a trigger, highlight that trigger
+		setTimeout(() => {
+			// Clean up any existing highlights first to prevent duplicates
+			cleanupAllHighlights();
+
+			// Use a small timeout to ensure the DOM is ready
+			highlightModalTrigger(null, modalId, safeTriggerBlockId, {
+				discreet: true,
+			});
+			setIsHighlightActive(true);
+
+			// Store any newly highlighted elements
+			document
+				.querySelectorAll('.modal-highlight-target')
+				.forEach((el) => {
+					previousHighlightedElements.current.add(el);
+				});
+		}, 100);
 
 		// Clean up when unmounting
 		return () => cleanupAllHighlights();
@@ -1214,31 +1220,41 @@ export default function Edit({
 	// When triggerBlockId changes, update the highlight ONLY if the modal is selected
 	useEffect(() => {
 		// Only show highlight if the modal is selected
-		if (isSelected && safeTriggerBlockId) {
-			// First make sure the trigger class is applied correctly
-			updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
-
-			setTimeout(() => {
-				// Clean up any existing highlights first
-				cleanupAllHighlights();
-
-				// Use a small timeout to ensure the DOM is ready
-				highlightModalTrigger(null, modalId, safeTriggerBlockId, {
-					discreet: true,
-				});
-				setIsHighlightActive(true);
-
-				// Store any newly highlighted elements
-				document
-					.querySelectorAll('.modal-highlight-target')
-					.forEach((el) => {
-						previousHighlightedElements.current.add(el);
-					});
-			}, 100);
+		if (!isSelected || !safeTriggerBlockId) {
+			return;
 		}
-	}, [safeTriggerBlockId, modalId, isSelected, updateBlockTriggerClass]); // Add updateBlockTriggerClass as a dependency
 
-	// After the other useEffect hooks, add a new one to subscribe to block selection changes globally
+		// Add a ready check before using block editor
+		if (
+			!wp.data ||
+			!wp.data.select ||
+			!wp.data.select('core/block-editor')
+		) {
+			return;
+		}
+
+		// First make sure the trigger class is applied correctly
+		updateBlockTriggerClass(safeTriggerBlockId, modalId, true);
+
+		setTimeout(() => {
+			// Clean up any existing highlights first
+			cleanupAllHighlights();
+
+			// Use a small timeout to ensure the DOM is ready
+			highlightModalTrigger(null, modalId, safeTriggerBlockId, {
+				discreet: true,
+			});
+			setIsHighlightActive(true);
+
+			// Store any newly highlighted elements
+			document
+				.querySelectorAll('.modal-highlight-target')
+				.forEach((el) => {
+					previousHighlightedElements.current.add(el);
+				});
+		}, 100);
+	}, [safeTriggerBlockId, modalId, isSelected, updateBlockTriggerClass]);
+
 	// Add a global selection change listener to ensure highlights are cleaned up
 	useEffect(() => {
 		// Don't bother if we don't have a trigger block
@@ -1248,27 +1264,44 @@ export default function Edit({
 
 		// Subscribe to selection changes in the block editor
 		const { subscribe } = wp.data;
+		if (!subscribe) {
+			return;
+		}
+
 		const unsubscribe = subscribe(() => {
+			// Skip if editor isn't ready
+			if (
+				!wp.data ||
+				!wp.data.select ||
+				!wp.data.select('core/block-editor')
+			) {
+				return;
+			}
+
+			// First check if the trigger block still exists using our utility
+			if (!blockExists(safeTriggerBlockId)) {
+				// Only process this once
+				if (!clearedTriggerIDs.current.has(safeTriggerBlockId)) {
+					clearedTriggerIDs.current.add(safeTriggerBlockId);
+					// Clear the trigger block reference since it no longer exists
+					setAttributes({ triggerBlockId: '' });
+					previousTriggerBlockId.current = null;
+					cleanupAllHighlights();
+					setIsHighlightActive(false);
+				}
+				return;
+			}
+
 			const blockEditor = wp.data.select('core/block-editor');
-			if (!blockEditor) {
-				return;
-			}
-
-			// First check if the trigger block still exists
-			const triggerBlockExists = blockEditor.getBlock(safeTriggerBlockId);
-			if (!triggerBlockExists) {
-				Debug.add(
-					`Trigger block ${safeTriggerBlockId} no longer exists - clearing reference`,
-					true
-				);
-				setAttributes({ triggerBlockId: '' });
-				previousTriggerBlockId.current = null;
-				cleanupAllHighlights();
-				setIsHighlightActive(false);
-				return;
-			}
-
 			const selectedBlockId = blockEditor?.getSelectedBlockClientId();
+
+			// Skip if selection hasn't changed
+			if (selectedBlockId === lastSelectedBlock.current) {
+				return;
+			}
+
+			// Update our tracking ref
+			lastSelectedBlock.current = selectedBlockId;
 
 			// If the selected block exists and it's not our modal or a parent of our modal
 			if (selectedBlockId && selectedBlockId !== clientId) {
@@ -1283,9 +1316,6 @@ export default function Edit({
 				// If it's not our modal or a parent of our modal, and we're showing a highlight,
 				// clean up all highlights
 				if (!isParentOfModal && isHighlightActive) {
-					Debug.add(
-						'Selection changed to another block, cleaning up highlights'
-					);
 					cleanupAllHighlights();
 					setIsHighlightActive(false);
 				}
@@ -1306,10 +1336,10 @@ export default function Edit({
 		if (isSelected && safeTriggerBlockId) {
 			// Verify the trigger block still exists
 			const blockEditor = wp.data.select('core/block-editor');
-			const blockExists =
+			const blockStillExists =
 				blockEditor && blockEditor.getBlock(safeTriggerBlockId);
 
-			if (!blockExists) {
+			if (!blockStillExists) {
 				Debug.add(
 					`Trigger block ${safeTriggerBlockId} no longer exists - cannot highlight`,
 					true
@@ -1385,10 +1415,10 @@ export default function Edit({
 
 				// Verify if previous block still exists before trying to remove classes
 				const blockEditor = wp.data.select('core/block-editor');
-				const prevBlockExists =
+				const prevBlockStillExists =
 					blockEditor && blockEditor.getBlock(prevTriggerId);
 
-				if (prevBlockExists) {
+				if (prevBlockStillExists) {
 					// Remove all modal-trigger classes from previous trigger
 					try {
 						updateBlockTriggerClass(prevTriggerId, modalId, false);
@@ -1419,10 +1449,10 @@ export default function Edit({
 
 			// Verify selected block exists before proceeding
 			const blockEditor = wp.data.select('core/block-editor');
-			const newBlockExists =
+			const newBlockStillExists =
 				blockEditor && blockEditor.getBlock(selectedBlockId);
 
-			if (!newBlockExists) {
+			if (!newBlockStillExists) {
 				Debug.add(
 					`Selected block ${selectedBlockId} not found - cannot set as trigger`,
 					true
@@ -1527,6 +1557,8 @@ export default function Edit({
 					options={availableTriggers}
 					onChange={handleTriggerBlockChange}
 					help={__('Select a block to trigger this modal', 'laao')}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 
 				{/* Show highlight status */}
@@ -1650,21 +1682,6 @@ export default function Edit({
 
 			<div {...blockProps}>
 				<div className="modal-editor-wrapper">
-					<div className="modal-editor-header">
-						<Icon icon="media-interactive" />
-						<h2>{__('Modal Block', 'laao')}</h2>
-						<Tooltip
-							text={__(
-								'Modal ID - Used to connect trigger elements',
-								'laao'
-							)}
-						>
-							<p className="modal-id">
-								{__('ID:', 'laao')} {modalId}
-							</p>
-						</Tooltip>
-					</div>
-
 					<div className="modal-editor-content">
 						<InnerBlocks
 							template={[

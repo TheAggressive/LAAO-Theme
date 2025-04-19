@@ -32,7 +32,7 @@ const { state, actions } = store('laao/modal', {
 			}
 
 			if (!state.modals[ctx.id]) {
-				state.modals[ctx.id] = { isActive: false };
+				return;
 			}
 
 			const modalContainer = document.querySelector(
