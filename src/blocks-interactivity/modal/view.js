@@ -25,7 +25,7 @@ const { state, actions } = store('laao/modal', {
 				actions.openModal();
 			}
 		},
-		openModal: () => {
+		openModal: (event) => {
 			const ctx = getContext();
 			if (!ctx || !ctx.id) {
 				return;
@@ -33,6 +33,10 @@ const { state, actions } = store('laao/modal', {
 
 			if (!state.modals[ctx.id]) {
 				return;
+			}
+
+			if (event) {
+				event.preventDefault();
 			}
 
 			const modalContainer = document.querySelector(
