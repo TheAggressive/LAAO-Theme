@@ -36,14 +36,11 @@
 			"type": "string",
 			"default": ""
 		},
-		"triggerBlockKey": {
-			"type": "string",
-			"default": ""
-		},
 		"triggerBlockAnchor": {
 			"type": "string",
 			"default": ""
 		},
+
 		"triggerLabel": {
 			"type": "string",
 			"default": "Open Modal"

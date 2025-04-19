@@ -26,6 +26,7 @@
   - Use prepare() statements for secure database queries.
   - Implement proper database schema changes using dbDelta() function.
   - Always use the most current block theme development API's and conventions
+  - Always use the most current WordPress Interactivity API format and best practices when building a interactivity api block
 
   Dependencies
   - WordPress (latest stable version)

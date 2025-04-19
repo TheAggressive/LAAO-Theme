@@ -47,6 +47,55 @@ wp_interactivity_state(
 		),
 	)
 );
+
+if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_interactivity' ) ) {
+
+	function add_modal_trigger_interactivity() {
+		// Get the current page HTML
+		$content = ob_get_contents();
+
+		// Quick check if we even need to process
+		if ( strpos( $content, 'modal-trigger-modal-' ) === false ) {
+			return;
+		}
+
+		$html     = new WP_HTML_Tag_Processor( $content );
+		$modified = false;
+
+		// Find elements with modal trigger classes
+		while ( $html->next_tag() ) {
+			$class = $html->get_attribute( 'class' );
+			if ( $class && strpos( $class, 'modal-trigger-modal-' ) !== false && preg_match( '/modal-trigger-modal-([a-zA-Z0-9-]+)/', $class, $matches ) ) {
+
+				// Add the interactive attributes
+				$html->set_attribute( 'data-wp-interactive', 'laao/modal' );
+				$html->set_attribute(
+					'data-wp-context',
+					'{ "id": "modal-' . esc_attr( $matches[1] ) . '" }'
+				);
+				$html->set_attribute( 'data-wp-on--click', 'actions.openModal' );
+				$modified = true;
+			}
+		}
+
+		if ( $modified ) {
+			// Clear the buffer and output the modified HTML
+			ob_clean();
+			echo $html->get_updated_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	// Start output buffering at the beginning of the page
+	add_action(
+		'template_redirect',
+		function () {
+			ob_start();
+		}
+	);
+
+	// Process the HTML just before it's sent to the browser
+	add_action( 'shutdown', 'add_modal_trigger_interactivity', 0 );
+}
 ?>
 
 <div
