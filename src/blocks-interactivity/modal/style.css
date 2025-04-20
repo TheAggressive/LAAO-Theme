@@ -187,7 +187,7 @@
 /* Slide animations */
 @keyframes modal-slide-down-in {
 	from {
-		transform: translateY(-60px);
+		transform: translateY(-100px);
 		opacity: 0;
 	}
 	to {
@@ -202,7 +202,7 @@
 		opacity: 1;
 	}
 	to {
-		transform: translateY(60px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 }
@@ -210,7 +210,7 @@
 /* Special slide animations for centered modals */
 @keyframes modal-center-slide-down-in {
 	from {
-		transform: translate(-50%, -50%) translateY(-60px);
+		transform: translate(-50%, -50%) translateY(-100px);
 		opacity: 0;
 	}
 	to {
@@ -225,14 +225,14 @@
 		opacity: 1;
 	}
 	to {
-		transform: translate(-50%, -50%) translateY(60px);
+		transform: translate(-50%, -50%) translateY(100px);
 		opacity: 0;
 	}
 }
 
 @keyframes modal-center-slide-up-in {
 	from {
-		transform: translate(-50%, -50%) translateY(60px);
+		transform: translate(-50%, -50%) translateY(100px);
 		opacity: 0;
 	}
 	to {
@@ -247,7 +247,7 @@
 		opacity: 1;
 	}
 	to {
-		transform: translate(-50%, -50%) translateY(-60px);
+		transform: translate(-50%, -50%) translateY(-100px);
 		opacity: 0;
 	}
 }
@@ -278,7 +278,7 @@
 /* Special zoom animations for centered modals */
 @keyframes modal-center-zoom-in {
 	from {
-		transform: translate(-50%, -50%) scale(0.9);
+		transform: translate(-50%, -50%) scale(0.7);
 		opacity: 0;
 	}
 	to {
@@ -293,7 +293,7 @@
 		opacity: 1;
 	}
 	to {
-		transform: translate(-50%, -50%) scale(0.9);
+		transform: translate(-50%, -50%) scale(0.7);
 		opacity: 0;
 	}
 }
@@ -301,7 +301,7 @@
 /* Bounce animation */
 @keyframes modal-bounce {
 	0% {
-		transform: scale(0.9);
+		transform: scale(0.6);
 		opacity: 0;
 	}
 	50% {
@@ -309,7 +309,7 @@
 		opacity: 1;
 	}
 	75% {
-		transform: scale(0.95);
+		transform: scale(0.9);
 	}
 	100% {
 		transform: scale(1);
@@ -320,7 +320,7 @@
 /* Special bounce animation for centered modals */
 @keyframes modal-center-bounce {
 	0% {
-		transform: translate(-50%, -50%) scale(0.9);
+		transform: translate(-50%, -50%) scale(0.6);
 		opacity: 0;
 	}
 	50% {
@@ -328,7 +328,7 @@
 		opacity: 1;
 	}
 	75% {
-		transform: translate(-50%, -50%) scale(0.95);
+		transform: translate(-50%, -50%) scale(0.9);
 	}
 	100% {
 		transform: translate(-50%, -50%) scale(1);
@@ -339,7 +339,7 @@
 /* Slide animations */
 @keyframes modal-slide-up-in {
 	from {
-		transform: translateY(60px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 	to {
@@ -354,7 +354,7 @@
 		opacity: 1;
 	}
 	to {
-		transform: translateY(-60px);
+		transform: translateY(-100px);
 		opacity: 0;
 	}
 }
