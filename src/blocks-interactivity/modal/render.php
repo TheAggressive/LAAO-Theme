@@ -132,8 +132,9 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		class="wp-block-laao-modal-overlay"
 		data-wp-on--click="actions.closeModal"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
-		data-wp-class--animation-enter="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-enter="!state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
 		data-wp-class--animation-exit="state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
+		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		aria-hidden="true"
 		style="--laao-modal-animation-duration: <?php echo esc_attr( $animation_duration ); ?>ms; --laao-modal-animation-delay: <?php echo esc_attr( $animation_duration ); ?>ms;"
 	></div>
@@ -144,7 +145,7 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?> wp-block-laao-<?php echo esc_attr( $unique_id ); ?>-content"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
-		data-wp-class--animation-enter-<?php echo esc_attr( $enter_animation ); ?>="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-enter-<?php echo esc_attr( $enter_animation ); ?>="!state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
 		data-wp-class--animation-exit-<?php echo esc_attr( $exit_animation ); ?>="state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
 		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'

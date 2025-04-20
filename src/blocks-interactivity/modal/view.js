@@ -27,11 +27,13 @@ const { state, actions } = store('laao/modal', {
 		},
 		openModal: (event) => {
 			const ctx = getContext();
+
 			if (!ctx || !ctx.id) {
 				return;
 			}
 
 			if (!state.modals[ctx.id]) {
+				state.modals[ctx.id] = { isActive: false };
 				return;
 			}
 

@@ -57,7 +57,7 @@
 			}
 
 			&:not(.modal-position-center).animation-exit-slide-down {
-				@apply animate-[modal-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] !delay-0;
+				@apply animate-[modal-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
 			}
 
 			&:not(.modal-position-center).animation-enter-slide-up {

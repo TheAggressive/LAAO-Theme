@@ -7,7 +7,7 @@
 	}
 
 	label {
-		@apply font-bold uppercase text-[var(--wp--preset--color--laao-gray)];
+		@apply font-medium uppercase text-[var(--wp--preset--color--laao-gray)];
 	}
 
 	input[type="email"] {
