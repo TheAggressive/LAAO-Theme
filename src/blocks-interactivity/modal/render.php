@@ -135,23 +135,14 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	<div
 		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?> wp-block-laao-<?php echo esc_attr( $unique_id ); ?>-content"
-	
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		role="dialog"
+		data-wp-bind--aria-expanded="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		aria-modal="true"
 		aria-labelledby="<?php echo esc_attr( $unique_id ); ?>-title"
 	>
-			<!-- Close button -->
-			<button
-				class="wp-block-laao-modal-close"
-				data-wp-on--click="actions.closeModal"
-				data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
-				aria-label="<?php esc_attr_e( 'Close modal', 'laao' ); ?>"
-			>
-				&times;
-			</button>
 
 				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	</div>

@@ -9,6 +9,7 @@
 
 /* Base modal styling */
 .wp-block-laao-modal-wrapper {
+	@apply relative;
 	/* Modal overlay */
 	.wp-block-laao-modal-overlay {
 		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85;
@@ -19,7 +20,13 @@
 	}
 
 	.wp-block-laao-modal-container {
-		@apply fixed z-[9999] hidden;
+		@apply fixed z-[9999] hidden w-full;
+
+		@media (--bp-md) {
+			& {
+				@apply max-w-96;
+			}
+		}
 
 		&.is-active {
 			@apply block;
@@ -44,9 +51,18 @@
 		&.modal-position-bottom-right {
 			@apply bottom-0 right-0;
 		}
+	}
+
+	.wp-block-laao-modal {
+		@apply flex flex-col;
 
 		.wp-block-laao-modal-close {
-			@apply absolute right-0 top-0;
+			@apply flex items-center justify-center place-self-end bg-[var(--wp--preset--color--laao-gray)] px-2 text-2xl leading-snug text-[var(--wp--preset--color--laao-white)] transition-all duration-300;
+
+			&:hover,
+			&:focus {
+				@apply border-none bg-[var(--wp--preset--color--laao-red)] outline-none;
+			}
 		}
 	}
 }

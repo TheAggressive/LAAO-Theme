@@ -1,19 +1,24 @@
 #mc_embed_shell {
-	margin-top: 2rem;
-	background-color: yellow;
+	@apply mb-4 mt-4 flex w-full max-w-80 flex-col items-center self-center;
 
-	.indicates-required {
-		display: none;
+	.indicates-required,
+	.asterisk {
+		@apply text-right text-xs text-[var(--wp--preset--color--laao-red)];
 	}
 
 	label {
+		@apply font-bold uppercase text-[var(--wp--preset--color--laao-gray)];
+	}
+
+	input[type="email"] {
+		@apply px-2;
 	}
 
 	input {
-		background-color: red;
+		@apply w-full border border-[var(--wp--preset--color--laao-gray)] bg-[var(--wp--preset--color--laao-white)] py-1;
 	}
 
 	input[type="submit"] {
-		margin-top: 2rem;
+		@apply mt-4 border bg-[var(--wp--preset--color--laao-red)] px-4 py-2 uppercase text-[var(--wp--preset--color--laao-white)];
 	}
 }

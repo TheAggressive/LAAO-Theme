@@ -5,22 +5,33 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
  * editor into `post_content`.
  *
+ * @param  root0
+ * @param  root0.attributes
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
  *
  * @return {JSX.Element} Element to render.
  */
-export default function save() {
+export default function save({ attributes }) {
 	// Use just the base class with no extras to match the database structure
 	const blockProps = useBlockProps.save();
 
 	return (
 		<div {...blockProps}>
+			<button
+				className="wp-block-laao-modal-close"
+				data-wp-on--click="actions.closeModal"
+				data-wp-context={`{ "id": '${attributes.modalId}' }`}
+				aria-label={__('Close modal', 'laao')}
+			>
+				&#x2715;
+			</button>
 			<InnerBlocks.Content />
 		</div>
 	);
