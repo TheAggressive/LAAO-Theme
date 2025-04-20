@@ -553,34 +553,32 @@ export default function Edit({
 				</div>
 
 				<div className="modal-editor-footer">
-					<div className="modal-position-indicator">
-						<span>
-							{__('Position:', 'laao')}{' '}
-							{safePosition.charAt(0).toUpperCase() +
-								safePosition.slice(1)}
-						</span>
+					<div className="modal-editor-footer-item">
+						{__('Position:', 'laao')}{' '}
+						{safePosition.charAt(0).toUpperCase() +
+							safePosition.slice(1)}
 					</div>
 
 					{openOnLoad && (
-						<div className="modal-auto-open-indicator">
-							<span>
-								{__('Opens Automatically on Page Load', 'laao')}
-							</span>
+						<div className="modal-editor-footer-item">
+							{__('Opens Automatically', 'laao')}
+						</div>
+					)}
+
+					{disableOverlay && (
+						<div className="modal-editor-footer-item">
+							{__('Disabled Overlay', 'laao')}
 						</div>
 					)}
 
 					{safeTriggerBlockId ? (
-						<div>
-							<span>
-								<Icon icon={linkIcon} size={14} />
-								{__('Has Trigger Block', 'laao')}{' '}
-							</span>
+						<div className="modal-editor-footer-item">
+							<Icon icon={linkIcon} size={14} />
+							{__('Uses Trigger Block', 'laao')}{' '}
 						</div>
 					) : (
-						<div>
-							<span>
-								{__('Trigger Label:', 'laao')} {triggerLabel}
-							</span>
+						<div className="modal-editor-footer-item">
+							{__('Uses Trigger Label', 'laao')}
 						</div>
 					)}
 				</div>

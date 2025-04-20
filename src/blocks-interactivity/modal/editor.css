@@ -9,7 +9,20 @@
 
 /* Base modal styling */
 .wp-block-laao-modal {
+	&.is-selected,
+	is-hovered {
+		@apply !shadow-[0_0_0_2px_#3b82f6];
+	}
+
 	.wp-block-laao-modal-container {
 		@apply relative block bg-transparent;
+	}
+
+	.modal-editor-footer {
+		@apply flex items-center justify-between bg-[--wp--preset--color--laao-light-gray] p-4 text-xs;
+	}
+
+	.modal-editor-footer-item {
+		@apply flex items-center gap-2;
 	}
 }
