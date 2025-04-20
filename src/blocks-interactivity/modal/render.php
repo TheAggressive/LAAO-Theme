@@ -108,7 +108,7 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 	data-wp-init="actions.init"
 >
-	<?php if ( empty( $trigger_block_id ) ) : ?>
+	<?php if ( empty( $trigger_block_id || empty( $trigger_label ) ) ) : ?>
 	<!-- Default trigger button -->
 	<button
 		class="wp-block-laao-modal-button-trigger"

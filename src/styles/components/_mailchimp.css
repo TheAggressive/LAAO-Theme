@@ -19,6 +19,10 @@
 	}
 
 	input[type="submit"] {
-		@apply mt-4 border bg-[var(--wp--preset--color--laao-red)] px-4 py-2 uppercase text-[var(--wp--preset--color--laao-white)];
+		@apply mt-4 border-none bg-[var(--wp--preset--color--laao-black)] px-4 py-2 uppercase text-[var(--wp--preset--color--laao-white)] transition-all duration-300;
+
+		&:hover {
+			@apply bg-[var(--wp--preset--color--laao-red)];
+		}
 	}
 }
