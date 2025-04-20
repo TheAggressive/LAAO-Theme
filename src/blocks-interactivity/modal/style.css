@@ -15,7 +15,20 @@
 		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85;
 
 		&.is-active {
-			@apply block;
+			@apply block opacity-100;
+		}
+
+		/* Apply fade animation by default */
+		&.is-active:not([data-animation="none"]) {
+			animation-name: modal-fade-in;
+			animation-fill-mode: forwards;
+			animation-timing-function: ease-out;
+		}
+
+		&.is-closing:not([data-animation="none"]) {
+			animation-name: modal-fade-out;
+			animation-fill-mode: forwards;
+			animation-timing-function: ease-in;
 		}
 	}
 
@@ -32,6 +45,7 @@
 			@apply block;
 		}
 
+		/* Position variants */
 		&.modal-position-center {
 			@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 		}
@@ -56,6 +70,7 @@
 	.wp-block-laao-modal {
 		@apply flex flex-col;
 
+		/* Close button */
 		.wp-block-laao-modal-close {
 			@apply flex items-center justify-center place-self-end bg-[var(--wp--preset--color--laao-gray)] px-2 text-2xl leading-snug text-[var(--wp--preset--color--laao-white)] transition-all duration-300;
 
@@ -64,5 +79,125 @@
 				@apply border-none bg-[var(--wp--preset--color--laao-red)] outline-none;
 			}
 		}
+	}
+}
+
+/* Animation handling based on data attributes */
+&.is-active[data-animation-enter="fade"]:not([data-animation-enter="none"]) {
+	animation-name: modal-fade-in;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+&.is-active[data-animation-enter="slide-down"] {
+	animation-name: modal-slide-down-in;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+/* Modal animations */
+/* Fade animations */
+@keyframes modal-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes modal-fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+/* Slide animations */
+@keyframes modal-slide-down-in {
+	from {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-slide-down-out {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+}
+
+@keyframes modal-slide-up-in {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-slide-up-out {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+}
+
+/* Zoom animations */
+@keyframes modal-zoom-in {
+	from {
+		transform: scale(0.95);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-zoom-out {
+	from {
+		transform: scale(1);
+		opacity: 1;
+	}
+	to {
+		transform: scale(0.95);
+		opacity: 0;
+	}
+}
+
+/* Bounce animation */
+@keyframes modal-bounce {
+	0% {
+		transform: scale(0.95);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+	75% {
+		transform: scale(0.98);
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
 	}
 }

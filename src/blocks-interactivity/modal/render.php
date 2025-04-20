@@ -29,12 +29,15 @@ $unique_id = ! empty( $attributes['modalId'] )
 	: 'modal-' . wp_unique_id();
 
 // Get position and other settings
-$position         = esc_attr( $attributes['position'] );
-$position_class   = 'modal-position-' . $position;
-$open_on_load     = $attributes['openOnLoad'] ? true : false;
-$disable_overlay  = $attributes['disableOverlay'] ? true : false;
-$trigger_block_id = ! empty( $attributes['triggerBlockId'] ) ? esc_attr( $attributes['triggerBlockId'] ) : '';
-$trigger_label    = esc_html( $attributes['triggerLabel'] );
+$position           = esc_attr( $attributes['position'] );
+$position_class     = 'modal-position-' . $position;
+$open_on_load       = $attributes['openOnLoad'] ? true : false;
+$disable_overlay    = $attributes['disableOverlay'] ? true : false;
+$trigger_block_id   = ! empty( $attributes['triggerBlockId'] ) ? esc_attr( $attributes['triggerBlockId'] ) : '';
+$trigger_label      = esc_html( $attributes['triggerLabel'] );
+$enter_animation    = esc_attr( $attributes['enterAnimation'] );
+$exit_animation     = esc_attr( $attributes['exitAnimation'] );
+$animation_duration = esc_attr( $attributes['animationDuration'] );
 
 // Initialize the interactive state
 wp_interactivity_state(
@@ -42,9 +45,13 @@ wp_interactivity_state(
 	array(
 		'modals' => array(
 			$unique_id => array(
-				'isActive'   => false,
-				'id'         => $unique_id,
-				'openOnLoad' => $open_on_load,
+				'isActive'          => false,
+				'overlayIsActive'   => false,
+				'id'                => $unique_id,
+				'openOnLoad'        => $open_on_load,
+				'enterAnimation'    => $enter_animation,
+				'exitAnimation'     => $exit_animation,
+				'animationDuration' => $animation_duration,
 			),
 		),
 	)
@@ -98,6 +105,8 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	// Process the HTML just before it's sent to the browser
 	add_action( 'shutdown', 'add_modal_trigger_interactivity', 0 );
 }
+
+print_r( $attributes );
 ?>
 
 
@@ -124,7 +133,7 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	<?php if ( ! $disable_overlay ) : ?>
 	<!-- Modal overlay -->
 	<div
-		class="wp-block-laao-modal-overlay"
+		class="wp-block-laao-modal-overlay animate-modal-in-<?php echo esc_attr( $enter_animation ); ?> animate-modal-out-<?php echo esc_attr( $exit_animation ); ?>"
 		data-wp-on--click="actions.closeModal"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		aria-hidden="true"

@@ -17,6 +17,7 @@ import {
 	Icon,
 	Notice,
 	PanelBody,
+	RangeControl,
 	SelectControl,
 	TextControl,
 	ToggleControl,
@@ -64,6 +65,9 @@ export default function Edit({
 		triggerBlockKey = '',
 		triggerLabel = 'Open Modal',
 		disableOverlay = false,
+		enterAnimation = 'fade',
+		exitAnimation = 'fade',
+		animationDuration = 300,
 	} = attributes;
 
 	const updateBlockTriggerClass = useUpdateBlockTriggerClass();
@@ -450,6 +454,68 @@ export default function Edit({
 						</Button>
 					</>
 				)}
+			</PanelBody>
+
+			{/* Animation panel */}
+			<PanelBody
+				title={__('Animation Settings', 'laao')}
+				initialOpen={false}
+			>
+				{/* Enter animation */}
+				<SelectControl
+					label={__('Enter Animation', 'laao')}
+					value={enterAnimation}
+					options={[
+						{ label: __('Fade', 'laao'), value: 'fade' },
+						{
+							label: __('Slide Down', 'laao'),
+							value: 'slide-down',
+						},
+						{ label: __('Slide Up', 'laao'), value: 'slide-up' },
+						{ label: __('Zoom In', 'laao'), value: 'zoom-in' },
+						{ label: __('Bounce', 'laao'), value: 'bounce' },
+						{ label: __('None', 'laao'), value: 'none' },
+					]}
+					onChange={(value) =>
+						setAttributes({ enterAnimation: value })
+					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+
+				{/* Exit animation */}
+				<SelectControl
+					label={__('Exit Animation', 'laao')}
+					value={exitAnimation}
+					options={[
+						{ label: __('Fade', 'laao'), value: 'fade' },
+						{
+							label: __('Slide Down', 'laao'),
+							value: 'slide-down',
+						},
+						{ label: __('Slide Up', 'laao'), value: 'slide-up' },
+						{ label: __('Zoom Out', 'laao'), value: 'zoom-out' },
+						{ label: __('None', 'laao'), value: 'none' },
+					]}
+					onChange={(value) =>
+						setAttributes({ exitAnimation: value })
+					}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+
+				{/* Animation Duration */}
+				<RangeControl
+					label={__('Animation Duration (ms)', 'laao')}
+					value={animationDuration}
+					onChange={(value) =>
+						setAttributes({ animationDuration: value })
+					}
+					min={100}
+					max={1000}
+					step={50}
+					__nextHasNoMarginBottom
+				/>
 			</PanelBody>
 		</InspectorControls>
 	);
