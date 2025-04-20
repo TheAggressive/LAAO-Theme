@@ -64,14 +64,12 @@ const { state, actions } = store('laao/modal', {
 				return;
 			}
 
-			state.modals[ctx.id].isActive = false;
+			state.modals[ctx.id].isClosing = true;
 
-			const modalContainer = document.querySelector(
-				`.wp-block-laao-modal-${ctx.id}-content`
-			);
-			if (modalContainer && modalContainer._previouslyFocusedElement) {
-				modalContainer._previouslyFocusedElement.focus();
-			}
+			setTimeout(() => {
+				state.modals[ctx.id].isActive = false;
+				state.modals[ctx.id].isClosing = false;
+			}, state.modals[ctx.id].animationDuration);
 		},
 	},
 	callbacks: {

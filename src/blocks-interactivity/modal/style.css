@@ -12,23 +12,21 @@
 	@apply relative;
 	/* Modal overlay */
 	.wp-block-laao-modal-overlay {
-		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85;
+		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85 opacity-0 transition-all duration-[var(--laao-modal-animation-duration)];
 
 		&.is-active {
-			@apply block opacity-100;
-		}
+			@apply block opacity-0;
 
-		/* Apply fade animation by default */
-		&.is-active:not([data-animation="none"]) {
-			animation-name: modal-fade-in;
-			animation-fill-mode: forwards;
-			animation-timing-function: ease-out;
-		}
+			/* Animation classes for overlay */
+			&.animation-enter {
+				animation: modal-fade-in var(--laao-modal-animation-duration)
+					forwards ease-out;
+			}
 
-		&.is-closing:not([data-animation="none"]) {
-			animation-name: modal-fade-out;
-			animation-fill-mode: forwards;
-			animation-timing-function: ease-in;
+			&.animation-exit {
+				animation: modal-fade-out var(--laao-modal-animation-duration)
+					forwards ease-out;
+			}
 		}
 	}
 
@@ -43,6 +41,77 @@
 
 		&.is-active {
 			@apply block;
+
+			/* Animation classes for modal content */
+			&.animation-enter-fade {
+				@apply animate-[modal-fade-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&.animation-exit-fade {
+				@apply animate-[modal-fade-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			/* Standard position slide animations */
+			&:not(.modal-position-center).animation-enter-slide-down {
+				@apply animate-[modal-slide-down-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&:not(.modal-position-center).animation-exit-slide-down {
+				@apply animate-[modal-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] !delay-0;
+			}
+
+			&:not(.modal-position-center).animation-enter-slide-up {
+				@apply animate-[modal-slide-up-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&:not(.modal-position-center).animation-exit-slide-up {
+				@apply animate-[modal-slide-up-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			/* Center position slide animations */
+			&.modal-position-center.animation-enter-slide-down {
+				@apply animate-[modal-center-slide-down-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&.modal-position-center.animation-exit-slide-down {
+				@apply animate-[modal-center-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			&.modal-position-center.animation-enter-slide-up {
+				@apply animate-[modal-center-slide-up-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&.modal-position-center.animation-exit-slide-up {
+				@apply animate-[modal-center-slide-up-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			/* Standard position zoom animations */
+			&:not(.modal-position-center).animation-enter-zoom-in {
+				@apply animate-[modal-zoom-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&:not(.modal-position-center).animation-exit-zoom-out {
+				@apply animate-[modal-zoom-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			/* Center position zoom animations */
+			&.modal-position-center.animation-enter-zoom-in {
+				@apply animate-[modal-center-zoom-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			&.modal-position-center.animation-exit-zoom-out {
+				@apply animate-[modal-center-zoom-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+			}
+
+			/* Standard position bounce animation */
+			&:not(.modal-position-center).animation-enter-bounce {
+				@apply animate-[modal-bounce_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
+
+			/* Center position bounce animation */
+			&.modal-position-center.animation-enter-bounce {
+				@apply animate-[modal-center-bounce_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+			}
 		}
 
 		/* Position variants */
@@ -118,7 +187,7 @@
 /* Slide animations */
 @keyframes modal-slide-down-in {
 	from {
-		transform: translateY(-20px);
+		transform: translateY(-60px);
 		opacity: 0;
 	}
 	to {
@@ -133,29 +202,52 @@
 		opacity: 1;
 	}
 	to {
-		transform: translateY(20px);
+		transform: translateY(60px);
 		opacity: 0;
 	}
 }
 
-@keyframes modal-slide-up-in {
+/* Special slide animations for centered modals */
+@keyframes modal-center-slide-down-in {
 	from {
-		transform: translateY(20px);
+		transform: translate(-50%, -50%) translateY(-60px);
 		opacity: 0;
 	}
 	to {
-		transform: translateY(0);
+		transform: translate(-50%, -50%);
 		opacity: 1;
 	}
 }
 
-@keyframes modal-slide-up-out {
+@keyframes modal-center-slide-down-out {
 	from {
-		transform: translateY(0);
+		transform: translate(-50%, -50%);
 		opacity: 1;
 	}
 	to {
-		transform: translateY(-20px);
+		transform: translate(-50%, -50%) translateY(60px);
+		opacity: 0;
+	}
+}
+
+@keyframes modal-center-slide-up-in {
+	from {
+		transform: translate(-50%, -50%) translateY(60px);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-center-slide-up-out {
+	from {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+	to {
+		transform: translate(-50%, -50%) translateY(-60px);
 		opacity: 0;
 	}
 }
@@ -163,7 +255,7 @@
 /* Zoom animations */
 @keyframes modal-zoom-in {
 	from {
-		transform: scale(0.95);
+		transform: scale(0.9);
 		opacity: 0;
 	}
 	to {
@@ -178,7 +270,30 @@
 		opacity: 1;
 	}
 	to {
-		transform: scale(0.95);
+		transform: scale(0.9);
+		opacity: 0;
+	}
+}
+
+/* Special zoom animations for centered modals */
+@keyframes modal-center-zoom-in {
+	from {
+		transform: translate(-50%, -50%) scale(0.9);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-center-zoom-out {
+	from {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 1;
+	}
+	to {
+		transform: translate(-50%, -50%) scale(0.9);
 		opacity: 0;
 	}
 }
@@ -186,18 +301,60 @@
 /* Bounce animation */
 @keyframes modal-bounce {
 	0% {
-		transform: scale(0.95);
+		transform: scale(0.9);
 		opacity: 0;
 	}
 	50% {
-		transform: scale(1.02);
+		transform: scale(1.1);
 		opacity: 1;
 	}
 	75% {
-		transform: scale(0.98);
+		transform: scale(0.95);
 	}
 	100% {
 		transform: scale(1);
 		opacity: 1;
+	}
+}
+
+/* Special bounce animation for centered modals */
+@keyframes modal-center-bounce {
+	0% {
+		transform: translate(-50%, -50%) scale(0.9);
+		opacity: 0;
+	}
+	50% {
+		transform: translate(-50%, -50%) scale(1.1);
+		opacity: 1;
+	}
+	75% {
+		transform: translate(-50%, -50%) scale(0.95);
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 1;
+	}
+}
+
+/* Slide animations */
+@keyframes modal-slide-up-in {
+	from {
+		transform: translateY(60px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes modal-slide-up-out {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(-60px);
+		opacity: 0;
 	}
 }

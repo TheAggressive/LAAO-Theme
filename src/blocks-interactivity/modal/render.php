@@ -49,8 +49,6 @@ wp_interactivity_state(
 				'overlayIsActive'   => false,
 				'id'                => $unique_id,
 				'openOnLoad'        => $open_on_load,
-				'enterAnimation'    => $enter_animation,
-				'exitAnimation'     => $exit_animation,
 				'animationDuration' => $animation_duration,
 			),
 		),
@@ -105,8 +103,6 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 	// Process the HTML just before it's sent to the browser
 	add_action( 'shutdown', 'add_modal_trigger_interactivity', 0 );
 }
-
-print_r( $attributes );
 ?>
 
 
@@ -133,10 +129,13 @@ print_r( $attributes );
 	<?php if ( ! $disable_overlay ) : ?>
 	<!-- Modal overlay -->
 	<div
-		class="wp-block-laao-modal-overlay animate-modal-in-<?php echo esc_attr( $enter_animation ); ?> animate-modal-out-<?php echo esc_attr( $exit_animation ); ?>"
+		class="wp-block-laao-modal-overlay"
 		data-wp-on--click="actions.closeModal"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-enter="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-exit="state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
 		aria-hidden="true"
+		style="--laao-modal-animation-duration: <?php echo esc_attr( $animation_duration ); ?>ms; --laao-modal-animation-delay: <?php echo esc_attr( $animation_duration ); ?>ms;"
 	></div>
 	<?php endif; ?>
 
@@ -145,12 +144,15 @@ print_r( $attributes );
 		id="<?php echo esc_attr( $unique_id ); ?>"
 		class="wp-block-laao-modal-container <?php echo esc_attr( $position_class ); ?> wp-block-laao-<?php echo esc_attr( $unique_id ); ?>-content"
 		data-wp-class--is-active="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-enter-<?php echo esc_attr( $enter_animation ); ?>="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
+		data-wp-class--animation-exit-<?php echo esc_attr( $exit_animation ); ?>="state.modals.<?php echo esc_attr( $unique_id ); ?>.isClosing"
 		data-wp-on--keydown="callbacks.handleKeydown"
 		data-wp-context='{ "id": "<?php echo esc_attr( $unique_id ); ?>" }'
 		role="dialog"
 		data-wp-bind--aria-expanded="state.modals.<?php echo esc_attr( $unique_id ); ?>.isActive"
 		aria-modal="true"
 		aria-labelledby="<?php echo esc_attr( $unique_id ); ?>-title"
+		style="--laao-modal-animation-duration: <?php echo esc_attr( $animation_duration ); ?>ms; --laao-modal-animation-delay: <?php echo esc_attr( $animation_duration ); ?>ms;"
 	>
 
 				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
