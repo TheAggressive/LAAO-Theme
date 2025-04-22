@@ -1,0 +1,33 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-laao-whats-hot {
+	border: 1px solid #eee;
+	padding: 1rem;
+	background-color: #fff;
+}
+
+.whats-hot-inner-blocks {
+	margin-top: 1.5rem;
+	border-top: 1px dashed #ccc;
+	padding-top: 1.5rem;
+}
+
+.editor-styles-wrapper .whats-hot-section .whats-hot-title {
+	margin-top: 0;
+}
+
+.whats-hot-helper-text {
+	font-style: italic;
+	color: #757575;
+	margin-bottom: 1.5rem;
+}
+
+.whats-hot-inner-blocks h4 {
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+	color: #333;
+}

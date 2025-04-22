@@ -863,6 +863,23 @@ class LAAO_Setup {
 			'1.0.29',
 			true
 		);
+
+		// Enqueue AOS (Animate On Scroll) library
+		wp_enqueue_style(
+			'aos-css',
+			'https://unpkg.com/aos@next/dist/aos.css',
+			array(),
+			'2.3.4'
+		);
+
+		wp_enqueue_script(
+			'aos-js',
+			'https://unpkg.com/aos@next/dist/aos.js',
+			array(),
+			'2.3.4',
+			true
+		);
+
 		wp_enqueue_script(
 			'laartsonline-gsap-js',
 			get_template_directory_uri() . '/dist/scripts/gsap.js',
@@ -905,8 +922,16 @@ class LAAO_Setup {
 		);
 
 		wp_register_script(
-			'wh-block-plugin',
-			get_template_directory_uri() . '/dist/scripts/wh-block-plugin.js',
+			'wh-image-credit-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/wh-image-credit-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
+
+		wp_register_script(
+			'wh-link-to-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/wh-link-to-block-plugin.js',
 			array( 'wp-plugins', 'wp-editor', 'react' ),
 			wp_get_theme()->get( 'Version' ),
 			false
@@ -940,7 +965,8 @@ class LAAO_Setup {
 		}
 
 		if ( in_array( get_post_type(), $this->wh_post_types, true ) ) {
-			wp_enqueue_script( 'wh-block-plugin' );
+			wp_enqueue_script( 'wh-link-to-block-plugin' );
+			wp_enqueue_script( 'wh-image-credit-block-plugin' );
 		}
 
 		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {

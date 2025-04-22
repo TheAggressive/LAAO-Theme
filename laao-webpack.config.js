@@ -45,10 +45,15 @@ module.exports = {
 				'src/scripts',
 				'cover-block-plugin.js'
 			),
-			'../scripts/wh-block-plugin': path.resolve(
+			'../scripts/wh-image-credit-block-plugin': path.resolve(
 				process.cwd(),
 				'src/scripts',
-				'wh-block-plugin.js'
+				'wh-image-credit-block-plugin.js'
+			),
+			'../scripts/wh-link-to-block-plugin': path.resolve(
+				process.cwd(),
+				'src/scripts',
+				'wh-link-to-block-plugin.js'
 			),
 			'../scripts/location-block-plugin': path.resolve(
 				process.cwd(),

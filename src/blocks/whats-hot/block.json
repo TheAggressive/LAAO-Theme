@@ -1,0 +1,64 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "laao/whats-hot",
+	"version": "0.1.0",
+	"title": "Whats Hot",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "This block displays the latest 4 posts from the 'What's Hot' postType.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"anchor": true,
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"numberOfPosts": {
+			"type": "number",
+			"default": 4
+		},
+		"displayFeaturedImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"displayCaption": {
+			"type": "boolean",
+			"default": true
+		},
+		"useLinkMeta": {
+			"type": "boolean",
+			"default": true
+		},
+		"enableAnimation": {
+			"type": "boolean",
+			"default": true
+		},
+		"animationType": {
+			"type": "string",
+			"default": "fade-up"
+		},
+		"animationDelay": {
+			"type": "number",
+			"default": 100
+		},
+		"animationDuration": {
+			"type": "number",
+			"default": 800
+		}
+	},
+	"textdomain": "whats-hot",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
