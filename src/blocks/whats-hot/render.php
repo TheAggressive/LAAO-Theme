@@ -80,24 +80,10 @@ ob_start();
 				// Build caption text with all available meta
 				$caption_text = '';
 
-				// Add photo credit if available
-				if ( ! empty( $photo_credit ) ) {
-					$caption_text .= ' (Photo ' . esc_html( $photo_credit ) . ')';
-				}
 
 				// Add picture ID if available
 				if ( ! empty( $picture_id ) ) {
-					$caption_text .= esc_html( $picture_id );
-				}
-
-				// Add location if available
-				if ( ! empty( $location ) ) {
-					$caption_text .= ' Location: ' . esc_html( $location );
-				}
-
-				// Add author if available
-				if ( ! empty( $author ) ) {
-					$caption_text .= ' By: ' . esc_html( $author );
+					$caption_text .= wp_kses_post( $picture_id );
 				}
 
 				// Animation attributes
@@ -125,7 +111,7 @@ ob_start();
 
 								<?php if ( $display_caption && ! empty( $caption_text ) ) : ?>
 									<figcaption class="whats-hot-caption">
-										<?php echo esc_html( $caption_text ); ?>
+										<?php echo wp_kses_post( $caption_text ); ?>
 									</figcaption>
 								<?php endif; ?>
 							</figure>
