@@ -14,10 +14,6 @@ $number_of_posts        = $attributes['numberOfPosts'] ?? 4;
 $display_featured_image = $attributes['displayFeaturedImage'] ?? true;
 $display_caption        = $attributes['displayCaption'] ?? true;
 $use_link_meta          = $attributes['useLinkMeta'] ?? true;
-$animation_type         = $attributes['animationType'] ?? 'fade-up';
-$animation_delay        = $attributes['animationDelay'] ?? 100;
-$animation_duration     = $attributes['animationDuration'] ?? 800;
-$enable_animation       = $attributes['enableAnimation'] ?? true;
 
 // Query the latest posts from wh_cover post type
 $args = array(
@@ -61,7 +57,7 @@ ob_start();
 				$image_url    = wp_get_attachment_image_url( $thumbnail_id, 'large' );
 				$image_alt    = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
 				if ( empty( $image_alt ) ) {
-					$image_alt = $post_title;
+					$image_alt = $picture_id;
 				}
 
 				// Get all relevant post meta for display
