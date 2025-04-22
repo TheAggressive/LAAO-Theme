@@ -19,7 +19,6 @@ import './style.css';
  */
 import metadata from './block.json';
 import Edit from './edit';
-import Save from './save';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -31,8 +30,4 @@ registerBlockType(metadata.name, {
 	 * @see ./edit.js
 	 */
 	edit: Edit,
-	/**
-	 * @see ./save.js
-	 */
-	save: Save,
 });

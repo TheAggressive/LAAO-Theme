@@ -37,28 +37,11 @@
 		"useLinkMeta": {
 			"type": "boolean",
 			"default": true
-		},
-		"enableAnimation": {
-			"type": "boolean",
-			"default": true
-		},
-		"animationType": {
-			"type": "string",
-			"default": "fade-up"
-		},
-		"animationDelay": {
-			"type": "number",
-			"default": 100
-		},
-		"animationDuration": {
-			"type": "number",
-			"default": 800
 		}
 	},
 	"textdomain": "whats-hot",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"render": "file:./render.php"
 }

@@ -1,27 +1,16 @@
 /**
  * WordPress dependencies
  */
-import {
-	InnerBlocks,
-	InspectorControls,
-	useBlockProps,
-} from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, ToggleControl } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
-
 /**
  * Internal dependencies
  */
 import './editor.css';
-
-// Define allowed blocks for InnerBlocks
-const ALLOWED_BLOCKS = ['laao/animate-on-scroll'];
-
-// Template with animate-on-scroll block
-const TEMPLATE = [['laao/animate-on-scroll', {}]];
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -67,6 +56,8 @@ export default function Edit({ attributes, setAttributes }) {
 						}
 						min={1}
 						max={8}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 					<ToggleControl
 						label={__('Display Featured Image', 'whats-hot')}
@@ -76,6 +67,7 @@ export default function Edit({ attributes, setAttributes }) {
 								displayFeaturedImage: !displayFeaturedImage,
 							})
 						}
+						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
 						label={__('Display Caption', 'whats-hot')}
@@ -83,6 +75,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={() =>
 							setAttributes({ displayCaption: !displayCaption })
 						}
+						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
 						label={__(
@@ -97,6 +90,7 @@ export default function Edit({ attributes, setAttributes }) {
 							'When enabled, links will use the wh_link_to post meta value instead of the post permalink',
 							'whats-hot'
 						)}
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -110,21 +104,6 @@ export default function Edit({ attributes, setAttributes }) {
 						attributes={attributes}
 					/>
 				)}
-
-				<div className="whats-hot-inner-blocks">
-					<h4>{__('Add Animation (Optional)', 'whats-hot')}</h4>
-					<p className="whats-hot-helper-text">
-						{__(
-							"Add an animate-on-scroll block here to animate the What's Hot items.",
-							'whats-hot'
-						)}
-					</p>
-					<InnerBlocks
-						allowedBlocks={ALLOWED_BLOCKS}
-						template={TEMPLATE}
-						templateLock={false}
-					/>
-				</div>
 			</div>
 		</>
 	);

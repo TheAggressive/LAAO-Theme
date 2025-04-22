@@ -41,11 +41,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 ob_start();
 ?>
 
-<div <?php echo wp_kses_post( $wrapper_attributes ); ?>>
-	<h3 class="whats-hot-title"><?php echo esc_html__( 'What\'s Hot', 'whats-hot' ); ?></h3>
-
 	<?php if ( $query->have_posts() ) : ?>
-		<ul class="whats-hot-grid">
 			<?php
 			// Counter for staggered animations
 			$item_count = 0;
@@ -55,7 +51,6 @@ ob_start();
 				++$item_count;
 
 				$current_post_id = get_the_ID();
-				$post_title      = get_the_title();
 
 				// Get link - either from meta or use the default permalink
 				$custom_link = $use_link_meta ? get_post_meta( $current_post_id, 'wh_link_to', true ) : '';
@@ -86,18 +81,8 @@ ob_start();
 					$caption_text .= wp_kses_post( $picture_id );
 				}
 
-				// Animation attributes
-				$animation_item_delay = ( $item_count - 1 ) * $animation_delay;
-				$animation_classes    = $enable_animation ? 'aos-init aos-animate' : '';
-				$animation_attrs      = $enable_animation ?
-					sprintf(
-						' data-aos="%s" data-aos-delay="%d" data-aos-duration="%d"',
-						esc_attr( $animation_type ),
-						$animation_item_delay,
-						$animation_duration
-					) : '';
 				?>
-				<li class="whats-hot-item <?php echo esc_attr( $animation_classes ); ?>"
+				<article class="whats-hot-item <?php echo esc_attr( $animation_classes ); ?>"
 					<?php echo wp_kses_post( $animation_attrs ); ?>
 					data-item-index="<?php echo esc_attr( $item_count ); ?>">
 
@@ -119,18 +104,13 @@ ob_start();
 							<div class="whats-hot-text"><?php echo esc_html( $post_title ); ?></div>
 						<?php endif; ?>
 					</a>
-				</li>
+				</article>
 			<?php endwhile; ?>
-		</ul>
 	<?php else : ?>
-		<p class="whats-hot-no-posts"><?php echo esc_html__( 'No What\'s Hot posts found.', 'whats-hot' ); ?></p>
+		<p class="whats-hot-no-posts"><?php echo esc_html__( 'Sorry, No What\'s Hot posts found.', 'whats-hot' ); ?></p>
 	<?php endif; ?>
 
 	<?php wp_reset_postdata(); ?>
-
-	<!-- Inner blocks content - this is where the animate-on-scroll block can be added -->
-	<div class="whats-hot-inner-blocks"><?php echo wp_kses_post( $content ); ?></div>
-</div>
 
 <?php
 // Get the output buffer contents and clean the buffer
