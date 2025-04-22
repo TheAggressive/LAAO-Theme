@@ -68,10 +68,6 @@ ob_start();
 				$photo_credit = get_post_meta( $current_post_id, 'wh_photo_credit', true );
 				$picture_id   = get_post_meta( $current_post_id, 'wh_picture_id', true );
 
-				// Get any other meta fields that might be relevant
-				$location = get_post_meta( $current_post_id, 'location', true );
-				$author   = get_post_meta( $current_post_id, 'author', true );
-
 				// Build caption text with all available meta
 				$caption_text = '';
 
@@ -86,7 +82,7 @@ ob_start();
 					<?php echo wp_kses_post( $animation_attrs ); ?>
 					data-item-index="<?php echo esc_attr( $item_count ); ?>">
 
-					<a href="<?php echo esc_url( $post_link ); ?>" class="whats-hot-link">
+					<a href="<?php echo esc_url( get_site_url() . '/' . $post_link ); ?>" class="whats-hot-link">
 						<?php if ( $display_featured_image && $image_url ) : ?>
 							<figure class="whats-hot-figure">
 								<img src="<?php echo esc_url( $image_url ); ?>"
