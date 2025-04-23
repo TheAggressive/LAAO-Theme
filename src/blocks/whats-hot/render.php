@@ -81,10 +81,12 @@ ob_start();
 					<a href="<?php echo esc_url( get_site_url() . '/' . $post_link ); ?>" class="whats-hot-link">
 						<?php if ( $display_featured_image && $image_url ) : ?>
 							<figure class="whats-hot-figure">
-								<img src="<?php echo esc_url( $image_url ); ?>"
-									alt="<?php echo esc_attr( $image_alt ); ?>"
-									class="whats-hot-image"
-									loading="lazy" />
+								<div class="whats-hot-image-container">
+									<img src="<?php echo esc_url( $image_url ); ?>"
+										alt="<?php echo esc_attr( $image_alt ); ?>"
+										class="whats-hot-image"
+										loading="lazy" />
+								</div>
 
 								<?php if ( $display_caption && ! empty( $caption_text ) ) : ?>
 									<figcaption class="whats-hot-caption">

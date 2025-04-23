@@ -1,5 +1,5 @@
 .site-top-bar {
-	@apply px-0 shadow-xl;
+	@apply px-0 shadow-2xl;
 
 	@media (--bp-md) {
 		@apply px-wp-44 py-0;

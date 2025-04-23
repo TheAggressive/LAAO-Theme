@@ -1,3 +1,5 @@
+@import "../../styles/_breakpoints.css";
+
 /**
  * The following styles get applied both on the front of your site
  * and in the editor.
@@ -8,7 +10,11 @@
 .wp-block-laao-site-logo {
 	@apply h-fit w-fit;
 	img {
-		@apply h-full w-64;
+		@apply h-full w-52;
+
+		@media (--bp-md) {
+			@apply w-64;
+		}
 
 		.a {
 			@apply fill-wp-laao-white;

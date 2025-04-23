@@ -7,13 +7,13 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-laao-hero {
-	@apply border-b-wp-laao-white relative m-0 h-[500px] overflow-hidden border-b-[1.5rem];
+	@apply relative m-0 h-[500px] overflow-hidden border-b-[1.5rem] border-b-wp-laao-white;
 
 	.wp-block-laao-hero-caption-container {
-		@apply gap-wp-24 px-wp-44 absolute z-10 grid w-full grid-cols-12;
+		@apply absolute z-10 grid w-full grid-cols-12 gap-wp-24 px-wp-44;
 
 		.wp-block-laao-hero-caption {
-			@apply mt-wp-8 text-wp-small text-wp-laao-dark-gray col-span-7 col-end-11 justify-self-end;
+			@apply col-span-7 col-end-11 mt-wp-8 justify-self-end text-wp-small text-wp-laao-dark-gray;
 		}
 	}
 	.wp-block-laao-hero-content {
@@ -72,7 +72,7 @@
 			width: 100%;
 			height: 100%;
 			background-size: cover;
-			background-position: center;
+			background-position: 25% center;
 			opacity: 0;
 			transition: opacity 1s ease-out;
 
