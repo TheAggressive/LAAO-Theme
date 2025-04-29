@@ -189,7 +189,6 @@
 					"slug": "system-ui",
 					"name": "System UI"
 				},
-
 				{
 					"fontFamily": "Roboto Condensed",
 					"slug": "roboto-condensed",
@@ -201,6 +200,21 @@
 							"fontWeight": "400",
 							"src": [
 								"file:./dist/assets/fonts/Roboto-Condensed.ttf"
+							]
+						}
+					]
+				},
+				{
+					"fontFamily": "Anton",
+					"slug": "anton",
+					"name": "Anton",
+					"fontFace": [
+						{
+							"fontFamily": "Anton",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./dist/assets/fonts/Anton-Regular.ttf"
 							]
 						}
 					]
@@ -360,11 +374,6 @@
 			"area": "footer",
 			"name": "footer",
 			"title": "Footer"
-		},
-		{
-			"area": "uncategorized",
-			"name": "post-whats-hot",
-			"title": "Query Post Card Template"
 		}
 	],
 	"customTemplates": [

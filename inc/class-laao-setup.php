@@ -11,6 +11,7 @@ class LAAO_Setup {
 
 	public function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'theme_supports' ) );
+		add_action( 'wp_head', array( $this, 'google_fonts_preconnect' ), 1 );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
 		add_action( 'init', array( $this, 'register_post_meta' ) );
@@ -1092,5 +1093,12 @@ class LAAO_Setup {
 		}
 
 		return $results;
+	}
+
+	public function google_fonts_preconnect() {
+		?>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<?php
 	}
 }
