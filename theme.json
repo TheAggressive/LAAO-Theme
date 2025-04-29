@@ -376,12 +376,5 @@
 			"title": "Footer"
 		}
 	],
-	"customTemplates": [
-		{
-			"name": "article-default-template",
-			"title": "Article Default Template",
-			"postTypes": ["arts", "film", "music", "theater"]
-		}
-	],
-	"patterns": ["laao/post-whats-hot"]
+	"patterns": []
 }
