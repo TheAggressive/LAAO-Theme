@@ -1,0 +1,25 @@
+@import "../_breakpoints.css";
+
+.cover-article {
+	align-items: flex-start;
+	flex-direction: column;
+
+	@media (--bp-lg) {
+		flex-direction: initial;
+	}
+
+	.cover-article-media-container {
+		@apply w-full;
+
+		.cover-article-secondary-images {
+			max-width: fit-content;
+
+			img {
+				flex: 1 1 0;
+				max-width: 100%;
+				height: auto;
+				object-fit: cover;
+			}
+		}
+	}
+}

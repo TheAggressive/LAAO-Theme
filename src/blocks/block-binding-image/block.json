@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "laao/cover",
+	"name": "laao/block-binding-image",
 	"version": "0.1.0",
-	"title": "Cover",
+	"title": "Block Binding Image",
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",
@@ -11,10 +11,20 @@
 	"supports": {
 		"html": false
 	},
-	"textdomain": "cover",
+	"attributes": {
+		"metaKey": {
+			"type": "string",
+			"default": "photo_2"
+		},
+		"sizeSlug": {
+			"type": "string",
+			"default": "medium"
+		}
+	},
+	"textdomain": "block-binding-image",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"usesContext": ["postId", "postType"]
 }

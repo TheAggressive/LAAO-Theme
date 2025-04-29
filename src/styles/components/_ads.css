@@ -1,3 +1,11 @@
+.ad-160x600 {
+	@apply float-right mb-wp-44 ml-wp-44 hidden;
+
+	@media (--bp-lg) {
+		@apply block;
+	}
+}
+
 .ad-break-300x250 {
 	@apply block border-[1.5rem] border-wp-laao-white;
 

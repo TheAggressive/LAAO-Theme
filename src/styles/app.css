@@ -33,3 +33,6 @@
 /* Blocks */
 @import "./blocks/_wp-block-social-links.css";
 @import "./blocks/_wp-block-jetpack-sharing-buttons.css";
+
+/* Patterns */
+@import "./patterns/_cover-story.css";
