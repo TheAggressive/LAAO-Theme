@@ -26,7 +26,6 @@
   - Use prepare() statements for secure database queries.
   - Implement proper database schema changes using dbDelta() function.
   - Always use the most current block theme development API's and conventions
-  - Always use the most current WordPress Interactivity API format and best practices when building a interactivity api block
 
   Dependencies
   - WordPress (latest stable version)
@@ -45,6 +44,9 @@
   - Implement custom post types and taxonomies when appropriate.
   - Use WordPress's built-in options API for storing configuration data.
   - Implement proper pagination using functions like paginate_links().
+  - Always use the most current WordPress Interactivity API format and best practices when building a Interactivity API Blocks.
+  - Use WordPress current documentation and best practices when building custom blocks.
+  - Use WordPress current Block Theme best practices and documentation when developing the theme.
 
   Key Conventions
   1. Follow WordPress's plugin API for extending functionality.
