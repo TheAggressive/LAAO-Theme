@@ -33,10 +33,10 @@
 		}
 	}
 	.wp-block-laao-hero-content {
-		@apply relative z-10 grid h-full grid-cols-12 gap-wp-24;
+		@apply relative z-10 grid h-full grid-cols-12;
 
 		@media (--bp-md) {
-			@apply px-wp-16;
+			@apply gap-wp-24 px-wp-16;
 		}
 
 		@media (--bp-md) {
@@ -58,7 +58,7 @@
 
 		/* Banner Ad */
 		& > *:nth-child(2) {
-			@apply order-1 col-span-12 flex;
+			@apply order-1 col-span-12 w-full;
 
 			@media (--bp-md) {
 				@apply order-2 col-span-7 col-start-6 items-center;
