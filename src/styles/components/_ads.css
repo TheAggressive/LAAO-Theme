@@ -1,3 +1,5 @@
+@import "../_breakpoints.css";
+
 .ad-160x600 {
 	@apply float-right clear-right mb-wp-44 ml-wp-44 hidden;
 
@@ -6,22 +8,23 @@
 	}
 }
 
-.ad-break-300x250 {
-	@apply block border-[1.5rem] border-wp-laao-white;
+.ad-300x250 {
+	@apply mx-auto block w-fit border-[1.5rem] border-wp-laao-white;
 
 	@media (--bp-lg) {
 		@apply hidden;
 	}
 }
+
 .ad-728x90 {
-	@apply block w-fit max-w-[728px] border-[1.5rem] border-wp-laao-white;
+	@apply block h-fit w-fit max-w-[728px] border-[1.5rem] border-wp-laao-white;
 }
 
-.ad-break-728x90 {
+.ad-728x90:not(.wp-block-laao-hero .ad-728x90) {
 	@apply hidden;
 
 	@media (--bp-lg) {
-		@apply block;
+		@apply mx-auto block;
 	}
 }
 

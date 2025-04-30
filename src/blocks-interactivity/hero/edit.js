@@ -11,6 +11,7 @@ export default function Edit() {
 		{
 			allowedBlocks: [
 				'adsanity/ad-group',
+				'adsanity/rotating-ad',
 				'laao/site-logo',
 				'core/group',
 				'core/paragraph',
