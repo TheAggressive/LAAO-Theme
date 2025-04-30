@@ -6,7 +6,7 @@
 		padding-bottom: var(--wp--preset--spacing--64);
 	"
 >
-	<!-- wp:navigation {"ref":49020,"overlayMenu":"never","layout":{"type":"flex","justifyContent":"center"}} /-->
+	<!-- wp:navigation {"ref":49020,"overlayMenu":"never","className":"","layout":{"type":"flex","justifyContent":"center"}} /-->
 
 	<!-- wp:navigation {"ref":49023,"overlayMenu":"never","layout":{"type":"flex","justifyContent":"center"}} /-->
 
@@ -24,9 +24,9 @@
 		>
 			<!-- wp:social-link {"url":"https://x.com/laartsonlinecom","service":"x"} /-->
 
-			<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook"} /-->
+			<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook","className":""} /-->
 
-			<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram"} /-->
+			<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram","className":""} /-->
 		</ul>
 		<!-- /wp:social-links -->
 	</div>
@@ -39,3 +39,113 @@
 	<!-- /wp:group -->
 </section>
 <!-- /wp:group -->
+
+<!-- wp:laao/modal {"enterAnimation":"slide-down","exitAnimation":"slide-down","animationDuration":250,"modalId":"modal-1745108981942-2050","style":{"border":{"radius":"0px","width":"1.5rem","style":"solid","color":"var(\u002d\u002dwp\u002d\u002dpreset\u002d\u002dcolor\u002d\u002dlaao-white)"},"color":{"background":"var(\u002d\u002dwp\u002d\u002dpreset\u002d\u002dcolor\u002d\u002dlaao-light-gray)"},"shadow":"var:preset|shadow|natural"}} -->
+<div
+	class="wp-block-laao-modal has-border-color has-background"
+	style="
+		border-color: var(--wp--preset--color--laao-white);
+		border-style: solid;
+		border-width: 1.5rem;
+		border-radius: 0px;
+		background-color: var(--wp--preset--color--laao-light-gray);
+		box-shadow: var(--wp--preset--shadow--natural);
+	"
+>
+	<button
+		class="wp-block-laao-modal-close"
+		data-wp-on--click="actions.closeModal"
+		data-wp-context="{ &quot;id&quot;: 'modal-1745108981942-2050' }"
+		aria-label="Close modal"
+	>
+		✕</button
+	><!-- wp:heading {"textAlign":"center","level":3,"style":{"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}},"typography":{"fontStyle":"normal","fontWeight":"700"}},"textColor":"laao-red","fontSize":"xx-large"} -->
+	<h3
+		class="wp-block-heading has-text-align-center has-laao-red-color has-text-color has-link-color has-xx-large-font-size"
+		style="font-style: normal; font-weight: 700"
+	>
+		SUBSCRIBE FOR FREE
+	</h3>
+	<!-- /wp:heading -->
+
+	<!-- wp:paragraph {"align":"center","style":{"spacing":{"padding":{"right":"var:preset|spacing|16","left":"var:preset|spacing|16"}}},"fontSize":"medium"} -->
+	<p
+		class="has-text-align-center has-medium-font-size"
+		style="
+			padding-right: var(--wp--preset--spacing--16);
+			padding-left: var(--wp--preset--spacing--16);
+		"
+	>
+		LET US CURATE WHAT’S HOT EACH MONTH FOR YOU, ALL WHILE RECEIVING
+		EXCLUSIVE OFFERS FROM OUR HIGH-PROFILE PARTNERS.
+	</p>
+	<!-- /wp:paragraph -->
+
+	<!-- wp:html -->
+	<div id="mc_embed_shell">
+		<div id="mc_embed_signup">
+			<form
+				action="https://laartsonline.us4.list-manage.com/subscribe/post?u=f07aa20b77c6adb6140b79f7f&amp;id=a772cab7cc&amp;f_id=006a5ae8f0"
+				method="post"
+				id="mc-embedded-subscribe-form"
+				name="mc-embedded-subscribe-form"
+				class="validate"
+				target="_self"
+				novalidate=""
+			>
+				<div id="mc_embed_signup_scroll">
+					<div class="indicates-required">
+						<span class="asterisk">*</span> Required
+					</div>
+					<div class="mc-field-group">
+						<label for="mce-EMAIL"
+							>Email <span class="asterisk">*</span></label
+						><input
+							type="email"
+							name="EMAIL"
+							class="required email"
+							id="mce-EMAIL"
+							required=""
+							value=""
+							placeholder="you@example.com"
+						/>
+					</div>
+					<div id="mce-responses" class="clear">
+						<div
+							class="response"
+							id="mce-error-response"
+							style="display: none"
+						></div>
+						<div
+							class="response"
+							id="mce-success-response"
+							style="display: none"
+						></div>
+					</div>
+					<div
+						aria-hidden="true"
+						style="position: absolute; left: -5000px"
+					>
+						<input
+							type="text"
+							name="b_f07aa20b77c6adb6140b79f7f_a772cab7cc"
+							tabindex="-1"
+							value=""
+						/>
+					</div>
+					<div class="clear">
+						<input
+							type="submit"
+							name="subscribe"
+							id="mc-embedded-subscribe"
+							class="button"
+							value="Subscribe"
+						/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- /wp:html -->
+</div>
+<!-- /wp:laao/modal -->

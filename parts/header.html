@@ -56,16 +56,22 @@
 			class="wp-block-group site-top-bar-content-container"
 			style="margin-top: 0; margin-bottom: 0"
 		>
-			<!-- wp:buttons -->
-			<div class="wp-block-buttons">
-				<!-- wp:button {"textColor":"laao-red","className":"is-style-outline","style":{"border":{"radius":"0px"},"typography":{"textTransform":"uppercase"},"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}}}} -->
+			<!-- wp:buttons {"className":"","style":{"border":{"width":"1px"}},"borderColor":"laao-red","layout":{"type":"flex","flexWrap":"nowrap"}} -->
+			<div
+				class="wp-block-buttons has-border-color has-laao-red-border-color"
+				style="border-width: 1px"
+			>
+				<!-- wp:button {"textColor":"laao-red","className":"is-style-outline modal-trigger-modal-1745108981942-2050","style":{"border":{"width":"0px","style":"none"},"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}},"typography":{"textTransform":"uppercase"}}} -->
 				<div
-					class="wp-block-button is-style-outline"
-					style="text-transform: uppercase"
+					class="wp-block-button is-style-outline modal-trigger-modal-1745108981942-2050"
 				>
 					<a
 						class="wp-block-button__link has-laao-red-color has-text-color has-link-color wp-element-button"
-						style="border-radius: 0px"
+						style="
+							border-style: none;
+							border-width: 0px;
+							text-transform: uppercase;
+						"
 						>Subscribe</a
 					>
 				</div>
@@ -81,13 +87,15 @@
 				>
 					<!-- wp:social-link {"url":"https://x.com/laartsonlinecom","service":"x"} /-->
 
-					<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook"} /-->
+					<!-- wp:social-link {"url":"https://www.facebook.com/pages/LAArtsOnlinecom/155329294580687","service":"facebook","className":""} /-->
 
-					<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram"} /-->
+					<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram","className":""} /-->
 				</ul>
 				<!-- /wp:social-links -->
 			</div>
 			<!-- /wp:group -->
+
+			<!-- wp:laao/mobile-nav /-->
 		</div>
 		<!-- /wp:group -->
 	</div>
