@@ -19,6 +19,10 @@
 				@apply max-w-full;
 			}
 		}
+
+		.cover-article-media-caption {
+			@apply bg-wp-laao-light-gray p-4 text-center text-sm;
+		}
 	}
 
 	.wp-block-post-content {

@@ -5,10 +5,14 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-laao-whats-hot div {
-	@apply !grid w-screen grid-cols-2 gap-4 p-0;
+.wp-block-laao-whats-hot {
+	@apply !grid grid-cols-1;
 
-	@media (--bp-md) {
-		@apply grid-cols-4;
+	& > div > div > div {
+		@apply grid w-full grid-cols-2 gap-4 p-0;
+
+		@media (--bp-md) {
+			@apply grid-cols-4;
+		}
 	}
 }

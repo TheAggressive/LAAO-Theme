@@ -26,14 +26,122 @@
 	"
 >
 	<!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":[]},"layout":{"type":"default"}} -->
-	<section class="wp-block-group site-content"></section>
+	<section class="wp-block-group site-content">
+		<!-- wp:group {"style":{"spacing":{"margin":{"top":"var:preset|spacing|24","bottom":"var:preset|spacing|24"}}},"layout":{"type":"constrained"}} -->
+		<div
+			class="wp-block-group"
+			style="
+				margin-top: var(--wp--preset--spacing--24);
+				margin-bottom: var(--wp--preset--spacing--24);
+			"
+		>
+			<!-- wp:heading {"style":{"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}},"typography":{"fontStyle":"normal","fontWeight":"400"}},"textColor":"laao-red","fontSize":"xxxxx-large","fontFamily":"anton"} -->
+			<h2
+				class="wp-block-heading has-laao-red-color has-text-color has-link-color has-anton-font-family has-xxxxx-large-font-size"
+				style="font-style: normal; font-weight: 400"
+			>
+				WHAT'S HOT
+			</h2>
+			<!-- /wp:heading -->
+
+			<!-- wp:laao/animate-on-scroll {"animation":"slide","staggerChildren":true,"threshold":"0.5","className":"wp-block-laao-whats-hot"} -->
+			<!-- wp:laao/whats-hot /-->
+			<!-- /wp:laao/animate-on-scroll -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:heading {"style":{"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}}},"textColor":"laao-red","fontSize":"xxxxx-large","fontFamily":"anton"} -->
+		<h2
+			class="wp-block-heading has-laao-red-color has-text-color has-link-color has-anton-font-family has-xxxxx-large-font-size"
+		>
+			COVER STORY
+		</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:query {"queryId":0,"query":{"perPage":1,"pages":0,"offset":0,"postType":"cover","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"parents":[],"format":[]},"metadata":{"categories":["posts"],"patternName":"laao/cover-post-query-loop-template","name":"Posts Query Loop"},"align":"wide"} -->
+		<div class="wp-block-query alignwide">
+			<!-- wp:post-template {"align":"wide","layout":{"type":"default"}} -->
+			<!-- wp:group {"tagName":"article","className":"cover-article","backgroundColor":"laao-white","layout":{"type":"flex","flexWrap":"nowrap"}} -->
+			<article
+				class="wp-block-group cover-article has-laao-white-background-color has-background"
+			>
+				<!-- wp:group {"className":"cover-article-media-container","style":{"layout":{"selfStretch":"fit","flexSize":null}},"layout":{"type":"flex","orientation":"vertical","verticalAlignment":"top","flexWrap":"nowrap"}} -->
+				<div class="wp-block-group cover-article-media-container">
+					<!-- wp:post-featured-image /-->
+
+					<!-- wp:group {"className":"cover-article-secondary-images","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
+					<div class="wp-block-group cover-article-secondary-images">
+						<!-- wp:laao/block-binding-image {"sizeSlug":"full"} /-->
+
+						<!-- wp:laao/block-binding-image {"metaKey":"photo_3","sizeSlug":"full"} /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"core/post-meta","args":{"key":"picture_id"}}}},"className":"cover-article-media-caption"} -->
+					<p class="cover-article-media-caption"></p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+
+				<!-- wp:group {"className":"article-content","style":{"spacing":{"blockGap":"var:preset|spacing|12"}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group article-content">
+					<!-- wp:post-title {"className":"article-title","style":{"typography":{"fontStyle":"normal","fontWeight":"700","lineHeight":"1.5"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
+
+					<!-- wp:group {"className":"social-share","layout":{"type":"flex","orientation":"horizontal"}} -->
+					<div class="wp-block-group social-share">
+						<!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"hsl(0, 72.2%, 50.6%)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"hsla(0, 0%, 0%, 0)","style":{"layout":{"selfStretch":"fit","flexSize":null},"spacing":{"blockGap":{"left":"0"}}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+						<ul
+							class="wp-block-jetpack-sharing-buttons has-normal-icon-size jetpack-sharing-buttons__services-list"
+							id="jetpack-sharing-serivces-list"
+						>
+							<!-- wp:jetpack/sharing-button {"service":"x","label":"X"} /-->
+
+							<!-- wp:jetpack/sharing-button {"service":"facebook","label":"Facebook"} /-->
+
+							<!-- wp:jetpack/sharing-button {"service":"linkedin","label":"LinkedIn"} /-->
+
+							<!-- wp:jetpack/sharing-button {"service":"mail","label":"Mail"} /-->
+						</ul>
+						<!-- /wp:jetpack/sharing-buttons -->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"className":"article-credits","layout":{"type":"flex","orientation":"horizontal"}} -->
+					<div class="wp-block-group article-credits">
+						<!-- wp:laao/article-credits /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"className":"article-text","layout":{"type":"constrained"}} -->
+					<div class="wp-block-group article-text">
+						<!-- wp:adsanity/rotating-ad {"group_id":62,"group_name":"160x600","ad_id":48707,"time":"8","rendered_ad":{"classes":"ad-160x600 adsanity-160x600  adsanity- alignnone adsanity-alignnone","markup":"\u003cdiv id=\u0022ad-48707\u0022 class=\u0022ad-160x600 adsanity-160x600  adsanity-\u0022\n\u003e\n\n\u003ca rel=\u0022nofollow\u0022   target=\u0022_blank\u0022\u003e\u003cimg width=\u0022160\u0022 height=\u0022600\u0022 src=\u0022http://laartsonline.local/wp-content/uploads/2024/05/JLY_LAAO____160-x-600.jpg\u0022 class=\u0022no-lazy-load wp-post-image\u0022 alt=\u0022\u0022 decoding=\u0022async\u0022 fetchpriority=\u0022high\u0022 srcset=\u0022http://laartsonline.local/wp-content/uploads/2024/05/JLY_LAAO____160-x-600.jpg 160w, http://laartsonline.local/wp-content/uploads/2024/05/JLY_LAAO____160-x-600-80x300.jpg 80w\u0022 sizes=\u0022(max-width: 160px) 100vw, 160px\u0022 /\u003e\u003c/a\u003e\n\u003c/div\u003e","id":48707,"isNetwork":false}} /-->
+
+						<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+					</div>
+					<!-- /wp:group -->
+				</div>
+				<!-- /wp:group -->
+			</article>
+			<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+
+		<!-- wp:paragraph {"className":"modal-trigger-modal-1745109654262-7724"} -->
+		<p class="modal-trigger-modal-1745109654262-7724">
+			this is a test to check links <a href="#">here</a>.
+		</p>
+		<!-- /wp:paragraph -->
+	</section>
 	<!-- /wp:group -->
 
 	<!-- wp:group {"tagName":"aside","metadata":{"name":"Navigation"},"className":"site-nav","style":{"layout":[]},"layout":{"type":"default"}} -->
 	<aside class="wp-block-group site-nav">
 		<!-- wp:group {"className":"site-nav-mobile-links","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
 		<div class="wp-block-group site-nav-mobile-links">
-			<!-- wp:social-links {"className":"is-style-logos-only","layout":{"type":"flex","flexWrap":"wrap"}} -->
+			<!-- wp:laao/mobile-nav {"icon":"closeIcon","className":""} /-->
+
+			<!-- wp:social-links {"openInNewTab":true,"className":"is-style-logos-only"} -->
 			<ul class="wp-block-social-links is-style-logos-only">
 				<!-- wp:social-link {"url":"https://x.com/laartsonlinecom","service":"x"} /-->
 
@@ -42,8 +150,6 @@
 				<!-- wp:social-link {"url":"https://instagram.com/laartsonline/","service":"instagram"} /-->
 			</ul>
 			<!-- /wp:social-links -->
-
-			<!-- wp:laao/mobile-nav {"icon":"closeIcon"} /-->
 		</div>
 		<!-- /wp:group -->
 
@@ -54,5 +160,115 @@
 	<!-- /wp:group -->
 </main>
 <!-- /wp:group -->
+
+<!-- wp:laao/modal {"position":"bottom-left","disableOverlay":true,"enterAnimation":"slide-up","exitAnimation":"slide-down","animationDuration":250,"modalId":"modal-1745108088508-5167","triggerLabel":"","style":{"border":{"radius":"0px","width":"1.5rem","style":"solid","color":"var(\u002d\u002dwp\u002d\u002dpreset\u002d\u002dcolor\u002d\u002dlaao-white)"},"color":{"background":"var(\u002d\u002dwp\u002d\u002dpreset\u002d\u002dcolor\u002d\u002dlaao-light-gray)"},"shadow":"var:preset|shadow|natural"}} -->
+<div
+	class="wp-block-laao-modal has-border-color has-background"
+	style="
+		border-color: var(--wp--preset--color--laao-white);
+		border-style: solid;
+		border-width: 1.5rem;
+		border-radius: 0px;
+		background-color: var(--wp--preset--color--laao-light-gray);
+		box-shadow: var(--wp--preset--shadow--natural);
+	"
+>
+	<button
+		class="wp-block-laao-modal-close"
+		data-wp-on--click="actions.closeModal"
+		data-wp-context="{ &quot;id&quot;: 'modal-1745108088508-5167' }"
+		aria-label="Close modal"
+	>
+		✕</button
+	><!-- wp:heading {"textAlign":"center","level":3,"style":{"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}},"typography":{"fontStyle":"normal","fontWeight":"700"}},"textColor":"laao-red","fontSize":"xx-large"} -->
+	<h3
+		class="wp-block-heading has-text-align-center has-laao-red-color has-text-color has-link-color has-xx-large-font-size"
+		style="font-style: normal; font-weight: 700"
+	>
+		SUBSCRIBE FOR FREE
+	</h3>
+	<!-- /wp:heading -->
+
+	<!-- wp:paragraph {"align":"center","style":{"spacing":{"padding":{"right":"var:preset|spacing|16","left":"var:preset|spacing|16"}}},"fontSize":"medium"} -->
+	<p
+		class="has-text-align-center has-medium-font-size"
+		style="
+			padding-right: var(--wp--preset--spacing--16);
+			padding-left: var(--wp--preset--spacing--16);
+		"
+	>
+		LET US CURATE WHAT’S HOT EACH MONTH FOR YOU, ALL WHILE RECEIVING
+		EXCLUSIVE OFFERS FROM OUR HIGH-PROFILE PARTNERS.
+	</p>
+	<!-- /wp:paragraph -->
+
+	<!-- wp:html -->
+	<div id="mc_embed_shell">
+		<div id="mc_embed_signup">
+			<form
+				action="https://laartsonline.us4.list-manage.com/subscribe/post?u=f07aa20b77c6adb6140b79f7f&amp;id=a772cab7cc&amp;f_id=006a5ae8f0"
+				method="post"
+				id="mc-embedded-subscribe-form"
+				name="mc-embedded-subscribe-form"
+				class="validate"
+				target="_self"
+				novalidate=""
+			>
+				<div id="mc_embed_signup_scroll">
+					<div class="indicates-required">
+						<span class="asterisk">*</span> Required
+					</div>
+					<div class="mc-field-group">
+						<label for="mce-EMAIL"
+							>Email <span class="asterisk">*</span></label
+						><input
+							type="email"
+							name="EMAIL"
+							class="required email"
+							id="mce-EMAIL"
+							required=""
+							value=""
+							placeholder="you@example.com"
+						/>
+					</div>
+					<div id="mce-responses" class="clear">
+						<div
+							class="response"
+							id="mce-error-response"
+							style="display: none"
+						></div>
+						<div
+							class="response"
+							id="mce-success-response"
+							style="display: none"
+						></div>
+					</div>
+					<div
+						aria-hidden="true"
+						style="position: absolute; left: -5000px"
+					>
+						<input
+							type="text"
+							name="b_f07aa20b77c6adb6140b79f7f_a772cab7cc"
+							tabindex="-1"
+							value=""
+						/>
+					</div>
+					<div class="clear">
+						<input
+							type="submit"
+							name="subscribe"
+							id="mc-embedded-subscribe"
+							class="button"
+							value="Subscribe"
+						/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- /wp:html -->
+</div>
+<!-- /wp:laao/modal -->
 
 <!-- wp:template-part {"slug":"footer","theme":"laao","className":"site-footer"} /-->

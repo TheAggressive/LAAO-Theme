@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, ToggleControl } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
@@ -24,10 +24,6 @@ import './editor.css';
 export default function Edit({ attributes, setAttributes }) {
 	const { numberOfPosts, displayFeaturedImage, displayCaption, useLinkMeta } =
 		attributes;
-
-	const blockProps = useBlockProps({
-		className: 'whats-hot-block',
-	});
 
 	// Check if posts are loading
 	const isLoading = useSelect(
@@ -95,7 +91,7 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div {...blockProps}>
+			<>
 				{isLoading ? (
 					<p>Loading What&apos;s Hot posts...</p>
 				) : (
@@ -104,7 +100,7 @@ export default function Edit({ attributes, setAttributes }) {
 						attributes={attributes}
 					/>
 				)}
-			</div>
+			</>
 		</>
 	);
 }
