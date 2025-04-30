@@ -1,52 +1,56 @@
 <?php
 
-/**
- * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
- */
+if ( ! function_exists( 'myplugin_render_featured_block' ) ) {
+	function myplugin_render_featured_block( $attributes, $content, $block ) {
+		ob_start();
+		$wrapper_attributes = get_block_wrapper_attributes();
+		$post_types         = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
+		$posts_per_page     = $attributes['postsPerPage'] ?? 4;
 
-$wrapper_attributes = get_block_wrapper_attributes();
-$post_types         = isset( $attributes['selectedPostTypes'] ) && ! empty( $attributes['selectedPostTypes'] )
-	? $attributes['selectedPostTypes']
-	: array( 'post' ); // Default to standard posts if nothing selected
-$posts_per_page     = isset( $attributes['postsPerPage'] ) ? $attributes['postsPerPage'] : 4;
+		$args = array(
+			'post_type'      => $post_types,
+			'posts_per_page' => $posts_per_page,
+			'tag'            => 'featured',
+			'post_status'    => 'publish',
+		);
 
-// Query posts with the selected post types
-$args = array(
-	'post_type'      => $post_types,
-	'posts_per_page' => $posts_per_page,
-	'tag'            => 'featured',
-	'post_status'    => 'publish',
-);
+		$featured_query = new WP_Query( $args );
 
-$featured_query = new WP_Query( $args );
+		if ( $featured_query->have_posts() ) :
+			while ( $featured_query->have_posts() ) :
+				$featured_query->the_post();
+				$archive_url = get_post_type_archive_link( get_post_type() );
 
-if ( $featured_query->have_posts() ) :
-	while ( $featured_query->have_posts() ) :
-		$featured_query->the_post();
-		?>
-		<article class="featured-item">
-			<a class="grid grid-cols-1 grid-cols-5@md" href="<?php echo esc_url( get_permalink() ); ?>">
-				<figure class="featured-list-img grid col-span-2">
-					<?php if ( has_post_thumbnail() ) : ?>
-						<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
-					<?php endif; ?>
-				</figure>
-				<div class="featured-list-content grid grid-rows-2 col-span-3">
-					<header class="featured-list-title">
-						<?php echo esc_html( get_the_title() ); ?>
-						<div class="featured-list-credits">
-							<div class="article-credits">
-								<span>By <?php echo esc_html( get_the_author() ); ?></span>
-							</div>
+				?>
+				<article class="featured-item">
+					<a class="featured-item-link" href="<?php echo esc_url( $archive_url ); ?>">
+						<figure class="featured-item-img">
+							<?php if ( has_post_thumbnail() ) : ?>
+								<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
+							<?php endif; ?>
+						</figure>
+						<div class="featured-item-content">
+							<header class="featured-list-title">
+								<h3><?php echo esc_html( get_the_title() ); ?></h3>
+								<div class="featured-list-credits">
+									<div class="article-credits">
+										<span><?php echo esc_html( get_post_meta( get_the_ID(), 'by_options', true ) ); ?> <?php echo esc_html( get_post_meta( get_the_ID(), 'author', true ) ); ?></span>
+									</div>
+								</div>
+							</header>
+							<span class="featured-list-preview"><?php echo wp_kses_post( wp_html_excerpt( get_the_excerpt(), 250, '...' ) ); ?></span>
 						</div>
-					</header>
-					<span class="featured-list-preview"><?php echo wp_kses_post( get_the_excerpt() ); ?></span>
-				</div>
-			</a>
-		</article>
-		<?php
-	endwhile;
-	wp_reset_postdata();
-else :
-	echo '<p>No featured posts found</p>';
-endif;
+					</a>
+				</article>
+				<?php
+			endwhile;
+			wp_reset_postdata();
+		else :
+			echo '<p>No featured posts found</p>';
+		endif;
+
+		return ob_get_clean();
+	}
+}
+
+echo myplugin_render_featured_block( $attributes, $content, $block );

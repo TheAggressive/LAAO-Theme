@@ -232,9 +232,7 @@ export default function Edit({ attributes, setAttributes }) {
 						}}
 					>
 						{__(
-							`Negative values delay trigger until element is further
-						in viewport. -50% means element must be halfway into
-						viewport before triggering.`,
+							`Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering.`,
 							'laao'
 						)}
 					</p>

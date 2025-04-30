@@ -1,3 +1,7 @@
 ::selection {
 	@apply bg-wp-laao-red text-wp-laao-white;
 }
+
+body {
+	@apply subpixel-antialiased;
+}

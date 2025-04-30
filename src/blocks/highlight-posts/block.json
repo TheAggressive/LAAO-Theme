@@ -19,7 +19,7 @@
 	"attributes": {
 		"selectedPostTypes": {
 			"type": "array",
-			"default": []
+			"default": ["post"]
 		},
 		"postsPerPage": {
 			"type": "number",

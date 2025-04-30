@@ -90,6 +90,8 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(val) => setAttributes({ postsPerPage: val })}
 						min={1}
 						max={12}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 
 					<p>
@@ -104,6 +106,7 @@ export default function Edit({ attributes, setAttributes }) {
 								label={type.name}
 								checked={selectedPostTypes.includes(type.slug)}
 								onChange={() => togglePostType(type.slug)}
+								__nextHasNoMarginBottom
 							/>
 						))
 					)}

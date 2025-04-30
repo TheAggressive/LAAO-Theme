@@ -5,7 +5,7 @@ import { getContext, getElement, store } from '@wordpress/interactivity';
 
 // Invert the value of a CSS variable
 const invertValue = (value) => {
-	const [_, num = 0, unit = '%'] = value?.match(/(-?\d+)(px|%)/) || [];
+	const [num = 0, unit = '%'] = value?.match(/(-?\d+)(px|%)/) || [];
 	return -num + unit;
 };
 

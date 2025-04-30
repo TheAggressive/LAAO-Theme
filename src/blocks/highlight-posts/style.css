@@ -1,3 +1,5 @@
+@import "../../styles/_breakpoints.css";
+
 /**
  * The following styles get applied both on the front of your site
  * and in the editor.
@@ -5,8 +7,49 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-laao-highlights {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+.wp-block-laao-highlight-posts {
+	@apply grid grid-cols-1 gap-wp-44;
+
+	@media (--bp-md) {
+		@apply grid-cols-2 gap-wp-44;
+	}
+
+	.featured-item-link {
+		@apply grid grid-cols-1;
+
+		@media (--bp-md) {
+			@apply grid-cols-5;
+		}
+
+		.featured-item-img {
+			@apply col-span-1;
+
+			@media (--bp-md) {
+				@apply col-span-2;
+			}
+		}
+
+		.featured-item-content {
+			@apply col-span-3 mt-0 border-[1.5rem] border-wp-laao-white p-wp-24;
+
+			@media (--bp-md) {
+				@apply mt-wp-24;
+			}
+
+			.featured-list-title {
+				@apply mb-4;
+				& h3 {
+					@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-2xl font-bold text-wp-laao-red;
+				}
+			}
+
+			.featured-list-credits {
+				@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-base font-bold uppercase text-wp-laao-black;
+			}
+
+			.featured-list-preview {
+				@apply mt-6 text-base;
+			}
+		}
+	}
 }
