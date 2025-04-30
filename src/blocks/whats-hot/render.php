@@ -75,8 +75,7 @@ ob_start();
 		}
 
 		?>
-		<article class="whats-hot-item <?php echo esc_attr( $animation_classes ); ?>"
-			<?php echo wp_kses_post( $animation_attrs ); ?>
+		<article class="whats-hot-item"
 			data-item-index="<?php echo esc_attr( $item_count ); ?>">
 
 			<a href="<?php echo esc_url( get_site_url() . '/' . $post_link ); ?>" class="whats-hot-link">

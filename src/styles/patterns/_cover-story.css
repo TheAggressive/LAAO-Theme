@@ -1,5 +1,9 @@
 @import "../_breakpoints.css";
 
+.cover-story {
+	margin-block-start: 0 !important;
+}
+
 .cover-article {
 	@apply flex-col !items-start;
 
