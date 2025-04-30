@@ -1,5 +1,5 @@
 .ad-160x600 {
-	@apply float-right mb-wp-44 ml-wp-44 hidden;
+	@apply float-right clear-right mb-wp-44 ml-wp-44 hidden;
 
 	@media (--bp-lg) {
 		@apply block;

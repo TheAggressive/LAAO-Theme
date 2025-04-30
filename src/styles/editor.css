@@ -28,7 +28,11 @@
 @import "./components/_article.css";
 @import "./components/_ads.css";
 @import "./components/_footer.css";
+@import "./components/_mailchimp.css";
 
 /* Blocks */
 @import "./blocks/_wp-block-social-links.css";
 @import "./blocks/_wp-block-jetpack-sharing-buttons.css";
+
+/* Patterns */
+@import "./patterns/_cover-story.css";
