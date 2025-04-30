@@ -1,11 +1,10 @@
 @import "../_breakpoints.css";
 
 .cover-article {
-	align-items: flex-start;
-	flex-direction: column;
+	@apply flex-col !items-start;
 
 	@media (--bp-lg) {
-		flex-direction: initial;
+		@apply flex-row;
 	}
 
 	.cover-article-media-container {
