@@ -30,7 +30,7 @@
 			@apply col-span-1;
 
 			@media (--bp-md) {
-				@apply col-span-2;
+				@apply z-10 col-span-2;
 			}
 		}
 
@@ -38,13 +38,13 @@
 			@apply col-span-3 mt-0 border-[1.5rem] border-wp-laao-white p-wp-24;
 
 			@media (--bp-md) {
-				@apply mt-wp-24;
+				@apply mt-6 w-[calc(100%+1.5rem)] -translate-x-6;
 			}
 
 			.featured-list-title {
 				@apply mb-4;
 				& h3 {
-					@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-2xl font-bold text-wp-laao-red;
+					@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-2xl font-bold uppercase text-wp-laao-red;
 				}
 			}
 

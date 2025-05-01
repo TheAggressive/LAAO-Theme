@@ -1,7 +1,7 @@
 <?php
 
-if ( ! function_exists( 'myplugin_render_featured_block' ) ) {
-	function myplugin_render_featured_block( $attributes, $content, $block ) {
+if ( ! function_exists( 'laao_render_featured_block' ) ) {
+	function laao_render_featured_block( $attributes, $content, $block ) {
 		ob_start();
 		$wrapper_attributes = get_block_wrapper_attributes();
 		$post_types         = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
@@ -12,6 +12,7 @@ if ( ! function_exists( 'myplugin_render_featured_block' ) ) {
 			'posts_per_page' => $posts_per_page,
 			'tag'            => 'featured',
 			'post_status'    => 'publish',
+			'orderby'        => 'rand',
 		);
 
 		$featured_query = new WP_Query( $args );
@@ -38,7 +39,7 @@ if ( ! function_exists( 'myplugin_render_featured_block' ) ) {
 									</div>
 								</div>
 							</header>
-							<span class="featured-list-preview"><?php echo wp_kses_post( wp_html_excerpt( get_the_excerpt(), 250, '...' ) ); ?></span>
+							<span class="featured-list-preview"><?php echo wp_kses_post( wp_html_excerpt( get_the_excerpt(), 275, '...' ) ); ?></span>
 						</div>
 					</a>
 				</article>
@@ -53,4 +54,4 @@ if ( ! function_exists( 'myplugin_render_featured_block' ) ) {
 	}
 }
 
-echo myplugin_render_featured_block( $attributes, $content, $block );
+echo wp_kses_post( laao_render_featured_block( $attributes, $content, $block ) );
