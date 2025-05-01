@@ -1,0 +1,17 @@
+label {
+	@apply font-bold uppercase text-wp-laao-black;
+}
+
+input,
+textarea,
+select {
+	@apply rounded-md bg-wp-laao-light-gray px-2 py-4;
+}
+
+button[type="submit"] {
+	@apply bg-wp-laao-red px-4 py-3 uppercase text-wp-laao-white;
+}
+
+select {
+	@apply h-11 align-middle;
+}

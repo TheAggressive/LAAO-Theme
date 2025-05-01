@@ -1,0 +1,15 @@
+.contact-us-form {
+	@apply col-span-2;
+
+	@media (--bp-lg) {
+		@apply col-span-1;
+	}
+}
+
+.contact-us-credits {
+	@apply col-span-2;
+
+	@media (--bp-lg) {
+		@apply col-span-1;
+	}
+}

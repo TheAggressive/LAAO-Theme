@@ -332,6 +332,7 @@
 			"background": "var:preset|color|laao-light-gray",
 			"text": "var:preset|color|laao-black"
 		},
+		"typography": {},
 		"elements": {
 			"link": {
 				"color": {
