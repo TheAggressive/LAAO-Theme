@@ -44,7 +44,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const blockProps = useBlockProps();
 	const innerBlockProps = useInnerBlocksProps(blockProps, {
 		allowedBlocks: ['adsanity/ad-group', 'adsanity/rotating-ad'],
-		template: [['core/paragraph']],
+		template: [['adsanity/rotating-ad']],
 		templateLock: false,
 	});
 

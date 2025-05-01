@@ -1,0 +1,32 @@
+.wp-block-query-pagination {
+	@apply flex items-center justify-center gap-wp-4;
+
+	.wp-block-query-pagination-numbers {
+		@apply flex items-center justify-center gap-wp-4;
+
+		.page-numbers {
+			@apply flex h-10 w-10 items-center justify-center rounded-full border border-wp-laao-gray font-bold text-wp-laao-gray transition-all duration-300;
+
+			&:hover {
+				@apply border-wp-laao-red bg-wp-laao-red text-wp-laao-white;
+			}
+		}
+
+		.dots {
+			@apply border-none hover:bg-inherit hover:text-wp-laao-gray;
+		}
+	}
+
+	.wp-block-query-pagination-next,
+	.wp-block-query-pagination-previous {
+		@apply flex h-10 w-10 items-center justify-center rounded-full bg-wp-laao-gray pb-2 text-3xl text-wp-laao-white transition-all duration-300;
+
+		&:hover {
+			@apply bg-wp-laao-red;
+		}
+
+		span {
+			@apply m-0;
+		}
+	}
+}

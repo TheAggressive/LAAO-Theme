@@ -27,7 +27,9 @@
 >
 	<!-- wp:group {"tagName":"section","className":"site-content","style":{"layout":[]},"layout":{"type":"default"}} -->
 	<section class="wp-block-group site-content">
-		<!-- wp:group {"tagName":"article","className":"site-article","style":{"spacing":{"padding":{"right":"var:preset|spacing|24","left":"var:preset|spacing|24","top":"var:preset|spacing|24","bottom":"var:preset|spacing|48"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"laao-white","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
+		<!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"400"},"elements":{"link":{"color":{"text":"var:preset|color|laao-red"}}},"spacing":{"margin":{"top":"var:preset|spacing|44","bottom":"var:preset|spacing|44"}}},"textColor":"laao-red","fontSize":"xxxxx-large","fontFamily":"anton"} /-->
+
+		<!-- wp:group {"tagName":"article","className":"site-article","style":{"spacing":{"padding":{"right":"var:preset|spacing|24","left":"var:preset|spacing|24","top":"var:preset|spacing|24","bottom":"var:preset|spacing|24"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"laao-white","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
 		<article
 			class="wp-block-group site-article has-laao-white-background-color has-background"
 			style="
@@ -35,7 +37,7 @@
 				margin-bottom: 0;
 				padding-top: var(--wp--preset--spacing--24);
 				padding-right: var(--wp--preset--spacing--24);
-				padding-bottom: var(--wp--preset--spacing--48);
+				padding-bottom: var(--wp--preset--spacing--24);
 				padding-left: var(--wp--preset--spacing--24);
 			"
 		>
@@ -47,8 +49,6 @@
 
 			<!-- wp:group {"className":"article-content","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group article-content">
-				<!-- wp:post-title {"style":{"typography":{"textTransform":"uppercase","lineHeight":"0.9","fontStyle":"normal","fontWeight":"700"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
-
 				<!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"hsl(0, 73.7%, 41.8%)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"hsla(0, 0%, 0%, 0)","style":{"spacing":{"blockGap":{"left":"0"},"margin":{"top":"var:preset|spacing|12","bottom":"0"}}},"layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} -->
 				<ul
 					class="wp-block-jetpack-sharing-buttons has-normal-icon-size jetpack-sharing-buttons__services-list"
