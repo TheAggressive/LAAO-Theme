@@ -9,7 +9,6 @@
 
 .wp-block-laao-whats-hot {
 	@apply !grid grid-cols-2 gap-4 p-0;
-	margin-block-start: 0 !important;
 
 	@media (--bp-md) {
 		@apply grid-cols-4;

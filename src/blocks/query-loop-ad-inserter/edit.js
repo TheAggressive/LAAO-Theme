@@ -43,7 +43,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const { placeAfter } = attributes;
 	const blockProps = useBlockProps();
 	const innerBlockProps = useInnerBlocksProps(blockProps, {
-		allowedBlocks: ['adsanity/ad-group'],
+		allowedBlocks: ['adsanity/ad-group', 'adsanity/rotating-ad'],
 		template: [['core/paragraph']],
 		templateLock: false,
 	});

@@ -1,35 +1,33 @@
 @import "../_breakpoints.css";
 
 .cover-story {
-	margin-block-start: 0 !important;
-}
+	.cover-article {
+		@apply flex-col !items-start;
 
-.cover-article {
-	@apply flex-col !items-start;
-
-	@media (--bp-lg) {
-		@apply flex-row;
-	}
-
-	.cover-article-media-container {
-		@apply w-full;
-
-		.wp-block-post-featured-image {
-			@apply w-full;
+		@media (--bp-lg) {
+			@apply flex-row;
 		}
 
-		.cover-article-secondary-images {
-			img {
-				@apply max-w-full;
+		.cover-article-media-container {
+			@apply w-full;
+
+			.wp-block-post-featured-image {
+				@apply w-full;
+			}
+
+			.cover-article-secondary-images {
+				img {
+					@apply max-w-full;
+				}
+			}
+
+			.cover-article-media-caption {
+				@apply bg-wp-laao-light-gray p-4 text-center text-sm;
 			}
 		}
 
-		.cover-article-media-caption {
-			@apply bg-wp-laao-light-gray p-4 text-center text-sm;
+		.wp-block-post-content {
+			@apply block;
 		}
-	}
-
-	.wp-block-post-content {
-		@apply block;
 	}
 }

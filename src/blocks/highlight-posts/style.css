@@ -9,7 +9,6 @@
 
 .wp-block-laao-highlight-posts {
 	@apply grid grid-cols-1 gap-14;
-	margin-block-start: 0 !important;
 
 	@media (--bp-md) {
 		@apply grid-cols-1;
