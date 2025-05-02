@@ -13,22 +13,22 @@
 		@apply absolute bottom-0 z-10 grid w-full grid-cols-12 gap-wp-24 px-wp-16;
 
 		@media (--bp-md) {
-			@apply top-0 px-wp-44;
+			@apply px-wp-44;
 		}
 
 		.wp-block-laao-hero-caption {
 			@apply col-span-12 mb-wp-8 text-center text-wp-small text-wp-laao-dark-gray;
 
 			@media (--bp-md) {
-				@apply col-span-8 col-end-13 mt-wp-8 justify-self-end;
+				@apply col-span-12 col-end-13 mt-wp-8 justify-self-end;
 			}
 
 			@media (--bp-lg) {
-				@apply col-span-6 col-end-10;
+				@apply col-span-12 col-end-10;
 			}
 
 			@media (--bp-2xl) {
-				@apply col-span-8 col-end-11 text-left;
+				@apply col-span-12 col-end-11 text-left;
 			}
 		}
 	}
