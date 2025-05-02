@@ -26,7 +26,7 @@
 	/* WordPress Override */
 	@media (--bp-sm-max) {
 		.is-layout-grid {
-			@apply gap-0;
+			@apply gap-4;
 		}
 	}
 
@@ -58,7 +58,13 @@
 		}
 
 		.wp-block-button {
-			@apply justify-center;
+			@apply justify-center whitespace-nowrap;
+
+			@media (--bp-sm-max) {
+				.wp-block-button__link {
+					@apply px-4;
+				}
+			}
 		}
 	}
 }
