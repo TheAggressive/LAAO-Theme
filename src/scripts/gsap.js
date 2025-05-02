@@ -10,18 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	const responsive = gsap.matchMedia();
 
 	responsive.add('(min-width: 1024px)', () => {
-		gsap.timeline({
-			scrollTrigger: {
-				trigger: '.site-nav',
-				start: 'top-=0 top',
-				endTrigger: '.site-footer',
-				end: 'top bottom',
-				toggleActions: 'play reverse play reverse',
-				scrub: false,
-				pin: true,
-				pinSpacing: false,
-				markers: false,
-			},
+		// Create timeline first
+		const navTimeline = gsap.timeline();
+
+		// Then create ScrollTrigger separately
+		ScrollTrigger.create({
+			trigger: '.site-nav',
+			start: 'top-=0 top',
+			endTrigger: '.site-footer',
+			end: 'top bottom',
+			toggleActions: 'play reverse play reverse',
+			scrub: false,
+			pin: true,
+			pinSpacing: false,
+			markers: false,
+			animation: navTimeline,
 		});
 	});
 

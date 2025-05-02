@@ -43,7 +43,7 @@
 }
 
 .whats-hot-caption {
-	@apply flex flex-1 items-center justify-center bg-wp-laao-light-gray p-4 text-center text-sm leading-5;
+	@apply flex flex-1 flex-col items-center justify-center bg-wp-laao-light-gray p-4 text-center text-sm leading-5;
 }
 
 .whats-hot-text {
