@@ -30,21 +30,27 @@ const { state, actions } = store('laao/hero', {
 				return;
 			}
 
-			actions.setCaption();
-
 			state.isTransitioning = true;
 			state.currentSlide =
 				(state.currentSlide + 1) % state.context.totalSlides;
 
+			// Set caption after changing the slide
+			actions.setCaption();
+
 			setTimeout(() => {
 				state.isTransitioning = false;
-			}, state.transitionDuration);
+			}, 1000); // Short transition time for slide change effect
 		},
 		init: () => {
 			state.context = getContext();
+
+			// Set initial caption for the first slide
+			actions.setCaption();
+
+			// Start the slideshow with a reasonable interval
 			setInterval(() => {
 				actions.nextSlide();
-			}, 0);
+			}, state.transitionDuration); // Use the defined transition duration
 		},
 	},
 	callbacks: {
