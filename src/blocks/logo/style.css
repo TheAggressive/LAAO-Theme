@@ -10,7 +10,7 @@
 .wp-block-laao-site-logo {
 	@apply h-fit w-fit;
 	img {
-		@apply h-full w-52;
+		@apply h-full w-full max-w-52;
 
 		@media (--bp-md) {
 			@apply w-64;

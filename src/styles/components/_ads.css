@@ -17,7 +17,7 @@
 }
 
 .ad-728x90 {
-	@apply block h-fit w-fit max-w-[728px] border-[1.5rem] border-wp-laao-white;
+	@apply block h-fit w-fit max-w-full border-[1.5rem] border-wp-laao-white;
 }
 
 .ad-728x90:not(.wp-block-laao-hero .ad-728x90) {

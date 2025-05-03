@@ -65,7 +65,7 @@
 			}
 
 			@media (--bp-lg) {
-				@apply col-span-5 col-start-5;
+				@apply col-span-6 col-start-4;
 			}
 
 			@media (--bp-2xl) {

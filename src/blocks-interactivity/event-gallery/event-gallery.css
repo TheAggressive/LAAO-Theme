@@ -1,14 +1,14 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-event-gallery {
-	@apply grid auto-rows-[repeat(100px)] grid-cols-3 gap-3;
+	@apply grid auto-rows-[minmax(50px,_100px)] grid-cols-3 gap-3;
 
 	@media (--bp-sm) {
-		@apply grid-cols-3;
+		@apply auto-rows-[minmax(75px,_125px)] grid-cols-3;
 	}
 
-	@media (--bp-md) {
-		@apply grid-cols-5;
+	@media (--bp-xl) {
+		@apply auto-rows-[minmax(150px,_250px)] grid-cols-5;
 	}
 }
 
