@@ -151,6 +151,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.isScrolling = true;
 
+			// Animation duration from CSS is 800ms - sync our timing with it
+			const animationDuration = 800;
+
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
 				// If there is no next sibling, it goes back to the first image.
@@ -165,28 +168,45 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 							'img'
 						)
 					);
-					callbacks.setLightBoxVariables();
-					return;
+				} else {
+					// Sets the next sibling as current image.
+					actions.setCurrentImage(
+						JSON.parse(
+							state.currentImageRef.parentNode.nextElementSibling.getAttribute(
+								'data-wp-context'
+							)
+						),
+						state.currentImageRef.parentNode.nextElementSibling.querySelector(
+							'img'
+						)
+					);
 				}
 
-				// Sets the next sibling as current image.
-				actions.setCurrentImage(
-					JSON.parse(
-						state.currentImageRef.parentNode.nextElementSibling.getAttribute(
-							'data-wp-context'
-						)
-					),
-					state.currentImageRef.parentNode.nextElementSibling.querySelector(
-						'img'
-					)
-				);
-				callbacks.setLightBoxVariables();
-			}, state.getTimeOut);
+				console.log('image loaded', state.hasImageLoaded);
 
-			// Double the amount of time as half way through the "next image" becomes the "current image".
+				// Check if image is loaded and set variables when ready
+				if (state.hasImageLoaded) {
+					console.log('image loaded', state.hasImageLoaded);
+					callbacks.setLightBoxVariables();
+					// Don't reset state.getNext until animation is complete
+					// animation-duration in CSS is 800ms, so we wait full duration
+				} else {
+					// If not loaded yet, add a load event listener
+					state.currentImageRef.addEventListener(
+						'load',
+						() => {
+							callbacks.setLightBoxVariables();
+							// Don't reset flag here, wait for animation to complete
+						},
+						{ once: true }
+					);
+				}
+			}, animationDuration / 2); // Half of animation time to swap image at midpoint
+
+			// Reset navigation state only after full animation completes
 			setTimeout(() => {
 				state.getNext = false;
-			}, state.getTimeOut * 2);
+			}, animationDuration);
 		},
 		handlePreviousImage() {
 			// Prevents double clicks from triggering the animation twice.
@@ -198,6 +218,9 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			state.isScrolling = true;
 			// Removes the previous image animation.
 			state.getPrevious = true;
+
+			// Animation duration from CSS is 800ms - sync our timing with it
+			const animationDuration = 800;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -212,29 +235,43 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 							'img'
 						)
 					);
-					callbacks.setLightBoxVariables();
-					return;
+				} else {
+					// Sets the previous sibling as current image.
+					actions.setCurrentImage(
+						JSON.parse(
+							state.currentImageRef.parentNode.previousElementSibling.getAttribute(
+								'data-wp-context'
+							)
+						),
+						(state.currentImageRef =
+							state.currentImageRef.parentNode.previousElementSibling.querySelector(
+								'img'
+							))
+					);
 				}
 
-				// Sets the previous sibling as current image.
-				actions.setCurrentImage(
-					JSON.parse(
-						state.currentImageRef.parentNode.previousElementSibling.getAttribute(
-							'data-wp-context'
-						)
-					),
-					(state.currentImageRef =
-						state.currentImageRef.parentNode.previousElementSibling.querySelector(
-							'img'
-						))
-				);
-				callbacks.setLightBoxVariables();
-			}, state.getTimeOut);
+				// Check if image is loaded and set variables when ready
+				if (state.hasImageLoaded) {
+					callbacks.setLightBoxVariables();
+					// Don't reset state.getPrevious until animation is complete
+					// animation-duration in CSS is 800ms, so we wait full duration
+				} else {
+					// If not loaded yet, add a load event listener
+					state.currentImageRef.addEventListener(
+						'load',
+						() => {
+							callbacks.setLightBoxVariables();
+							// Don't reset flag here, wait for animation to complete
+						},
+						{ once: true }
+					);
+				}
+			}, animationDuration / 2); // Half of animation time to swap image at midpoint
 
-			// Double the amount of time as half way through the "previous image" becomes the "current image".
+			// Reset navigation state only after full animation completes
 			setTimeout(() => {
 				state.getPrevious = false;
-			}, state.getTimeOut * 2);
+			}, animationDuration);
 		},
 		focusLock() {
 			if (state.isActive) {
