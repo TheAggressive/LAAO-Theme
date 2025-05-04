@@ -2,7 +2,7 @@
 	@apply col-span-12;
 
 	@media (--bp-lg) {
-		@apply col-span-9;
+		@apply col-span-12;
 	}
 
 	@media (--bp-2xl) {

@@ -42,7 +42,7 @@
 		}
 
 		@media (--bp-lg) {
-			@apply col-span-5;
+			@apply col-span-8;
 		}
 
 		@media (--bp-2xl) {

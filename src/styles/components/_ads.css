@@ -24,7 +24,7 @@
 	}
 
 	@media (--bp-md) {
-		@apply border-l-[1.5rem] border-r-[1.5rem];
+		@apply w-fit border-l-[1.5rem] border-r-[1.5rem];
 	}
 }
 
@@ -32,7 +32,11 @@
 	@apply hidden;
 
 	@media (--bp-lg) {
-		@apply mx-auto block;
+		@apply mx-auto block w-fit;
+
+		img {
+			@apply h-auto w-fit;
+		}
 	}
 }
 

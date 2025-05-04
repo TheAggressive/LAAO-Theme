@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Navigation /////////////////////////////////////////////////
 	const responsive = gsap.matchMedia();
 
-	responsive.add('(min-width: 1024px)', () => {
+	responsive.add('(min-width: 1536px)', () => {
 		// Create timeline first
 		const navTimeline = gsap.timeline();
 

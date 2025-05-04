@@ -1,11 +1,11 @@
 .site-nav {
 	@apply fixed bottom-0 right-0 top-0 z-[999] h-full max-h-lvh w-full translate-x-full overflow-x-auto bg-wp-laao-black;
 
-	@media (--bp-md) and (--bp-lg-max) {
+	@media (--bp-md) and (--bp-2xl-max) {
 		@apply w-[40vw];
 	}
 
-	@media (--bp-lg) {
+	@media (--bp-2xl) {
 		@apply relative -translate-y-[calc(500px+64px)] translate-x-0;
 	}
 
@@ -13,7 +13,7 @@
 		@apply flex h-[60px] flex-row-reverse gap-4 px-wp-16;
 
 		/* Hide the mobile links for the desktop nav */
-		@media (--bp-lg) {
+		@media (--bp-2xl) {
 			@apply hidden;
 		}
 
@@ -62,7 +62,7 @@
 		@apply mt-0 w-full;
 
 		.wp-block-navigation-link {
-			@media (--bp-md) {
+			@media (--bp-xl) {
 				@apply text-wp-laao-white transition-all;
 
 				&:hover {
@@ -72,7 +72,7 @@
 		}
 	}
 
-	@media (--bp-lg-max) {
+	@media (--bp-2xl-max) {
 		.laao-mobile-nav-open & {
 			@apply translate-x-0 transition-transform duration-[450ms] ease-in-out;
 		}

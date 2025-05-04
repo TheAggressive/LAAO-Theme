@@ -9,7 +9,7 @@ const useIsMobile = () => {
 
 	useEffect(() => {
 		// Create media query list
-		const mediaQuery = window.matchMedia('(max-width: 1023px)');
+		const mediaQuery = window.matchMedia('(max-width: 1535px)');
 
 		// Handler function
 		const handleMediaQueryChange = (e) => setIsMobile(e.matches);
