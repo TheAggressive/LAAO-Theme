@@ -344,12 +344,20 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				return;
 			}
 
+			// Cache DOM reads to prevent layout thrashing
 			const {
 				naturalWidth: nativeWidth,
 				naturalHeight: nativeHeight,
 				offsetWidth: displayWidth,
 				offsetHeight: displayHeight,
 			} = state.currentImageRef;
+
+			const rect = state.currentImageRef.getBoundingClientRect();
+			const initialTop = rect.top;
+			const initialLeft = rect.left;
+			const windowWidth = window.innerWidth;
+			const windowHeight = window.innerHeight;
+			const isMobile = windowWidth <= 768;
 
 			// Natural ratio of the image clicked to open the lightbox.
 			const nativeRatio = nativeWidth / nativeHeight;
@@ -359,8 +367,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// For images taller than viewport height, calculate a scale factor to reduce them to 90% viewport height
 			// If image height <= viewport height, no scaling needed (scale factor = 1)
 			const reduceTallImage =
-				nativeHeight > window.innerHeight
-					? Math.min((window.innerHeight * 0.9) / nativeHeight, 1)
+				nativeHeight > windowHeight
+					? Math.min((windowHeight * 0.9) / nativeHeight, 1)
 					: 1;
 
 			// Adjust native dimensions if image is tall
@@ -445,24 +453,45 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Calculates the final lightbox image size and the scale factor.
 			// MaxWidth is either the window container (accounting for padding) or
 			// the image resolution.
-			let horizontalPadding = 0;
-			if (window.innerWidth > 480) {
-				horizontalPadding = 80;
-			} else if (window.innerWidth > 1920) {
+			let horizontalPadding = isMobile ? 20 : 80;
+			if (windowWidth > 1920) {
 				horizontalPadding = 160;
 			}
 
-			const verticalPadding = 80;
+			const verticalPadding = isMobile ? 40 : 80;
 
-			const targetMaxWidth = Math.min(
-				window.innerWidth - horizontalPadding,
-				containerWidth
-			);
+			// Calculate the available viewport space
+			const availableWidth = windowWidth - horizontalPadding;
+			const availableHeight = windowHeight - verticalPadding;
 
-			const targetMaxHeight = Math.min(
-				window.innerHeight - verticalPadding,
-				containerHeight
-			);
+			// Get original dimensions for final image
+			let finalImgWidth = imgMaxWidth;
+			let finalImgHeight = imgMaxHeight;
+
+			// Check if the image exceeds viewport boundaries and scale proportionally if needed
+			if (
+				finalImgWidth > availableWidth ||
+				finalImgHeight > availableHeight
+			) {
+				// Calculate scale factors for both dimensions
+				const widthScaleFactor = availableWidth / finalImgWidth;
+				const heightScaleFactor = availableHeight / finalImgHeight;
+
+				// Use the smaller scale factor to ensure both dimensions fit within viewport
+				const scaleFactor = Math.min(
+					widthScaleFactor,
+					heightScaleFactor
+				);
+
+				// Apply the scale factor to both dimensions to maintain aspect ratio
+				finalImgWidth = finalImgWidth * scaleFactor;
+				finalImgHeight = finalImgHeight * scaleFactor;
+			}
+
+			// Calculate container dimensions with proper aspect ratio
+			const targetMaxWidth = Math.min(availableWidth, containerWidth);
+
+			const targetMaxHeight = Math.min(availableHeight, containerHeight);
 
 			const targetContainerRatio = targetMaxWidth / targetMaxHeight;
 
@@ -478,26 +507,19 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 
 			const containerScale = displayWidth / containerWidth;
 
-			// As of this writing, using the calculations above will render the
-			// lightbox with a small, erroneous whitespace on the left side of the
-			// image in iOS Safari, perhaps due to an inconsistency in how browsers
-			// handle absolute positioning and CSS transformation. In any case,
-			// adding 1 pixel to the container width and height solves the problem,
-			// though this can be removed if the issue is fixed in the future.
+			// Add 1 pixel to fix iOS Safari issue with small whitespace
 			state.lightBoxVariables = `
-			:root {
-				--wp--lightbox-initial-top-position: ${state.currentImageRef.getBoundingClientRect().top}px;
-				--wp--lightbox-initial-left-position: ${state.currentImageRef.getBoundingClientRect().left}px;
-				--wp--lightbox-container-width: ${containerWidth + 1}px;
-				--wp--lightbox-container-height: ${containerHeight + 1}px;
-				--wp--lightbox-scale: ${containerScale};
-				--wp--lightbox-scrollbar-width: ${state.scrollBarWidth}px;
-				--wp--lightbox-image-max-width: ${imgMaxWidth}px;
-				--wp--lightbox-image-max-height: ${imgMaxHeight}px;
-				--wp--lightbox-image-native-aspect-ratio: ${nativeRatio};
-				--wp--lightbox-image-display-aspect-ratio: ${displayRatio};
-			}
-		`;
+				:root {
+					--wp--lightbox-initial-top-position: ${initialTop}px;
+					--wp--lightbox-initial-left-position: ${initialLeft}px;
+					--wp--lightbox-container-width: ${containerWidth + 1}px;
+					--wp--lightbox-container-height: ${containerHeight + 1}px;
+					--wp--lightbox-scale: ${containerScale};
+					--wp--lightbox-scrollbar-width: ${state.scrollBarWidth}px;
+					--wp--lightbox-image-max-width: ${finalImgWidth}px;
+					--wp--lightbox-image-max-height: ${finalImgHeight}px;
+				}
+			`;
 		},
 	},
 });

@@ -8,7 +8,7 @@
  */
 
 .wp-block-laao-whats-hot {
-	@apply !grid grid-cols-2 gap-4 p-0;
+	@apply !grid grid-cols-2 p-0;
 
 	@media (--bp-md) {
 		@apply grid-cols-4;
@@ -16,7 +16,41 @@
 }
 
 .whats-hot-item {
-	@apply border-[1.5rem] border-wp-laao-white bg-wp-laao-white;
+	@apply relative border-wp-laao-white;
+
+	&:first-child {
+		@apply border-b-[0.75rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[1.5rem];
+	}
+
+	&:nth-child(2) {
+		@apply border-b-[0.75rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[1.5rem];
+	}
+
+	&:nth-child(3) {
+		@apply border-b-[1.5rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[0.75rem];
+	}
+
+	&:last-child {
+		@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[0.75rem];
+	}
+
+	@media (--bp-md) {
+		&:first-child {
+			@apply border-b-[1.5rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[1.5rem];
+		}
+
+		&:nth-child(2) {
+			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[0.75rem] border-t-[1.5rem];
+		}
+
+		&:nth-child(3) {
+			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[0.75rem] border-t-[1.5rem];
+		}
+
+		&:last-child {
+			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[1.5rem];
+		}
+	}
 }
 
 .whats-hot-link {
@@ -24,18 +58,15 @@
 }
 
 .whats-hot-figure {
-	@apply relative m-0 flex flex-col justify-center;
+	@apply relative m-0;
 }
 
 .whats-hot-image-container {
-	@apply relative h-fit overflow-hidden;
+	@apply relative h-full overflow-hidden;
 }
 
 .whats-hot-image {
-	width: 100%;
-	height: auto;
-	transition: transform 0.3s ease;
-	transform-origin: center center;
+	@apply h-full max-w-full origin-center object-cover transition-all duration-300;
 }
 
 .whats-hot-link:hover .whats-hot-image {
@@ -43,7 +74,7 @@
 }
 
 .whats-hot-caption {
-	@apply flex flex-1 flex-col items-center justify-center bg-wp-laao-light-gray p-4 text-center text-sm leading-5;
+	@apply absolute bottom-0 flex w-full flex-1 flex-col justify-center bg-black/10 p-2 text-xs leading-none text-wp-laao-white backdrop-blur-md;
 }
 
 .whats-hot-text {

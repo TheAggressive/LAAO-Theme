@@ -43,7 +43,7 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	?>
 <div class="wp-block-laao-hero">
 	<div class="wp-block-laao-hero-caption-container">
-		<p class="wp-block-laao-hero-caption"></p>
+		<div class="wp-block-laao-hero-caption"></div>
 	</div>
 
 	<?php echo wp_kses_post( $content ); ?>
