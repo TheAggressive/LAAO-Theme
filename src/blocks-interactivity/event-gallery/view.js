@@ -44,7 +44,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				.matches;
 		},
 		get getTimeOut() {
-			return state.isReducedMotion ? 0 : 200;
+			return state.isReducedMotion ? 0 : 300;
 		},
 		get getImageId() {
 			return state.currentImageRef?.dataset.wpKey;
@@ -108,11 +108,25 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 		},
 		destroy: () => {
 			if (state.isOverlayActive) {
+				// Prevent multiple close attempts
+				if (state.isClosing) {
+					return;
+				}
+
 				// Starts the overlay closing animation. The showClosingAnimation
 				// class is used to avoid showing it on page load.
 				state.isOverlayActive = false;
 				state.isClosing = true;
 				state.isScrolling = false;
+
+				// Use passive event listener for better performance during closing animation
+				document.addEventListener(
+					'touchmove',
+					function (e) {
+						e.preventDefault();
+					},
+					{ passive: false, once: true }
+				);
 
 				// Waits until the close animation has completed before allowing a
 				// user to scroll again. The duration of this animation is defined in
@@ -123,14 +137,19 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					// Delays before changing the focus. Otherwise the focus ring will
 					// appear on Firefox before the image has finished animating, which
 					// looks broken.
-					state.currentImageRef.focus({
-						preventScroll: true,
-					});
+					if (state.currentImageRef) {
+						state.currentImageRef.focus({
+							preventScroll: true,
+						});
+					}
 
 					// Resets the current image id to mark the overlay as closed.
 					actions.setCurrentImage(null, null);
 
+					// IMPORTANT: Only reset these states after animation completes
 					state.isClosing = false;
+					state.getNext = false;
+					state.getPrevious = false;
 
 					callbacks.setScrollLock();
 				}, state.getTimeOut);
@@ -151,8 +170,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.isScrolling = true;
 
-			// Animation duration from CSS is 400ms - sync our timing with it
-			const animationDuration = 400;
+			// Animation duration from CSS is 600ms - sync our timing with it
+			const animationDuration = 600;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -186,7 +205,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getNext until animation is complete
-					// animation-duration in CSS is 400ms, so we wait full duration
+					// animation-duration in CSS is 600ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -216,8 +235,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.getPrevious = true;
 
-			// Animation duration from CSS is 400ms - sync our timing with it
-			const animationDuration = 400;
+			// Animation duration from CSS is 600ms - sync our timing with it
+			const animationDuration = 600;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -251,7 +270,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getPrevious until animation is complete
-					// animation-duration in CSS is 400ms, so we wait full duration
+					// animation-duration in CSS is 600ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -409,7 +428,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				// Restore scroll position
 				window.scrollTo(0, state.scrollPosition);
 
-				// Remove event listeners
+				// Remove event listeners - but only after animation has completed
 				window.removeEventListener('wheel', actions.preventScroll);
 				window.removeEventListener('touchmove', actions.preventScroll);
 				window.removeEventListener(
