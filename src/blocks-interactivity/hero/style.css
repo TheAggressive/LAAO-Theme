@@ -17,10 +17,10 @@
 		}
 
 		.wp-block-laao-hero-caption {
-			@apply col-span-12 mb-wp-8 text-center text-wp-small text-wp-laao-dark-gray;
+			@apply col-span-12 mb-wp-8 rounded-sm bg-white/15 px-2 py-2 text-xs leading-tight drop-shadow-lg backdrop-blur-lg;
 
 			@media (--bp-md) {
-				@apply col-span-12 col-end-13 mt-wp-8 justify-self-end;
+				@apply col-span-12 col-end-13 mt-wp-8 justify-self-start;
 			}
 
 			@media (--bp-lg) {

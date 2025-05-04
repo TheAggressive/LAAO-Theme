@@ -11,6 +11,6 @@
 	}
 
 	& .wp-block-laao-post-featured-image-caption {
-		@apply bg-wp-laao-light-gray p-wp-16 text-center text-wp-medium;
+		@apply bg-wp-laao-light-gray p-wp-16 text-xs leading-tight text-wp-laao-dark-gray;
 	}
 }

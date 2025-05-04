@@ -22,7 +22,7 @@
 			}
 
 			.cover-article-media-caption {
-				@apply bg-wp-laao-light-gray p-4 text-center text-sm;
+				@apply bg-wp-laao-light-gray p-4 text-xs leading-tight text-wp-laao-dark-gray;
 			}
 		}
 
