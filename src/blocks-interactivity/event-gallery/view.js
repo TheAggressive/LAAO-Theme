@@ -182,11 +182,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 					);
 				}
 
-				console.log('image loaded', state.hasImageLoaded);
-
 				// Check if image is loaded and set variables when ready
 				if (state.hasImageLoaded) {
-					console.log('image loaded', state.hasImageLoaded);
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getNext until animation is complete
 					// animation-duration in CSS is 800ms, so we wait full duration
