@@ -3,23 +3,23 @@
 
 	.wp-block-navigation,
 	.wp-block-navigation__container {
-		@apply gap-wp-28 flex-col;
+		@apply flex-col gap-wp-28;
 
 		@media (--bp-md) {
-			@apply gap-wp-28 flex-row;
+			@apply flex-row gap-wp-28;
 		}
 
 		.wp-block-navigation-item {
 			@media (--bp-md) {
 				&:not(:last-child)::after {
-					@apply -right-wp-16 text-wp-laao-red absolute bottom-0 top-0 content-['|'];
+					@apply absolute -right-wp-16 bottom-0 top-0 text-wp-laao-red content-['|'];
 				}
 			}
 		}
 
 		.wp-block-navigation-link {
 			@media (--bp-md) {
-				@apply text-wp-laao-white hover:text-wp-laao-red flex-row transition-all;
+				@apply flex-row text-wp-laao-white transition-all hover:text-wp-laao-red;
 			}
 		}
 	}

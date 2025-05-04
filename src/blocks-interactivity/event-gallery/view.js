@@ -44,7 +44,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				.matches;
 		},
 		get getTimeOut() {
-			return state.isReducedMotion ? 0 : 400;
+			return state.isReducedMotion ? 0 : 300;
 		},
 		get getImageId() {
 			return state.currentImageRef?.dataset.wpKey;
@@ -151,8 +151,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.isScrolling = true;
 
-			// Animation duration from CSS is 800ms - sync our timing with it
-			const animationDuration = 800;
+			// Animation duration from CSS is 600ms - sync our timing with it
+			const animationDuration = 600;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -186,7 +186,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getNext until animation is complete
-					// animation-duration in CSS is 800ms, so we wait full duration
+					// animation-duration in CSS is 600ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -216,8 +216,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.getPrevious = true;
 
-			// Animation duration from CSS is 800ms - sync our timing with it
-			const animationDuration = 800;
+			// Animation duration from CSS is 600ms - sync our timing with it
+			const animationDuration = 600;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -251,7 +251,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getPrevious until animation is complete
-					// animation-duration in CSS is 800ms, so we wait full duration
+					// animation-duration in CSS is 600ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -356,13 +356,66 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				return false;
 			}
 		},
+		// Prevent all types of scroll
+		preventScroll(e) {
+			if (state.isActive) {
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			}
+		},
+		preventScrollKeys(e) {
+			// Prevent scrolling with keyboard
+			const keys = {
+				ArrowUp: 1,
+				ArrowDown: 1,
+				Space: 1,
+				PageUp: 1,
+				PageDown: 1,
+				Home: 1,
+				End: 1,
+			};
+
+			if (state.isActive && keys[e.key]) {
+				e.preventDefault();
+				return false;
+			}
+		},
 	},
 	callbacks: {
 		setScrollLock() {
 			if (state.isActive) {
+				// Store the current scroll position
+				state.scrollPosition =
+					window.scrollY || document.documentElement.scrollTop;
+
+				// Add scroll-lock class to body
 				document.body.classList.add('scroll-lock');
+
+				// Add event listeners to prevent all types of scrolling
+				window.addEventListener('wheel', actions.preventScroll, {
+					passive: false,
+				});
+				window.addEventListener('touchmove', actions.preventScroll, {
+					passive: false,
+				});
+				window.addEventListener('keydown', actions.preventScrollKeys, {
+					passive: false,
+				});
 			} else {
+				// Remove scroll-lock class from body
 				document.body.classList.remove('scroll-lock');
+
+				// Restore scroll position
+				window.scrollTo(0, state.scrollPosition);
+
+				// Remove event listeners
+				window.removeEventListener('wheel', actions.preventScroll);
+				window.removeEventListener('touchmove', actions.preventScroll);
+				window.removeEventListener(
+					'keydown',
+					actions.preventScrollKeys
+				);
 			}
 		},
 		setOverlayFocus() {
