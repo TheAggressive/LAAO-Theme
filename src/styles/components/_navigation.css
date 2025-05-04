@@ -2,7 +2,7 @@
 	@apply fixed bottom-0 right-0 top-0 z-[999] h-full max-h-lvh w-full translate-x-full overflow-x-auto bg-wp-laao-black;
 
 	@media (--bp-md) and (--bp-2xl-max) {
-		@apply w-[40vw];
+		@apply w-[30vw];
 	}
 
 	@media (--bp-2xl) {
