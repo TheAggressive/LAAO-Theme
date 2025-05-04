@@ -17,19 +17,19 @@
 }
 
 .ad-728x90 {
-	@apply block h-auto w-full max-w-full border-b-[1.5rem] border-t-[1.5rem] border-wp-laao-white;
+	@apply block h-auto w-full max-w-full bg-white/20 pb-[1.5rem] pt-[1.5rem] backdrop-blur-lg;
 
 	img {
 		@apply h-auto w-full;
 	}
 
 	@media (--bp-md) {
-		@apply w-fit border-l-[1.5rem] border-r-[1.5rem];
+		@apply w-fit pl-[1.5rem] pr-[1.5rem];
 	}
 }
 
 .ad-728x90:not(.wp-block-laao-hero .ad-728x90) {
-	@apply hidden;
+	@apply hidden border-[1.5rem] border-wp-laao-white p-0;
 
 	@media (--bp-lg) {
 		@apply mx-auto block w-fit;
