@@ -44,7 +44,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				.matches;
 		},
 		get getTimeOut() {
-			return state.isReducedMotion ? 0 : 300;
+			return state.isReducedMotion ? 0 : 250;
 		},
 		get getImageId() {
 			return state.currentImageRef?.dataset.wpKey;
@@ -170,8 +170,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.isScrolling = true;
 
-			// Animation duration from CSS is 600ms - sync our timing with it
-			const animationDuration = 600;
+			// Animation duration from CSS is 500ms - sync our timing with it
+			const animationDuration = 500;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -205,7 +205,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getNext until animation is complete
-					// animation-duration in CSS is 600ms, so we wait full duration
+					// animation-duration in CSS is 500ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -235,8 +235,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			// Removes the previous image animation.
 			state.getPrevious = true;
 
-			// Animation duration from CSS is 600ms - sync our timing with it
-			const animationDuration = 600;
+			// Animation duration from CSS is 500ms - sync our timing with it
+			const animationDuration = 500;
 
 			// Allows image to stay in view while the animation finishes.
 			setTimeout(() => {
@@ -270,7 +270,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				if (state.hasImageLoaded) {
 					callbacks.setLightBoxVariables();
 					// Don't reset state.getPrevious until animation is complete
-					// animation-duration in CSS is 600ms, so we wait full duration
+					// animation-duration in CSS is 500ms, so we wait full duration
 				} else {
 					// If not loaded yet, add a load event listener
 					state.currentImageRef.addEventListener(
@@ -459,8 +459,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			} = state.currentImageRef;
 
 			const rect = state.currentImageRef.getBoundingClientRect();
-			const initialTop = rect.top;
-			const initialLeft = rect.left;
+			const initialTop = rect.top + window.visualViewport?.offsetTop;
+			const initialLeft = rect.left + window.visualViewport?.offsetLeft;
 			const windowWidth = window.innerWidth;
 			const windowHeight = window.innerHeight;
 			const isMobile = windowWidth <= 768;
