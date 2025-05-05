@@ -3,15 +3,19 @@
 /* Lock scrolling but preserve navigation visibility */
 .scroll-lock {
 	@apply overflow-hidden !pr-[--wp--lightbox-scrollbar-width];
-	height: 100%;
-	width: 100%;
-	position: relative;
-	-webkit-overflow-scrolling: touch;
+	/* Prevent reflow on body */
+	overscroll-behavior: none;
 }
 
 /* Overlay styling */
 .wp-block-laao-event-lightbox-overlay {
 	@apply invisible fixed inset-0 z-0 h-screen w-screen cursor-zoom-out overflow-hidden bg-black/85 backdrop-blur-sm;
+	/* Reduce repaint area for overlay */
+	contain: strict;
+	/* Force layer creation */
+	isolation: isolate;
+	/* GPU acceleration for opacity changes */
+	will-change: opacity;
 }
 
 /* Active overlay state */
@@ -34,6 +38,10 @@
 /* Event Gallery Block Lightbox */
 .wp-block-laao-event-lightbox {
 	@apply invisible fixed inset-0 z-[999] w-screen;
+	/* Reduce repaint area */
+	contain: layout size style;
+	/* Force layer creation */
+	isolation: isolate;
 }
 
 .wp-block-laao-event-lightbox.active {
@@ -42,9 +50,12 @@
 	@media (--motion-reduce-no-preference) {
 		.wp-block-laao-event-lightbox-image-container {
 			@apply animate-[lightbox-zoom-in_300ms_ease-in-out_forwards];
+			/* Force hardware acceleration without changing animation */
 			transform-style: preserve-3d;
 			backface-visibility: hidden;
 			will-change: transform;
+			/* Reduce repaint area */
+			contain: layout paint style;
 
 			&.scrolling {
 				@apply animate-none;
@@ -52,10 +63,18 @@
 
 			&.next {
 				@apply origin-center animate-[next-image_600ms_ease-in-out_forwards];
+				/* Force hardware acceleration without changing animation */
+				will-change: transform, opacity;
+				/* Prevent unnecessary layout calculations */
+				contain: layout paint style;
 			}
 
 			&.previous {
 				@apply origin-center animate-[previous-image_600ms_ease-in-out_forwards];
+				/* Force hardware acceleration without changing animation */
+				will-change: transform, opacity;
+				/* Prevent unnecessary layout calculations */
+				contain: layout paint style;
 			}
 		}
 	}
@@ -65,9 +84,12 @@
 	@media (--motion-reduce-no-preference) {
 		.wp-block-laao-event-lightbox-image-container {
 			@apply visible animate-[lightbox-zoom-out_300ms_ease-in-out_forwards];
+			/* Force hardware acceleration without changing animation */
 			transform-style: preserve-3d;
 			backface-visibility: hidden;
 			will-change: transform;
+			/* Reduce repaint area */
+			contain: layout paint style;
 		}
 	}
 }
@@ -156,20 +178,26 @@ button.wp-block-laao-event-lightbox-previous {
 
 button.wp-block-laao-event-lightbox-previous {
 	@apply left-0;
+	transform: translateZ(0);
+	backface-visibility: hidden;
 
 	@media (--motion-reduce-no-preference) {
 		div:has(.active) & {
 			@apply -left-20 animate-[slide-right_300ms_ease-in-out_forwards];
+			will-change: transform;
 		}
 	}
 }
 
 button.wp-block-laao-event-lightbox-next {
 	@apply right-0;
+	transform: translateZ(0);
+	backface-visibility: hidden;
 
 	@media (--motion-reduce-no-preference) {
 		div:has(.active) & {
 			@apply -right-20 animate-[slide-left_300ms_ease-in-out_forwards];
+			will-change: transform;
 		}
 	}
 }
@@ -181,9 +209,18 @@ button.wp-block-laao-event-lightbox-next {
 	.wp-block-laao-event-lightbox-image-container {
 		/* stylelint-disable-next-line scss/operator-no-unspaced */
 		@apply absolute left-1/2 top-[calc(50%_+_1.875rem)] h-auto max-h-[var(--wp--lightbox-image-max-height)] w-full max-w-[--wp--lightbox-image-max-width] origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-hidden;
+		/* Replace transform with translate3d for hardware acceleration */
 		transform: translate3d(-50%, -50%, 0);
+		/* Force hardware acceleration */
 		-webkit-transform-style: preserve-3d;
 		transform-style: preserve-3d;
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		/* CSS containment to reduce repaint area */
+		contain: layout paint style;
+		/* Force layer creation */
+		isolation: isolate;
+		z-index: 1;
 
 		@media (--motion-reduce-no-preference) {
 			@apply max-h-[--wp--lightbox-container-height] max-w-[--wp--lightbox-container-width];
@@ -191,11 +228,26 @@ button.wp-block-laao-event-lightbox-next {
 
 		& .wp-block-event-gallery-item {
 			@apply relative flex h-full w-full;
+			/* Hardware acceleration for child element */
 			transform: translateZ(0);
+			/* CSS containment to reduce repaint area */
+			contain: layout paint;
+			/* Force layer creation */
+			isolation: isolate;
+			z-index: 1;
 
 			& img {
 				@apply h-full w-full cursor-auto;
+				/* Hardware acceleration for image */
 				transform: translateZ(0);
+				-webkit-transform: translateZ(0);
+				backface-visibility: hidden;
+				-webkit-backface-visibility: hidden;
+				/* Force layer creation to reduce repaints */
+				isolation: isolate;
+				z-index: 1;
+				/* Add paint containment for image */
+				contain: paint;
 			}
 		}
 
@@ -208,74 +260,91 @@ button.wp-block-laao-event-lightbox-next {
 /* Keyframe Animations */
 @keyframes previous-image {
 	0% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(1);
-		will-change: transform;
 	}
 
 	25% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(0.85);
 	}
 
 	49% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-15%, -50%, 0) scale(0.85);
 	}
 
 	50% {
 		opacity: 0;
 		visibility: hidden;
+		/* Keep transform value for consistency */
+		transform: translate3d(-15%, -50%, 0) scale(0.85);
 	}
 
 	51% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-85%, -50%, 0) scale(0.85);
 		opacity: 0;
 		visibility: visible;
 	}
 
 	75% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(0.85);
 		opacity: 1;
 	}
 
 	100% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(1);
 	}
 }
 
 @keyframes next-image {
 	0% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(1);
-		will-change: transform;
 	}
 
 	25% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(0.85);
 	}
 
 	49% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-85%, -50%, 0) scale(0.85);
 	}
 
 	50% {
 		opacity: 0;
 		visibility: hidden;
+		/* Keep transform value for consistency */
+		transform: translate3d(-85%, -50%, 0) scale(0.85);
 	}
 
 	51% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-15%, -50%, 0) scale(0.85);
+		opacity: 0;
+		visibility: visible;
 	}
 
 	75% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(0.85);
 		opacity: 1;
 	}
 
 	100% {
+		/* Force GPU acceleration but keep exact same animation */
 		transform: translate3d(-50%, -50%, 0) scale(1);
 	}
 }
 
 @keyframes lightbox-zoom-in {
 	0% {
+		/* Keep original width/height to preserve visual effect */
 		transform: translate3d(
 				calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
 				calc(
@@ -286,10 +355,12 @@ button.wp-block-laao-event-lightbox-next {
 			scale(var(--wp--lightbox-scale));
 		width: calc(100% / var(--wp--lightbox-scale));
 		height: calc(100% / var(--wp--lightbox-scale));
+		/* Use GPU-accelerated property */
 		will-change: transform;
 	}
 
 	100% {
+		/* Keep original width/height to preserve visual effect */
 		max-width: var(--wp--lightbox-image-max-width);
 		max-height: var(--wp--lightbox-image-max-height);
 		transform: translate3d(-50%, -50%, 0) scale(1);
@@ -300,15 +371,18 @@ button.wp-block-laao-event-lightbox-next {
 
 @keyframes lightbox-zoom-out {
 	0% {
+		/* Keep original width/height to preserve visual effect */
 		max-width: var(--wp--lightbox-image-max-width);
 		max-height: var(--wp--lightbox-image-max-height);
 		transform: translate3d(-50%, -50%, 0) scale(1);
 		width: 100%;
 		height: 100%;
+		/* Use GPU-accelerated property */
 		will-change: transform;
 	}
 
 	99% {
+		/* Keep original width/height to preserve visual effect */
 		transform: translate3d(
 				calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
 				calc(
@@ -322,6 +396,7 @@ button.wp-block-laao-event-lightbox-next {
 	}
 
 	100% {
+		/* Keep original width/height to preserve visual effect */
 		visibility: hidden;
 		transform: translate3d(
 				calc((-100vw) / 2 + var(--wp--lightbox-initial-left-position)),
@@ -339,6 +414,8 @@ button.wp-block-laao-event-lightbox-next {
 @keyframes turn-on-visibility {
 	0% {
 		opacity: 0;
+		/* Use GPU-accelerated property */
+		will-change: opacity;
 	}
 
 	100% {
@@ -349,6 +426,8 @@ button.wp-block-laao-event-lightbox-next {
 @keyframes turn-off-visibility {
 	0% {
 		opacity: 1;
+		/* Use GPU-accelerated property */
+		will-change: opacity;
 	}
 
 	100% {
@@ -378,20 +457,28 @@ button.wp-block-laao-event-lightbox-next {
 
 @keyframes slide-left {
 	0% {
-		transform: translateX(0%);
+		/* Use translate3d for hardware acceleration */
+		transform: translate3d(0, 0, 0);
+		/* Use GPU-accelerated property */
+		will-change: transform;
 	}
 
 	100% {
-		transform: translateX(-100%);
+		/* Use translate3d for hardware acceleration */
+		transform: translate3d(-100%, 0, 0);
 	}
 }
 
 @keyframes slide-right {
 	0% {
-		transform: translateX(0%);
+		/* Use translate3d for hardware acceleration */
+		transform: translate3d(0, 0, 0);
+		/* Use GPU-accelerated property */
+		will-change: transform;
 	}
 
 	100% {
-		transform: translateX(100%);
+		/* Use translate3d for hardware acceleration */
+		transform: translate3d(100%, 0, 0);
 	}
 }
