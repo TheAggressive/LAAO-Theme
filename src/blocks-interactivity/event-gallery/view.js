@@ -458,9 +458,8 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				offsetHeight: displayHeight,
 			} = state.currentImageRef;
 
-			const rect = state.currentImageRef.getBoundingClientRect();
-			const initialTop = rect.top + window.visualViewport?.offsetTop;
-			const initialLeft = rect.left + window.visualViewport?.offsetLeft;
+			const { x: initialLeft, y: initialTop } =
+				state.currentImageRef.getBoundingClientRect();
 			const windowWidth = window.innerWidth;
 			const windowHeight = window.innerHeight;
 			const isMobile = windowWidth <= 768;

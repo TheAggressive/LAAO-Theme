@@ -37,7 +37,7 @@
 
 /* Event Gallery Block Lightbox */
 .wp-block-laao-event-lightbox {
-	@apply invisible fixed inset-0 z-[999] w-screen;
+	@apply invisible fixed left-0 top-0 z-[999] h-screen w-screen;
 	/* Reduce repaint area */
 	contain: layout size style;
 	/* Force layer creation */
