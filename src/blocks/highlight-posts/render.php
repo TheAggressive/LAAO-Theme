@@ -1,7 +1,7 @@
 <?php
 
 if ( ! function_exists( 'laao_render_featured_block' ) ) {
-	function laao_render_featured_block( $attributes, $content, $block ) {
+	function laao_render_featured_block( $attributes ) {
 		ob_start();
 		$wrapper_attributes = get_block_wrapper_attributes();
 		$post_types         = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
