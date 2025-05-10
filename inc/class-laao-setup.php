@@ -1097,8 +1097,8 @@ class LAAO_Setup {
 
 	public function preload_self_hosted_fonts() {
 		?>
-		<link rel="preload" href="/dist/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
-		<link rel="preload" href="/dist/assets/fonts/Roboto-Condensed.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+		<link rel="preload" href="<?php echo get_template_directory_uri(); ?>/dist/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+		<link rel="preload" href="<?php echo get_template_directory_uri(); ?>/dist/assets/fonts/Roboto-Condensed.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
 		<?php
 	}
 }
