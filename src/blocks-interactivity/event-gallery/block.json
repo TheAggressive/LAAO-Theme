@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "laao/event-gallery",
 	"title": "Event Gallery",
-	"version": "1.0.0",
+	"version": "1.1.3",
 	"icon": "format-gallery",
 	"description": "LAAO Event Gallery",
 	"category": "media",
