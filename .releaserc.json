@@ -1,0 +1,32 @@
+{
+  "branches": ["main", "master"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "WORKSPACE=$(pwd) && sed -i 's/Version: [0-9]\\+\\.[0-9]\\+\\.[0-9]\\+/Version: ${nextRelease.version}/g' style.css && npm version ${nextRelease.version} --no-git-tag-version && mkdir -p /tmp/laao-pkg/laao && rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='src' --exclude='pnpm-lock.yaml' --exclude='laao-webpack.config.js' --exclude='postcss.config.js' --exclude='tailwind.config.js' --exclude='.gitignore' --exclude='.editorconfig' --exclude='.releaserc.json' --exclude='commitlint.config.js' --exclude='.husky' --exclude='package.json' . /tmp/laao-pkg/laao/ && cd /tmp/laao-pkg && zip -r laao.zip laao/ && mv laao.zip $WORKSPACE/"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "style.css"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "laao.zip",
+            "label": "LAAO Theme"
+          }
+        ]
+      }
+    ]
+  ]
+}
