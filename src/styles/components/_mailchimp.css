@@ -1,3 +1,4 @@
+/* stylelint-disable-next-line selector-id-pattern -- Mailchimp-generated ID */
 #mc_embed_shell {
 	@apply mb-4 mt-4 flex w-full max-w-80 flex-col items-center self-center;
 

@@ -65,12 +65,7 @@ const HighlightPanel = () => {
 		select('core/editor').getCurrentPostId()
 	);
 
-	const [meta, setMeta] = useEntityProp(
-		'postType',
-		postType,
-		'meta',
-		postId
-	);
+	const [meta, setMeta] = useEntityProp('postType', postType, 'meta', postId);
 
 	if (!EDITORIAL_POST_TYPES.includes(postType)) {
 		return null;
