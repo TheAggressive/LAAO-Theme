@@ -22,6 +22,7 @@ class LAAO_Setup {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_setup_theme', array( $this, 'add_editor_styles' ) );
+		add_action( 'init', array( $this, 'register_highlight_columns' ) );
 		add_action(
 			'init',
 			function () {
@@ -59,6 +60,58 @@ class LAAO_Setup {
 				}
 			}
 		);
+	}
+
+	/** Registers the Highlight column on all editorial post type list screens. */
+	public function register_highlight_columns() {
+		foreach ( $this->editorial_post_types as $post_type ) {
+			add_filter( "manage_{$post_type}_posts_columns", array( $this, 'add_highlight_column' ) );
+			add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'render_highlight_column' ), 10, 2 );
+		}
+	}
+
+	public function add_highlight_column( $columns ) {
+		$columns['highlight_schedule'] = __( 'Highlight', 'laao' );
+		return $columns;
+	}
+
+	public function render_highlight_column( $column, $post_id ) {
+		if ( 'highlight_schedule' !== $column ) {
+			return;
+		}
+
+		$start = get_post_meta( $post_id, 'highlight_start_date', true );
+		$end   = get_post_meta( $post_id, 'highlight_end_date', true );
+
+		if ( ! $start && ! $end ) {
+			echo '<span style="color:#999;">—</span>';
+			return;
+		}
+
+		$tz       = wp_timezone();
+		$now      = new \DateTime( 'now', $tz );
+		$start_dt = \DateTime::createFromFormat( 'Y-m-d H:i:s', $start, $tz );
+		$end_dt   = \DateTime::createFromFormat( 'Y-m-d H:i:s', $end, $tz );
+		$active   = $start_dt && $end_dt && $start_dt <= $now && $end_dt >= $now;
+		$upcoming = $start_dt && $start_dt > $now;
+
+		if ( $active ) {
+			echo '<span style="display:inline-block;padding:2px 8px;background:#00a32a;color:#fff;border-radius:3px;font-size:11px;font-weight:600;margin-bottom:4px;">Active</span><br>';
+		} elseif ( $upcoming ) {
+			echo '<span style="display:inline-block;padding:2px 8px;background:#ddd;color:#555;border-radius:3px;font-size:11px;font-weight:600;margin-bottom:4px;">Scheduled</span><br>';
+		}
+
+		$format_date = function ( $mysql_date ) use ( $tz ) {
+			$dt = \DateTime::createFromFormat( 'Y-m-d H:i:s', $mysql_date, $tz );
+			return $dt ? $dt->format( 'M j, Y g:i a' ) : $mysql_date;
+		};
+
+		if ( $start ) {
+			echo '<small><strong>Start:</strong> ' . esc_html( $format_date( $start ) ) . '</small><br>';
+		}
+		if ( $end ) {
+			echo '<small><strong>End:</strong> ' . esc_html( $format_date( $end ) ) . '</small>';
+		}
 	}
 
 	/** This is where you can register custom post types */
@@ -634,6 +687,34 @@ class LAAO_Setup {
 					},
 				),
 			),
+			array(
+				'id'      => 'highlight_start_date',
+				'screens' => $this->editorial_post_types,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Highlight Start Date',
+					'description'   => 'Date and time when this post starts appearing in the Highlight section.',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
+			array(
+				'id'      => 'highlight_end_date',
+				'screens' => $this->editorial_post_types,
+				'args'    => array(
+					'show_in_rest'  => true,
+					'title'         => 'Highlight End Date',
+					'description'   => 'Date and time when this post stops appearing in the Highlight section.',
+					'single'        => true,
+					'type'          => 'string',
+					'auth_callback' => function () {
+						return current_user_can( 'edit_pages' );
+					},
+				),
+			),
 		);
 
 		// Loop through each Editorial meta box configuration
@@ -953,6 +1034,14 @@ class LAAO_Setup {
 			wp_get_theme()->get( 'Version' ),
 			false
 		);
+
+		wp_register_script(
+			'highlight-block-plugin',
+			get_template_directory_uri() . '/dist/scripts/highlight-block-plugin.js',
+			array( 'wp-plugins', 'wp-editor', 'react' ),
+			wp_get_theme()->get( 'Version' ),
+			false
+		);
 	}
 
 	public function enqueue_block_plugins_scripts() {
@@ -973,6 +1062,7 @@ class LAAO_Setup {
 		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
 			wp_enqueue_script( 'location-block-plugin' );
 			wp_enqueue_script( 'hair-makeup-block-plugin' );
+			wp_enqueue_script( 'highlight-block-plugin' );
 		}
 	}
 
@@ -1097,8 +1187,8 @@ class LAAO_Setup {
 
 	public function preload_self_hosted_fonts() {
 		?>
-		<link rel="preload" href="<?php echo get_template_directory_uri(); ?>/dist/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
-		<link rel="preload" href="<?php echo get_template_directory_uri(); ?>/dist/assets/fonts/Roboto-Condensed.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+		<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() ); ?>/dist/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+		<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() ); ?>/dist/assets/fonts/Roboto-Condensed.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
 		<?php
 	}
 }

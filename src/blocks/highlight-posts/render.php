@@ -7,12 +7,27 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 		$post_types         = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
 		$posts_per_page     = $attributes['postsPerPage'] ?? 4;
 
+		$now  = current_time( 'mysql' );
 		$args = array(
 			'post_type'      => $post_types,
 			'posts_per_page' => $posts_per_page,
-			'tag'            => 'featured',
 			'post_status'    => 'publish',
 			'orderby'        => 'rand',
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'highlight_start_date',
+					'value'   => $now,
+					'compare' => '<=',
+					'type'    => 'DATETIME',
+				),
+				array(
+					'key'     => 'highlight_end_date',
+					'value'   => $now,
+					'compare' => '>=',
+					'type'    => 'DATETIME',
+				),
+			),
 		);
 
 		$featured_query = new WP_Query( $args );

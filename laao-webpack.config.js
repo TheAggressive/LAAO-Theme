@@ -65,6 +65,11 @@ module.exports = {
 				'src/scripts',
 				'hair-makeup-credits-block-plugin.js'
 			),
+			'../scripts/highlight-block-plugin': path.resolve(
+				process.cwd(),
+				'src/scripts',
+				'highlight-block-plugin.js'
+			),
 			'../styles/app': path.resolve(
 				process.cwd(),
 				'src/styles',
