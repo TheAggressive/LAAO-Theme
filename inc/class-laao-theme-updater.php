@@ -20,27 +20,34 @@ class LAAO_Theme_Updater {
 			return $transient;
 		}
 
-		$source_version  = $this->get_github_version();
+		$release         = $this->get_latest_release();
 		$theme_slug      = wp_get_theme()->get_stylesheet();
 		$current_version = wp_get_theme()->get( 'Version' );
 
-		if ( version_compare( $source_version, $current_version, '>' ) ) {
+		if ( ! $release ) {
+			return $transient;
+		}
+
+		$source_version  = isset( $release['tag_name'] ) ? ltrim( $release['tag_name'], 'v' ) : false;
+		$download_url    = isset( $release['assets'][0]['browser_download_url'] ) ? $release['assets'][0]['browser_download_url'] : false;
+
+		if ( $source_version && $download_url && version_compare( $source_version, $current_version, '>' ) ) {
 			$transient->response[ $theme_slug ] = array(
 				'theme'       => $theme_slug,
 				'new_version' => $source_version,
 				'url'         => "https://github.com/{$this->repo_owner}/{$this->repo_name}",
-				'package'     => $this->get_download_url(),
+				'package'     => $download_url,
 			);
 		}
 
 		return $transient;
 	}
 
-	// Fetch the latest version from GitHub API
-	private function get_github_version() {
-		$url = "https://api.github.com/repos/{$this->repo_owner}/{$this->repo_name}/releases/latest";
-
+	// Fetch the latest release from GitHub API — single request per update check.
+	private function get_latest_release() {
+		$url  = "https://api.github.com/repos/{$this->repo_owner}/{$this->repo_name}/releases/latest";
 		$args = array(
+			'timeout' => 10,
 			'headers' => array(
 				'User-Agent' => $this->repo_owner,
 			),
@@ -48,34 +55,13 @@ class LAAO_Theme_Updater {
 
 		$response = wp_remote_get( $url, $args );
 
-		if ( is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return false;
 		}
 
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		return isset( $body['tag_name'] ) ? ltrim( $body['tag_name'], 'v' ) : false;
-	}
-
-	// Get the download URL for the latest GitHub release
-	private function get_download_url() {
-		$url = "https://api.github.com/repos/{$this->repo_owner}/{$this->repo_name}/releases/latest";
-
-		$args = array(
-			'headers' => array(
-				'User-Agent' => $this->repo_owner,
-			),
-		);
-
-		$response = wp_remote_get( $url, $args );
-
-		if ( is_wp_error( $response ) ) {
-			return false;
-		}
-
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		return isset( $body['assets'][0]['browser_download_url'] ) ? $body['assets'][0]['browser_download_url'] : false;
+		return is_array( $body ) ? $body : false;
 	}
 
 	// Rename the downloaded folder to match the theme directory name

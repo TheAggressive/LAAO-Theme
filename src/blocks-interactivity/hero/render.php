@@ -22,8 +22,10 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	$number_of_slides   = $attributes['numberOfSlides'] ?? 5;
 
 	$args = array(
-		'post_type'      => $post_type_selector,
-		'posts_per_page' => -1,
+		'post_type'              => $post_type_selector,
+		'posts_per_page'         => $number_of_slides,
+		'no_found_rows'          => true,
+		'update_post_term_cache' => false,
 	);
 
 	$query  = new WP_Query( $args );

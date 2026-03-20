@@ -3,17 +3,19 @@
 if ( ! function_exists( 'laao_render_featured_block' ) ) {
 	function laao_render_featured_block( $attributes ) {
 		ob_start();
-		$wrapper_attributes = get_block_wrapper_attributes();
-		$post_types         = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
+		$post_types = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
 		$posts_per_page     = $attributes['postsPerPage'] ?? 4;
 
 		$now  = current_time( 'mysql' );
 		$args = array(
-			'post_type'      => $post_types,
-			'posts_per_page' => $posts_per_page,
-			'post_status'    => 'publish',
-			'orderby'        => 'rand',
-			'meta_query'     => array(
+			'post_type'              => $post_types,
+			'posts_per_page'         => $posts_per_page,
+			'post_status'            => 'publish',
+			'orderby'                => 'rand',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => true,
+			'update_post_term_cache' => false,
+			'meta_query'             => array(
 				'relation' => 'AND',
 				array(
 					'key'     => 'highlight_start_date',
@@ -31,6 +33,14 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 		);
 
 		$featured_query = new WP_Query( $args );
+
+		// Fallback: if no scheduled posts are active, show the most recent posts.
+		if ( ! $featured_query->have_posts() ) {
+			unset( $args['meta_query'] );
+			$args['orderby'] = 'date';
+			$args['order']   = 'DESC';
+			$featured_query  = new WP_Query( $args );
+		}
 
 		if ( $featured_query->have_posts() ) :
 			while ( $featured_query->have_posts() ) :

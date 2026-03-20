@@ -112,6 +112,32 @@ class LAAO_Setup {
 		if ( $end ) {
 			echo '<small><strong>End:</strong> ' . esc_html( $format_date( $end ) ) . '</small>';
 		}
+
+		// Overlap warning: count other published posts whose windows overlap this one.
+		if ( ( $active || $upcoming ) && $start && $end ) {
+			global $wpdb;
+			$overlap_count = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(DISTINCT pm1.post_id)
+					FROM {$wpdb->postmeta} pm1
+					JOIN {$wpdb->postmeta} pm2 ON pm1.post_id = pm2.post_id
+					JOIN {$wpdb->posts} p ON pm1.post_id = p.ID
+					WHERE pm1.meta_key = 'highlight_start_date'
+					AND pm2.meta_key = 'highlight_end_date'
+					AND pm1.meta_value <= %s
+					AND pm2.meta_value >= %s
+					AND p.post_status = 'publish'
+					AND pm1.post_id != %d",
+					$end,
+					$start,
+					$post_id
+				)
+			);
+
+			if ( $overlap_count >= 4 ) {
+				echo '<br><span style="display:inline-block;padding:2px 6px;background:#fcf0f1;color:#c02b0a;border:1px solid #f5c0c0;border-radius:3px;font-size:11px;margin-top:4px;">&#9888; ' . esc_html( $overlap_count ) . ' overlapping posts</span>';
+			}
+		}
 	}
 
 	/** This is where you can register custom post types */
@@ -1048,6 +1074,9 @@ class LAAO_Setup {
 		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
 			wp_enqueue_script( 'editorial-block-plugin' );
 			wp_enqueue_script( 'image-credits-block-plugin' );
+			wp_enqueue_script( 'location-block-plugin' );
+			wp_enqueue_script( 'hair-makeup-block-plugin' );
+			wp_enqueue_script( 'highlight-block-plugin' );
 		}
 
 		if ( in_array( get_post_type(), $this->cover_post_type, true ) ) {
@@ -1057,12 +1086,6 @@ class LAAO_Setup {
 		if ( in_array( get_post_type(), $this->wh_post_types, true ) ) {
 			wp_enqueue_script( 'wh-link-to-block-plugin' );
 			wp_enqueue_script( 'wh-image-credit-block-plugin' );
-		}
-
-		if ( in_array( get_post_type(), $this->editorial_post_types, true ) ) {
-			wp_enqueue_script( 'location-block-plugin' );
-			wp_enqueue_script( 'hair-makeup-block-plugin' );
-			wp_enqueue_script( 'highlight-block-plugin' );
 		}
 	}
 
@@ -1091,7 +1114,7 @@ class LAAO_Setup {
 			}
 		}
 
-		if ( is_user_logged_in() ) {
+		if ( is_admin() ) {
 			return $url;
 		} //don't break WP Admin
 		if ( strpos( $url, '.js' ) === false ) {
@@ -1107,6 +1130,10 @@ class LAAO_Setup {
 	public function register_block_types( $dir ) {
 
 		$build_dir = get_stylesheet_directory() . $dir;
+
+		if ( ! is_dir( $build_dir ) ) {
+			return;
+		}
 
 		foreach ( scandir( $build_dir ) as $result ) {
 			$block_location = $build_dir . '/' . $result;
