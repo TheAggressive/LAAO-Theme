@@ -2,9 +2,16 @@
 
 if ( ! function_exists( 'laao_render_featured_block' ) ) {
 	function laao_render_featured_block( $attributes ) {
+		$post_types     = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
+		$posts_per_page = $attributes['postsPerPage'] ?? 4;
+
+		$cache_key = 'laao_highlight_posts_' . md5( serialize( $post_types ) . $posts_per_page ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$cached    = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		ob_start();
-		$post_types = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
-		$posts_per_page     = $attributes['postsPerPage'] ?? 4;
 
 		$now  = current_time( 'mysql' );
 		$args = array(
@@ -75,7 +82,10 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 			echo '<p>No featured posts found</p>';
 		endif;
 
-		return ob_get_clean();
+		$output = ob_get_clean();
+		set_transient( $cache_key, $output, 5 * MINUTE_IN_SECONDS );
+
+		return $output;
 	}
 }
 

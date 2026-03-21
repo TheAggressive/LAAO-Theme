@@ -4,11 +4,13 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
 	prefix: '',
 	content: [
-		// './src/**/*.{html,js,php,ts,jsx,tsx,css,scss}',
 		'./templates/**/*.{html,js,php,ts,jsx,tsx}',
 		'./patterns/**/*.{html,js,php,ts,jsx,tsx}',
 		'./parts/**/*.{html,js,php,ts,jsx,tsx}',
 		'./styles/**/*.{css,scss}',
+		'./src/blocks/**/*.{js,jsx,php}',
+		'./src/blocks-interactivity/**/*.{js,jsx,php}',
+		'./src/styles/**/*.css',
 	],
 	theme: {
 		extend: {

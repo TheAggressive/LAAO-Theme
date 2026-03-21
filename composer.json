@@ -1,0 +1,21 @@
+{
+	"name": "theaggressive/laao",
+	"type": "wordpress-theme",
+	"require": {
+		"php": ">=8.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"LAAO\\": "inc/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"LAAO\\Tests\\": "tests/php/"
+		}
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^13.0",
+		"brain/monkey": "^2.7"
+	}
+}

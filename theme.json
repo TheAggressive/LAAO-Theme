@@ -198,7 +198,9 @@
 							"fontFamily": "Roboto Condensed",
 							"fontStyle": "normal",
 							"fontWeight": "400",
+							"fontDisplay": "swap",
 							"src": [
+								"file:./dist/assets/fonts/Roboto-Condensed.woff2",
 								"file:./dist/assets/fonts/Roboto-Condensed.ttf"
 							]
 						}
@@ -213,7 +215,9 @@
 							"fontFamily": "Anton",
 							"fontStyle": "normal",
 							"fontWeight": "400",
+							"fontDisplay": "swap",
 							"src": [
+								"file:./dist/assets/fonts/Anton-Regular.woff2",
 								"file:./dist/assets/fonts/Anton-Regular.ttf"
 							]
 						}

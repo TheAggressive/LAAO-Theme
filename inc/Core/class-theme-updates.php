@@ -1,21 +1,22 @@
 <?php
 
+namespace LAAO\Core;
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+	exit;
 }
 
-class LAAO_Theme_Updater {
+class Theme_Updates {
 
-	private $repo_owner = 'TheAggressive';
-	private $repo_name  = 'LAAO';
+	private string $repo_owner = 'TheAggressive';
+	private string $repo_name  = 'LAAO';
 
-	public function __construct() {
+	public function init(): void {
 		add_filter( 'pre_set_site_transient_update_themes', array( $this, 'check_for_update' ), 100, 1 );
 		add_filter( 'upgrader_source_selection', array( $this, 'rename_package' ), 10, 3 );
 	}
 
-	// Check for updates by comparing the current version with the GitHub release
-	public function check_for_update( $transient ) {
+	public function check_for_update( mixed $transient ): mixed {
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
@@ -28,8 +29,8 @@ class LAAO_Theme_Updater {
 			return $transient;
 		}
 
-		$source_version  = isset( $release['tag_name'] ) ? ltrim( $release['tag_name'], 'v' ) : false;
-		$download_url    = isset( $release['assets'][0]['browser_download_url'] ) ? $release['assets'][0]['browser_download_url'] : false;
+		$source_version = isset( $release['tag_name'] ) ? ltrim( $release['tag_name'], 'v' ) : false;
+		$download_url   = isset( $release['assets'][0]['browser_download_url'] ) ? $release['assets'][0]['browser_download_url'] : false;
 
 		if ( $source_version && $download_url && version_compare( $source_version, $current_version, '>' ) ) {
 			$transient->response[ $theme_slug ] = array(
@@ -44,7 +45,7 @@ class LAAO_Theme_Updater {
 	}
 
 	// Fetch the latest release from GitHub API — single request per update check.
-	private function get_latest_release() {
+	private function get_latest_release(): array|false {
 		$url  = "https://api.github.com/repos/{$this->repo_owner}/{$this->repo_name}/releases/latest";
 		$args = array(
 			'timeout' => 10,
@@ -64,14 +65,15 @@ class LAAO_Theme_Updater {
 		return is_array( $body ) ? $body : false;
 	}
 
-	// Rename the downloaded folder to match the theme directory name
-	public function rename_package( $source, $remote_source, $theme ) {
+	public function rename_package( string $source, string $remote_source, mixed $theme ): string {
 		$theme_slug = wp_get_theme()->get_stylesheet();
+
 		if ( strpos( $remote_source, $this->repo_name ) !== false ) {
 			$corrected_source = trailingslashit( $theme ) . $theme_slug;
 			rename( $source, $corrected_source );
 			return $corrected_source;
 		}
+
 		return $source;
 	}
 }

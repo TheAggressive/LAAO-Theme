@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<ruleset name="LAAO Theme">
+    <description>PHP coding standards for the LAAO WordPress theme.</description>
+
+    <!-- What to scan -->
+    <file>inc</file>
+    <file>src/blocks</file>
+    <file>src/blocks-interactivity</file>
+    <file>functions.php</file>
+
+    <!-- Exclude generated/vendor code -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>dist/*</exclude-pattern>
+
+    <!-- Base standard -->
+    <rule ref="WordPress">
+        <!-- Allow short array syntax -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    </rule>
+
+    <!-- Require PHP 8.0+ -->
+    <config name="minimum_supported_wp_version" value="6.4"/>
+    <config name="testVersion" value="8.0-"/>
+
+    <!-- ---------------------------------------------------------------
+         Test directory — standard PHPUnit conventions, not WP rules
+    --------------------------------------------------------------- -->
+    <rule ref="PSR1">
+        <include-pattern>tests/*</include-pattern>
+    </rule>
+    <rule ref="WordPress.Files.FileName">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.EnqueuedResources">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.GlobalVariablesOverride">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.DB.DirectDatabaseQuery">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+</ruleset>

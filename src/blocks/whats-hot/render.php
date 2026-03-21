@@ -16,6 +16,14 @@ $display_featured_image = $attributes['displayFeaturedImage'] ?? true;
 $display_caption        = $attributes['displayCaption'] ?? true;
 $use_link_meta          = $attributes['useLinkMeta'] ?? true;
 
+$cache_key = 'laao_whats_hot_' . md5( $number_of_posts . (int) $display_featured_image . (int) $display_caption . (int) $use_link_meta );
+$cached    = get_transient( $cache_key );
+
+if ( false !== $cached ) {
+	echo wp_kses_post( $cached );
+	return;
+}
+
 // Query the latest posts from wh_cover post type
 $args = array(
 	'post_type'              => 'wh_cover',
@@ -110,6 +118,8 @@ ob_start();
 <?php
 // Get the output buffer contents and clean the buffer
 $output = ob_get_clean();
+
+set_transient( $cache_key, $output, HOUR_IN_SECONDS );
 
 // Return the output
 echo wp_kses_post( $output );

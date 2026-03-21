@@ -126,7 +126,6 @@ export default function Edit({ attributes, setAttributes }) {
 								baseAnimations[attributes.animation].directions
 							}
 							onChange={(direction) => {
-								console.log(direction);
 								setAttributes({ direction });
 							}}
 							__next40pxDefaultSize
