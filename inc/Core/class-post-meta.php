@@ -20,6 +20,9 @@ class Post_Meta {
 
 	public function init(): void {
 		add_action( 'init', array( $this, 'register' ) );
+		add_action( 'updated_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
+		add_action( 'added_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
+		add_action( 'deleted_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
 	}
 
 	public function register(): void {
@@ -55,6 +58,21 @@ class Post_Meta {
 				'wh_photo_credit' => 'Photo Credit',
 			),
 			$this->wh_post_types
+		);
+	}
+
+	public function clear_highlight_transients( mixed $meta_id, int $post_id = 0, string $meta_key = '' ): void {
+		if ( ! in_array( $meta_key, array( 'highlight_start_date', 'highlight_end_date' ), true ) ) {
+			return;
+		}
+
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_laao_highlight_posts_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_laao_highlight_posts_' ) . '%'
+			)
 		);
 	}
 
