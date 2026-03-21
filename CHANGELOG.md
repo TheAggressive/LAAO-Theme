@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.4.2...v1.5.0) (2026-03-21)
+
+
+### Features
+
+* Enhance theme updater with GitHub integration and caching ([c605510](https://github.com/TheAggressive/LAAO-Theme/commit/c6055108eb3e5cdefc53bcb9cca9c5dc4718f29b))
+
 ## [1.4.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.4.1...v1.4.2) (2026-03-21)
 
 
