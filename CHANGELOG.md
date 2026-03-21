@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.5.0...v1.6.0) (2026-03-21)
+
+
+### Features
+
+* Clear transients on post meta updates ([8551b1a](https://github.com/TheAggressive/LAAO-Theme/commit/8551b1ac3d1cebdd21b809051920cd62adbc94e5))
+
 # [1.5.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.4.2...v1.5.0) (2026-03-21)
 
 
