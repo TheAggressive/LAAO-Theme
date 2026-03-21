@@ -1,3 +1,13 @@
+## [1.4.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.4.1...v1.4.2) (2026-03-21)
+
+
+### Bug Fixes
+
+* Refactor theme structure and implement autoloading ([b2394fb](https://github.com/TheAggressive/LAAO-Theme/commit/b2394fb06a37fae4762d48b22b67f97c2ffb6742))
+* Update .gitignore and remove PHPUnit result cache ([7dafe76](https://github.com/TheAggressive/LAAO-Theme/commit/7dafe76916656268c8fada3ef24670a29d2a20b7))
+* Update PHPUnit result cache with latest test results ([fcafd13](https://github.com/TheAggressive/LAAO-Theme/commit/fcafd13ca25aa8149be6e9b84a8abadbcfd85178))
+* Update README.md with project details and structure ([61db8c0](https://github.com/TheAggressive/LAAO-Theme/commit/61db8c0aa935fcd530f58d57de8096f0151f6849))
+
 ## [1.4.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.4.0...v1.4.1) (2026-03-20)
 
 
