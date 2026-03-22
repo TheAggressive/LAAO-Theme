@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.3...v1.8.0) (2026-03-22)
+
+
+### Features
+
+* Enhance highlight date management and block rendering ([a9ece14](https://github.com/TheAggressive/LAAO-Theme/commit/a9ece141345cb2f0eeee1a8afdf9207d0893250f))
+
 ## [1.7.3](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.2...v1.7.3) (2026-03-22)
 
 
