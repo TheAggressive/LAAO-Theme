@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.6.0...v1.7.0) (2026-03-22)
+
+
+### Features
+
+* Enhance post meta and block rendering functionality ([418ce3d](https://github.com/TheAggressive/LAAO-Theme/commit/418ce3d9dd340c6625eff91f5b3399744d082e08))
+
 # [1.6.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.5.0...v1.6.0) (2026-03-21)
 
 
