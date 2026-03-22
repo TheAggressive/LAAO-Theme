@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.1...v1.7.2) (2026-03-22)
+
+
+### Bug Fixes
+
+* Update release configuration to exclude additional files ([2c88d94](https://github.com/TheAggressive/LAAO-Theme/commit/2c88d94eb875edaa4d45eb6dfcad1ef66520ab50))
+
 ## [1.7.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.0...v1.7.1) (2026-03-22)
 
 
