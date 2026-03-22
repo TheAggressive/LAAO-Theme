@@ -21,7 +21,7 @@ env:
   THEME_SLUG: laao
   NODE_VERSION: '22'
   PNPM_VERSION: '9'
-  PHP_VERSION: '8.2'
+  PHP_VERSION: '8.4'
 
 jobs:
   # ============================================================================

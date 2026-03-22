@@ -2,7 +2,7 @@
 	"name": "theaggressive/laao",
 	"type": "wordpress-theme",
 	"require": {
-		"php": ">=8.0"
+		"php": ">=8.4"
 	},
 	"autoload": {
 		"psr-4": {
