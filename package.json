@@ -33,6 +33,7 @@
 		"test:js:watch": "wp-scripts test-unit-js --watch",
 		"test:php": "vendor/bin/phpunit",
 		"test": "concurrently 'pnpm test:php' 'pnpm test:js'",
+		"qa": "pnpm lint:js && pnpm lint:css && pnpm test:js && pnpm test:php",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style 'src/**/*.css'",
 		"lint:js": "wp-scripts lint-js ./src/**/*.js",
