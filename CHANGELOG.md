@@ -1,3 +1,11 @@
+## [1.7.3](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.2...v1.7.3) (2026-03-22)
+
+
+### Bug Fixes
+
+* Enhance CI workflow with PHP linting and testing ([ea54512](https://github.com/TheAggressive/LAAO-Theme/commit/ea545124430b0266c998ae76ecef749d21d74cbb))
+* Update PHP version requirements in composer.json and CI workflow ([3be9c45](https://github.com/TheAggressive/LAAO-Theme/commit/3be9c45ad85e54a57f0e12f1f45fb392b4e9519c))
+
 ## [1.7.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.1...v1.7.2) (2026-03-22)
 
 
