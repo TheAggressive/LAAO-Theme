@@ -66,6 +66,10 @@ class Post_Meta {
 			return;
 		}
 
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
 		global $wpdb;
 		$wpdb->query(
 			$wpdb->prepare(

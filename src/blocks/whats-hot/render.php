@@ -90,7 +90,7 @@ ob_start();
 		<article class="whats-hot-item"
 			data-item-index="<?php echo esc_attr( $item_count ); ?>">
 
-			<a href="<?php echo esc_url( get_site_url() . '/' . $post_link ); ?>" class="whats-hot-link">
+			<a href="<?php echo esc_url( $post_link ); ?>" class="whats-hot-link">
 				<?php if ( $display_featured_image && $thumbnail_img ) : ?>
 					<figure class="whats-hot-figure">
 						<div class="whats-hot-image-container">

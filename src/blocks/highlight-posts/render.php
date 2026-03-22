@@ -5,7 +5,7 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 		$post_types     = ! empty( $attributes['selectedPostTypes'] ) ? $attributes['selectedPostTypes'] : array( 'post' );
 		$posts_per_page = $attributes['postsPerPage'] ?? 4;
 
-		$cache_key = 'laao_highlight_posts_' . md5( serialize( $post_types ) . $posts_per_page ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$cache_key = 'laao_highlight_posts_' . md5( implode( ',', $post_types ) . $posts_per_page );
 		$cached    = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			return $cached;

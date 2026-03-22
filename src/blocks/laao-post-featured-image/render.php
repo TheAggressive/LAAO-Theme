@@ -5,7 +5,7 @@
 global $post;
 ?>
 <figure <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-	<?php echo get_the_post_thumbnail( $post->id ); ?>
+	<?php echo get_the_post_thumbnail( $post->ID ); ?>
 	<?php
 	if ( get_post_meta( get_the_ID(), 'picture_id', true ) ) {
 		?>

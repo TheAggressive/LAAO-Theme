@@ -176,11 +176,37 @@ export const cleanupAllHighlights = (modalId = null) => {
 	animationTimers.forEach((timer) => clearInterval(timer));
 	animationTimers.clear();
 
-	// Remove all event listeners
+	// Remove all event listeners (module-level map)
 	eventListeners.forEach((listener) => {
 		document.removeEventListener('keydown', listener);
 	});
 	eventListeners.clear();
+
+	// Remove event listeners tracked in highlightData
+	highlightData.eventListeners.forEach(({ element, eventType, callback }) => {
+		element.removeEventListener(eventType, callback);
+	});
+	highlightData.eventListeners = [];
+
+	// Clear timers tracked in highlightData
+	highlightData.timers.forEach((timer) => clearTimeout(timer));
+	highlightData.timers = [];
+
+	// Disconnect resize observer
+	if (highlightData.resizeObserver) {
+		highlightData.resizeObserver.disconnect();
+		highlightData.resizeObserver = null;
+	}
+
+	// Remove appended DOM elements (highlights, tooltips, pulse rings)
+	[
+		...highlightData.highlights,
+		...highlightData.tooltips,
+		...highlightData.pulseElements,
+	].forEach((el) => el?.parentNode?.removeChild(el));
+	highlightData.highlights = [];
+	highlightData.tooltips = [];
+	highlightData.pulseElements = [];
 
 	// Step 1: Define all selectors we might need to clean up
 	const highlightClassSelectors = [
@@ -525,8 +551,10 @@ export const highlightTriggerBlock = (
 	// Find the block element
 	const blockElement = findBlockDomElement(triggerBlockId);
 	if (!blockElement) {
-		// eslint-disable-next-line no-console
-		console.warn(`Could not find block element with ID: ${triggerBlockId}`);
+		Debug.add(
+			`Could not find block element with ID: ${triggerBlockId}`,
+			true
+		);
 		return;
 	}
 
