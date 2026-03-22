@@ -23,6 +23,15 @@ class Post_Meta {
 		add_action( 'updated_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
 		add_action( 'added_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
 		add_action( 'deleted_post_meta', array( $this, 'clear_highlight_transients' ), 10, 3 );
+		add_action( 'transition_post_status', array( $this, 'clear_on_status_change' ), 10, 3 );
+		// When the standard REST save sends an empty string for a highlight date,
+		// delete the meta row instead of storing '' so the deleted_post_meta
+		// action fires and DB stays clean.
+		add_filter( 'pre_update_post_metadata', array( $this, 'delete_highlight_meta_if_empty' ), 10, 4 );
+		// Hide highlight date keys from the Classic Custom Fields meta box so
+		// clicking Save/Update does not submit stale values through the classic
+		// meta box pathway and overwrite what the block editor panel saved.
+		add_filter( 'is_protected_meta', array( $this, 'protect_highlight_date_meta' ), 10, 2 );
 	}
 
 	public function register(): void {
@@ -61,15 +70,66 @@ class Post_Meta {
 		);
 	}
 
+	public function clear_on_status_change( string $new_status, string $old_status, \WP_Post $post ): void {
+		if ( $new_status === $old_status ) {
+			return;
+		}
+
+		// Only care about posts that have highlight dates set.
+		if ( ! get_post_meta( $post->ID, 'highlight_start_date', true ) && ! get_post_meta( $post->ID, 'highlight_end_date', true ) ) {
+			return;
+		}
+
+		$this->delete_all_highlight_transients();
+	}
+
 	public function clear_highlight_transients( mixed $meta_id, int $post_id = 0, string $meta_key = '' ): void {
 		if ( ! in_array( $meta_key, array( 'highlight_start_date', 'highlight_end_date' ), true ) ) {
 			return;
 		}
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return;
+		$this->delete_all_highlight_transients();
+	}
+
+	/**
+	 * Mark highlight date keys as protected so they are hidden from the Classic
+	 * Custom Fields meta box. Without this, the classic save pathway submits
+	 * the stale values shown in the meta box and overwrites the block editor save.
+	 *
+	 * @param bool   $protected Whether the meta key is protected.
+	 * @param string $meta_key  The meta key.
+	 */
+	public function protect_highlight_date_meta( bool $protected, string $meta_key ): bool {
+		if ( in_array( $meta_key, array( 'highlight_start_date', 'highlight_end_date' ), true ) ) {
+			return true;
+		}
+		return $protected;
+	}
+
+	/**
+	 * Intercept update_post_meta calls for highlight date keys.
+	 * When the value is empty, delete the row instead of storing ''.
+	 * Returning non-null short-circuits the normal update path.
+	 *
+	 * @param mixed  $check     null to proceed normally, non-null to short-circuit.
+	 * @param int    $object_id Post ID.
+	 * @param string $meta_key  Meta key being updated.
+	 * @param mixed  $meta_value New value.
+	 */
+	public function delete_highlight_meta_if_empty( mixed $check, int $object_id, string $meta_key, mixed $meta_value ): mixed {
+		if ( ! in_array( $meta_key, array( 'highlight_start_date', 'highlight_end_date' ), true ) ) {
+			return $check;
 		}
 
+		if ( '' === (string) $meta_value ) {
+			delete_post_meta( $object_id, $meta_key );
+			return true; // Short-circuit: tell update_post_meta we handled it.
+		}
+
+		return $check; // null — proceed with normal update.
+	}
+
+	private function delete_all_highlight_transients(): void {
 		global $wpdb;
 		$wpdb->query(
 			$wpdb->prepare(
@@ -81,8 +141,8 @@ class Post_Meta {
 	}
 
 	private function register_group( array $fields, array $post_types ): void {
-		$auth = function () {
-			return current_user_can( 'edit_pages' );
+		$auth = function ( $allowed, $meta_key, $post_id ) {
+			return current_user_can( 'edit_post', $post_id );
 		};
 
 		foreach ( $fields as $key => $title ) {

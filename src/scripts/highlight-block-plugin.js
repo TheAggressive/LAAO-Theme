@@ -28,16 +28,12 @@ const META_END = 'highlight_end_date';
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Returns a default ISO date string for today (in the WP site timezone) at the given time
 const getDefaultDate = (hours, minutes, seconds) => {
-	const today = format('Y-m-d'); // uses WP site timezone via window._wpDateSettings
+	const today = format('Y-m-d');
 	return `${today}T${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
-// Convert MySQL "2026-03-20 00:00:01" -> ISO "2026-03-20T00:00:01" for DateTimePicker
 const toISO = (mysql) => (mysql ? mysql.replace(' ', 'T') : null);
-
-// Convert ISO "2026-03-20T00:00:01" -> MySQL "2026-03-20 00:00:01" for storage
 const toMySQL = (iso) => (iso ? iso.replace('T', ' ').slice(0, 19) : '');
 
 const labelStyle = {
@@ -51,13 +47,16 @@ const DateField = ({ label, value, onChange }) => (
 	<PanelRow>
 		<div style={{ width: '100%' }}>
 			<p style={labelStyle}>{label}</p>
-			<DateTimePicker currentDate={value} onChange={onChange} is12Hour />
+			<DateTimePicker
+				currentDate={value}
+				onChange={(v) => v && onChange(v)}
+				is12Hour
+			/>
 		</div>
 	</PanelRow>
 );
 
 const HighlightPanel = () => {
-	// All hooks must be called unconditionally before any early return
 	const postType = useSelect((select) =>
 		select('core/editor').getCurrentPostType()
 	);
@@ -71,9 +70,9 @@ const HighlightPanel = () => {
 		return null;
 	}
 
-	const startISO = toISO(meta[META_START]) || getDefaultDate(0, 0, 1);
-	const endISO = toISO(meta[META_END]) || getDefaultDate(23, 59, 59);
-	const hasSchedule = !!(meta[META_START] || meta[META_END]);
+	const startISO = toISO(meta?.[META_START]) || getDefaultDate(0, 0, 1);
+	const endISO = toISO(meta?.[META_END]) || getDefaultDate(23, 59, 59);
+	const hasSchedule = !!(meta?.[META_START] || meta?.[META_END]);
 
 	return (
 		<PluginDocumentSettingPanel
@@ -99,20 +98,18 @@ const HighlightPanel = () => {
 							'laao'
 						)}
 			</p>
+
 			<DateField
 				label={__('Start', 'laao')}
 				value={startISO}
-				onChange={(value) =>
-					setMeta({ ...meta, [META_START]: toMySQL(value) })
-				}
+				onChange={(v) => setMeta({ ...meta, [META_START]: toMySQL(v) })}
 			/>
 			<DateField
 				label={__('End', 'laao')}
 				value={endISO}
-				onChange={(value) =>
-					setMeta({ ...meta, [META_END]: toMySQL(value) })
-				}
+				onChange={(v) => setMeta({ ...meta, [META_END]: toMySQL(v) })}
 			/>
+
 			{hasSchedule && (
 				<PanelRow>
 					<Button
@@ -125,7 +122,7 @@ const HighlightPanel = () => {
 								[META_END]: '',
 							})
 						}
-						style={{ marginTop: '4px' }}
+						style={{ marginTop: '8px' }}
 						__next40pxDefaultSize
 					>
 						{__('Clear Schedule', 'laao')}

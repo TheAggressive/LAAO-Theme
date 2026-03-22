@@ -14,7 +14,7 @@ export class Debug {
 	/**
 	 * Add a debug message
 	 *
-	 * @param {string} message The debug message
+	 * @param {string}  message  The debug message
 	 * @param {boolean} critical Whether this is a critical message that should be shown even when debug is disabled
 	 */
 	static add(message, critical = false) {
@@ -103,7 +103,7 @@ export class Debug {
 	 * @return {Array} Array of critical log messages
 	 */
 	static getCriticalLogs() {
-		return this.logs.filter(log => log.critical);
+		return this.logs.filter((log) => log.critical);
 	}
 }
 
@@ -131,7 +131,9 @@ export const isElementVisible = (element) => {
 	return (
 		rect.top >= 0 &&
 		rect.left >= 0 &&
-		rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+		rect.bottom <=
+			(window.innerHeight || document.documentElement.clientHeight) &&
+		rect.right <=
+			(window.innerWidth || document.documentElement.clientWidth)
 	);
 };

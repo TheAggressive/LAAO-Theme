@@ -41,9 +41,26 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 
 		$featured_query = new WP_Query( $args );
 
-		// Fallback: if no scheduled posts are active, show the most recent posts.
 		if ( ! $featured_query->have_posts() ) {
-			unset( $args['meta_query'] );
+			// Tier 2: no active highlights — show the most recently expired ones
+			// so the section never goes blank between highlight windows.
+			$args['meta_query'] = array(
+				array(
+					'key'     => 'highlight_end_date',
+					'value'   => $now,
+					'compare' => '<',
+					'type'    => 'DATETIME',
+				),
+			);
+			$args['orderby']  = 'meta_value';
+			$args['meta_key'] = 'highlight_end_date';
+			$args['order']    = 'DESC';
+			$featured_query   = new WP_Query( $args );
+		}
+
+		if ( ! $featured_query->have_posts() ) {
+			// Tier 3: no highlight dates exist at all — fall back to most recent posts.
+			unset( $args['meta_query'], $args['meta_key'] );
 			$args['orderby'] = 'date';
 			$args['order']   = 'DESC';
 			$featured_query  = new WP_Query( $args );
@@ -83,7 +100,32 @@ if ( ! function_exists( 'laao_render_featured_block' ) ) {
 		endif;
 
 		$output = ob_get_clean();
-		set_transient( $cache_key, $output, 5 * MINUTE_IN_SECONDS );
+
+		// Set a smart TTL: expire the cache right when the next highlight state
+		// change happens (a future start_date or end_date on any published post),
+		// rather than waiting out a fixed 5-minute window.
+		global $wpdb;
+		$next_change = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT MIN(pm.meta_value)
+				 FROM {$wpdb->postmeta} pm
+				 INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+				 WHERE pm.meta_key IN ('highlight_start_date', 'highlight_end_date')
+				   AND pm.meta_value > %s
+				   AND p.post_status = 'publish'",
+				$now
+			)
+		);
+
+		$ttl = 5 * MINUTE_IN_SECONDS;
+		if ( $next_change ) {
+			$seconds_until = strtotime( $next_change ) - current_time( 'timestamp' );
+			if ( $seconds_until > 0 && $seconds_until < $ttl ) {
+				$ttl = max( 30, $seconds_until );
+			}
+		}
+
+		set_transient( $cache_key, $output, $ttl );
 
 		return $output;
 	}
