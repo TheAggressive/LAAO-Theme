@@ -44,21 +44,21 @@ const ImageCreditFields = () => {
 						},
 						{
 							label: 'Arts',
-							value: 'arts',
+							value: '/arts',
 						},
-						{ label: 'Theatre', value: 'theatre' },
-						{ label: 'Film', value: 'film' },
+						{ label: 'Theatre', value: '/theatre' },
+						{ label: 'Film', value: '/film' },
 						{
 							label: 'Television',
-							value: 'television',
+							value: '/television',
 						},
 						{
 							label: 'Extra',
-							value: 'extra',
+							value: '/extra',
 						},
-						{ label: 'Music', value: 'music' },
-						{ label: 'Spotlight', value: 'spotlight' },
-						{ label: 'Dining', value: 'dining' },
+						{ label: 'Music', value: '/music' },
+						{ label: 'Spotlight', value: '/spotlight' },
+						{ label: 'Dining', value: '/dining' },
 					]}
 					onChange={(value) =>
 						setMeta({

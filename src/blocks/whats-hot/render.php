@@ -16,14 +16,6 @@ $display_featured_image = $attributes['displayFeaturedImage'] ?? true;
 $display_caption        = $attributes['displayCaption'] ?? true;
 $use_link_meta          = $attributes['useLinkMeta'] ?? true;
 
-$cache_key = 'laao_whats_hot_' . md5( $number_of_posts . (int) $display_featured_image . (int) $display_caption . (int) $use_link_meta );
-$cached    = get_transient( $cache_key );
-
-if ( false !== $cached ) {
-	echo wp_kses_post( $cached );
-	return;
-}
-
 // Query the latest posts from wh_cover post type
 $args = array(
 	'post_type'              => 'wh_cover',
@@ -62,7 +54,10 @@ ob_start();
 
 		// Get link - either from meta or use the default permalink
 		$custom_link = $use_link_meta ? get_post_meta( $current_post_id, 'wh_link_to', true ) : '';
-		$post_link   = ! empty( $custom_link ) ? $custom_link : get_permalink();
+		if ( ! empty( $custom_link ) && '/' !== $custom_link[0] ) {
+			$custom_link = '/' . $custom_link;
+		}
+		$post_link = ! empty( $custom_link ) ? $custom_link : get_permalink();
 
 		// Get all relevant post meta for display
 		$photo_credit = get_post_meta( $current_post_id, 'wh_photo_credit', true );
@@ -119,7 +114,4 @@ ob_start();
 // Get the output buffer contents and clean the buffer
 $output = ob_get_clean();
 
-set_transient( $cache_key, $output, HOUR_IN_SECONDS );
-
-// Return the output
 echo wp_kses_post( $output );
