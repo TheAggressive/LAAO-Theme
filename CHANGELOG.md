@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.8.0...v1.8.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* Update link handling and caching in Whats Hot block ([88d71d1](https://github.com/TheAggressive/LAAO-Theme/commit/88d71d1c196b7c3bc8e1739c800d26d9a52a6933))
+
 # [1.8.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.7.3...v1.8.0) (2026-03-22)
 
 
