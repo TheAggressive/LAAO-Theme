@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.8.1...v1.8.2) (2026-04-06)
+
+
+### Bug Fixes
+
+* Refactor Whats Hot block caption styles ([eb29bed](https://github.com/TheAggressive/LAAO-Theme/commit/eb29bed691b2d65c2e004b8f1d99dd7e5bdf0a8b))
+
 ## [1.8.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.8.0...v1.8.1) (2026-04-06)
 
 
