@@ -74,7 +74,7 @@
 }
 
 .whats-hot-caption {
-	@apply absolute bottom-0 flex w-full flex-1 flex-col justify-center bg-black/10 p-2 text-xs leading-tight text-wp-laao-white backdrop-blur-md;
+	@apply absolute bottom-0 w-full bg-black/10 p-2 text-xs leading-tight text-wp-laao-white backdrop-blur-md;
 }
 
 .whats-hot-text {
