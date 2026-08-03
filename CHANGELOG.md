@@ -1,3 +1,19 @@
+## [1.8.3](https://github.com/TheAggressive/LAAO-Theme/compare/v1.8.2...v1.8.3) (2026-08-03)
+
+### Bug Fixes
+
+* **ci:** mount the theme at a fixed path and drop unreachable timer branch ([91a5c4c](https://github.com/TheAggressive/LAAO-Theme/commit/91a5c4cbe932e7d30f9170e090225f18eb7dad03))
+* correct defects surfaced by static analysis ([a0e70db](https://github.com/TheAggressive/LAAO-Theme/commit/a0e70db761cf6e4ece17551fa4febb5f3b903b66))
+* correct PHP 8 concatenation precedence in gallery alt text ([4bea649](https://github.com/TheAggressive/LAAO-Theme/commit/4bea649aec58af53022a91b81ad6c9456e6f9dc5))
+* guard the hero block against rendering with zero slides ([90ef594](https://github.com/TheAggressive/LAAO-Theme/commit/90ef594fc8837e0d5512077617d90f54aa9b3fc8))
+* **i18n:** normalise every block text domain to laao ([e5f1d5e](https://github.com/TheAggressive/LAAO-Theme/commit/e5f1d5ea4f2a38701b383b80d7b750c12a9f6569))
+* make highlight cache invalidation work on object-cached sites ([94a95cc](https://github.com/TheAggressive/LAAO-Theme/commit/94a95cc88bb5c322f53fb21c98fe07c037d80b22))
+* **release:** verify the package is installable before publishing ([9ba387e](https://github.com/TheAggressive/LAAO-Theme/commit/9ba387ef9950dd9d8493db51b5864f198abd7b80))
+
+### Performance Improvements
+
+* drop third-party CDN assets and preload the woff2 fonts ([abaee9b](https://github.com/TheAggressive/LAAO-Theme/commit/abaee9baeb1a49ac3bb83f84b198adbb8d10510a))
+
 ## [1.8.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.8.1...v1.8.2) (2026-04-06)
 
 
