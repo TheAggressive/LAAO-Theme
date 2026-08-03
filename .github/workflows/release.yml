@@ -107,7 +107,7 @@ jobs:
               run: pnpm ci:build
 
             - name: Upload build output
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: dist
                   path: dist/
@@ -154,7 +154,7 @@ jobs:
 
             - name: Upload failure artefacts
               if: failure()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: playwright-report
                   path: |
