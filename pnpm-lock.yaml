@@ -12,8 +12,8 @@ importers:
         specifier: ^34.0.0
         version: 34.0.0(@playwright/test@1.62.1)(@types/node@26.1.2)(@types/react@18.3.21)(@typescript-eslint/eslint-plugin@8.65.0(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.6.1))(typescript@5.8.3))(eslint@10.8.0(jiti@2.6.1))(typescript@5.8.3))(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.6.1))(typescript@5.8.3))(@wordpress/env@11.12.0(@types/node@26.1.2))(babel-plugin-macros@3.1.0)(jiti@2.6.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(stylelint-scss@6.10.0(stylelint@16.19.1(typescript@5.8.3)))(tslib@2.8.1)(type-fest@4.41.0)(typescript@5.8.3)
       gsap:
-        specifier: ^3.13.0
-        version: 3.13.0
+        specifier: ^3.15.0
+        version: 3.15.0
       isomorphic-dompurify:
         specifier: ^2.24.0
         version: 2.24.0
@@ -6869,8 +6869,8 @@ packages:
     resolution: {integrity: sha512-6ABGa9CR7WR/0pAJicBy5SJkiikbFM6kf/JjykwX7x+t+s8ORWVnlbi6FkHeFFb36yWsjUpHqSYrygd7ofEUqA==}
     engines: {node: '>=0.10.0'}
 
-  gsap@3.13.0:
-    resolution: {integrity: sha512-QL7MJ2WMjm1PHWsoFrAQH/J8wUeqZvMtHO58qdekHpCfhvhSL4gSiz6vJf5EeMP0LOn3ZCprL2ki/gjED8ghVw==}
+  gsap@3.15.0:
+    resolution: {integrity: sha512-dMW4CWBTUK1AEEDeZc1g4xpPGIrSf9fJF960qbTZmN/QwZIWY5wgliS6JWl9/25fpTGJrMRtSjGtOmPnfjZB+A==}
 
   gzip-size@6.0.0:
     resolution: {integrity: sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==}
@@ -20842,7 +20842,7 @@ snapshots:
 
   gradient-parser@1.2.0: {}
 
-  gsap@3.13.0: {}
+  gsap@3.15.0: {}
 
   gzip-size@6.0.0:
     dependencies:
