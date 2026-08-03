@@ -1,0 +1,15 @@
+# pnpm 11 blocks dependency build scripts unless they are listed here.
+#
+# Keeping this explicit means a new transitive dependency cannot silently run
+# arbitrary code at install time — adding one is a reviewable change. Only
+# @parcel/watcher genuinely needs its native build (file watching for
+# `wp-scripts start`); the rest either print funding notices or ship a working
+# JavaScript fallback.
+packages: []
+
+allowBuilds:
+    '@parcel/watcher': true
+    core-js: false
+    core-js-pure: false
+    fs-ext-extra-prebuilt: false
+    unrs-resolver: false
