@@ -1,9 +1,17 @@
 version: 2
 
+# Grouping keeps routine updates to a handful of reviewable pull requests
+# rather than thirty — @wordpress/* packages release in lockstep, and merging
+# them individually produces incompatible intermediate states.
+#
+# Every group is constrained to minor and patch. This is what makes unattended
+# merging safe: a grouped pull request's title reads "bump the X group with N
+# updates" and carries no version numbers, so the major-version guard in
+# dependabot-auto-merge.yml cannot inspect it. Constraining the groups means a
+# major can never be inside one — it arrives as its own pull request, with
+# versions in the title, and is held for review.
+
 updates:
-    # JavaScript. Grouped so a WordPress package bump arrives as one reviewable
-    # PR rather than thirty — @wordpress/* releases move in lockstep, and
-    # merging them individually produces incompatible intermediate states.
     - package-ecosystem: npm
       directory: '/'
       schedule:
@@ -14,18 +22,27 @@ updates:
           wordpress:
               patterns:
                   - '@wordpress/*'
+              update-types:
+                  - minor
+                  - patch
           eslint:
               patterns:
                   - 'eslint'
                   - 'eslint-*'
                   - '@eslint/*'
                   - '@typescript-eslint/*'
+              update-types:
+                  - minor
+                  - patch
           testing:
               patterns:
                   - '@playwright/*'
                   - 'jest'
                   - 'jest-*'
                   - '@types/jest'
+              update-types:
+                  - minor
+                  - patch
           dev-minor-patch:
               dependency-type: development
               update-types:
@@ -51,6 +68,9 @@ updates:
                   - 'automattic/vipwpcs'
                   - 'phpcompatibility/*'
                   - 'dealerdirect/*'
+              update-types:
+                  - minor
+                  - patch
       commit-message:
           prefix: 'chore'
           include: scope
@@ -59,5 +79,12 @@ updates:
       directory: '/'
       schedule:
           interval: monthly
+      groups:
+          actions:
+              patterns:
+                  - '*'
+              update-types:
+                  - minor
+                  - patch
       commit-message:
           prefix: 'ci'
