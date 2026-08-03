@@ -19,21 +19,12 @@ import {
 	HIGHLIGHT_CLASS_SELECTORS,
 } from './registry';
 
-/** Interval handle for the pulse animation. @type {number|null} */
-let highlightTimer = null;
-
 /**
  * Utility function to remove all highlight styles and elements
  *
  * @param {string} modalId Optional modalId to target specific cleanup
  */
 export const cleanupAllHighlights = (modalId = null) => {
-	// Clear any timers
-	if (highlightTimer) {
-		clearInterval(highlightTimer);
-		highlightTimer = null;
-	}
-
 	// Clear all animation timers
 	animationTimers.forEach((timer) => clearInterval(timer));
 	animationTimers.clear();
@@ -70,13 +61,10 @@ export const cleanupAllHighlights = (modalId = null) => {
 	highlightData.tooltips = [];
 	highlightData.pulseElements = [];
 
-	const highlightClassSelectors = HIGHLIGHT_CLASS_SELECTORS;
-
-	// Step 2: Find all elements with highlight styles applied via DOM classes or inline styles
-	// This is our first pass for cleanup
+	// First pass: elements carrying highlight classes, in a given document.
 	const findAndCleanElements = (rootElement = document) => {
 		// Create a combined selector for all highlight elements
-		const allHighlightSelector = highlightClassSelectors.join(',');
+		const allHighlightSelector = HIGHLIGHT_CLASS_SELECTORS.join(',');
 
 		// Find elements with highlight classes
 		rootElement
@@ -85,7 +73,7 @@ export const cleanupAllHighlights = (modalId = null) => {
 				Debug.add(`Cleaning up highlight element: ${element.tagName}`);
 
 				// Remove highlight classes
-				highlightClassSelectors.forEach((selector) => {
+				HIGHLIGHT_CLASS_SELECTORS.forEach((selector) => {
 					// Remove the . from the selector
 					const className = selector.substring(1);
 					element.classList.remove(className);
@@ -160,7 +148,7 @@ export const cleanupAllHighlights = (modalId = null) => {
 		);
 	}
 
-	// Step 3: Clean up specific elements we've tracked in our maps
+	// Second pass: elements tracked explicitly in the registry.
 	highlightElements.forEach((element) => {
 		if (element && document.contains(element)) {
 			// Reset all highlight-related styles
@@ -174,7 +162,7 @@ export const cleanupAllHighlights = (modalId = null) => {
 			element.style.background = '';
 
 			// Remove all highlight classes
-			highlightClassSelectors.forEach((selector) => {
+			HIGHLIGHT_CLASS_SELECTORS.forEach((selector) => {
 				// Remove the . from the selector
 				const className = selector.substring(1);
 				element.classList.remove(className);
@@ -220,8 +208,6 @@ export const cleanupAllHighlights = (modalId = null) => {
 	} catch (error) {
 		Debug.add(`Error in final cleanup pass: ${error.message}`, true);
 	}
-
-	// Reset the current highlight
 };
 
 // For convenience, create an alias for cleanupAllHighlights.
