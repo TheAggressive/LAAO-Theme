@@ -32,7 +32,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: pnpm/action-setup@v4
               with:
@@ -58,7 +58,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: shivammathur/setup-php@v2
               with:
@@ -89,7 +89,7 @@ jobs:
         needs: [frontend, php]
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: pnpm/action-setup@v4
               with:
@@ -119,7 +119,7 @@ jobs:
         needs: [build]
         timeout-minutes: 20
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: pnpm/action-setup@v4
               with:
@@ -168,7 +168,7 @@ jobs:
         needs: [build, e2e]
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: pnpm/action-setup@v4
               with:
@@ -207,7 +207,7 @@ jobs:
             pull-requests: write
             id-token: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
                   token: ${{ secrets.GITHUB_TOKEN }}
