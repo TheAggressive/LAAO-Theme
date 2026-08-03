@@ -1,0 +1,117 @@
+name: Dependabot auto-merge
+
+# Squash-merges Dependabot updates once the full pipeline has passed, so
+# routine minor/patch bumps stop being a weekly chore.
+#
+# Why workflow_run rather than GitHub's built-in auto-merge: built-in
+# auto-merge waits for *required* status checks, and this repository has none —
+# there is no branch protection or ruleset on master, partly because required
+# checks block semantic-release's direct push of the version commit. With
+# nothing required, built-in auto-merge would merge immediately, tests or not.
+# (It is also disabled at the repository level.) This waits for a real,
+# verified green.
+#
+# Four independent conditions must hold before anything merges. Any one of them
+# failing leaves the pull request untouched for a human:
+#
+#   1. The triggering run was the pipeline, on a pull request, and it succeeded.
+#   2. The pull request author is genuinely dependabot[bot], re-checked against
+#      the API rather than trusted from the event payload.
+#   3. EVERY check on the pull request is green — not just the run that fired
+#      this workflow. A pending or failed CodeQL still blocks the merge.
+#   4. The update does not cross a major version. Groups in dependabot.yml are
+#      all constrained to minor/patch, so a major always arrives as its own
+#      pull request with versions in the title, where this guard can see it.
+
+on:
+    workflow_run:
+        workflows: ['CI/CD Pipeline']
+        types: [completed]
+
+# Read-only by default; the merge job elevates only what it needs.
+permissions:
+    contents: read
+
+concurrency:
+    group: dependabot-auto-merge-${{ github.event.workflow_run.head_branch }}
+    cancel-in-progress: false
+
+jobs:
+    merge:
+        name: 🤖 Auto-merge Dependabot
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        if: >-
+            github.event.workflow_run.event == 'pull_request' &&
+            github.event.workflow_run.conclusion == 'success' &&
+            github.event.workflow_run.actor.login == 'dependabot[bot]'
+
+        permissions:
+            contents: write
+            pull-requests: write
+
+        steps:
+            # Needed for bin/ci/dependabot-major-guard.sh. Checks out the base
+            # branch, never the Dependabot branch — the guard must be the version
+            # on master, not one the pull request could have altered.
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.repository.default_branch }}
+                  persist-credentials: false
+
+            - name: Merge if every check passed and no major version is crossed
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_REPO: ${{ github.repository }}
+                  HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+              run: |
+                  set -euo pipefail
+
+                  # Resolve the pull request from the branch. workflow_run's
+                  # `pull_requests` array is unreliable, so look it up explicitly.
+                  PR="$(gh pr list --head "${HEAD_BRANCH}" --state open \
+                          --json number --jq '.[0].number // empty')"
+                  if [[ -z "${PR}" ]]; then
+                    echo "No open pull request for ${HEAD_BRANCH} — nothing to do."
+                    exit 0
+                  fi
+
+                  # Re-verify authorship server-side. The event payload is not
+                  # enough: only a real Dependabot pull request may be merged
+                  # unattended.
+                  AUTHOR="$(gh pr view "${PR}" --json author --jq '.author.login')"
+                  if [[ "${AUTHOR}" != "app/dependabot" && "${AUTHOR}" != "dependabot[bot]" ]]; then
+                    echo "::notice::#${PR} is authored by ${AUTHOR}, not Dependabot. Leaving it."
+                    exit 0
+                  fi
+
+                  TITLE="$(gh pr view "${PR}" --json title --jq '.title')"
+
+                  # Major-version guard, in bin/ci/ so it can be unit tested —
+                  # see dependabot-major-guard.test.sh, which runs in the
+                  # frontend lane. Logic that merges code without a human should
+                  # not be the one part of the pipeline nothing verifies.
+                  if ! REASON="$(bash bin/ci/dependabot-major-guard.sh "${TITLE}")"; then
+                    echo "::notice::#${PR} held for review: ${REASON}"
+                    exit 0
+                  fi
+                  echo "Version guard passed: ${REASON}"
+
+                  # Require EVERY check to be green, not just the run that fired
+                  # this workflow. Anything still pending means we do not yet know.
+                  STATES="$(gh pr view "${PR}" --json statusCheckRollup \
+                              --jq '[.statusCheckRollup[] | (.conclusion // .status // "PENDING")] | join(" ")')"
+                  echo "Checks on #${PR}: ${STATES}"
+
+                  for state in ${STATES}; do
+                    case "${state}" in
+                      SUCCESS|SKIPPED|NEUTRAL|COMPLETED) ;;
+                      *)
+                        echo "::notice::#${PR} has a check in state ${state}. Not merging."
+                        exit 0
+                        ;;
+                    esac
+                  done
+
+                  echo "All checks green on #${PR} — squash-merging."
+                  gh pr merge "${PR}" --squash --delete-branch
