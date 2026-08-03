@@ -1,4 +1,13 @@
 <?php
+/**
+ * Theme Support
+ *
+ * Declares the theme's core feature support, registers editor styles, preloads
+ * brand fonts, and switches off the WordPress and plugin behaviour this theme
+ * replaces.
+ *
+ * @package LAAO
+ */
 
 namespace LAAO\Core;
 
@@ -6,8 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Registers theme support and global front-end behaviour.
+ */
 class Theme_Support {
 
+	/**
+	 * Registers hooks and applies the theme's global filters.
+	 *
+	 * @return void
+	 */
 	public function init(): void {
 		add_action( 'after_setup_theme', array( $this, 'register' ) );
 		add_action( 'after_setup_theme', array( $this, 'add_editor_styles' ) );
@@ -24,9 +41,11 @@ class Theme_Support {
 
 		remove_theme_support( 'core-block-patterns' );
 
-		add_filter(
+		// pre_get_posts is an action, not a filter — the callback mutates the
+		// query object in place and returns nothing.
+		add_action(
 			'pre_get_posts',
-			function ( $query ) {
+			function ( \WP_Query $query ): void {
 				if ( is_search() && $query->is_main_query() ) {
 					$query->set( 'posts_per_page', 10 );
 				}
@@ -34,6 +53,11 @@ class Theme_Support {
 		);
 	}
 
+	/**
+	 * Declares add_theme_support() features.
+	 *
+	 * @return void
+	 */
 	public function register(): void {
 		add_theme_support( 'automatic-feed-links' );
 		add_theme_support( 'title-tag' );
@@ -52,13 +76,46 @@ class Theme_Support {
 		add_theme_support( 'responsive-embeds' );
 	}
 
+	/**
+	 * Registers the compiled editor stylesheet.
+	 *
+	 * @return void
+	 */
 	public function add_editor_styles(): void {
 		add_editor_style( 'dist/styles/editor.css' );
 	}
 
+	/**
+	 * Emits preload hints for the brand fonts.
+	 *
+	 * The faces are declared inside the global-styles block, so the browser only
+	 * discovers their URLs after CSS parse and style resolution. Preloading
+	 * starts the fetch with the first bytes of HTML instead, removing a full
+	 * round-trip from first text render.
+	 *
+	 * These must stay in step with the woff2 entries in theme.json. A preload
+	 * whose URL does not exactly match the one the @font-face resolves to is
+	 * worse than none: the file is downloaded, never used, and competes for
+	 * bandwidth with the font that is.
+	 *
+	 * @return void
+	 */
 	public function preload_fonts(): void {
-		$uri = esc_url( get_template_directory_uri() );
-		echo '<link rel="preload" href="' . $uri . '/dist/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />' . "\n";
-		echo '<link rel="preload" href="' . $uri . '/dist/assets/fonts/Roboto-Condensed.ttf" as="font" type="font/ttf" crossorigin="anonymous" />' . "\n";
+		$uri = get_template_directory_uri();
+
+		// woff2 only. theme.json lists woff2 first in each src, so that is what
+		// every browser in the support matrix actually loads; the .ttf sits
+		// behind it purely as a fallback and must not be preloaded.
+		$fonts = array(
+			'/dist/assets/fonts/Anton-Regular.woff2',
+			'/dist/assets/fonts/Roboto-Condensed.woff2',
+		);
+
+		foreach ( $fonts as $font ) {
+			printf(
+				'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin="anonymous" />' . "\n",
+				esc_url( $uri . $font )
+			);
+		}
 	}
 }
