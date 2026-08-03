@@ -34,7 +34,7 @@
 			"text": false
 		}
 	},
-	"textdomain": "modal",
+	"textdomain": "laao",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

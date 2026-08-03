@@ -4,7 +4,7 @@
 			@apply transition-all;
 
 			&:hover {
-				@apply text-wp-laao-black scale-125;
+				@apply scale-125 text-wp-laao-black;
 			}
 		}
 	}

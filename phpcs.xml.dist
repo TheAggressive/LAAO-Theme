@@ -1,47 +1,98 @@
 <?xml version="1.0"?>
 <ruleset name="LAAO Theme">
-    <description>PHP coding standards for the LAAO WordPress theme.</description>
+	<description>PHP coding standards for the LAAO WordPress theme.</description>
 
-    <!-- What to scan -->
-    <file>inc</file>
-    <file>src/blocks</file>
-    <file>src/blocks-interactivity</file>
-    <file>functions.php</file>
+	<!-- What to scan -->
+	<file>inc</file>
+	<file>src/blocks</file>
+	<file>src/blocks-interactivity</file>
+	<file>tests/php</file>
+	<file>functions.php</file>
 
-    <!-- Exclude generated/vendor code -->
-    <exclude-pattern>vendor/*</exclude-pattern>
-    <exclude-pattern>node_modules/*</exclude-pattern>
-    <exclude-pattern>dist/*</exclude-pattern>
+	<!-- Exclude generated and third-party code -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/dist/*</exclude-pattern>
 
-    <!-- Base standard -->
-    <rule ref="WordPress">
-        <!-- Allow short array syntax -->
-        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
-    </rule>
+	<!-- Show sniff codes and progress; run in parallel -->
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+	<arg value="sp"/>
 
-    <!-- Require PHP 8.0+ -->
-    <config name="minimum_supported_wp_version" value="6.4"/>
-    <config name="testVersion" value="8.0-"/>
+	<!-- Base standard -->
+	<rule ref="WordPress">
+		<!-- Short array syntax is the house style. -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+	</rule>
 
-    <!-- ---------------------------------------------------------------
-         Test directory — standard PHPUnit conventions, not WP rules
-    --------------------------------------------------------------- -->
-    <rule ref="PSR1">
-        <include-pattern>tests/*</include-pattern>
-    </rule>
-    <rule ref="WordPress.Files.FileName">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.WP.EnqueuedResources">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.WP.GlobalVariablesOverride">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.DB.DirectDatabaseQuery">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
+	<!-- Security and correctness sniffs from the VIP standard, minus its
+	     platform-specific hosting restrictions which do not apply here. -->
+	<rule ref="WordPressVIPMinimum.Security"/>
+	<rule ref="WordPressVIPMinimum.Performance"/>
+
+	<!-- Forward/backward PHP compatibility. Matches composer platform (8.4). -->
+	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="8.4-"/>
+	<config name="minimum_supported_wp_version" value="6.4"/>
+
+	<!-- Text domain must match the theme slug everywhere. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="laao"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Prefix for globals, hooks and options owned by this theme. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="laao"/>
+				<element value="LAAO"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Block render templates are NOT global scope. register_block_type_from_metadata()
+	     wraps each render.php in a closure, so $attributes/$content/$block and every
+	     local the template declares are function-scoped. The global-variable sniffs
+	     read them as globals and produce pure noise. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>src/blocks/*/render.php</exclude-pattern>
+		<exclude-pattern>src/blocks-interactivity/*/render.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>src/blocks/*/render.php</exclude-pattern>
+		<exclude-pattern>src/blocks-interactivity/*/render.php</exclude-pattern>
+	</rule>
+
+	<!-- Test files follow PHPUnit conventions, not WordPress file/naming rules. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.EnqueuedResources">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.DirectDatabaseQuery">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.ClassComment">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<!-- Test doubles live alongside the test that uses them. -->
+	<rule ref="Generic.Files.OneObjectStructurePerFile">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
 </ruleset>

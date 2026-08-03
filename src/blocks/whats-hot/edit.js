@@ -41,11 +41,11 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={__("What's Hot Settings", 'whats-hot')}
+					title={__("What's Hot Settings", 'laao')}
 					initialOpen={true}
 				>
 					<RangeControl
-						label={__('Number of posts', 'whats-hot')}
+						label={__('Number of posts', 'laao')}
 						value={numberOfPosts}
 						onChange={(value) =>
 							setAttributes({ numberOfPosts: value })
@@ -56,7 +56,7 @@ export default function Edit({ attributes, setAttributes }) {
 						__next40pxDefaultSize
 					/>
 					<ToggleControl
-						label={__('Display Featured Image', 'whats-hot')}
+						label={__('Display Featured Image', 'laao')}
 						checked={displayFeaturedImage}
 						onChange={() =>
 							setAttributes({
@@ -66,7 +66,7 @@ export default function Edit({ attributes, setAttributes }) {
 						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
-						label={__('Display Caption', 'whats-hot')}
+						label={__('Display Caption', 'laao')}
 						checked={displayCaption}
 						onChange={() =>
 							setAttributes({ displayCaption: !displayCaption })

@@ -1,379 +1,31 @@
 /**
+ * Highlight and visual feedback for modal trigger blocks.
+ *
+ * Public surface for the editor: given a modal id and a selected trigger
+ * block, draw attention to that block in the canvas, and tear it down again.
+ *
+ * Split across ./highlights/: registry.js owns the shared collections,
+ * findBlockDomElement.js resolves a clientId to a node, cleanup.js undoes
+ * everything. The lookup and cleanup helpers are re-exported here so existing
+ * imports from './highlights' keep working.
+ */
+
+/**
  * WordPress dependencies
  */
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { select } from '@wordpress/data';
 
-/**
- * Highlight and visual feedback functionality for modal trigger blocks
- */
-
-// Track current highlights for cleanup
-// eslint-disable-next-line no-unused-vars
-let currentHighlight = null;
-let highlightTimer = null;
-
-// Track which elements have been highlighted so we can clean them up precisely
-const highlightedElements = new Set();
-
-// Debugging utility
 import { Debug } from './utils';
+import { cleanupAllHighlights, removeHighlight } from './highlights/cleanup';
+import { findBlockDomElement } from './highlights/findBlockDomElement';
+import {
+	highlightData,
+	highlightedElements,
+	styleElements,
+} from './highlights/registry';
 
-// Store global references to cleanup timers and listeners
-const highlightElements = new Map();
-const styleElements = new Map();
-const animationTimers = new Map();
-const eventListeners = new Map();
-
-// Initialize arrays for tracking elements
-const highlightData = {
-	highlights: [],
-	tooltips: [],
-	pulseElements: [],
-	timers: [],
-	eventListeners: [],
-	resizeObserver: null,
-};
-
-/**
- * Find a block's DOM element by clientId
- *
- * @param {string} clientId - ClientId to find DOM element for
- * @return {Element|null} - DOM element or null if not found
- */
-export const findBlockDomElement = (clientId) => {
-	if (!clientId) {
-		Debug.add('findBlockDomElement: No clientId provided', true);
-		return null;
-	}
-
-	// Try direct approach first - this will catch most cases
-	let blockElement = document.querySelector(`[data-block="${clientId}"]`);
-
-	// Verify element is in editor content area if found
-	if (blockElement) {
-		const isInEditor =
-			blockElement.closest('.editor-styles-wrapper') ||
-			blockElement.closest('.edit-site-visual-editor') ||
-			blockElement.closest('.editor-canvas') ||
-			blockElement.closest('.edit-post-visual-editor');
-
-		if (isInEditor) {
-			return blockElement;
-		}
-	}
-
-	// If not found directly or not in editor, try template parts and iframes
-	Debug.add(`Looking for block ${clientId} in iframes (template parts)`);
-
-	// Collect all possible editor iframes
-	const editorIframes = [
-		// Site editor canvas
-		...Array.from(
-			document.querySelectorAll('iframe[name="editor-canvas"]')
-		),
-		// Template part editor frames and template editor frames
-		...Array.from(
-			document.querySelectorAll('.edit-site-visual-editor iframe')
-		),
-		...Array.from(document.querySelectorAll('.edit-site-canvas iframe')),
-		// Block editor iframes
-		...Array.from(document.querySelectorAll('iframe.components-sandbox')),
-	];
-
-	// Try to find the block in each iframe
-	for (const iframe of editorIframes) {
-		try {
-			// Skip iframes without contentDocument access
-			if (!iframe.contentDocument) {
-				continue;
-			}
-
-			// Try finding in this iframe
-			const iframeDoc = iframe.contentDocument;
-			blockElement = iframeDoc.querySelector(
-				`[data-block="${clientId}"]`
-			);
-
-			// If found in this iframe, return it
-			if (blockElement) {
-				Debug.add(
-					`Found block ${clientId} in iframe: ${iframe.name || 'unnamed'}`
-				);
-				return blockElement;
-			}
-
-			// Try alternative selectors as fallbacks
-			const alternativeSelectors = [
-				`[id="${clientId}"]`,
-				`[data-id="${clientId}"]`,
-				`[data-block-id="${clientId}"]`,
-				`[id*="${clientId}"]`,
-				`[class*="${clientId}"]`,
-			];
-
-			for (const selector of alternativeSelectors) {
-				blockElement = iframeDoc.querySelector(selector);
-				if (blockElement) {
-					Debug.add(
-						`Found block ${clientId} using alternative selector: ${selector}`
-					);
-					return blockElement;
-				}
-			}
-		} catch (error) {
-			Debug.add(`Error accessing iframe: ${error.message}`, true);
-		}
-	}
-
-	// Final fallback - look for link or button with the clientId in a custom attribute
-	Debug.add(`Fallback: looking for link or button with ${clientId}`);
-
-	const allElements = document.querySelectorAll(
-		`[data-wp-block-linkage="${clientId}"], [data-block-linkage="${clientId}"]`
-	);
-
-	if (allElements.length > 0) {
-		Debug.add(`Found block using linkage attribute: ${clientId}`);
-		return allElements[0];
-	}
-
-	// Try accessing the WordPress data store to get block info
-	try {
-		const blockEditor = window.wp?.data?.select('core/block-editor');
-		if (blockEditor) {
-			const blockInfo = blockEditor.getBlock(clientId);
-			if (blockInfo) {
-				Debug.add(
-					`Block exists in store but can't find DOM element: ${clientId}`
-				);
-				Debug.add(
-					`Block type: ${blockInfo.name}, is valid: ${blockEditor.isBlockValid(clientId)}`
-				);
-			}
-		}
-	} catch (error) {
-		Debug.add(`Error accessing block store: ${error.message}`, true);
-	}
-
-	Debug.add(`Could not find DOM element for block: ${clientId}`, true);
-	return null;
-};
-
-/**
- * Utility function to remove all highlight styles and elements
- *
- * @param {string} modalId Optional modalId to target specific cleanup
- */
-export const cleanupAllHighlights = (modalId = null) => {
-	// Clear any timers
-	if (highlightTimer) {
-		clearInterval(highlightTimer);
-		highlightTimer = null;
-	}
-
-	// Clear all animation timers
-	animationTimers.forEach((timer) => clearInterval(timer));
-	animationTimers.clear();
-
-	// Remove all event listeners (module-level map)
-	eventListeners.forEach((listener) => {
-		document.removeEventListener('keydown', listener);
-	});
-	eventListeners.clear();
-
-	// Remove event listeners tracked in highlightData
-	highlightData.eventListeners.forEach(({ element, eventType, callback }) => {
-		element.removeEventListener(eventType, callback);
-	});
-	highlightData.eventListeners = [];
-
-	// Clear timers tracked in highlightData
-	highlightData.timers.forEach((timer) => clearTimeout(timer));
-	highlightData.timers = [];
-
-	// Disconnect resize observer
-	if (highlightData.resizeObserver) {
-		highlightData.resizeObserver.disconnect();
-		highlightData.resizeObserver = null;
-	}
-
-	// Remove appended DOM elements (highlights, tooltips, pulse rings)
-	[
-		...highlightData.highlights,
-		...highlightData.tooltips,
-		...highlightData.pulseElements,
-	].forEach((el) => el?.parentNode?.removeChild(el));
-	highlightData.highlights = [];
-	highlightData.tooltips = [];
-	highlightData.pulseElements = [];
-
-	// Step 1: Define all selectors we might need to clean up
-	const highlightClassSelectors = [
-		'.modal-highlight-target',
-		'.modal-trigger-highlight',
-		'.modal-trigger-highlight-discreet',
-		'.no-layout-shift',
-		'.modal-direct-highlight',
-		'.modal-highlight-arrow',
-		'.modal-highlight-label',
-	];
-
-	// Step 2: Find all elements with highlight styles applied via DOM classes or inline styles
-	// This is our first pass for cleanup
-	const findAndCleanElements = (rootElement = document) => {
-		// Create a combined selector for all highlight elements
-		const allHighlightSelector = highlightClassSelectors.join(',');
-
-		// Find elements with highlight classes
-		rootElement
-			.querySelectorAll(allHighlightSelector)
-			.forEach((element) => {
-				Debug.add(`Cleaning up highlight element: ${element.tagName}`);
-
-				// Remove highlight classes
-				highlightClassSelectors.forEach((selector) => {
-					// Remove the . from the selector
-					const className = selector.substring(1);
-					element.classList.remove(className);
-				});
-
-				// Reset all highlight-related styles
-				element.style.outline = '';
-				element.style.outlineOffset = '';
-				element.style.boxShadow = '';
-				element.style.animation = '';
-				element.style.zIndex = '';
-				element.style.border = '';
-				element.style.position = '';
-				element.style.background = '';
-
-				// Add to our tracked set for future reference
-				highlightedElements.add(element);
-			});
-
-		// For modal-trigger classes, handle specifically if a modalId is provided
-		// Removing modal-trigger classes should happen at the attribute level in edit.js
-		// This is just a safety cleanup for the DOM
-		if (modalId) {
-			rootElement
-				.querySelectorAll(`[class*="modal-trigger-${modalId}"]`)
-				.forEach((element) => {
-					if (
-						element.className &&
-						element.className.includes(`modal-trigger-${modalId}`)
-					) {
-						const newClasses = element.className
-							.split(' ')
-							.filter((cls) => cls !== `modal-trigger-${modalId}`)
-							.join(' ');
-						element.className = newClasses;
-
-						Debug.add(
-							`Removed specific modal-trigger-${modalId} class from element`
-						);
-					}
-				});
-		}
-	};
-
-	// Clean elements in main document
-	findAndCleanElements(document);
-
-	// Also clean elements in editor iframes
-	try {
-		// Check in site editor iframe
-		const siteEditorIframe = document.querySelector(
-			'iframe[name="editor-canvas"]'
-		);
-		if (siteEditorIframe?.contentDocument) {
-			findAndCleanElements(siteEditorIframe.contentDocument);
-		}
-
-		// Check other editor iframes too
-		document
-			.querySelectorAll(
-				'.edit-site-visual-editor iframe, .edit-site-canvas iframe'
-			)
-			.forEach((iframe) => {
-				if (iframe?.contentDocument) {
-					findAndCleanElements(iframe.contentDocument);
-				}
-			});
-	} catch (error) {
-		Debug.add(
-			`Error cleaning up highlights in iframe: ${error.message}`,
-			true
-		);
-	}
-
-	// Step 3: Clean up specific elements we've tracked in our maps
-	highlightElements.forEach((element) => {
-		if (element && document.contains(element)) {
-			// Reset all highlight-related styles
-			element.style.outline = '';
-			element.style.outlineOffset = '';
-			element.style.boxShadow = '';
-			element.style.animation = '';
-			element.style.zIndex = '';
-			element.style.border = '';
-			element.style.position = '';
-			element.style.background = '';
-
-			// Remove all highlight classes
-			highlightClassSelectors.forEach((selector) => {
-				// Remove the . from the selector
-				const className = selector.substring(1);
-				element.classList.remove(className);
-			});
-		}
-	});
-
-	// Clear our tracking maps
-	highlightElements.clear();
-	styleElements.clear();
-
-	// Remove any style tags we've added
-	document
-		.querySelectorAll('style[id^="modal-direct-highlight-style-"]')
-		.forEach((styleTag) => {
-			styleTag.parentNode?.removeChild(styleTag);
-		});
-
-	// Remove any debug elements that might have been added
-	document.querySelectorAll('.modal-highlight-debug').forEach((el) => {
-		el.parentNode?.removeChild(el);
-	});
-
-	// Final pass: Look for elements that still have highlight styles by computed style
-	// This is a more aggressive approach to ensure nothing is missed
-	try {
-		const allElements = document.querySelectorAll('*');
-		for (const element of allElements) {
-			const computedStyle = window.getComputedStyle(element);
-			// Check if this element has blue outline or box-shadow that might be from our highlights
-			if (
-				computedStyle.outline?.includes('rgb(0, 124, 186)') || // Blue outline
-				computedStyle.boxShadow?.includes('rgb(0, 124, 186)') // Blue shadow
-			) {
-				Debug.add(
-					`Found element with highlight styles via computed style`
-				);
-				element.style.outline = '';
-				element.style.boxShadow = '';
-				element.style.animation = '';
-			}
-		}
-	} catch (error) {
-		Debug.add(`Error in final cleanup pass: ${error.message}`, true);
-	}
-
-	// Reset the current highlight
-	currentHighlight = null;
-};
-
-// For convenience, create an alias for cleanupAllHighlights
-export const removeHighlight = cleanupAllHighlights;
+export { cleanupAllHighlights, removeHighlight, findBlockDomElement };
 
 /**
  * Global function to add animation to a trigger element
@@ -389,8 +41,7 @@ export const highlightModalTrigger = (
 	triggerElement,
 	modalId,
 	selectedTriggerBlockId,
-	// eslint-disable-next-line no-unused-vars
-	options = {}
+	_options = {}
 ) => {
 	// Remove any existing highlight first
 	cleanupAllHighlights(modalId);
@@ -419,8 +70,9 @@ export const highlightModalTrigger = (
 				blockElement.classList.add(`modal-trigger-${modalId}`);
 			}
 
-			// First try to find a specific trigger inside the block (button, link, etc.)
-			let targetElement = null;
+			// First try to find a specific trigger inside the block (button, link, etc.).
+			// No initialiser: the if/else below assigns on every path.
+			let targetElement;
 
 			// Look for a button element or link inside the block
 			const buttonOrLink = blockElement.querySelector(
@@ -443,7 +95,6 @@ export const highlightModalTrigger = (
 
 			if (highlightInfo) {
 				// Store for cleanup
-				currentHighlight = highlightInfo;
 
 				// Track which elements were highlighted in this session
 				if (targetElement) {
@@ -469,7 +120,6 @@ export const highlightModalTrigger = (
 
 		if (highlightInfo) {
 			// Store for cleanup
-			currentHighlight = highlightInfo;
 
 			// Track the element
 			highlightedElements.add(triggerElement);

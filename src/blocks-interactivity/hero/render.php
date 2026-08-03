@@ -1,16 +1,24 @@
 <?php
 /**
- * PHP file to use when rendering the block type on the server to show on the front end.
+ * Server render for the Hero block.
  *
- * The following variables are exposed to the file:
+ * Exposed to this file by WordPress:
  *     $attributes (array): The block attributes.
  *     $content (string): The block default content.
  *     $block (WP_Block): The block instance.
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @package LAAO
  */
 
 if ( ! function_exists( 'laao_hero_context' ) ) {
+	/**
+	 * Builds the Interactivity API context for the hero carousel.
+	 *
+	 * @param array<int, array<string, mixed>> $slides Slide data.
+	 * @return array<string, mixed> Interactivity context.
+	 */
 	function laao_hero_context( $slides ) {
 		return array(
 			'totalSlides' => count( $slides ),
@@ -33,10 +41,18 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 
 	while ( $query->have_posts() ) {
 		$query->the_post();
-		// i need to save the url and the content
+
+		$raw_content = (string) get_the_content();
+		$content     = null;
+
+		if ( '' !== trim( $raw_content ) ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- 'the_content' is a core hook; applying it is the documented way to render post content.
+			$content = str_replace( array( '<p>', '</p>' ), '', (string) apply_filters( 'the_content', $raw_content ) );
+		}
+
 		$slides[] = array(
 			'imageUrl' => has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'full' ) : null,
-			'content'  => ! empty( get_the_content() ) ? str_replace( array( '<p>', '</p>' ), '', apply_filters( 'the_content', get_the_content() ) ) : null,
+			'content'  => $content,
 		);
 	}
 

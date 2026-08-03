@@ -1,30 +1,32 @@
 <?php
 /**
- * PHP file to use when rendering the block type on the server to show on the front end.
+ * Server render for the Animate On Scroll block.
  *
- * The following variables are exposed to the file:
+ * Exposed to this file by WordPress:
  *     $attributes (array): The block attributes.
  *     $content (string): The block default content.
  *     $block (WP_Block): The block instance.
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @package LAAO
  */
 
-// Build animation class that combines animation type and direction
+// Build animation class that combines animation type and direction.
 $default_classes = array( 'wp-block-laao-animate-on-scroll' );
 
-// Add the base animation class
+// Add the base animation class.
 if ( ! empty( $attributes['animation'] ) ) {
 	$default_classes[] = esc_attr( $attributes['animation'] );
 }
 
-// Add direction for animations that support it
+// Add direction for animations that support it.
 if ( ! empty( $attributes['direction'] ) &&
 	in_array( $attributes['animation'], array( 'slide', 'flip', 'rotate', 'zoom' ), true ) ) {
 	$default_classes[] = esc_attr( $attributes['direction'] );
 }
 
-// Join classes with spaces
+// Join classes with spaces.
 $combined_classes = implode( ' ', array_filter( $default_classes ) );
 
 $wrapper_attributes = get_block_wrapper_attributes(

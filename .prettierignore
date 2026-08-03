@@ -1,0 +1,31 @@
+# Build output and dependencies
+dist/
+node_modules/
+vendor/
+coverage/
+tests/e2e/.results/
+tests/e2e/.report/
+
+# Lockfiles are tool-owned
+pnpm-lock.yaml
+composer.lock
+
+# Generated
+CHANGELOG.md
+*.min.js
+*.min.css
+
+# PHP is formatted by phpcbf against the WordPress standard, not Prettier
+*.php
+
+# Block templates and patterns are authored in the site editor; reformatting
+# them produces diffs the editor immediately undoes
+templates/
+parts/
+patterns/
+
+# Theme metadata that WordPress parses positionally
+style.css
+
+# Local agent/editor state, not project source
+.claude/

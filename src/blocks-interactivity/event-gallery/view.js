@@ -498,9 +498,7 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 			);
 
 			// Ratio of the biggest image stored in the database.
-			let imgRatio = imgMaxWidth / imgMaxHeight;
-			let containerMaxWidth = imgMaxWidth;
-			let containerMaxHeight = imgMaxHeight;
+			const imgRatio = imgMaxWidth / imgMaxHeight;
 			let containerWidth = imgMaxWidth;
 			let containerHeight = imgMaxHeight;
 
@@ -534,16 +532,6 @@ const { state, actions, callbacks } = store('laao/event-gallery', {
 				}
 				containerWidth = imgMaxWidth;
 				containerHeight = imgMaxHeight;
-				imgRatio = imgMaxWidth / imgMaxHeight;
-
-				// Calculates the max size of the container.
-				if (displayRatio > imgRatio) {
-					containerMaxWidth = imgMaxWidth;
-					containerMaxHeight = containerMaxWidth / displayRatio;
-				} else {
-					containerMaxHeight = imgMaxHeight;
-					containerMaxWidth = containerMaxHeight * displayRatio;
-				}
 			}
 
 			// If the image has been pixelated on purpose, it keeps that size.

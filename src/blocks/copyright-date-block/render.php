@@ -1,11 +1,22 @@
 <?php
 /**
+ * Server render for the Copyright Date block.
+ *
+ * Renders the footer copyright line, optionally as a year range.
+ *
+ * Exposed to this file by WordPress:
+ *     $attributes (array): The block attributes.
+ *     $content (string): The block default content.
+ *     $block (WP_Block): The block instance.
+ *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @package LAAO
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-}   // Exit if accessed directly
+} // Exit if accessed directly.
 
 ['showStartingYear' => $show_starting_year, 'startingYear' => $starting_year, 'companyName' => $company_name ] = $attributes;
 $current_year = gmdate( 'Y' );

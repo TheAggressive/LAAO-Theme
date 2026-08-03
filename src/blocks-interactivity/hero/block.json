@@ -5,7 +5,7 @@
 	"version": "1.0.8",
 	"title": "Hero",
 	"category": "widgets",
-	"textdomain": "hero",
+	"textdomain": "laao",
 	"icon": "slides",
 	"description": "The hero block for LAAO that features Ken Burns-style image slideshow.",
 	"example": {},

@@ -4,13 +4,13 @@ Official WordPress block theme for [LAArtsOnline.com](https://laartsonline.com),
 
 ## Requirements
 
-| Dependency | Version |
-|---|---|
-| WordPress | 6.8+ |
-| PHP | 8.0+ |
-| Node.js | 20+ (LTS recommended) |
-| pnpm | 9+ |
-| Composer | 2+ |
+| Dependency | Version               |
+| ---------- | --------------------- |
+| WordPress  | 6.8+                  |
+| PHP        | 8.0+                  |
+| Node.js    | 20+ (LTS recommended) |
+| pnpm       | 9+                    |
+| Composer   | 2+                    |
 
 ## Getting Started
 
@@ -69,26 +69,26 @@ tests/php/Unit/               PHPUnit unit tests
 
 ### Standard Blocks (`src/blocks/`)
 
-| Block | Description |
-|---|---|
-| `article-credits` | Byline / credits for articles |
-| `block-binding-image` | Image with block binding support |
-| `copyright-date-block` | Dynamic copyright year |
-| `highlight-posts` | Posts within editorial highlight date ranges |
-| `laao-post-featured-image` | Enhanced featured image |
-| `logo` | Site logo |
-| `query-loop-ad-inserter` | Injects ads at a configured interval in query loops |
-| `whats-hot` | Trending / featured posts |
+| Block                      | Description                                         |
+| -------------------------- | --------------------------------------------------- |
+| `article-credits`          | Byline / credits for articles                       |
+| `block-binding-image`      | Image with block binding support                    |
+| `copyright-date-block`     | Dynamic copyright year                              |
+| `highlight-posts`          | Posts within editorial highlight date ranges        |
+| `laao-post-featured-image` | Enhanced featured image                             |
+| `logo`                     | Site logo                                           |
+| `query-loop-ad-inserter`   | Injects ads at a configured interval in query loops |
+| `whats-hot`                | Trending / featured posts                           |
 
 ### Interactivity API Blocks (`src/blocks-interactivity/`)
 
-| Block | Description |
-|---|---|
+| Block               | Description                                                                       |
+| ------------------- | --------------------------------------------------------------------------------- |
 | `animate-on-scroll` | GSAP-powered scroll animations with configurable direction, duration, and stagger |
-| `event-gallery` | Interactive event image gallery |
-| `hero` | Hero section with interactive states |
-| `mobile-nav` | Mobile navigation with open/close state |
-| `modal` | Accessible modal dialog |
+| `event-gallery`     | Interactive event image gallery                                                   |
+| `hero`              | Hero section with interactive states                                              |
+| `mobile-nav`        | Mobile navigation with open/close state                                           |
+| `modal`             | Accessible modal dialog                                                           |
 
 ## Scripts
 
@@ -135,19 +135,19 @@ Commit messages must follow the [Conventional Commits](https://www.conventionalc
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| CMS | WordPress 6.8 (Full Site Editing) |
-| Interactivity | WordPress Interactivity API |
-| Animations | GSAP |
-| Smooth scroll | Lenis |
-| CSS | PostCSS + Tailwind CSS |
+| Layer           | Technology                                                  |
+| --------------- | ----------------------------------------------------------- |
+| CMS             | WordPress 6.8 (Full Site Editing)                           |
+| Interactivity   | WordPress Interactivity API                                 |
+| Animations      | GSAP                                                        |
+| Smooth scroll   | Lenis                                                       |
+| CSS             | PostCSS + Tailwind CSS                                      |
 | PostCSS plugins | nesting, mixins, custom-properties, simple-vars, preset-env |
-| JS bundler | @wordpress/scripts (webpack) |
-| PHP tests | PHPUnit 13 + Brain Monkey |
-| JS tests | Jest (via wp-scripts) |
-| Git hooks | Husky + commitlint |
-| Releases | semantic-release |
+| JS bundler      | @wordpress/scripts (webpack)                                |
+| PHP tests       | PHPUnit 13 + Brain Monkey                                   |
+| JS tests        | Jest (via wp-scripts)                                       |
+| Git hooks       | Husky + commitlint                                          |
+| Releases        | semantic-release                                            |
 
 ## License
 

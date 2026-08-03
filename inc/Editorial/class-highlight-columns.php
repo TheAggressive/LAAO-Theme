@@ -1,4 +1,12 @@
 <?php
+/**
+ * Highlight Columns
+ *
+ * Adds a "Highlight" column to the editorial post list tables, showing each
+ * post's highlight window and warning when too many windows overlap.
+ *
+ * @package LAAO
+ */
 
 namespace LAAO\Editorial;
 
@@ -6,24 +14,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Admin list-table column for highlight scheduling.
+ */
 class Highlight_Columns {
 
+	/**
+	 * Post types that receive the column.
+	 *
+	 * @var string[]
+	 */
 	private array $editorial_post_types;
 
 	/**
 	 * Request-level cache: post_id => overlap_count for all scheduled posts.
-	 * Populated on first use via a single batch query.
+	 *
+	 * Populated on first use via a single batch query, then reused for every
+	 * row in the table.
+	 *
+	 * @var array<int, int>|null
 	 */
 	private static ?array $overlap_cache = null;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param string[] $editorial_post_types Post types that receive the column.
+	 */
 	public function __construct( array $editorial_post_types ) {
 		$this->editorial_post_types = $editorial_post_types;
 	}
 
+	/**
+	 * Registers hooks.
+	 *
+	 * @return void
+	 */
 	public function init(): void {
 		add_action( 'init', array( $this, 'register' ) );
 	}
 
+	/**
+	 * Hooks the column into every editorial post type's list table.
+	 *
+	 * @return void
+	 */
 	public function register(): void {
 		foreach ( $this->editorial_post_types as $post_type ) {
 			add_filter( "manage_{$post_type}_posts_columns", array( $this, 'add_column' ) );
@@ -31,11 +66,24 @@ class Highlight_Columns {
 		}
 	}
 
+	/**
+	 * Appends the Highlight column to a list table.
+	 *
+	 * @param array<string, string> $columns Existing columns.
+	 * @return array<string, string> Columns with Highlight appended.
+	 */
 	public function add_column( array $columns ): array {
 		$columns['highlight_schedule'] = __( 'Highlight', 'laao' );
 		return $columns;
 	}
 
+	/**
+	 * Renders one Highlight cell.
+	 *
+	 * @param string $column  Column being rendered.
+	 * @param int    $post_id Post for this row.
+	 * @return void
+	 */
 	public function render_column( string $column, int $post_id ): void {
 		if ( 'highlight_schedule' !== $column ) {
 			return;
@@ -79,7 +127,7 @@ class Highlight_Columns {
 			$overlap_count = $overlaps[ $post_id ] ?? 0;
 
 			if ( $overlap_count >= 4 ) {
-				echo '<br><span style="display:inline-block;padding:2px 6px;background:#fcf0f1;color:#c02b0a;border:1px solid #f5c0c0;border-radius:3px;font-size:11px;margin-top:4px;">&#9888; ' . esc_html( $overlap_count ) . ' overlapping posts</span>';
+				echo '<br><span style="display:inline-block;padding:2px 6px;background:#fcf0f1;color:#c02b0a;border:1px solid #f5c0c0;border-radius:3px;font-size:11px;margin-top:4px;">&#9888; ' . esc_html( (string) $overlap_count ) . ' overlapping posts</span>';
 			}
 		}
 	}
@@ -100,6 +148,12 @@ class Highlight_Columns {
 		// Single query: for each post A with a highlight schedule, count how many
 		// OTHER published posts B have a date range that overlaps with A.
 		// Overlap condition: B_start <= A_end AND B_end >= A_start
+		//
+		// No core API expresses this self-join. Results are held in a per-request
+		// static above rather than a persistent cache on purpose: this drives an
+		// admin list-table column, and editors expect the count to reflect a date
+		// they just changed, not a cached value from a previous request.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- See above.
 		$rows = $wpdb->get_results(
 			"SELECT a.post_id, COUNT(DISTINCT b.post_id) AS overlap_count
 			FROM {$wpdb->postmeta} a
