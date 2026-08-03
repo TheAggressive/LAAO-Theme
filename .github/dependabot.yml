@@ -1,0 +1,63 @@
+version: 2
+
+updates:
+    # JavaScript. Grouped so a WordPress package bump arrives as one reviewable
+    # PR rather than thirty — @wordpress/* releases move in lockstep, and
+    # merging them individually produces incompatible intermediate states.
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          interval: weekly
+          day: monday
+      open-pull-requests-limit: 5
+      groups:
+          wordpress:
+              patterns:
+                  - '@wordpress/*'
+          eslint:
+              patterns:
+                  - 'eslint'
+                  - 'eslint-*'
+                  - '@eslint/*'
+                  - '@typescript-eslint/*'
+          testing:
+              patterns:
+                  - '@playwright/*'
+                  - 'jest'
+                  - 'jest-*'
+                  - '@types/jest'
+          dev-minor-patch:
+              dependency-type: development
+              update-types:
+                  - minor
+                  - patch
+      commit-message:
+          prefix: 'chore'
+          include: scope
+
+    - package-ecosystem: composer
+      directory: '/'
+      schedule:
+          interval: weekly
+          day: monday
+      open-pull-requests-limit: 5
+      groups:
+          php-quality:
+              patterns:
+                  - 'phpstan/*'
+                  - 'szepeviktor/*'
+                  - 'squizlabs/*'
+                  - 'wp-coding-standards/*'
+                  - 'automattic/vipwpcs'
+                  - 'phpcompatibility/*'
+                  - 'dealerdirect/*'
+      commit-message:
+          prefix: 'chore'
+          include: scope
+
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          interval: monthly
+      commit-message:
+          prefix: 'ci'

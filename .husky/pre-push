@@ -1,0 +1,4 @@
+# The real gate. Everything CI checks except E2E and packaging, which need a
+# running wp-env and are therefore CI-only. Before cutting a release, run the
+# full rehearsal yourself: pnpm ci:verify
+pnpm qa

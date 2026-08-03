@@ -1,4 +1,4 @@
-pnpm lint:js
-pnpm lint:css
-pnpm test:php
-pnpm test:js
+# Fast per-commit autofix only. The full gate (tests, static analysis, build)
+# runs on pre-push and in CI — see .husky/pre-push.
+pnpm format
+pnpm lint:js:fix

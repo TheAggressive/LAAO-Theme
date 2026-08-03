@@ -5,3 +5,19 @@ npm-debug.log
 yarn-error.log
 .vscode/
 .phpunit.result.cache
+
+# Release artifacts — built by bin/release/package.sh, attached to the GitHub
+# release, never committed.
+/laao-*.zip
+/laao-*.zip.sha256
+
+# Playwright
+/tests/e2e/.results/
+/tests/e2e/.report/
+/playwright-report/
+/test-results/
+
+# Local environment
+/.wp-env-backups/
+/coverage/
+/phpcs-report.txt

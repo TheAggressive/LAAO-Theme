@@ -1,0 +1,48 @@
+name: CodeQL
+
+# Static security analysis for the theme's JavaScript. CodeQL has no PHP
+# analyser; PHP security is covered by the WordPressVIPMinimum.Security sniffs
+# in the PHP lane of the main pipeline.
+
+on:
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+    schedule:
+        # Weekly, so newly published advisories are applied to unchanged code.
+        - cron: '27 4 * * 1'
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    analyze:
+        name: Analyze JavaScript
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        permissions:
+            security-events: write
+            actions: read
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: javascript-typescript
+                  queries: security-and-quality
+
+            - name: Autobuild
+              uses: github/codeql-action/autobuild@v3
+
+            - name: Perform CodeQL analysis
+              uses: github/codeql-action/analyze@v3
+              with:
+                  category: '/language:javascript-typescript'

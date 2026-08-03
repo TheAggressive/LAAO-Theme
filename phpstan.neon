@@ -1,0 +1,40 @@
+# PHPStan configuration
+#
+# Analyses the theme's PHP sources at the strictest practical level. The theme
+# ships without vendor/, so the runtime autoloader is LAAO\Autoloader — the
+# bootstrap file below mirrors the constants WordPress would have defined by
+# the time any of this code runs.
+
+parameters:
+	level: 8
+	paths:
+		- inc
+		- functions.php
+
+	bootstrapFiles:
+		- tests/php/phpstan-bootstrap.php
+
+	scanFiles:
+		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+
+	# Treat PHP code as if it always runs on PHP 8.4+ (matches composer platform).
+	phpVersion: 80400
+
+	# WordPress stubs declare optimistic types: a docblock may say a filter
+	# returns array<int,int>, but any plugin can make it return anything at
+	# runtime. PHPStan 2 trusts those docblocks as certain, which reports every
+	# defensive is_string()/is_array() guard as redundant — and acting on that
+	# would delete protection real runtime paths depend on.
+	treatPhpDocTypesAsCertain: false
+
+	# No ignoreErrors and no baseline. Every array in inc/ carries a value type;
+	# keep it that way rather than reintroducing missingType.iterableValue.
+
+	# Universal object crates — allow dynamic properties on these classes.
+	universalObjectCratesClasses:
+		- WP_Post
+		- WP_Term
+		- WP_User
+		- WP_Comment
+		- WP_Query
+		- stdClass

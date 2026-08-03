@@ -1,0 +1,36 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		// "bundler" rather than the legacy node10 resolution: webpack resolves
+		// these imports, so package.json "exports" maps and extensionless
+		// specifiers should be honoured.
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+
+		"strict": true,
+		"noImplicitOverride": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"forceConsistentCasingInFileNames": true,
+
+		// The existing 67 source files are untyped JavaScript. allowJs lets them
+		// resolve as imports; checkJs stays off so this gate is meaningful from
+		// the first .ts file rather than drowning in pre-existing noise.
+		// Migrating a file to .ts opts it into full strict checking.
+		"allowJs": true,
+		"checkJs": false,
+
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"skipLibCheck": true,
+		"noEmit": true,
+
+		"types": ["jest", "node"]
+	},
+	"include": ["src/**/*", "types/**/*"],
+	"exclude": ["node_modules", "vendor", "dist"]
+}
