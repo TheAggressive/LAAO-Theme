@@ -39,7 +39,7 @@
 			"default": true
 		}
 	},
-	"textdomain": "whats-hot",
+	"textdomain": "laao",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
