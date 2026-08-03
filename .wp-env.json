@@ -1,0 +1,16 @@
+{
+	"core": "https://wordpress.org/wordpress-7.0.2.zip",
+	"phpVersion": "8.4",
+	"themes": ["."],
+	"port": 9930,
+	"phpmyadminPort": 9932,
+	"testsEnvironment": false,
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": false,
+		"SCRIPT_DEBUG": true,
+		"WP_MEMORY_LIMIT": "256M",
+		"WP_MAX_MEMORY_LIMIT": "512M"
+	}
+}
