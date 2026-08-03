@@ -1,4 +1,9 @@
 <?php
+/**
+ * Unit tests for LAAO\Editorial\Highlight_Columns.
+ *
+ * @package LAAO
+ */
 
 namespace LAAO\Tests\Unit\Editorial;
 
@@ -11,11 +16,34 @@ use PHPUnit\Framework\TestCase;
  * Minimal wpdb stand-in with a configurable get_results() return value.
  */
 class FakeWpdb {
-	public string $postmeta = 'wp_postmeta';
-	public string $posts    = 'wp_posts';
 
+	/**
+	 * Postmeta table name.
+	 *
+	 * @var string
+	 */
+	public string $postmeta = 'wp_postmeta';
+
+	/**
+	 * Posts table name.
+	 *
+	 * @var string
+	 */
+	public string $posts = 'wp_posts';
+
+	/**
+	 * Rows get_results() returns.
+	 *
+	 * @var array<int, array<string, mixed>>
+	 */
 	private array $rows;
-	public int    $call_count = 0;
+
+	/**
+	 * How many times get_results() has been called.
+	 *
+	 * @var int
+	 */
+	public int $call_count = 0;
 
 	public function __construct( array $rows = array() ) {
 		$this->rows = $rows;
@@ -29,6 +57,11 @@ class FakeWpdb {
 
 class HighlightColumnsTest extends TestCase {
 
+	/**
+	 * Subject under test.
+	 *
+	 * @var Highlight_Columns
+	 */
 	private Highlight_Columns $highlight_columns;
 
 	protected function setUp(): void {
@@ -55,13 +88,21 @@ class HighlightColumnsTest extends TestCase {
 	// -------------------------------------------------------------------------
 
 	public function test_add_column_appends_highlight_column(): void {
-		$result = $this->highlight_columns->add_column( array( 'title' => 'Title', 'date' => 'Date' ) );
+		$result = $this->highlight_columns->add_column(
+			array(
+				'title' => 'Title',
+				'date'  => 'Date',
+			)
+		);
 
 		$this->assertArrayHasKey( 'highlight_schedule', $result );
 	}
 
 	public function test_add_column_preserves_existing_columns(): void {
-		$columns = array( 'title' => 'Title', 'date' => 'Date' );
+		$columns = array(
+			'title' => 'Title',
+			'date'  => 'Date',
+		);
 		$result  = $this->highlight_columns->add_column( $columns );
 
 		$this->assertArrayHasKey( 'title', $result );
@@ -175,7 +216,14 @@ class HighlightColumnsTest extends TestCase {
 
 		$this->stub_post_meta( $start, $end );
 		Functions\when( 'wp_timezone' )->justReturn( $tz );
-		$GLOBALS['wpdb'] = new FakeWpdb( array( array( 'post_id' => '1', 'overlap_count' => '5' ) ) );
+		$GLOBALS['wpdb'] = new FakeWpdb(
+			array(
+				array(
+					'post_id'       => '1',
+					'overlap_count' => '5',
+				),
+			)
+		);
 
 		ob_start();
 		$this->highlight_columns->render_column( 'highlight_schedule', 1 );
@@ -193,7 +241,14 @@ class HighlightColumnsTest extends TestCase {
 
 		$this->stub_post_meta( $start, $end );
 		Functions\when( 'wp_timezone' )->justReturn( $tz );
-		$GLOBALS['wpdb'] = new FakeWpdb( array( array( 'post_id' => '1', 'overlap_count' => '3' ) ) );
+		$GLOBALS['wpdb'] = new FakeWpdb(
+			array(
+				array(
+					'post_id'       => '1',
+					'overlap_count' => '3',
+				),
+			)
+		);
 
 		ob_start();
 		$this->highlight_columns->render_column( 'highlight_schedule', 1 );
@@ -207,15 +262,27 @@ class HighlightColumnsTest extends TestCase {
 	// -------------------------------------------------------------------------
 
 	public function test_get_overlap_counts_maps_rows_to_post_id_keys(): void {
-		$rows = array(
-			array( 'post_id' => '10', 'overlap_count' => '3' ),
-			array( 'post_id' => '20', 'overlap_count' => '7' ),
+		$rows            = array(
+			array(
+				'post_id'       => '10',
+				'overlap_count' => '3',
+			),
+			array(
+				'post_id'       => '20',
+				'overlap_count' => '7',
+			),
 		);
 		$GLOBALS['wpdb'] = new FakeWpdb( $rows );
 
 		$result = $this->call_get_overlap_counts();
 
-		$this->assertSame( array( 10 => 3, 20 => 7 ), $result );
+		$this->assertSame(
+			array(
+				10 => 3,
+				20 => 7,
+			),
+			$result
+		);
 	}
 
 	public function test_get_overlap_counts_returns_empty_array_when_no_overlaps(): void {

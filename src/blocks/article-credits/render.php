@@ -1,11 +1,23 @@
 <?php
 /**
+ * Server render for the Article Credits block.
+ *
+ * Builds the credits list (byline, photo credit, location, hair/make-up)
+ * from post meta, loading every key in one query.
+ *
+ * Exposed to this file by WordPress:
+ *     $attributes (array): The block attributes.
+ *     $content (string): The block default content.
+ *     $block (WP_Block): The block instance.
+ *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @package LAAO
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-}   // Exit if accessed directly
+} // Exit if accessed directly.
 
 // Load all meta for this post in a single DB query.
 $post_id = get_the_ID();

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Unit tests for LAAO\Assets\Scripts.
+ *
+ * @package LAAO
+ */
 
 namespace LAAO\Tests\Unit\Assets;
 
@@ -9,6 +14,11 @@ use PHPUnit\Framework\TestCase;
 
 class ScriptsTest extends TestCase {
 
+	/**
+	 * Subject under test.
+	 *
+	 * @var Scripts
+	 */
 	private Scripts $scripts;
 
 	protected function setUp(): void {

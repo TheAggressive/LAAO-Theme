@@ -1,4 +1,11 @@
 <?php
+/**
+ * Post Types
+ *
+ * Registers the theme's custom post types.
+ *
+ * @package LAAO
+ */
 
 namespace LAAO\Core;
 
@@ -6,12 +13,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Registers the editorial and utility post types the theme provides.
+ */
 class Post_Types {
 
+	/**
+	 * Registers hooks.
+	 *
+	 * @return void
+	 */
 	public function init(): void {
 		add_action( 'init', array( $this, 'register' ) );
 	}
 
+	/**
+	 * Registers every custom post type.
+	 *
+	 * @return void
+	 */
 	public function register(): void {
 		register_post_type(
 			'announcements',

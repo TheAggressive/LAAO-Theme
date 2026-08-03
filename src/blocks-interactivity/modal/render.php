@@ -1,16 +1,18 @@
 <?php
 /**
- * PHP file to use when rendering the block type on the server to show on the front end.
+ * Server render for the Modal block.
  *
- * The following variables are exposed to the file:
+ * Exposed to this file by WordPress:
  *     $attributes (array): The block attributes.
  *     $content (string): The block default content.
  *     $block (WP_Block): The block instance.
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ *
+ * @package LAAO
  */
 
-// Parse attributes with defaults
+// Parse attributes with defaults.
 $attributes = wp_parse_args(
 	$attributes,
 	array(
@@ -23,12 +25,12 @@ $attributes = wp_parse_args(
 	)
 );
 
-// Generate a unique ID for modal elements if not provided
+// Generate a unique ID for modal elements if not provided.
 $unique_id = ! empty( $attributes['modalId'] )
 	? esc_attr( $attributes['modalId'] )
 	: 'modal-' . wp_unique_id();
 
-// Get position and other settings
+// Get position and other settings.
 $position           = esc_attr( $attributes['position'] );
 $position_class     = 'modal-position-' . $position;
 $open_on_load       = $attributes['openOnLoad'] ? true : false;
@@ -39,7 +41,7 @@ $enter_animation    = esc_attr( $attributes['enterAnimation'] );
 $exit_animation     = esc_attr( $attributes['exitAnimation'] );
 $animation_duration = esc_attr( $attributes['animationDuration'] );
 
-// Initialize the interactive state
+// Initialize the interactive state.
 wp_interactivity_state(
 	'laao/modal',
 	array(
@@ -55,13 +57,21 @@ wp_interactivity_state(
 	)
 );
 
-if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_interactivity' ) ) {
+if ( ! empty( $trigger_block_id ) && ! function_exists( 'laao_add_modal_trigger_interactivity' ) ) {
 
-	function add_modal_trigger_interactivity() {
-		// Get the current page HTML
+	/**
+	 * Attaches modal-open directives to elements marked as triggers.
+	 *
+	 * Runs over the buffered page on shutdown because a trigger may be rendered
+	 * by any block anywhere on the page, long after this modal was rendered.
+	 *
+	 * @return void
+	 */
+	function laao_add_modal_trigger_interactivity() {
+		// Get the current page HTML.
 		$content = ob_get_contents();
 
-		// Quick check if we even need to process
+		// Quick check if we even need to process.
 		if ( strpos( $content, 'modal-trigger-modal-' ) === false ) {
 			return;
 		}
@@ -69,12 +79,12 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		$html     = new WP_HTML_Tag_Processor( $content );
 		$modified = false;
 
-		// Find elements with modal trigger classes
+		// Find elements with modal trigger classes.
 		while ( $html->next_tag() ) {
 			$class = $html->get_attribute( 'class' );
 			if ( $class && strpos( $class, 'modal-trigger-modal-' ) !== false && preg_match( '/modal-trigger-modal-([a-zA-Z0-9-]+)/', $class, $matches ) ) {
 
-				// Add the interactive attributes
+				// Add the interactive attributes.
 				$html->set_attribute( 'data-wp-interactive', 'laao/modal' );
 				$html->set_attribute(
 					'data-wp-context',
@@ -86,13 +96,13 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		}
 
 		if ( $modified ) {
-			// Clear the buffer and output the modified HTML
+			// Clear the buffer and output the modified HTML.
 			ob_clean();
 			echo $html->get_updated_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
-	// Start output buffering at the beginning of the page
+	// Start output buffering at the beginning of the page.
 	add_action(
 		'template_redirect',
 		function () {
@@ -100,8 +110,8 @@ if ( ! empty( $trigger_block_id ) && ! function_exists( 'add_modal_trigger_inter
 		}
 	);
 
-	// Process the HTML just before it's sent to the browser
-	add_action( 'shutdown', 'add_modal_trigger_interactivity', 0 );
+	// Process the HTML just before it's sent to the browser.
+	add_action( 'shutdown', 'laao_add_modal_trigger_interactivity', 0 );
 }
 ?>
 
