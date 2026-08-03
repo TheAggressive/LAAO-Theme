@@ -67,8 +67,9 @@ export function useUpdateBlockTriggerClass() {
 						});
 					}
 				}
-			} catch (error) {
-				// Silently fail
+			} catch {
+				// Silently fail: a block may have been removed between the
+				// lookup and the update, which is not an error worth surfacing.
 			}
 		},
 		// No external dependencies for this function

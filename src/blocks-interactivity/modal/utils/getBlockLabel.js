@@ -10,8 +10,9 @@ export const getBlockLabel = (block) => {
 		return '';
 	}
 
-	// Try to find a meaningful label based on block type
-	let label = '';
+	// Try to find a meaningful label based on block type.
+	// No initialiser: every branch below, including the final else, assigns.
+	let label;
 
 	if (block.name === 'core/button') {
 		// For buttons, use the text content

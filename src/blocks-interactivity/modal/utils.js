@@ -1,3 +1,9 @@
+/* eslint-disable no-console --
+ * The Debug class below IS the modal's console logger. Its output is gated
+ * behind Debug.enabled, so routing it through console.warn would misreport
+ * ordinary trace messages as warnings.
+ */
+
 /**
  * Utility functions for modal blocks
  */
