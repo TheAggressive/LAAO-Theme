@@ -18,12 +18,22 @@ const { state, actions } = store('laao/hero', {
 			const slideContexts = document.querySelectorAll(
 				'.wp-block-laao-hero-slide'
 			);
-			// Find the active slide's context
-			const activeSlideContext = JSON.parse(
-				slideContexts[state.currentSlide].dataset.wpContext
-			);
 
-			captionElement.innerHTML = activeSlideContext.caption;
+			// The block renders with zero slides whenever its query matches no
+			// posts. Bail rather than indexing into an empty NodeList.
+			const activeSlide = slideContexts[state.currentSlide];
+
+			if (!captionElement || !activeSlide) {
+				return;
+			}
+
+			const rawContext = activeSlide.dataset.wpContext;
+
+			if (!rawContext) {
+				return;
+			}
+
+			captionElement.innerHTML = JSON.parse(rawContext).caption ?? '';
 		},
 		nextSlide: () => {
 			if (state.isTransitioning) {
