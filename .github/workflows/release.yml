@@ -135,7 +135,7 @@ jobs:
 
             # E2E runs against the real built theme, not source.
             - name: Download build output
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: dist
                   path: dist/
@@ -183,7 +183,7 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Download build output
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: dist
                   path: dist/
@@ -227,7 +227,7 @@ jobs:
             # semantic-release decides whether this commit warrants a release.
             # bin/release/prepare.sh repackages from this dist/.
             - name: Download build output
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: dist
                   path: dist/
