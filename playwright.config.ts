@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// @ts-expect-error -- plain .mjs helper, also used by bin/ci scripts
+import { wpEnvUrl } from './bin/ci/wp-env-url.mjs';
+
 /**
  * Playwright configuration.
  *
@@ -26,7 +29,9 @@ export default defineConfig({
 		: [['list']],
 
 	use: {
-		baseURL: process.env.WP_BASE_URL ?? 'http://localhost:9930',
+		// Read from .wp-env.json rather than duplicated here, so changing the
+		// port in one place does not silently point the suite at a dead one.
+		baseURL: wpEnvUrl(),
 		trace: 'on-first-retry',
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',

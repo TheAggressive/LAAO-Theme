@@ -25,7 +25,8 @@ echo "==> Build"
 pnpm ci:build
 
 echo "==> End-to-end"
-if ! curl -sfo /dev/null "${WP_BASE_URL:-http://localhost:9930}"; then
+WP_URL="${WP_BASE_URL:-$(node -e "import('./bin/ci/wp-env-url.mjs').then(m=>console.log(m.wpEnvUrl()))")}"
+if ! curl -sfo /dev/null "${WP_URL}"; then
 	echo "  wp-env is not responding — starting it."
 	pnpm env:start
 fi

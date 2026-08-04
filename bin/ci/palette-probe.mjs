@@ -43,8 +43,19 @@ export function resolvePaletteInPage(paletteSlugs) {
 
 		const computed = window.getComputedStyle(probe).backgroundColor;
 
-		context.clearRect(0, 0, 1, 1);
+		// Assigning an unparsable value to fillStyle is a silent no-op, so
+		// without a sentinel the canvas would still hold the previous slug's
+		// colour and report it as this one's. Set a known value first and
+		// confirm the assignment actually took.
+		context.fillStyle = '#000000';
 		context.fillStyle = computed;
+
+		if (context.fillStyle === '#000000' && computed !== 'rgb(0, 0, 0)') {
+			resolved[slug] = `UNPARSABLE(${computed})`;
+			continue;
+		}
+
+		context.clearRect(0, 0, 1, 1);
 		context.fillRect(0, 0, 1, 1);
 
 		const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;

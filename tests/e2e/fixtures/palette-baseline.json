@@ -1,14 +1,14 @@
 {
-	"generatedFrom": "http://localhost:9930",
+	"generatedFrom": "http://localhost:9950",
 	"note": "Browser-resolved rgb() for every theme.json palette entry. Regenerate with `pnpm palette:baseline` only when a colour change is intended.",
 	"declared": {
-		"laao-black": "hsl(0, 0%, 0.43%)",
-		"laao-white": "hsl(0, 0%, 100%)",
-		"laao-red": "hsl(0, 72.2%, 50.6%)",
-		"laao-dark-gray": "hsl(0, 0%, 22.35%)",
-		"laao-gray": "hsl(0, 0%, 44.7%)",
-		"laao-light-gray": "hsl(0, 0%, 89.4%)",
-		"laao-transparent": "hsla(0, 0%, 0%, 0)"
+		"laao-black": "var(--wp--custom--color--black)",
+		"laao-white": "var(--wp--custom--color--white)",
+		"laao-red": "var(--wp--custom--color--red)",
+		"laao-dark-gray": "var(--wp--custom--color--dark-gray)",
+		"laao-gray": "var(--wp--custom--color--gray)",
+		"laao-light-gray": "var(--wp--custom--color--light-gray)",
+		"laao-transparent": "var(--wp--custom--color--transparent)"
 	},
 	"colors": {
 		"laao-black": "rgb(1, 1, 1)",

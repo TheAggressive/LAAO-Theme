@@ -4,6 +4,11 @@ import path from 'node:path';
 
 // @ts-expect-error -- plain .mjs helper shared with bin/ci/palette-baseline.mjs
 import { resolvePaletteInPage } from '../../bin/ci/palette-probe.mjs';
+// @ts-expect-error -- plain .mjs helper shared with bin/ci/palette-baseline.mjs
+import {
+	isIntentionallyTransparent,
+	readDeclaredPalette,
+} from '../../bin/ci/theme-palette.mjs';
 
 /**
  * Palette colour contract.
@@ -28,6 +33,7 @@ import { resolvePaletteInPage } from '../../bin/ci/palette-probe.mjs';
 type PaletteBaseline = {
 	generatedFrom: string;
 	note: string;
+	declared: Record<string, string>;
 	colors: Record<string, string>;
 };
 
@@ -37,6 +43,15 @@ const baseline: PaletteBaseline = JSON.parse(
 		'utf8'
 	)
 );
+
+/**
+ * theme.json palette, read at test time via the same helper the baseline
+ * generator uses, so the two cannot disagree about what a slug is declared as.
+ *
+ * Slugs come from theme.json rather than from the baseline: reading them from
+ * the fixture would mean a newly added colour is simply never tested.
+ */
+const declaredPalette: Record<string, string> = readDeclaredPalette();
 
 /**
  * Resolves every palette slug to its rasterised sRGB value.
@@ -58,27 +73,56 @@ test.describe('theme.json colour palette', () => {
 	}) => {
 		await page.goto('/');
 
-		const slugs = Object.keys(baseline.colors);
-		const resolved = await resolvePalette(page, slugs);
+		const resolved = await resolvePalette(
+			page,
+			Object.keys(declaredPalette)
+		);
 
 		// Compare as a whole object so a failure reports every drifted colour
 		// at once rather than stopping at the first.
 		expect(resolved).toEqual(baseline.colors);
 	});
 
+	test('the baseline covers exactly the palette in theme.json', () => {
+		// Guards the seam between the two files. Without this, adding a colour
+		// leaves it untested, and removing one leaves a baseline entry that
+		// nothing renders — neither of which the colour comparison would catch.
+		expect(Object.keys(baseline.colors).sort()).toEqual(
+			Object.keys(declaredPalette).sort()
+		);
+
+		// The recorded declarations must match what theme.json says now, or the
+		// baseline is describing colours the theme no longer has.
+		expect(baseline.declared).toEqual(declaredPalette);
+	});
+
 	test('every palette colour is actually defined', async ({ page }) => {
 		await page.goto('/');
 
-		const slugs = Object.keys(baseline.colors);
+		const slugs = Object.keys(declaredPalette);
 		const resolved = await resolvePalette(page, slugs);
 
 		// An undefined custom property leaves background-color at its initial
-		// value, so the property silently disappearing would otherwise look
+		// value, so a property that silently disappeared would otherwise look
 		// like a legitimate transparent colour.
+		//
+		// Alpha is read numerically rather than by matching a formatted string:
+		// the probe emits "rgba(0, 0, 0, 0.000)", so comparing against
+		// "rgba(0, 0, 0, 0)" matched nothing and this test could never fail.
+		const isFullyTransparent = (value: string) => {
+			const alpha = value.startsWith('rgba(')
+				? Number.parseFloat(value.split(',')[3] ?? '1')
+				: 1;
+			return alpha === 0;
+		};
+
+		// A deliberately transparent colour and a missing custom property both
+		// rasterise to zero alpha, so the declaration decides which this is —
+		// following var() indirection to the underlying token.
 		const undefined_ = slugs.filter(
 			(slug) =>
-				slug !== 'laao-transparent' &&
-				resolved[slug] === 'rgba(0, 0, 0, 0)'
+				!isIntentionallyTransparent(declaredPalette[slug]) &&
+				isFullyTransparent(resolved[slug])
 		);
 
 		expect(

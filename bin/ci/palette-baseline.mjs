@@ -15,22 +15,26 @@
  */
 
 import { chromium } from '@playwright/test';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { resolvePaletteInPage } from './palette-probe.mjs';
+import {
+	isIntentionallyTransparent,
+	readDeclaredPalette,
+	readThemeJson,
+} from './theme-palette.mjs';
+import { wpEnvUrl } from './wp-env-url.mjs';
 
 const repositoryRoot = path.resolve(
 	path.dirname(fileURLToPath(import.meta.url)),
 	'../..'
 );
 
-const baseUrl = process.env.WP_BASE_URL ?? 'http://localhost:9930';
+const baseUrl = wpEnvUrl();
 
-const themeJson = JSON.parse(
-	readFileSync(path.join(repositoryRoot, 'theme.json'), 'utf8')
-);
+const themeJson = readThemeJson();
 
 const slugs = (themeJson.settings?.color?.palette ?? []).map(
 	(entry) => entry.slug
@@ -54,16 +58,32 @@ if (!response?.ok()) {
 	process.exit(1);
 }
 
+const declared = readDeclaredPalette(themeJson);
+
 const colors = await page.evaluate(resolvePaletteInPage, slugs);
 
 await browser.close();
 
-const declared = Object.fromEntries(
-	(themeJson.settings?.color?.palette ?? []).map((entry) => [
-		entry.slug,
-		entry.color,
-	])
+// A baseline is only meaningful if the palette actually rendered. Running this
+// before `wp theme activate` — the exact window CI sits in — would otherwise
+// record every colour as transparent and freeze that as the expected result.
+const unresolved = Object.entries(colors).filter(
+	([slug, value]) =>
+		value.startsWith('UNPARSABLE') ||
+		(/^rgba\(0, 0, 0, 0(\.0+)?\)$/.test(value) &&
+			!isIntentionallyTransparent(declared[slug], themeJson))
 );
+
+if (unresolved.length > 0) {
+	console.error(
+		'Refusing to write a baseline: these palette colours did not resolve.'
+	);
+	console.error('Is the theme activated on the target site?\n');
+	for (const [slug, value] of unresolved) {
+		console.error(`  ${slug} -> ${value}`);
+	}
+	process.exit(1);
+}
 
 const outputDirectory = path.join(repositoryRoot, 'tests/e2e/fixtures');
 mkdirSync(outputDirectory, { recursive: true });
