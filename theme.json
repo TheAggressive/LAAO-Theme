@@ -138,37 +138,37 @@
 			"link": true,
 			"palette": [
 				{
-					"color": "hsl(0, 0%, 0.43%)",
+					"color": "oklch(6.72% 0 0)",
 					"name": "Black",
 					"slug": "laao-black"
 				},
 				{
-					"color": "hsl(0, 0%, 100%)",
+					"color": "oklch(100% 0 0)",
 					"name": "White",
 					"slug": "laao-white"
 				},
 				{
-					"color": "hsl(0, 72.2%, 50.6%)",
+					"color": "oklch(57.71% 0.2152 27.33)",
 					"name": "Red",
 					"slug": "laao-red"
 				},
 				{
-					"color": "hsl(0, 0%, 22.35%)",
+					"color": "oklch(34.458% 0 0)",
 					"name": "Dark Gray",
 					"slug": "laao-dark-gray"
 				},
 				{
-					"color": "hsl(0, 0%, 44.7%)",
+					"color": "oklch(55.208% 0 0)",
 					"name": "Gray",
 					"slug": "laao-gray"
 				},
 				{
-					"color": "hsl(0, 0%, 89.4%)",
+					"color": "oklch(91.887% 0 0)",
 					"name": "Light Gray",
 					"slug": "laao-light-gray"
 				},
 				{
-					"color": "hsla(0, 0%, 0%, 0)",
+					"color": "oklch(0% 0 0 / 0)",
 					"name": "Transparent",
 					"slug": "laao-transparent"
 				}

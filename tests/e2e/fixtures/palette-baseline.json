@@ -1,0 +1,22 @@
+{
+	"generatedFrom": "http://localhost:9930",
+	"note": "Browser-resolved rgb() for every theme.json palette entry. Regenerate with `pnpm palette:baseline` only when a colour change is intended.",
+	"declared": {
+		"laao-black": "hsl(0, 0%, 0.43%)",
+		"laao-white": "hsl(0, 0%, 100%)",
+		"laao-red": "hsl(0, 72.2%, 50.6%)",
+		"laao-dark-gray": "hsl(0, 0%, 22.35%)",
+		"laao-gray": "hsl(0, 0%, 44.7%)",
+		"laao-light-gray": "hsl(0, 0%, 89.4%)",
+		"laao-transparent": "hsla(0, 0%, 0%, 0)"
+	},
+	"colors": {
+		"laao-black": "rgb(1, 1, 1)",
+		"laao-white": "rgb(255, 255, 255)",
+		"laao-red": "rgb(220, 38, 38)",
+		"laao-dark-gray": "rgb(57, 57, 57)",
+		"laao-gray": "rgb(114, 114, 114)",
+		"laao-light-gray": "rgb(228, 228, 228)",
+		"laao-transparent": "rgba(0, 0, 0, 0.000)"
+	}
+}
