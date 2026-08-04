@@ -34,7 +34,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: pnpm/action-setup@v6.0.9
+            - uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
 
@@ -91,7 +91,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: pnpm/action-setup@v6.0.9
+            - uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
 
@@ -121,7 +121,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: pnpm/action-setup@v6.0.9
+            - uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
 
@@ -170,7 +170,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: pnpm/action-setup@v6.0.9
+            - uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
 
@@ -212,7 +212,7 @@ jobs:
                   fetch-depth: 0
                   token: ${{ secrets.GITHUB_TOKEN }}
 
-            - uses: pnpm/action-setup@v6.0.9
+            - uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
 
