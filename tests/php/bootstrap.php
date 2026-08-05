@@ -23,3 +23,37 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../inc/class-autoloader.php';
 
 new LAAO\Autoloader();
+
+/**
+ * Minimal WP_Error stand-in.
+ *
+ * Brain\Monkey stubs functions, not classes, and the updater returns real
+ * WP_Error instances from its refusal paths. Only the surface those tests
+ * assert on is implemented — enough to distinguish an error from a file path
+ * and to read its code.
+ */
+if ( ! class_exists( 'WP_Error' ) ) {
+	// phpcs:disable Squiz.Commenting, Generic.Commenting -- Test double.
+	class WP_Error {
+
+		/** @var string */
+		public string $code;
+
+		/** @var string */
+		public string $message;
+
+		public function __construct( string $code = '', string $message = '' ) {
+			$this->code    = $code;
+			$this->message = $message;
+		}
+
+		public function get_error_code(): string {
+			return $this->code;
+		}
+
+		public function get_error_message(): string {
+			return $this->message;
+		}
+	}
+	// phpcs:enable
+}
