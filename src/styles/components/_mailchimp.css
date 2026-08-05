@@ -2,13 +2,22 @@
 #mc_embed_shell {
 	@apply mb-4 mt-4 flex w-full max-w-80 flex-col items-center self-center;
 
+	/*
+	 * This form sits on the light-gray surface, where laao-red reaches only
+	 * 3.80:1 against the background and laao-gray 3.78:1 — both below the 4.5:1
+	 * WCAG AA minimum for normal text. Flagged by the axe gate, not by eye.
+	 *
+	 * red-on-light is the same hue darkened to clear the threshold (5.09:1);
+	 * dark-gray replaces gray for label text (9.08:1). Neither changes the
+	 * design's intent, only its legibility.
+	 */
 	.indicates-required,
 	.asterisk {
-		@apply text-right text-xs text-[var(--wp--preset--color--laao-red)];
+		@apply text-right text-xs text-[var(--wp--custom--color--red-on-light)];
 	}
 
 	label {
-		@apply font-medium uppercase text-[var(--wp--preset--color--laao-gray)];
+		@apply font-medium uppercase text-[var(--wp--custom--color--dark-gray)];
 	}
 
 	input[type="email"] {

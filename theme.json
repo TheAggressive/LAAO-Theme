@@ -163,6 +163,11 @@
 					"slug": "laao-gray"
 				},
 				{
+					"color": "var(--wp--custom--color--gray-on-dark)",
+					"name": "Gray on Dark",
+					"slug": "laao-gray-on-dark"
+				},
+				{
 					"color": "var(--wp--custom--color--light-gray)",
 					"name": "Light Gray",
 					"slug": "laao-light-gray"
@@ -334,8 +339,10 @@
 				"black": "oklch(6.72% 0 0)",
 				"white": "oklch(100% 0 0)",
 				"red": "oklch(57.71% 0.2152 27.33)",
+				"red-on-light": "oklch(50.542% 0.1905 27.52)",
 				"dark-gray": "oklch(34.458% 0 0)",
 				"gray": "oklch(55.208% 0 0)",
+				"gray-on-dark": "oklch(57.951% 0 0)",
 				"light-gray": "oklch(91.887% 0 0)",
 				"transparent": "oklch(0% 0 0 / 0)"
 			}
