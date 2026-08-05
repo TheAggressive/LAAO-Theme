@@ -43,11 +43,11 @@ Both are safe to apply immediately: neither interferes with the release job.
 
 Applied as ruleset id **20430755**.
 
-### The admin bypass is load-bearing, and cuts both ways
+### There is deliberately no bypass actor
 
-`bypass_actors` grants `RepositoryRole` 5 (admin) an `always` bypass, which is
-what keeps the rule from interfering with maintenance. It also means the rule
-does **not** protect the repository owner from themselves.
+`bypass_actors` is empty. An earlier version granted `RepositoryRole` 5 (admin)
+an `always` bypass so maintenance would never be blocked — which also meant the
+rule did **not** protect the repository owner from themselves.
 
 That is not hypothetical. While verifying this ruleset, a
 `git push --force-with-lease origin master` printed
@@ -62,12 +62,25 @@ on a tag collision — repeatedly.
 It was recoverable only because both release commits had identical trees, so the
 tag could be moved onto the one on `master`.
 
-Two lessons worth keeping:
+The bypass was removed as a direct result. It bought very little: an admin can
+already disable a ruleset deliberately when emergency maintenance genuinely
+requires it, and that is a separate, visible, logged act rather than a side
+effect of a routine command. A guard rail that exempts the only person able to
+trip it is not a guard rail.
 
-- Verify a force-push rule against a throwaway branch, never against `master`.
-- An `always` admin bypass means this ruleset is a guard rail against mistakes by
-  others, not by whoever holds admin. Narrowing `bypass_mode` to `pull_request`
-  would close that, at the cost of making genuine emergency maintenance harder.
+Verified after removal — a force-push to `master` is now refused outright:
+
+```
+remote: - Cannot force-push to this branch
+ ! [remote rejected] master -> master (push declined due to repository rule violations)
+```
+
+Normal pushes are unaffected, which is what matters for the release job:
+semantic-release fast-forwards `master` with a new commit and never force-pushes
+or deletes, so no bypass is needed for it to work.
+
+The other lesson: verify a force-push rule against a throwaway branch, never
+against `master`.
 
 ## Why required status checks are NOT enforced
 
