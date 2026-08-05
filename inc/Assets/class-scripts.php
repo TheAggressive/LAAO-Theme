@@ -70,6 +70,11 @@ class Scripts {
 	/**
 	 * Enqueues front-end scripts.
 	 *
+	 * The app.js entry point is intentionally not enqueued: it is empty, so
+	 * loading it cost every visitor a request for zero bytes of behaviour. It
+	 * remains as an entry point for future front-end code — enqueue it again
+	 * when it has content.
+	 *
 	 * GSAP (with ScrollTrigger) and Lenis are compiled into dist/scripts by
 	 * webpack from the npm packages in package.json — src/scripts/gsap.js and
 	 * src/scripts/smoothscroll.js import them directly. Nothing is loaded from
@@ -82,7 +87,6 @@ class Scripts {
 		$version = wp_get_theme()->get( 'Version' );
 		$uri     = get_template_directory_uri();
 
-		wp_enqueue_script( 'laartsonline-app', $uri . '/dist/scripts/app.js', array(), $version, true );
 		wp_enqueue_script( 'laartsonline-gsap-js', $uri . '/dist/scripts/gsap.js', array(), $version, true );
 		wp_enqueue_script( 'laartsonline-smoothscroll-js', $uri . '/dist/scripts/smoothscroll.js', array(), $version, true );
 	}
