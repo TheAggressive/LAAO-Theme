@@ -141,5 +141,15 @@ export default [
 		},
 	},
 
+	// Browser code that happens to live under bin/. palette-probe.mjs is passed
+	// to page.evaluate() and serialised into the page, so it runs against the
+	// DOM despite being imported by a Node script.
+	{
+		files: ['bin/ci/palette-probe.mjs'],
+		languageOptions: {
+			globals: globals.browser,
+		},
+	},
+
 	prettierConfig,
 ];

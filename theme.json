@@ -138,37 +138,37 @@
 			"link": true,
 			"palette": [
 				{
-					"color": "hsl(0, 0%, 0.43%)",
+					"color": "var(--wp--custom--color--black)",
 					"name": "Black",
 					"slug": "laao-black"
 				},
 				{
-					"color": "hsl(0, 0%, 100%)",
+					"color": "var(--wp--custom--color--white)",
 					"name": "White",
 					"slug": "laao-white"
 				},
 				{
-					"color": "hsl(0, 72.2%, 50.6%)",
+					"color": "var(--wp--custom--color--red)",
 					"name": "Red",
 					"slug": "laao-red"
 				},
 				{
-					"color": "hsl(0, 0%, 22.35%)",
+					"color": "var(--wp--custom--color--dark-gray)",
 					"name": "Dark Gray",
 					"slug": "laao-dark-gray"
 				},
 				{
-					"color": "hsl(0, 0%, 44.7%)",
+					"color": "var(--wp--custom--color--gray)",
 					"name": "Gray",
 					"slug": "laao-gray"
 				},
 				{
-					"color": "hsl(0, 0%, 89.4%)",
+					"color": "var(--wp--custom--color--light-gray)",
 					"name": "Light Gray",
 					"slug": "laao-light-gray"
 				},
 				{
-					"color": "hsla(0, 0%, 0%, 0)",
+					"color": "var(--wp--custom--color--transparent)",
 					"name": "Transparent",
 					"slug": "laao-transparent"
 				}
@@ -329,7 +329,17 @@
 				}
 			]
 		},
-		"custom": {}
+		"custom": {
+			"color": {
+				"black": "oklch(6.72% 0 0)",
+				"white": "oklch(100% 0 0)",
+				"red": "oklch(57.71% 0.2152 27.33)",
+				"dark-gray": "oklch(34.458% 0 0)",
+				"gray": "oklch(55.208% 0 0)",
+				"light-gray": "oklch(91.887% 0 0)",
+				"transparent": "oklch(0% 0 0 / 0)"
+			}
+		}
 	},
 	"styles": {
 		"color": {

@@ -1,8 +1,8 @@
 {
 	"core": "https://wordpress.org/wordpress-7.0.2.zip",
 	"phpVersion": "8.4",
-	"port": 9950,
-	"phpmyadminPort": 9952,
+	"port": 9930,
+	"phpmyadminPort": 9932,
 	"testsEnvironment": false,
 	"mappings": {
 		"wp-content/themes/laao": "."
