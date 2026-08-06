@@ -69,18 +69,32 @@ ob_start();
 		$caption_text = ! empty( $picture_id ) ? wp_kses_post( $picture_id ) : '';
 
 		// Get featured image — fall back to caption text if attachment alt is empty.
-		$thumbnail_id  = get_post_thumbnail_id( $current_post_id );
-		$attached_alt  = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
-		$alt           = ! empty( $attached_alt ) ? $attached_alt : wp_strip_all_tags( $caption_text );
+		$thumbnail_id = get_post_thumbnail_id( $current_post_id );
+		$attached_alt = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+		$alt          = ! empty( $attached_alt ) ? $attached_alt : wp_strip_all_tags( $caption_text );
+		// The first item sits at the top of the page and is routinely the LCP
+		// element, so it must load eagerly and be flagged as high priority.
+		// Lazy-loading it — which this block previously did for every item —
+		// tells the browser to deprioritise the one image the user is waiting
+		// on. Only the block knows its own position; core assumes any image
+		// rendered outside the main loop is below the fold.
+		$is_first_item = 1 === $item_count;
+
+		$image_attributes = array(
+			'class'   => 'whats-hot-image',
+			'alt'     => $alt,
+			'loading' => $is_first_item ? 'eager' : 'lazy',
+		);
+
+		if ( $is_first_item ) {
+			$image_attributes['fetchpriority'] = 'high';
+		}
+
 		$thumbnail_img = wp_get_attachment_image(
 			$thumbnail_id,
 			'large',
 			false,
-			array(
-				'class'   => 'whats-hot-image',
-				'loading' => 'lazy',
-				'alt'     => $alt,
-			)
+			$image_attributes
 		);
 
 		?>
@@ -91,7 +105,21 @@ ob_start();
 				<?php if ( $display_featured_image && $thumbnail_img ) : ?>
 					<figure class="whats-hot-figure">
 						<div class="whats-hot-image-container">
-							<?php echo wp_kses_post( $thumbnail_img ); ?>
+							<?php
+							/*
+							 * Deliberately not passed through wp_kses_post().
+							 * This markup comes from wp_get_attachment_image(),
+							 * which builds it from attachment data and escapes
+							 * every attribute itself — it is not user input.
+							 * Sanitising it again silently strips srcset,
+							 * sizes, fetchpriority and decoding, which cost
+							 * this block responsive images entirely: every
+							 * visitor, on any screen, downloaded the full-size
+							 * file.
+							 */
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image(); see above.
+							echo $thumbnail_img;
+							?>
 						</div>
 
 						<?php if ( $display_caption && ! empty( $caption_text ) ) : ?>

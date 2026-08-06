@@ -30,7 +30,7 @@
 <div class="wp-block-group article-content"><!-- wp:post-title {"className":"article-title","style":{"typography":{"fontStyle":"normal","fontWeight":"700","lineHeight":"1.5"}},"fontSize":"xxxxx-large","fontFamily":"roboto-condensed"} /-->
 
 <!-- wp:group {"className":"social-share","layout":{"type":"flex","orientation":"horizontal"}} -->
-<div class="wp-block-group social-share"><!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"hsl(0, 72.2%, 50.6%)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"hsla(0, 0%, 0%, 0)","style":{"layout":{"selfStretch":"fit","flexSize":null},"spacing":{"blockGap":{"left":"0"}}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group social-share"><!-- wp:jetpack/sharing-buttons {"styleType":"icon","iconColor":"laao-red","iconColorValue":"var(--wp--custom--color--red)","iconBackgroundColor":"laao-transparent","iconBackgroundColorValue":"var(--wp--custom--color--transparent)","style":{"layout":{"selfStretch":"fit","flexSize":null},"spacing":{"blockGap":{"left":"0"}}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <ul class="wp-block-jetpack-sharing-buttons has-normal-icon-size jetpack-sharing-buttons__services-list" id="jetpack-sharing-serivces-list"><!-- wp:jetpack/sharing-button {"service":"x","label":"X"} /-->
 
 <!-- wp:jetpack/sharing-button {"service":"facebook","label":"Facebook"} /-->
