@@ -7,6 +7,7 @@
 		"laao-red": "var(--wp--custom--color--red)",
 		"laao-dark-gray": "var(--wp--custom--color--dark-gray)",
 		"laao-gray": "var(--wp--custom--color--gray)",
+		"laao-gray-on-dark": "var(--wp--custom--color--gray-on-dark)",
 		"laao-light-gray": "var(--wp--custom--color--light-gray)",
 		"laao-transparent": "var(--wp--custom--color--transparent)"
 	},
@@ -16,6 +17,7 @@
 		"laao-red": "rgb(220, 38, 38)",
 		"laao-dark-gray": "rgb(57, 57, 57)",
 		"laao-gray": "rgb(114, 114, 114)",
+		"laao-gray-on-dark": "rgb(122, 122, 122)",
 		"laao-light-gray": "rgb(228, 228, 228)",
 		"laao-transparent": "rgba(0, 0, 0, 0.000)"
 	}
