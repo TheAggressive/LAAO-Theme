@@ -7,69 +7,127 @@
 @import "../../styles/_breakpoints.css";
 
 .wp-block-laao-hero {
-	@apply relative m-0 h-[500px] overflow-hidden border-b-[1.5rem] border-b-wp-laao-white;
+	position: relative;
+	margin: 0;
+	height: 500px;
+	overflow: hidden;
+	border-bottom-width: 1.5rem;
+	border-bottom-color: var(--wp--preset--color--laao-white);
 
 	.wp-block-laao-hero-caption-container {
-		@apply absolute bottom-0 z-10 grid w-full grid-cols-12 px-wp-16;
+		position: absolute;
+		bottom: 0;
+		z-index: 10;
+		display: grid;
+		width: 100%;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		padding-left: var(--wp--preset--spacing--16);
+		padding-right: var(--wp--preset--spacing--16);
 
 		@media (--bp-md) {
-			@apply px-wp-44;
+			padding-left: var(--wp--preset--spacing--44);
+			padding-right: var(--wp--preset--spacing--44);
 		}
 
 		.wp-block-laao-hero-caption {
-			@apply col-span-12 mb-wp-8 rounded-sm bg-white/20 px-2 py-2 text-xs leading-tight drop-shadow-lg backdrop-blur-lg;
+			grid-column: span 12 / span 12;
+			margin-bottom: var(--wp--preset--spacing--8);
+			border-radius: 0.125rem;
+			background-color: rgb(255 255 255 / 0.2);
+			padding-left: 0.5rem;
+			padding-right: 0.5rem;
+			padding-top: 0.5rem;
+			padding-bottom: 0.5rem;
+			font-size: 0.75rem;
+			line-height: 1rem;
+			line-height: 1.25;
+			--tw-drop-shadow: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+			filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+			--tw-backdrop-blur: blur(16px);
+			-webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+			backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 
 			@media (--bp-md) {
-				@apply col-span-12 col-end-13 mt-wp-8 justify-self-start;
+				grid-column: span 12 / span 12;
+				grid-column-end: 13;
+				margin-top: var(--wp--preset--spacing--8);
+				justify-self: start;
 			}
 
 			@media (--bp-lg) {
-				@apply col-span-12 col-end-13;
+				grid-column: span 12 / span 12;
+				grid-column-end: 13;
 			}
 
 			@media (--bp-2xl) {
-				@apply col-span-12 col-end-11 text-left;
+				grid-column: span 12 / span 12;
+				grid-column-end: 11;
+				text-align: left;
 			}
 		}
 	}
 	.wp-block-laao-hero-content {
-		@apply relative z-10 grid h-full grid-cols-12 grid-rows-[auto_1fr];
+		position: relative;
+		z-index: 10;
+		display: grid;
+		height: 100%;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		grid-template-rows: auto 1fr;
 
 		@media (--bp-md) {
-			@apply grid-rows-1 gap-wp-24 px-wp-16;
+			grid-template-rows: repeat(1, minmax(0, 1fr));
+			gap: var(--wp--preset--spacing--24);
+			padding-left: var(--wp--preset--spacing--16);
+			padding-right: var(--wp--preset--spacing--16);
 		}
 
 		@media (--bp-md) {
-			@apply content-center px-wp-44;
+			align-content: center;
+			padding-left: var(--wp--preset--spacing--44);
+			padding-right: var(--wp--preset--spacing--44);
 		}
 
 		/* Logo */
 		& > *:nth-child(1) {
-			@apply order-2 col-span-12 place-self-center justify-self-center;
+			order: 2;
+			grid-column: span 12 / span 12;
+			place-self: center;
+			justify-self: center;
 
 			@media (--bp-md) {
-				@apply order-1 col-span-3 place-self-center justify-self-start;
+				order: 1;
+				grid-column: span 3 / span 3;
+				place-self: center;
+				justify-self: start;
 			}
 
 			@media (--bp-lg) {
-				@apply col-span-3;
+				grid-column: span 3 / span 3;
 			}
 		}
 
 		/* Banner Ad */
 		& > *:nth-child(2) {
-			@apply order-1 col-span-12 w-full;
+			order: 1;
+			grid-column: span 12 / span 12;
+			width: 100%;
 
 			@media (--bp-md) {
-				@apply order-2 col-span-9 col-start-5 place-self-end self-center;
+				order: 2;
+				grid-column: span 9 / span 9;
+				grid-column-start: 5;
+				place-self: end;
+				align-self: center;
 			}
 
 			@media (--bp-lg) {
-				@apply col-span-8 col-start-5;
+				grid-column: span 8 / span 8;
+				grid-column-start: 5;
 			}
 
 			@media (--bp-2xl) {
-				@apply col-span-6 col-start-5;
+				grid-column: span 6 / span 6;
+				grid-column-start: 5;
 			}
 		}
 	}

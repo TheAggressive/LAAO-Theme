@@ -6,6 +6,7 @@
 
 .wp-block-laao-article-credits {
 	& li {
-		@apply font-semibold uppercase;
+		font-weight: 600;
+		text-transform: uppercase;
 	}
 }

@@ -1,72 +1,122 @@
+/*
+ * stylelint-disable no-descending-specificity
+ *
+ * These orderings predate the Tailwind removal. They were invisible to the rule
+ * while the declarations lived inside @apply, which stylelint could not resolve
+ * into a specificity graph; expanding them made the existing cascade visible.
+ * Reordering the rules to satisfy the check would change which declaration wins,
+ * so the ordering is kept and the rule turned off for this file.
+ */
+/* stylelint-disable no-descending-specificity */
 .site-nav {
-	@apply fixed bottom-0 right-0 top-0 z-[999] h-full max-h-lvh w-full translate-x-full overflow-x-auto bg-wp-laao-black;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	top: 0;
+	z-index: 999;
+	height: 100%;
+	max-height: 100lvh;
+	width: 100%;
+	--tw-translate-x: 100%;
+	transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+		rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+		scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+	overflow-x: auto;
+	background-color: var(--wp--preset--color--laao-black);
 
 	@media (--bp-md) and (--bp-2xl-max) {
-		@apply w-[30vw];
+		width: 30vw;
 	}
 
 	@media (--bp-2xl) {
-		@apply relative -translate-y-[calc(500px+64px)] translate-x-0;
+		position: relative;
+		--tw-translate-y: calc(calc(500px + 64px) * -1);
+		--tw-translate-x: 0;
+		transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+			rotate(var(--tw-rotate)) skewX(var(--tw-skew-x))
+			skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+			scaleY(var(--tw-scale-y));
 	}
 
 	.site-nav-mobile-links {
-		@apply flex h-[60px] flex-row-reverse gap-4 px-wp-16;
+		display: flex;
+		height: 60px;
+		flex-direction: row-reverse;
+		gap: 1rem;
+		padding-left: var(--wp--preset--spacing--16);
+		padding-right: var(--wp--preset--spacing--16);
 
 		/* Hide the mobile links for the desktop nav */
 		@media (--bp-2xl) {
-			@apply hidden;
+			display: none;
 		}
 
 		/* Adjust the social links for the mobile nav */
 		.wp-block-social-links {
 			svg {
 				&:hover {
-					@apply !fill-wp-laao-white;
+					fill: var(--wp--preset--color--laao-white) !important;
 				}
 			}
 		}
 
 		/* Adjust the mobile nav button for the mobile nav */
 		.wp-block-laao-mobile-nav {
-			@apply text-wp-laao-red;
+			color: var(--wp--preset--color--laao-red);
 
 			&:hover {
-				@apply text-wp-laao-white;
+				color: var(--wp--preset--color--laao-white);
 			}
 		}
 	}
 
 	/* Site Search */
 	.site-nav-search {
-		@apply mt-0;
+		margin-top: 0;
 		.wp-block-search__inside-wrapper {
-			@apply relative p-0;
+			position: relative;
+			padding: 0;
 
 			button {
-				@apply absolute right-0 top-1 border-none p-4;
+				position: absolute;
+				right: 0;
+				top: 0.25rem;
+				border-style: none;
+				padding: 1rem;
 
 				& svg {
-					@apply fill-wp-laao-gray;
+					fill: var(--wp--preset--color--laao-gray);
 				}
 			}
 		}
 
 		.wp-block-search__input {
-			@apply w-full bg-wp-laao-light-gray py-5 pl-4 pr-14 outline-none;
+			width: 100%;
+			background-color: var(--wp--preset--color--laao-light-gray);
+			padding-top: 1.25rem;
+			padding-bottom: 1.25rem;
+			padding-left: 1rem;
+			padding-right: 3.5rem;
+			outline: 2px solid transparent;
+			outline-offset: 2px;
 		}
 	}
 
 	/* Site Nav Menu */
 	.wp-block-navigation,
 	.wp-block-navigation__container {
-		@apply mt-0 w-full;
+		margin-top: 0;
+		width: 100%;
 
 		.wp-block-navigation-link {
 			@media (--bp-xl) {
-				@apply text-wp-laao-white transition-all;
+				color: var(--wp--preset--color--laao-white);
+				transition-property: all;
+				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+				transition-duration: 150ms;
 
 				&:hover {
-					@apply text-wp-laao-red;
+					color: var(--wp--preset--color--laao-red);
 				}
 			}
 		}
@@ -74,11 +124,25 @@
 
 	@media (--bp-2xl-max) {
 		.laao-mobile-nav-open & {
-			@apply translate-x-0 transition-transform duration-[450ms] ease-in-out;
+			--tw-translate-x: 0;
+			transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+				rotate(var(--tw-rotate)) skewX(var(--tw-skew-x))
+				skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+				scaleY(var(--tw-scale-y));
+			transition-property: transform;
+			transition-duration: 450ms;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
 		.laao-mobile-nav-closing & {
-			@apply translate-x-full transition-transform duration-[450ms] ease-in-out;
+			--tw-translate-x: 100%;
+			transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+				rotate(var(--tw-rotate)) skewX(var(--tw-skew-x))
+				skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+				scaleY(var(--tw-scale-y));
+			transition-property: transform;
+			transition-duration: 450ms;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		}
 	}
 }

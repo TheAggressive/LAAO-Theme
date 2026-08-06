@@ -1,6 +1,13 @@
 /* stylelint-disable-next-line selector-id-pattern -- Mailchimp-generated ID */
 #mc_embed_shell {
-	@apply mb-4 mt-4 flex w-full max-w-80 flex-col items-center self-center;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+	display: flex;
+	width: 100%;
+	max-width: 20rem;
+	flex-direction: column;
+	align-items: center;
+	align-self: center;
 
 	/*
 	 * This form sits on the light-gray surface, where laao-red reaches only
@@ -13,26 +20,48 @@
 	 */
 	.indicates-required,
 	.asterisk {
-		@apply text-right text-xs text-[var(--wp--custom--color--red-on-light)];
+		text-align: right;
+		font-size: 0.75rem;
+		line-height: 1rem;
+		color: var(--wp--custom--color--red-on-light);
 	}
 
 	label {
-		@apply font-medium uppercase text-[var(--wp--custom--color--dark-gray)];
+		font-weight: 500;
+		text-transform: uppercase;
+		color: var(--wp--custom--color--dark-gray);
 	}
 
 	input[type="email"] {
-		@apply px-2;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
 	}
 
 	input {
-		@apply w-full border border-[var(--wp--preset--color--laao-gray)] bg-[var(--wp--preset--color--laao-white)] py-1;
+		width: 100%;
+		border-width: 1px;
+		border-color: var(--wp--preset--color--laao-gray);
+		background-color: var(--wp--preset--color--laao-white);
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
 	}
 
 	input[type="submit"] {
-		@apply mt-4 border-none bg-[var(--wp--preset--color--laao-black)] px-4 py-2 uppercase text-[var(--wp--preset--color--laao-white)] transition-all duration-300;
+		margin-top: 1rem;
+		border-style: none;
+		background-color: var(--wp--preset--color--laao-black);
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+		text-transform: uppercase;
+		color: var(--wp--preset--color--laao-white);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 300ms;
 
 		&:hover {
-			@apply bg-[var(--wp--preset--color--laao-red)];
+			background-color: var(--wp--preset--color--laao-red);
 		}
 	}
 }

@@ -8,51 +8,74 @@
  */
 
 .wp-block-laao-highlight-posts {
-	@apply grid grid-cols-1 gap-14;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 3.5rem;
 
 	@media (--bp-md) {
-		@apply grid-cols-1;
+		grid-template-columns: repeat(1, minmax(0, 1fr));
 	}
 
 	@media (--bp-2xl) {
-		@apply grid-cols-2;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.featured-item-link {
-		@apply grid grid-cols-1;
+		display: grid;
+		grid-template-columns: repeat(1, minmax(0, 1fr));
 
 		@media (--bp-md) {
-			@apply grid-cols-5;
+			grid-template-columns: repeat(5, minmax(0, 1fr));
 		}
 
 		.featured-item-img {
-			@apply col-span-1;
+			grid-column: span 1 / span 1;
 
 			@media (--bp-md) {
-				@apply z-10 col-span-2;
+				z-index: 10;
+				grid-column: span 2 / span 2;
 			}
 		}
 
 		.featured-item-content {
-			@apply col-span-3 mt-0 border-[1.5rem] border-wp-laao-white p-wp-24;
+			grid-column: span 3 / span 3;
+			margin-top: 0;
+			border-width: 1.5rem;
+			border-color: var(--wp--preset--color--laao-white);
+			padding: var(--wp--preset--spacing--24);
 
 			@media (--bp-md) {
-				@apply mt-6 w-[calc(100%+1.5rem)] -translate-x-6;
+				margin-top: 1.5rem;
+				width: calc(100% + 1.5rem);
+				--tw-translate-x: -1.5rem;
+				transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 			}
 
 			.featured-list-title {
-				@apply mb-4;
+				margin-bottom: 1rem;
 				& h3 {
-					@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-2xl font-bold uppercase text-wp-laao-red;
+					font-family: var(--wp--preset--font-family--roboto-condensed);
+					font-size: 1.5rem;
+					line-height: 2rem;
+					font-weight: 700;
+					text-transform: uppercase;
+					color: var(--wp--preset--color--laao-red);
 				}
 			}
 
 			.featured-list-credits {
-				@apply font-[family-name:var(--wp--preset--font-family--roboto-condensed)] text-base font-bold uppercase text-wp-laao-black;
+				font-family: var(--wp--preset--font-family--roboto-condensed);
+				font-size: 1rem;
+				line-height: 1.5rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				color: var(--wp--preset--color--laao-black);
 			}
 
 			.featured-list-preview {
-				@apply mt-6 text-base;
+				margin-top: 1.5rem;
+				font-size: 1rem;
+				line-height: 1.5rem;
 			}
 		}
 	}

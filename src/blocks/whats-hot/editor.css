@@ -6,13 +6,18 @@
  * Replace them with your own styles or remove the file completely.
  */
 .wp-block-laao-whats-hot {
-	@apply !grid grid-cols-1;
+	display: grid !important;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
 
 	& > div > div > div {
-		@apply grid w-full grid-cols-2 gap-4 p-0;
+		display: grid;
+		width: 100%;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		padding: 0;
 
 		@media (--bp-md) {
-			@apply grid-cols-4;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
 		}
 	}
 }

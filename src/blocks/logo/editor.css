@@ -6,14 +6,15 @@
 
 .wp-block-laao-site-logo {
 	svg {
-		@apply h-auto w-full;
+		height: auto;
+		width: 100%;
 
 		.a {
-			@apply fill-wp-laao-white;
+			fill: var(--wp--preset--color--laao-white);
 		}
 
 		.b {
-			@apply fill-wp-laao-red;
+			fill: var(--wp--preset--color--laao-red);
 		}
 	}
 }

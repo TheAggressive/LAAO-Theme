@@ -8,65 +8,102 @@
  */
 
 .wp-block-laao-whats-hot {
-	@apply !grid grid-cols-2 p-0;
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	padding: 0;
 
 	@media (--bp-md) {
-		@apply grid-cols-4;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 }
 
 .whats-hot-item {
-	@apply relative border-wp-laao-white;
+	position: relative;
+	border-color: var(--wp--preset--color--laao-white);
 
 	&:first-child {
-		@apply border-b-[0.75rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[1.5rem];
+		border-bottom-width: 0.75rem;
+		border-left-width: 1.5rem;
+		border-right-width: 0.75rem;
+		border-top-width: 1.5rem;
 	}
 
 	&:nth-child(2) {
-		@apply border-b-[0.75rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[1.5rem];
+		border-bottom-width: 0.75rem;
+		border-left-width: 0.75rem;
+		border-right-width: 1.5rem;
+		border-top-width: 1.5rem;
 	}
 
 	&:nth-child(3) {
-		@apply border-b-[1.5rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[0.75rem];
+		border-bottom-width: 1.5rem;
+		border-left-width: 1.5rem;
+		border-right-width: 0.75rem;
+		border-top-width: 0.75rem;
 	}
 
 	&:last-child {
-		@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[0.75rem];
+		border-bottom-width: 1.5rem;
+		border-left-width: 0.75rem;
+		border-right-width: 1.5rem;
+		border-top-width: 0.75rem;
 	}
 
 	@media (--bp-md) {
 		&:first-child {
-			@apply border-b-[1.5rem] border-l-[1.5rem] border-r-[0.75rem] border-t-[1.5rem];
+			border-bottom-width: 1.5rem;
+			border-left-width: 1.5rem;
+			border-right-width: 0.75rem;
+			border-top-width: 1.5rem;
 		}
 
 		&:nth-child(2) {
-			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[0.75rem] border-t-[1.5rem];
+			border-bottom-width: 1.5rem;
+			border-left-width: 0.75rem;
+			border-right-width: 0.75rem;
+			border-top-width: 1.5rem;
 		}
 
 		&:nth-child(3) {
-			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[0.75rem] border-t-[1.5rem];
+			border-bottom-width: 1.5rem;
+			border-left-width: 0.75rem;
+			border-right-width: 0.75rem;
+			border-top-width: 1.5rem;
 		}
 
 		&:last-child {
-			@apply border-b-[1.5rem] border-l-[0.75rem] border-r-[1.5rem] border-t-[1.5rem];
+			border-bottom-width: 1.5rem;
+			border-left-width: 0.75rem;
+			border-right-width: 1.5rem;
+			border-top-width: 1.5rem;
 		}
 	}
 }
 
 .whats-hot-link {
-	@apply flex h-full;
+	display: flex;
+	height: 100%;
 }
 
 .whats-hot-figure {
-	@apply relative m-0;
+	position: relative;
+	margin: 0;
 }
 
 .whats-hot-image-container {
-	@apply relative h-full overflow-hidden;
+	position: relative;
+	height: 100%;
+	overflow: hidden;
 }
 
 .whats-hot-image {
-	@apply h-full max-w-full origin-center object-cover transition-all duration-300;
+	height: 100%;
+	max-width: 100%;
+	transform-origin: center;
+	object-fit: cover;
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 300ms;
 }
 
 .whats-hot-link:hover .whats-hot-image {
@@ -74,7 +111,18 @@
 }
 
 .whats-hot-caption {
-	@apply absolute bottom-0 w-full bg-black/10 p-2 text-xs leading-tight text-wp-laao-white backdrop-blur-md;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: rgb(0 0 0 / 0.1);
+	padding: 0.5rem;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	line-height: 1.25;
+	color: var(--wp--preset--color--laao-white);
+	--tw-backdrop-blur: blur(12px);
+	-webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+	backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
 .whats-hot-text {

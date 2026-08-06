@@ -7,10 +7,15 @@
 
 .wp-block-laao-post-featured-image {
 	& img {
-		@apply w-full;
+		width: 100%;
 	}
 
 	& .wp-block-laao-post-featured-image-caption {
-		@apply bg-wp-laao-light-gray p-wp-16 text-xs leading-tight text-wp-laao-dark-gray;
+		background-color: var(--wp--preset--color--laao-light-gray);
+		padding: var(--wp--preset--spacing--16);
+		font-size: 0.75rem;
+		line-height: 1rem;
+		line-height: 1.25;
+		color: var(--wp--preset--color--laao-dark-gray);
 	}
 }

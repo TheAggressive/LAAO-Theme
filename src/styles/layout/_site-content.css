@@ -1,11 +1,11 @@
 .site-content {
-	@apply col-span-12;
+	grid-column: span 12 / span 12;
 
 	@media (--bp-lg) {
-		@apply col-span-12;
+		grid-column: span 12 / span 12;
 	}
 
 	@media (--bp-2xl) {
-		@apply col-span-10;
+		grid-column: span 10 / span 10;
 	}
 }

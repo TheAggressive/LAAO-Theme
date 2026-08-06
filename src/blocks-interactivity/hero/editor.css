@@ -5,17 +5,33 @@
  */
 
 .wp-block-laao-hero {
-	@apply relative m-0 h-[500px] overflow-hidden;
+	position: relative;
+	margin: 0;
+	height: 500px;
+	overflow: hidden;
 
 	.wp-block-laao-hero-content {
-		@apply relative z-10;
+		position: relative;
+		z-index: 10;
 	}
 
 	.wp-block-laao-hero-slider {
-		@apply absolute left-0 top-0 h-full w-full;
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
 
 		.wp-block-laao-hero-slide {
-			@apply absolute left-0 top-0 z-[5] h-full w-full bg-cover bg-center opacity-100;
+			position: absolute;
+			left: 0;
+			top: 0;
+			z-index: 5;
+			height: 100%;
+			width: 100%;
+			background-size: cover;
+			background-position: center;
+			opacity: 1;
 		}
 	}
 }

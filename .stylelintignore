@@ -1,3 +1,7 @@
 **/*.js
 node_modules
 **/*.svg
+
+# Vendored: Tailwind Preflight, extracted verbatim when Tailwind was removed.
+# Generated third-party CSS, not hand-written source.
+src/styles/_reset.css

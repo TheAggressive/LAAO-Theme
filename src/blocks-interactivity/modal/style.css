@@ -9,13 +9,27 @@
 
 /* Base modal styling */
 .wp-block-laao-modal-wrapper {
-	@apply relative;
+	position: relative;
 	/* Modal overlay */
 	.wp-block-laao-modal-overlay {
-		@apply fixed bottom-0 left-0 right-0 top-0 z-[9999] hidden cursor-pointer bg-black/85 opacity-0 transition-all duration-[var(--laao-modal-animation-duration)];
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		top: 0;
+		z-index: 9999;
+		display: none;
+		cursor: pointer;
+		background-color: rgb(0 0 0 / 0.85);
+		opacity: 0;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+		transition-duration: var(--laao-modal-animation-duration);
 
 		&.is-active {
-			@apply block opacity-0;
+			display: block;
+			opacity: 0;
 
 			/* Animation classes for overlay */
 			&.animation-enter {
@@ -31,121 +45,165 @@
 	}
 
 	.wp-block-laao-modal-container {
-		@apply fixed z-[9999] hidden w-full;
+		position: fixed;
+		z-index: 9999;
+		display: none;
+		width: 100%;
 
 		@media (--bp-md) {
 			& {
-				@apply max-w-96;
+				max-width: 24rem;
 			}
 		}
 
 		&.is-active {
-			@apply block;
+			display: block;
 
 			/* Animation classes for modal content */
 			&.animation-enter-fade {
-				@apply animate-[modal-fade-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-fade-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&.animation-exit-fade {
-				@apply animate-[modal-fade-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-fade-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			/* Standard position slide animations */
 			&:not(.modal-position-center).animation-enter-slide-down {
-				@apply animate-[modal-slide-down-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-slide-down-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&:not(.modal-position-center).animation-exit-slide-down {
-				@apply animate-[modal-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-slide-down-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			&:not(.modal-position-center).animation-enter-slide-up {
-				@apply animate-[modal-slide-up-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-slide-up-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&:not(.modal-position-center).animation-exit-slide-up {
-				@apply animate-[modal-slide-up-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-slide-up-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			/* Center position slide animations */
 			&.modal-position-center.animation-enter-slide-down {
-				@apply animate-[modal-center-slide-down-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-center-slide-down-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&.modal-position-center.animation-exit-slide-down {
-				@apply animate-[modal-center-slide-down-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-center-slide-down-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			&.modal-position-center.animation-enter-slide-up {
-				@apply animate-[modal-center-slide-up-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-center-slide-up-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&.modal-position-center.animation-exit-slide-up {
-				@apply animate-[modal-center-slide-up-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-center-slide-up-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			/* Standard position zoom animations */
 			&:not(.modal-position-center).animation-enter-zoom-in {
-				@apply animate-[modal-zoom-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-zoom-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&:not(.modal-position-center).animation-exit-zoom-out {
-				@apply animate-[modal-zoom-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-zoom-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			/* Center position zoom animations */
 			&.modal-position-center.animation-enter-zoom-in {
-				@apply animate-[modal-center-zoom-in_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-center-zoom-in var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			&.modal-position-center.animation-exit-zoom-out {
-				@apply animate-[modal-center-zoom-out_var(--laao-modal-animation-duration)_forwards_ease-out] delay-0;
+				animation: modal-center-zoom-out var(--laao-modal-animation-duration) forwards ease-out;
+				transition-delay: 0s;
 			}
 
 			/* Standard position bounce animation */
 			&:not(.modal-position-center).animation-enter-bounce {
-				@apply animate-[modal-bounce_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-bounce var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 
 			/* Center position bounce animation */
 			&.modal-position-center.animation-enter-bounce {
-				@apply animate-[modal-center-bounce_var(--laao-modal-animation-duration)_forwards_ease-in] delay-[var(--laao-modal-animation-delay)];
+				animation: modal-center-bounce var(--laao-modal-animation-duration) forwards ease-in;
+				transition-delay: var(--laao-modal-animation-delay);
 			}
 		}
 
 		/* Position variants */
 		&.modal-position-center {
-			@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+			left: 50%;
+			top: 50%;
+			--tw-translate-x: -50%;
+			--tw-translate-y: -50%;
+			transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 		}
 
 		&.modal-position-top-left {
-			@apply left-0 top-0;
+			left: 0;
+			top: 0;
 		}
 
 		&.modal-position-top-right {
-			@apply right-0 top-0;
+			right: 0;
+			top: 0;
 		}
 
 		&.modal-position-bottom-left {
-			@apply bottom-0 left-0;
+			bottom: 0;
+			left: 0;
 		}
 
 		&.modal-position-bottom-right {
-			@apply bottom-0 right-0;
+			bottom: 0;
+			right: 0;
 		}
 	}
 
 	.wp-block-laao-modal {
-		@apply flex flex-col;
+		display: flex;
+		flex-direction: column;
 
 		/* Close button */
 		.wp-block-laao-modal-close {
-			@apply flex items-center justify-center place-self-end bg-[var(--wp--preset--color--laao-gray)] px-2 text-2xl leading-snug text-[var(--wp--preset--color--laao-white)] transition-all duration-300;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			place-self: end;
+			background-color: var(--wp--preset--color--laao-gray);
+			padding-left: 0.5rem;
+			padding-right: 0.5rem;
+			font-size: 1.5rem;
+			line-height: 2rem;
+			line-height: 1.375;
+			color: var(--wp--preset--color--laao-white);
+			transition-property: all;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+			transition-duration: 300ms;
 
 			&:hover,
 			&:focus {
-				@apply border-none bg-[var(--wp--preset--color--laao-red)] outline-none;
+				border-style: none;
+				background-color: var(--wp--preset--color--laao-red);
+				outline: 2px solid transparent;
+				outline-offset: 2px;
 			}
 		}
 	}
