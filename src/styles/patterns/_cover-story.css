@@ -2,32 +2,38 @@
 
 .cover-story {
 	.cover-article {
-		@apply flex-col !items-start;
+		flex-direction: column;
+		align-items: flex-start !important;
 
 		@media (--bp-lg) {
-			@apply flex-row;
+			flex-direction: row;
 		}
 
 		.cover-article-media-container {
-			@apply w-full;
+			width: 100%;
 
 			.wp-block-post-featured-image {
-				@apply w-full;
+				width: 100%;
 			}
 
 			.cover-article-secondary-images {
 				img {
-					@apply max-w-full;
+					max-width: 100%;
 				}
 			}
 
 			.cover-article-media-caption {
-				@apply bg-wp-laao-light-gray p-4 text-xs leading-tight text-wp-laao-dark-gray;
+				background-color: var(--wp--preset--color--laao-light-gray);
+				padding: 1rem;
+				font-size: 0.75rem;
+				line-height: 1rem;
+				line-height: 1.25;
+				color: var(--wp--preset--color--laao-dark-gray);
 			}
 		}
 
 		.wp-block-post-content {
-			@apply block;
+			display: block;
 		}
 	}
 }

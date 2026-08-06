@@ -6,7 +6,11 @@
 	);
 	position: relative;
 
-	@apply grid h-[3.75rem] w-full place-items-center overflow-hidden;
+	display: grid;
+	height: 3.75rem;
+	width: 100%;
+	place-items: center;
+	overflow: hidden;
 
 	h3 {
 		display: flex;
@@ -19,11 +23,23 @@
 	}
 
 	p {
-		@apply absolute m-0 flex items-center justify-center overflow-hidden p-0 uppercase tracking-[1vw] lg:tracking-[1.5vw];
+		position: absolute;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		padding: 0;
+		text-transform: uppercase;
+		letter-spacing: 1vw;
+
+		@media (--bp-lg) {
+			letter-spacing: 1.5vw;
+		}
 
 		.letter {
 			/* This will let you apply transforms to the span char elements. */
-			@apply inline-block;
+			display: inline-block;
 		}
 	}
 }

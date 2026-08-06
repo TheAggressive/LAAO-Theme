@@ -1,32 +1,70 @@
 .wp-block-query-pagination {
-	@apply flex items-center justify-center gap-wp-4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--wp--preset--spacing--4);
 
 	.wp-block-query-pagination-numbers {
-		@apply flex items-center justify-center gap-wp-4;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--wp--preset--spacing--4);
 
 		.page-numbers {
-			@apply flex h-10 w-10 items-center justify-center rounded-full border border-wp-laao-gray font-bold text-wp-laao-gray transition-all duration-300;
+			display: flex;
+			height: 2.5rem;
+			width: 2.5rem;
+			align-items: center;
+			justify-content: center;
+			border-radius: 9999px;
+			border-width: 1px;
+			border-color: var(--wp--preset--color--laao-gray);
+			font-weight: 700;
+			color: var(--wp--preset--color--laao-gray);
+			transition-property: all;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+			transition-duration: 300ms;
 
 			&:hover {
-				@apply border-wp-laao-red bg-wp-laao-red text-wp-laao-white;
+				border-color: var(--wp--preset--color--laao-red);
+				background-color: var(--wp--preset--color--laao-red);
+				color: var(--wp--preset--color--laao-white);
 			}
 		}
 
 		.dots {
-			@apply border-none hover:bg-inherit hover:text-wp-laao-gray;
+			border-style: none;
+
+			&:hover {
+				background-color: inherit;
+				color: var(--wp--preset--color--laao-gray);
+			}
 		}
 	}
 
 	.wp-block-query-pagination-next,
 	.wp-block-query-pagination-previous {
-		@apply flex h-10 w-10 items-center justify-center rounded-full bg-wp-laao-gray pb-2 text-3xl text-wp-laao-white transition-all duration-300;
+		display: flex;
+		height: 2.5rem;
+		width: 2.5rem;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		background-color: var(--wp--preset--color--laao-gray);
+		padding-bottom: 0.5rem;
+		font-size: 1.875rem;
+		line-height: 2.25rem;
+		color: var(--wp--preset--color--laao-white);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 300ms;
 
 		&:hover {
-			@apply bg-wp-laao-red;
+			background-color: var(--wp--preset--color--laao-red);
 		}
 
 		span {
-			@apply m-0;
+			margin: 0;
 		}
 	}
 }

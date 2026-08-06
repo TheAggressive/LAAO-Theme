@@ -1,25 +1,41 @@
 .site-footer {
-	@apply m-0;
+	margin: 0;
 
 	.wp-block-navigation,
 	.wp-block-navigation__container {
-		@apply flex-col gap-wp-28;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--28);
 
 		@media (--bp-md) {
-			@apply flex-row gap-wp-28;
+			flex-direction: row;
+			gap: var(--wp--preset--spacing--28);
 		}
 
 		.wp-block-navigation-item {
 			@media (--bp-md) {
 				&:not(:last-child)::after {
-					@apply absolute -right-wp-16 bottom-0 top-0 text-wp-laao-red content-['|'];
+					position: absolute;
+					right: calc(var(--wp--preset--spacing--16) * -1);
+					bottom: 0;
+					top: 0;
+					color: var(--wp--preset--color--laao-red);
+					--tw-content: "|";
+					content: var(--tw-content);
 				}
 			}
 		}
 
 		.wp-block-navigation-link {
 			@media (--bp-md) {
-				@apply flex-row text-wp-laao-white transition-all hover:text-wp-laao-red;
+				flex-direction: row;
+				color: var(--wp--preset--color--laao-white);
+				transition-property: all;
+				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+				transition-duration: 150ms;
+
+				&:hover {
+					color: var(--wp--preset--color--laao-red);
+				}
 			}
 		}
 	}
@@ -27,20 +43,26 @@
 	.wp-block-social-links {
 		li {
 			&:hover {
-				@apply text-wp-laao-red;
+				color: var(--wp--preset--color--laao-red);
 			}
 
 			svg {
-				@apply h-wp-28 w-wp-28 fill-current;
+				height: var(--wp--preset--spacing--28);
+				width: var(--wp--preset--spacing--28);
+				fill: currentcolor;
 			}
 		}
 	}
 
 	.wp-block-laao-copyright-date-tag a {
-		@apply text-wp-laao-white underline transition-all;
+		color: var(--wp--preset--color--laao-white);
+		text-decoration-line: underline;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
 
 		&:hover {
-			@apply text-wp-laao-red;
+			color: var(--wp--preset--color--laao-red);
 		}
 	}
 }

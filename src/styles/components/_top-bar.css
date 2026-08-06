@@ -1,24 +1,62 @@
 .site-top-bar {
-	@apply px-0 shadow-2xl;
+	padding-left: 0;
+	padding-right: 0;
+	--tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+	--tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+	box-shadow:
+		var(--tw-ring-offset-shadow, 0 0 #0000),
+		var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 
 	@media (--bp-md) {
-		@apply px-wp-44 py-0;
+		padding-left: var(--wp--preset--spacing--44);
+		padding-right: var(--wp--preset--spacing--44);
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 
 	.site-top-bar-edition {
-		@apply relative col-span-4;
+		position: relative;
+		grid-column: span 4 / span 4;
 
 		@media (--bp-sm-max) {
-			@apply col-span-6;
+			grid-column: span 6 / span 6;
 		}
 
 		@media (--bp-md) {
-			@apply col-span-4 min-w-[176px] max-w-[176px];
+			grid-column: span 4 / span 4;
+			min-width: 176px;
+			max-width: 176px;
 		}
 
 		&::after {
 			@media (--bp-md) {
-				@apply absolute right-0 top-[64px] z-10 w-full rounded-b-md bg-wp-laao-white py-wp-8 text-center font-wp-roboto-condensed text-[0.95rem] uppercase tracking-wp-8 text-wp-laao-black shadow-xl content-["Edition"];
+				position: absolute;
+				right: 0;
+				top: 64px;
+				z-index: 10;
+				width: 100%;
+				border-bottom-right-radius: 0.375rem;
+				border-bottom-left-radius: 0.375rem;
+				background-color: var(--wp--preset--color--laao-white);
+				padding-top: var(--wp--preset--spacing--8);
+				padding-bottom: var(--wp--preset--spacing--8);
+				text-align: center;
+				font-family: var(--wp--preset--font-family--roboto-condensed);
+				font-size: 0.95rem;
+				text-transform: uppercase;
+				letter-spacing: var(--wp--preset--spacing--8);
+				color: var(--wp--preset--color--laao-black);
+				--tw-shadow:
+					0 20px 25px -5px rgb(0 0 0 / 0.1),
+					0 8px 10px -6px rgb(0 0 0 / 0.1);
+				--tw-shadow-colored:
+					0 20px 25px -5px var(--tw-shadow-color),
+					0 8px 10px -6px var(--tw-shadow-color);
+				box-shadow:
+					var(--tw-ring-offset-shadow, 0 0 #0000),
+					var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+				--tw-content: "Edition";
+				content: var(--tw-content);
 			}
 		}
 	}
@@ -26,43 +64,54 @@
 	/* WordPress Override */
 	@media (--bp-sm-max) {
 		.is-layout-grid {
-			@apply gap-4;
+			gap: 1rem;
 		}
 	}
 
 	.site-top-bar-content-container {
-		@apply col-span-8 col-start-5 w-full gap-wp-16 justify-self-end pr-wp-16;
+		grid-column: span 8 / span 8;
+		grid-column-start: 5;
+		width: 100%;
+		gap: var(--wp--preset--spacing--16);
+		justify-self: end;
+		padding-right: var(--wp--preset--spacing--16);
 
 		@media (--bp-sm-max) {
-			@apply col-span-6 col-start-7;
+			grid-column: span 6 / span 6;
+			grid-column-start: 7;
 		}
 
 		@media (--bp-md) {
-			@apply col-span-8 col-start-5 gap-wp-44 pr-0;
+			grid-column: span 8 / span 8;
+			grid-column-start: 5;
+			gap: var(--wp--preset--spacing--44);
+			padding-right: 0;
 		}
 
 		@media (--bp-lg) {
-			@apply col-span-8;
+			grid-column: span 8 / span 8;
 		}
 
 		@media (--bp-2xl) {
-			@apply col-span-6;
+			grid-column: span 6 / span 6;
 		}
 
 		.site-top-bar-social {
-			@apply hidden;
+			display: none;
 
 			@media (--bp-sm) {
-				@apply block;
+				display: block;
 			}
 		}
 
 		.wp-block-button {
-			@apply justify-center whitespace-nowrap;
+			justify-content: center;
+			white-space: nowrap;
 
 			@media (--bp-sm-max) {
 				.wp-block-button__link {
-					@apply px-4;
+					padding-left: 1rem;
+					padding-right: 1rem;
 				}
 			}
 		}

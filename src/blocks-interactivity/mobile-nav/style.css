@@ -8,7 +8,7 @@
 
 	@media (--bp-2xl) {
 		& {
-			@apply hidden;
+			display: none;
 		}
 	}
 
@@ -26,13 +26,23 @@
 }
 
 .laao-mobile-nav-overlay {
-	@apply fixed bottom-0 left-0 right-0 top-0 z-[998] bg-wp-laao-black opacity-0 transition-opacity duration-[450ms];
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 998;
+	background-color: var(--wp--preset--color--laao-black);
+	opacity: 0;
+	transition-property: opacity;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 450ms;
 }
 
 .laao-mobile-nav-open .laao-mobile-nav-overlay {
-	@apply opacity-85;
+	opacity: 0.85;
 }
 
 .laao-mobile-nav-overlay-closing {
-	@apply opacity-0;
+	opacity: 0;
 }

@@ -2,6 +2,7 @@
 	@media (--bp-md-max) {
 		--wp--preset--spacing--44: var(--wp--preset--spacing--16);
 
-		@apply px-wp-16;
+		padding-left: var(--wp--preset--spacing--16);
+		padding-right: var(--wp--preset--spacing--16);
 	}
 }

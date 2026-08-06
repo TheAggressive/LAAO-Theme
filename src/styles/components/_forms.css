@@ -1,17 +1,31 @@
 label {
-	@apply font-bold uppercase text-wp-laao-black;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--laao-black);
 }
 
 input,
 textarea,
 select {
-	@apply rounded-md bg-wp-laao-light-gray px-2 py-4;
+	border-radius: 0.375rem;
+	background-color: var(--wp--preset--color--laao-light-gray);
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 button[type="submit"] {
-	@apply bg-wp-laao-red px-4 py-3 uppercase text-wp-laao-white;
+	background-color: var(--wp--preset--color--laao-red);
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--laao-white);
 }
 
 select {
-	@apply h-11 align-middle;
+	height: 2.75rem;
+	vertical-align: middle;
 }

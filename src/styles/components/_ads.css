@@ -1,45 +1,88 @@
 @import "../_breakpoints.css";
 
 .ad-160x600 {
-	@apply float-right clear-right mb-wp-44 ml-wp-44 hidden;
+	float: right;
+	clear: right;
+	margin-bottom: var(--wp--preset--spacing--44);
+	margin-left: var(--wp--preset--spacing--44);
+	display: none;
 
 	@media (--bp-lg) {
-		@apply block;
+		display: block;
 	}
 }
 
 .ad-300x250 {
-	@apply mx-auto block w-fit border-[1.5rem] border-wp-laao-white;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: fit-content;
+	border-width: 1.5rem;
+	border-color: var(--wp--preset--color--laao-white);
 
 	@media (--bp-lg) {
-		@apply hidden;
+		display: none;
 	}
 }
 
 .ad-728x90 {
-	@apply block h-auto w-full max-w-full bg-white/20 pb-[1.5rem] pt-[1.5rem] backdrop-blur-lg;
+	display: block;
+	height: auto;
+	width: 100%;
+	max-width: 100%;
+	background-color: rgb(255 255 255 / 0.2);
+	padding-bottom: 1.5rem;
+	padding-top: 1.5rem;
+	--tw-backdrop-blur: blur(16px);
+	-webkit-backdrop-filter: var(--tw-backdrop-blur)
+		var(--tw-backdrop-brightness) var(--tw-backdrop-contrast)
+		var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
+		var(--tw-backdrop-invert) var(--tw-backdrop-opacity)
+		var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+	backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+		var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
+		var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
+		var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+		var(--tw-backdrop-sepia);
 
 	img {
-		@apply h-auto w-full;
+		height: auto;
+		width: 100%;
 	}
 
 	@media (--bp-md) {
-		@apply w-fit pl-[1.5rem] pr-[1.5rem];
+		width: fit-content;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
 	}
 }
 
 .ad-728x90:not(.wp-block-laao-hero .ad-728x90) {
-	@apply hidden border-[1.5rem] border-wp-laao-white p-0;
+	display: none;
+	border-width: 1.5rem;
+	border-color: var(--wp--preset--color--laao-white);
+	padding: 0;
 
 	@media (--bp-lg) {
-		@apply mx-auto block w-fit;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		width: fit-content;
 
 		img {
-			@apply h-auto w-fit;
+			height: auto;
+			width: fit-content;
 		}
 	}
 }
 
 .ad-720x300 {
-	@apply mx-auto my-wp-44 block w-fit border-[1.5rem] border-wp-laao-white;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: var(--wp--preset--spacing--44);
+	margin-bottom: var(--wp--preset--spacing--44);
+	display: block;
+	width: fit-content;
+	border-width: 1.5rem;
+	border-color: var(--wp--preset--color--laao-white);
 }

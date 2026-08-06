@@ -6,24 +6,35 @@
 		.wp-block-social-links:not(.site-footer .wp-block-social-links):not(
 			.site-nav .wp-block-social-links
 		) {
-		@apply hidden;
+		display: none;
 
 		@media (--bp-sm) {
-			@apply flex;
+			display: flex;
 		}
 	}
 
 	li {
-		@apply text-wp-laao-red transition-all;
+		color: var(--wp--preset--color--laao-red);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
 
 		&:hover {
-			@apply scale-125 text-wp-laao-black;
+			--tw-scale-x: 1.25;
+			--tw-scale-y: 1.25;
+			transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+				rotate(var(--tw-rotate)) skewX(var(--tw-skew-x))
+				skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+				scaleY(var(--tw-scale-y));
+			color: var(--wp--preset--color--laao-black);
 		}
 	}
 
 	.wp-social-link {
 		svg {
-			@apply h-wp-32 w-wp-32 fill-current;
+			height: var(--wp--preset--spacing--32);
+			width: var(--wp--preset--spacing--32);
+			fill: currentcolor;
 		}
 	}
 }

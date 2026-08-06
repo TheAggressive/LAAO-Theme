@@ -8,20 +8,23 @@
  */
 
 .wp-block-laao-site-logo {
-	@apply h-fit w-fit;
+	height: fit-content;
+	width: fit-content;
 	img {
-		@apply h-full w-full max-w-52;
+		height: 100%;
+		width: 100%;
+		max-width: 13rem;
 
 		@media (--bp-md) {
-			@apply w-64;
+			width: 16rem;
 		}
 
 		.a {
-			@apply fill-wp-laao-white;
+			fill: var(--wp--preset--color--laao-white);
 		}
 
 		.b {
-			@apply fill-wp-laao-red;
+			fill: var(--wp--preset--color--laao-red);
 		}
 	}
 }
