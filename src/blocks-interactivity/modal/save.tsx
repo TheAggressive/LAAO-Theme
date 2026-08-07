@@ -10,11 +10,11 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  * @return Element to render.
  */
 export default function save(): JSX.Element {
-  const blockProps = useBlockProps.save();
+	const blockProps = useBlockProps.save();
 
-  return (
-    <div {...blockProps}>
-      <InnerBlocks.Content />
-    </div>
-  );
+	return (
+		<div {...blockProps}>
+			<InnerBlocks.Content />
+		</div>
+	);
 }

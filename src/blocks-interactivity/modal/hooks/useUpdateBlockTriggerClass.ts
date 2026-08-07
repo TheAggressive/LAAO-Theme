@@ -5,9 +5,9 @@ import { addOrUpdateClassWithPrefix } from '../utils/addOrUpdateClassWithPrefix'
 import { blockExists } from '../utils/editorHelpers';
 
 export type UpdateBlockTriggerClassFn = (
-  blockId: string,
-  modalVal: string,
-  add?: boolean
+	blockId: string,
+	modalVal: string,
+	add?: boolean
 ) => void;
 
 /**
@@ -20,72 +20,72 @@ export type UpdateBlockTriggerClassFn = (
  *         - add      Whether to add or remove the class
  */
 export function useUpdateBlockTriggerClass(): UpdateBlockTriggerClassFn {
-  const updateBlockTriggerClass = useCallback<UpdateBlockTriggerClassFn>(
-    (blockId, modalVal, add = true) => {
-      if (!blockId) {
-        return;
-      }
+	const updateBlockTriggerClass = useCallback<UpdateBlockTriggerClassFn>(
+		(blockId, modalVal, add = true) => {
+			if (!blockId) {
+				return;
+			}
 
-      // Check if the block exists using our utility function.
-      if (!blockExists(blockId)) {
-        return;
-      }
+			// Check if the block exists using our utility function.
+			if (!blockExists(blockId)) {
+				return;
+			}
 
-      try {
-        // Get the block editor.
-        const blockEditor = select(blockEditorStore);
-        // Get the block's current attributes.
-        const blockAttributes = blockEditor.getBlockAttributes(blockId);
+			try {
+				// Get the block editor.
+				const blockEditor = select(blockEditorStore);
+				// Get the block's current attributes.
+				const blockAttributes = blockEditor.getBlockAttributes(blockId);
 
-        if (!blockAttributes) {
-          return;
-        }
+				if (!blockAttributes) {
+					return;
+				}
 
-        // Get the current className or empty string. Attributes come back as
-        // an untyped bag, so confirm the shape rather than assuming a string.
-        const rawClassName = blockAttributes.className;
-        const currentClassName: string =
-          typeof rawClassName === 'string' ? rawClassName : '';
+				// Get the current className or empty string. Attributes come back as
+				// an untyped bag, so confirm the shape rather than assuming a string.
+				const rawClassName = blockAttributes.className;
+				const currentClassName: string =
+					typeof rawClassName === 'string' ? rawClassName : '';
 
-        // Get the update function from the store.
-        const blockDispatch = dispatch(blockEditorStore);
-        if (!blockDispatch || !blockDispatch.updateBlockAttributes) {
-          return;
-        }
+				// Get the update function from the store.
+				const blockDispatch = dispatch(blockEditorStore);
+				if (!blockDispatch || !blockDispatch.updateBlockAttributes) {
+					return;
+				}
 
-        // If removing, strip all modal-trigger classes, not just one specific class.
-        if (!add) {
-          // Remove all modal-trigger classes regardless of modal ID.
-          const cleanedClassName = currentClassName
-            .split(' ')
-            .filter(cls => !cls.startsWith('modal-trigger-'))
-            .join(' ');
+				// If removing, strip all modal-trigger classes, not just one specific class.
+				if (!add) {
+					// Remove all modal-trigger classes regardless of modal ID.
+					const cleanedClassName = currentClassName
+						.split(' ')
+						.filter((cls) => !cls.startsWith('modal-trigger-'))
+						.join(' ');
 
-          blockDispatch.updateBlockAttributes(blockId, {
-            className: cleanedClassName,
-          });
-        } else {
-          // Add the new class.
-          const updatedClassName = addOrUpdateClassWithPrefix(
-            currentClassName,
-            'modal-trigger-',
-            modalVal
-          );
+					blockDispatch.updateBlockAttributes(blockId, {
+						className: cleanedClassName,
+					});
+				} else {
+					// Add the new class.
+					const updatedClassName = addOrUpdateClassWithPrefix(
+						currentClassName,
+						'modal-trigger-',
+						modalVal
+					);
 
-          // Only update if the class has actually changed.
-          if (updatedClassName !== currentClassName) {
-            blockDispatch.updateBlockAttributes(blockId, {
-              className: updatedClassName,
-            });
-          }
-        }
-      } catch {
-        // Silently fail.
-      }
-    },
-    // No external dependencies for this function.
-    []
-  );
+					// Only update if the class has actually changed.
+					if (updatedClassName !== currentClassName) {
+						blockDispatch.updateBlockAttributes(blockId, {
+							className: updatedClassName,
+						});
+					}
+				}
+			} catch {
+				// Silently fail.
+			}
+		},
+		// No external dependencies for this function.
+		[]
+	);
 
-  return updateBlockTriggerClass;
+	return updateBlockTriggerClass;
 }

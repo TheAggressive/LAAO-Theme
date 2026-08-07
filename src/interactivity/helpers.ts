@@ -17,24 +17,24 @@
  * @param container Element to trap focus within.
  * @return Cleanup function that removes the listener.
  */
-export function setupFocusTrap( container: HTMLElement ): () => void {
+export function setupFocusTrap(container: HTMLElement): () => void {
 	const FOCUSABLE_SELECTOR =
 		'a[href], button:not([disabled]), input:not([disabled]), ' +
 		'select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-	const handleKeydown = ( event: KeyboardEvent ): void => {
-		if ( event.key !== 'Tab' ) {
+	const handleKeydown = (event: KeyboardEvent): void => {
+		if (event.key !== 'Tab') {
 			return;
 		}
 
 		const focusable = Array.from(
-			container.querySelectorAll< HTMLElement >( FOCUSABLE_SELECTOR )
+			container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
 		).filter(
-			( element ) =>
-				! element.closest( '[hidden]' ) && ! element.closest( '[inert]' )
+			(element) =>
+				!element.closest('[hidden]') && !element.closest('[inert]')
 		);
 
-		if ( focusable.length === 0 ) {
+		if (focusable.length === 0) {
 			event.preventDefault();
 			return;
 		}
@@ -44,7 +44,7 @@ export function setupFocusTrap( container: HTMLElement ): () => void {
 		);
 		let nextIndex: number;
 
-		if ( event.shiftKey ) {
+		if (event.shiftKey) {
 			nextIndex =
 				currentIndex <= 0 ? focusable.length - 1 : currentIndex - 1;
 		} else {
@@ -53,12 +53,14 @@ export function setupFocusTrap( container: HTMLElement ): () => void {
 		}
 
 		event.preventDefault();
-		focusable[ nextIndex ].focus();
+		// nextIndex is clamped to the array above, but noUncheckedIndexedAccess
+		// cannot prove it — call optionally rather than assert non-null.
+		focusable[nextIndex]?.focus();
 	};
 
-	container.addEventListener( 'keydown', handleKeydown );
+	container.addEventListener('keydown', handleKeydown);
 
 	return () => {
-		container.removeEventListener( 'keydown', handleKeydown );
+		container.removeEventListener('keydown', handleKeydown);
 	};
 }

@@ -232,7 +232,7 @@ if ( $show_close_btn ) {
 	);
 	$icon_svg   = '';
 	if ( 'text-only' !== $close_icon ) {
-		$slug     = $icon_slugs[ $close_icon ] ?? 'close';
+		$slug = $icon_slugs[ $close_icon ] ?? 'close';
 		// Fully qualified: this file is required inside a closure by
 		// register_block_type_from_metadata(), so there is no `use` context.
 		$icon_svg = \LAAO\Core\Icons::get(

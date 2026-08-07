@@ -95,4 +95,22 @@
 	<rule ref="Generic.Files.OneObjectStructurePerFile">
 		<exclude-pattern>tests/php/*</exclude-pattern>
 	</rule>
+    <!--
+        Functions returning markup already escaped at construction.
+
+        laao_trusted_html() escapes nothing; it marks a string whose parts were
+        escaped individually (see inc/helpers.php). Registering it here keeps
+        the sniff meaningful everywhere else instead of scattering ignore
+        comments through block render callbacks.
+    -->
+    <rule ref="WordPress.Security.EscapeOutput">
+        <properties>
+            <property name="customAutoEscapedFunctions" type="array">
+                <element value="laao_trusted_html"/>
+                <element value="get_block_wrapper_attributes"/>
+                <element value="render_block"/>
+            </property>
+        </properties>
+    </rule>
+
 </ruleset>

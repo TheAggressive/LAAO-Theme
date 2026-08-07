@@ -11,30 +11,30 @@ import { blockAttrString } from './blockAttributes';
  * @return A persistent key for the block
  */
 export const generateBlockKey = (
-  block: EditorBlock | null | undefined
+	block: EditorBlock | null | undefined
 ): string => {
-  if (!block) {
-    return '';
-  }
+	if (!block) {
+		return '';
+	}
 
-  const existingKey = blockAttrString(block.attributes, 'modalTriggerKey');
-  if (existingKey) {
-    return existingKey;
-  }
+	const existingKey = blockAttrString(block.attributes, 'modalTriggerKey');
+	if (existingKey) {
+		return existingKey;
+	}
 
-  // Add a unique identifier attribute to the block if it doesn't have one.
-  const blockEditor = select(blockEditorStore);
-  if (blockEditor && block.clientId) {
-    // Use the dispatch function to update the block attributes.
-    const { updateBlockAttributes } = dispatch(blockEditorStore);
-    const triggerKey = `trigger-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+	// Add a unique identifier attribute to the block if it doesn't have one.
+	const blockEditor = select(blockEditorStore);
+	if (blockEditor && block.clientId) {
+		// Use the dispatch function to update the block attributes.
+		const { updateBlockAttributes } = dispatch(blockEditorStore);
+		const triggerKey = `trigger-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-    updateBlockAttributes(block.clientId, {
-      modalTriggerKey: triggerKey,
-    });
+		updateBlockAttributes(block.clientId, {
+			modalTriggerKey: triggerKey,
+		});
 
-    return triggerKey;
-  }
+		return triggerKey;
+	}
 
-  return '';
+	return '';
 };

@@ -1,3 +1,12 @@
+/*
+ * stylelint-disable no-descending-specificity
+ *
+ * The close-button placement rules intentionally follow the `.is-open` state
+ * rules they override. Reordering them to satisfy the check would change which
+ * declaration wins, moving the button. This ordering came across with the block
+ * from the Aggressive Apparel theme, where the rule is not enabled.
+ */
+/* stylelint-disable no-descending-specificity */
 /* ============================================================
  * Modal Block Styles
  * Follows the theme's modal/overlay pattern:

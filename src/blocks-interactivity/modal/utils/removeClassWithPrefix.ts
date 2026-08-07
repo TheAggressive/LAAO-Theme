@@ -6,14 +6,14 @@
  * @return The updated className string
  */
 export const removeClassWithPrefix = (
-  className: string,
-  prefix: string
+	className: string,
+	prefix: string
 ): string => {
-  if (!className) {
-    return '';
-  }
-  return className
-    .split(' ')
-    .filter(cls => !cls.startsWith(prefix))
-    .join(' ');
+	if (!className) {
+		return '';
+	}
+	return className
+		.split(' ')
+		.filter((cls) => !cls.startsWith(prefix))
+		.join(' ');
 };

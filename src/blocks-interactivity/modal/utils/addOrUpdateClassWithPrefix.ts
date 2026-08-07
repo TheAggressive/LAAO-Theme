@@ -9,14 +9,14 @@ import { removeClassWithPrefix } from './removeClassWithPrefix';
  * @return The updated className string
  */
 export const addOrUpdateClassWithPrefix = (
-  className: string,
-  prefix: string,
-  value: string
+	className: string,
+	prefix: string,
+	value: string
 ): string => {
-  // First remove any existing classes with this prefix.
-  const cleanedClassName = removeClassWithPrefix(className, prefix);
-  // Add the new class with value.
-  const newClass = `${prefix}${value}`;
-  // Return the combined class.
-  return cleanedClassName ? `${cleanedClassName} ${newClass}` : newClass;
+	// First remove any existing classes with this prefix.
+	const cleanedClassName = removeClassWithPrefix(className, prefix);
+	// Add the new class with value.
+	const newClass = `${prefix}${value}`;
+	// Return the combined class.
+	return cleanedClassName ? `${cleanedClassName} ${newClass}` : newClass;
 };

@@ -7,24 +7,24 @@
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { select } from '@wordpress/data';
 import {
-  cleanupAllHighlights,
-  highlightModalTrigger,
-  queryAllEditorDocuments,
+	cleanupAllHighlights,
+	highlightModalTrigger,
+	queryAllEditorDocuments,
 } from '../highlights';
 import { Debug } from './debug';
 
 type UpdateTriggerClassFn = (
-  blockId: string,
-  modalId: string,
-  shouldAdd: boolean
+	blockId: string,
+	modalId: string,
+	shouldAdd: boolean
 ) => void;
 
 interface ManageHighlightOptions {
-  modalId: string;
-  blockId: string;
-  isSelected: boolean;
-  setIsHighlightActive: (active: boolean) => void;
-  previousHighlightedElements?: Set<Element>;
+	modalId: string;
+	blockId: string;
+	isSelected: boolean;
+	setIsHighlightActive: (active: boolean) => void;
+	previousHighlightedElements?: Set<Element>;
 }
 
 /**
@@ -33,7 +33,7 @@ interface ManageHighlightOptions {
  * @return True if editor is ready
  */
 export const isEditorReady = (): boolean => {
-  return !!select(blockEditorStore);
+	return !!select(blockEditorStore);
 };
 
 /**
@@ -43,12 +43,12 @@ export const isEditorReady = (): boolean => {
  * @return True if block exists
  */
 export const blockExists = (blockId: string): boolean => {
-  if (!blockId || !isEditorReady()) {
-    return false;
-  }
+	if (!blockId || !isEditorReady()) {
+		return false;
+	}
 
-  const blockEditor = select(blockEditorStore);
-  return !!blockEditor.getBlock(blockId);
+	const blockEditor = select(blockEditorStore);
+	return !!blockEditor.getBlock(blockId);
 };
 
 /**
@@ -61,25 +61,25 @@ export const blockExists = (blockId: string): boolean => {
  * @return Success status
  */
 export const safeUpdateTriggerClass = (
-  updateFunction: UpdateTriggerClassFn,
-  blockId: string,
-  modalId: string,
-  shouldAdd: boolean
+	updateFunction: UpdateTriggerClassFn,
+	blockId: string,
+	modalId: string,
+	shouldAdd: boolean
 ): boolean => {
-  if (!blockId || !modalId || !updateFunction) {
-    return false;
-  }
+	if (!blockId || !modalId || !updateFunction) {
+		return false;
+	}
 
-  try {
-    updateFunction(blockId, modalId, shouldAdd);
-    return true;
-  } catch (error) {
-    Debug.add(
-      `Error ${shouldAdd ? 'adding' : 'removing'} trigger class: ${(error as Error).message}`,
-      true
-    );
-    return false;
-  }
+	try {
+		updateFunction(blockId, modalId, shouldAdd);
+		return true;
+	} catch (error) {
+		Debug.add(
+			`Error ${shouldAdd ? 'adding' : 'removing'} trigger class: ${(error as Error).message}`,
+			true
+		);
+		return false;
+	}
 };
 
 /**
@@ -89,41 +89,43 @@ export const safeUpdateTriggerClass = (
  * @return void
  */
 export const manageHighlight = ({
-  modalId,
-  blockId,
-  isSelected,
-  setIsHighlightActive,
-  previousHighlightedElements,
+	modalId,
+	blockId,
+	isSelected,
+	setIsHighlightActive,
+	previousHighlightedElements,
 }: ManageHighlightOptions): void => {
-  if (!isSelected || !blockId) {
-    cleanupAllHighlights();
-    setIsHighlightActive(false);
-    return;
-  }
+	if (!isSelected || !blockId) {
+		cleanupAllHighlights();
+		setIsHighlightActive(false);
+		return;
+	}
 
-  // Use a small timeout to ensure the DOM is ready.
-  setTimeout(() => {
-    // Clean up any existing highlights first.
-    cleanupAllHighlights();
+	// Use a small timeout to ensure the DOM is ready.
+	setTimeout(() => {
+		// Clean up any existing highlights first.
+		cleanupAllHighlights();
 
-    try {
-      highlightModalTrigger(null, modalId, blockId, {
-        discreet: true,
-      });
-      setIsHighlightActive(true);
+		try {
+			highlightModalTrigger(null, modalId, blockId, {
+				discreet: true,
+			});
+			setIsHighlightActive(true);
 
-      // Store any newly highlighted elements (canvas may be iframed).
-      if (previousHighlightedElements) {
-        queryAllEditorDocuments('.modal-highlight-target').forEach(el => {
-          previousHighlightedElements.add(el);
-        });
-      }
-    } catch (error) {
-      Debug.add(
-        `Error highlighting trigger: ${(error as Error).message}`,
-        true
-      );
-      setIsHighlightActive(false);
-    }
-  }, 100);
+			// Store any newly highlighted elements (canvas may be iframed).
+			if (previousHighlightedElements) {
+				queryAllEditorDocuments('.modal-highlight-target').forEach(
+					(el) => {
+						previousHighlightedElements.add(el);
+					}
+				);
+			}
+		} catch (error) {
+			Debug.add(
+				`Error highlighting trigger: ${(error as Error).message}`,
+				true
+			);
+			setIsHighlightActive(false);
+		}
+	}, 100);
 };
