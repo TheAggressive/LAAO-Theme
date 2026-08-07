@@ -1,0 +1,219 @@
+# CLAUDE.md — LAAO Theme
+
+Guidance for AI assistants working in the LAArtsOnline.com WordPress theme.
+
+Adapted from the sibling Aggressive Apparel theme. Where the two differ, this
+file is authoritative for LAAO: it has no WooCommerce, no navigation block
+system, and a smaller block set.
+
+## Overview
+
+**LAAO** is a WordPress Full Site Editing block theme for an arts and culture
+publication. Service-container architecture, custom Gutenberg blocks with
+Interactivity API support, and a CI pipeline that runs the same commands
+locally as it does on GitHub.
+
+- **Version:** see `style.css` / `package.json` — semantic-release owns it, never hardcode
+- **Requires:** WordPress 6.8+, PHP 8.4+
+- **Tested up to:** WordPress 7.0.2
+- **Toolchain:** Node 24.18.1, pnpm 11.1.2 (pinned; `pnpm ci:doctor` enforces)
+- **No Tailwind.** Removed deliberately — see "Styling" below.
+
+## Quick commands
+
+```bash
+pnpm install
+pnpm build              # all three webpack configs
+pnpm start              # watch mode
+pnpm env:start          # wp-env on :9950 (phpMyAdmin :9952)
+
+pnpm ci:verify          # the whole pipeline, exactly as CI runs it
+pnpm test:php           # PHPUnit (68 tests)
+pnpm test:js            # Jest (47 tests)
+pnpm test:e2e           # Playwright (13 tests)
+pnpm analyse:php        # PHPStan level 8
+pnpm lint:php:fix       # phpcbf
+
+pnpm cli <wp args>      # WP-CLI inside wp-env
+```
+
+`pnpm ci:verify` is the contract: every GitHub job maps 1:1 onto a `pnpm ci:*`
+script, so "green locally" and "green in CI" mean the same thing. Run it before
+proposing a change is finished.
+
+## Architecture
+
+### Directory structure
+
+```
+inc/                    PHP. Autoloaded LAAO\* → inc/class-*.php
+  class-bootstrap.php     service registration + init order
+  class-service-container.php
+  helpers.php             plain functions for block render callbacks
+  Assets/                 Scripts, Styles
+  Core/                   Post_Types, Post_Meta, Block_Types, Theme_Support,
+                          Cache_Version, Icons, Theme_Updates (+ 3 collaborators)
+  Editorial/              Highlight_Columns
+src/
+  blocks/                 static + dynamic blocks (JS)
+  blocks-interactivity/   Interactivity API blocks
+  interactivity/          shared Interactivity helpers
+  styles/                 global CSS; base/_tokens.css is the semantic layer
+  scripts/                editor sidebar plugins, gsap, smoothscroll
+bin/
+  ci/                     doctor, guards, palette baseline, CI parity
+  release/                package, verify-package
+tests/
+  php/Unit/               PHPUnit + Brain\Monkey (WordPress is mocked, not loaded)
+  e2e/                    Playwright: smoke, palette, accessibility
+docs/                     known-issues, site-editor-overrides
+.github/rulesets/         committed branch-protection intent
+```
+
+### PHP
+
+`functions.php` loads `inc/helpers.php`, then the autoloader, then
+`LAAO\Bootstrap::get_instance()`. Bootstrap registers every service into
+`Service_Container` and calls `init()` in a fixed order. Add a service in both
+places — registration alone does nothing.
+
+The autoloader maps `LAAO\Core\Theme_Updates` → `inc/Core/class-theme-updates.php`
+(WordPress file naming). Composer uses a **classmap**, not PSR-4 — PSR-4 cannot
+express that convention and silently resolved nothing when it was configured.
+
+The theme ships without `vendor/`, so `LAAO\Autoloader` is what runs in
+production. Tests exercise it rather than Composer's autoloader so the two
+cannot drift.
+
+### Blocks
+
+Three build configs, three block types:
+
+| Kind        | Where                        | Entry                         |
+| ----------- | ---------------------------- | ----------------------------- |
+| Static      | `src/blocks/*`               | `save.js` writes markup       |
+| Dynamic     | `src/blocks/*`               | `render.php`                  |
+| Interactive | `src/blocks-interactivity/*` | `view.js` + Interactivity API |
+
+**Blocks are registered from `dist/`, not `src/`.** Editing a `render.php` in
+`src/` changes nothing until you rebuild. This costs time repeatedly if you
+forget it.
+
+## Styling
+
+**There is no Tailwind.** It was removed by converting 307 `@apply`
+declarations into plain CSS. Do not reintroduce `@apply`, `tailwind.config.js`,
+or utility classes in markup.
+
+- `src/styles/_reset.css` is Tailwind Preflight, extracted verbatim and now
+  ordinary source. It is stylelint-ignored as vendored output.
+- `src/styles/base/_tokens.css` holds semantic tokens (`--laao-color-surface`,
+  `--laao-radius-panel`, `--laao-z-modal`, …). Components ask for a role, not a
+  literal. Colours resolve through the palette so `theme.json` stays the single
+  source of truth.
+- Nesting is handled by `postcss-nesting` **and** `postcss-preset-env`. Both are
+  intentional: disabling preset-env's `nesting-rules` dropped `:hover` rules and
+  flattened media queries into their parents.
+
+### Colour
+
+`theme.json` `settings.custom.color` holds oklch values; `settings.color.palette`
+references them with `var(--wp--custom--color--*)`.
+
+That indirection is load-bearing. WordPress 7.0 bundles colord 2.9.3, which
+**cannot parse oklch** — a palette declared in bare `oklch()` makes every colour
+normalise to `#000000`, and the editor labels every swatch with the first
+colour's name. `isSimpleCSSColor()` skips colord for any value containing
+`var()`, which is why the tokens work. `src/__tests__/palette-editor-labels.test.js`
+guards it.
+
+Templates must reference tokens, never cached literals —
+`bin/ci/check-template-colors.sh` enforces this. WordPress caches a resolved
+colour beside the slug when a block is saved; those snapshots drift silently and
+once left article pages rendering a different brand red from the front page.
+
+## Testing
+
+| Suite    | Runner                    | Notes                                              |
+| -------- | ------------------------- | -------------------------------------------------- |
+| PHP unit | PHPUnit 13 + Brain\Monkey | WordPress is **not** loaded; functions are stubbed |
+| JS unit  | Jest via wp-scripts       |                                                    |
+| E2E      | Playwright                | smoke, palette, accessibility                      |
+
+PHPUnit 13 removed annotation data providers — use `#[DataProvider]`.
+
+There is no WordPress integration suite. The E2E layer covers real WordPress
+instead; adding one would mean downgrading to PHPUnit 9 for `WP_UnitTestCase`.
+
+E2E defaults to wp-env but honours `WP_BASE_URL`:
+
+```bash
+WP_BASE_URL=http://laartsonline.local npx playwright test
+```
+
+Test against **both**. wp-env is clean and reproducible; the LocalWP site has
+real content, plugins, and database-stored templates that behave differently.
+
+### Writing tests that mean something
+
+Prove a test fails when the behaviour breaks. Mutate the implementation, watch
+it go red, revert. Several tests in this repo passed for the wrong reason until
+that was done — a contrast assertion measured styles before they settled, and an
+undefined-colour check compared against a string the probe never emitted.
+
+## Gates
+
+`pnpm ci:frontend` runs, beyond the obvious linters:
+
+- `bin/check-file-length.sh` — warn 800 lines, fail 1000, no allowlist
+- `bin/ci/check-action-pins.sh` — GitHub Actions must use major tags
+- `bin/ci/check-template-colors.sh` — no hard-coded palette literals
+- `bin/ci/dependabot-major-guard.test.sh` — 18 cases for the auto-merge guard
+
+Every one exists because the thing it checks actually drifted.
+
+## Release
+
+semantic-release on `master`. `bin/release/package.sh` builds the zip and a
+SHA-256 sidecar; `verify-package.sh` asserts the archive is installable before
+publishing.
+
+The updater (`Core\Theme_Updates` + HTTP client, release repository, package
+verifier) verifies that checksum before WordPress unpacks anything, and refuses
+an update whose checksum cannot be resolved. Every URL passes an allow-list —
+HTTPS, GitHub hosts, port 443, no embedded credentials, no `..` — including URLs
+read back out of a transient.
+
+Commit types drive the version: `feat` minor, `fix`/`perf` patch,
+`chore`/`ci`/`docs`/`refactor`/`test`/`style` no release.
+
+## Gotchas that cost real time
+
+- **Blocks load from `dist/`.** Rebuild after touching `src/**/render.php`.
+- **Site Editor overrides shadow theme files.** `parts/footer.html` and
+  `templates/front-page.html` are stored in the database on production; edits to
+  those files never reach the live site. See `docs/site-editor-overrides.md`.
+- **`pnpm install` ignores `pnpm-workspace.yaml` edits.** It reports "Already up
+  to date" and exits on a cached workspace state — even with `--force` and no
+  lockfile. Delete `node_modules/.pnpm-workspace-state-v1.json`.
+- **`wp_kses_post()` strips image attributes.** On WP 7.0.2 it removes `srcset`,
+  `sizes`, `fetchpriority` and `decoding`. Never run it over
+  `wp_get_attachment_image()` output — that markup is already escaped.
+- **Overrides live in `pnpm-workspace.yaml`,** not `package.json`. With a
+  workspace file present pnpm 10+ silently ignores `pnpm.overrides`.
+- **The front-page modal opens on load** by configuration (`openOnLoad: true`),
+  which is why the first Tab lands inside it. Not a bug — see
+  `docs/known-issues.md`.
+- **Force-pushing `master` is blocked** by an active ruleset with no bypass.
+  That is deliberate; see `.github/rulesets/README.md` for the incident that
+  caused it.
+
+## Working style
+
+- Verify claims against the codebase before asserting them. Several confident
+  diagnoses in this repo's history were wrong until measured.
+- When a gate surfaces a defect, fix the defect or document it honestly —
+  do not weaken the gate.
+- Comments explain **why**, not what. The repo is consistent about this.
+- Prefer small, reviewable commits with conventional types; the CHANGELOG is
+  generated from them.

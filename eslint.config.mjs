@@ -100,13 +100,25 @@ export default [
 		},
 	},
 
-	// TypeScript-only rules. No .ts files exist yet; this makes the first one
-	// land under the same gate as everything else.
+	// TypeScript sources.
 	{
 		files: ['src/**/*.{ts,tsx}'],
+		languageOptions: {
+			globals: {
+				...globals.browser,
+				// Ambient TypeScript/JSX types, not runtime values — no-undef
+				// cannot see the compiler's view of them.
+				JSX: 'readonly',
+				NodeJS: 'readonly',
+			},
+		},
 		rules: {
 			...tsPlugin.configs.recommended.rules,
 			'@typescript-eslint/no-explicit-any': 'error',
+
+			// TypeScript resolves these itself; the base rule only sees runtime
+			// scope and reports every type-only identifier as undefined.
+			'no-undef': 'off',
 		},
 	},
 
