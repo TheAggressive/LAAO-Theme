@@ -25,6 +25,24 @@ file entirely, for that template only. Other templates keep loading from disk.
 Ruled out as causes: caching (a cache-busting query string changes nothing) and
 build staleness (blocks load from `dist/`, which was rebuilt).
 
+## This is now visible on the front end
+
+Since the modal was ported, the stale database copies render **two close
+buttons**: the old one saved into the block's markup, plus the one the new
+render.php emits. The same copies also carry `openOnLoad: true`, so the
+newsletter modal still opens immediately even though the theme file switched to
+scroll-depth and exit-intent triggers.
+
+Confirmed by comparing the same page in both environments:
+
+|                       | old close button | new close button | openOnLoad |
+| --------------------- | ---------------- | ---------------- | ---------- |
+| wp-env (theme files)  | 0                | 1 per modal      | `false`    |
+| production (database) | 1 per modal      | 1 per modal      | `true`     |
+
+Nothing in this repository can fix that. The markup and the attributes both live
+in the database copy, so the theme file is not consulted.
+
 ## Consequences
 
 Two fixes in this repository do not apply to the live site:
