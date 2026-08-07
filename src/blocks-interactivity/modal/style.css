@@ -1,418 +1,680 @@
-@import "../../styles/_breakpoints.css";
-
-/**
- * The following styles get applied both on the front of your site
- * and in the editor.
+/*
+ * stylelint-disable no-descending-specificity
  *
- * Replace them with your own styles or remove the file completely.
+ * The close-button placement rules intentionally follow the `.is-open` state
+ * rules they override. Reordering them to satisfy the check would change which
+ * declaration wins, moving the button. This ordering came across with the block
+ * from the Aggressive Apparel theme, where the rule is not enabled.
  */
+/* stylelint-disable no-descending-specificity */
+/* ============================================================
+ * Modal Block Styles
+ * Follows the theme's modal/overlay pattern:
+ *  - CSS transitions (not keyframes) so transitionend fires on 'opacity'.
+ *  - @starting-style for smooth entry from display:none.
+ *  - Animated backdrop blur: blur(0) → blur(4px).
+ *  - [hidden] override for flex/grid containers.
+ *  - prefers-reduced-motion: disables all transitions and backdrop-filter.
+ * ============================================================ */
 
-/* Base modal styling */
-.wp-block-laao-modal-wrapper {
+/* ──────────────────────────────────────────────
+ * Wrapper (data-wp-interactive root)
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal {
+
+	/* Inline trigger sits naturally in document flow. */
+	display: inline-block;
+}
+
+/* ──────────────────────────────────────────────
+ * Screen-reader announcer (visually hidden)
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__announcer,
+.wp-block-laao-modal__dialog-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ──────────────────────────────────────────────
+ * Built-in trigger button (optional)
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__trigger {
+	--laao-trigger-border: var(--wp--custom--button--secondary--border);
+	--laao-trigger-hover-border: var(--wp--custom--button--secondary--hover-background);
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+	cursor: pointer;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	background: var(--laao-trigger-bg, transparent);
+	color: var(--laao-trigger-text, currentcolor);
+	border-radius: var(--laao-trigger-radius, var(--laao-radius-button));
+	transition:
+		background-color var(--laao-duration-fast, 0.15s) var(--laao-ease-default, ease),
+		color var(--laao-duration-fast, 0.15s) var(--laao-ease-default, ease),
+		border-color var(--laao-duration-fast, 0.15s) var(--laao-ease-default, ease),
+		box-shadow var(--laao-duration-fast, 0.15s) var(--laao-ease-default, ease);
+
+	&:hover {
+		background-color: var(--laao-trigger-hover-bg, var(--laao-color-hover-subtle));
+		color: var(--laao-trigger-hover-text, currentcolor);
+	}
+
+	&:focus-visible {
+		outline: none;
+		box-shadow: var(--laao-focus-ring);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+
+	/* ── Size variants ────── */
+
+	&.trigger-size-sm {
+		padding: 0.4em 0.875em;
+		font-size: var(--wp--preset--font-size--x-small);
+		min-height: var(--laao-control-min);
+	}
+
+	&.trigger-size-md {
+		padding: 0.55em 1.125em;
+		font-size: var(--wp--preset--font-size--small);
+		min-height: var(--laao-button-height-md);
+	}
+
+	&.trigger-size-lg {
+		padding: 0.7em 1.5em;
+		font-size: var(--wp--preset--font-size--medium);
+		min-height: var(--laao-button-height-lg);
+	}
+
+	/* ── Style variants ────── */
+
+	&.trigger-variant-outlined {
+		border: 2px solid var(--laao-trigger-border);
+		background: var(--laao-trigger-bg, var(--wp--custom--button--secondary--background));
+		color: var(--laao-trigger-text, var(--wp--custom--button--secondary--text));
+
+		&:hover {
+			border-color: var(--laao-trigger-hover-border);
+			background: var(--laao-trigger-hover-bg, var(--wp--custom--button--secondary--hover-background));
+			color: var(--laao-trigger-hover-text, var(--wp--custom--button--secondary--hover-text));
+		}
+	}
+
+	&.trigger-variant-filled {
+		border: 2px solid var(--laao-trigger-bg, var(--wp--custom--button--primary--background));
+		background: var(--laao-trigger-bg, var(--wp--custom--button--primary--background));
+		color: var(--laao-trigger-text, var(--wp--custom--button--primary--text));
+
+		&:hover {
+			border-color: var(--laao-trigger-hover-bg, var(--wp--custom--button--primary--hover-background));
+			background-color: var(--laao-trigger-hover-bg, var(--wp--custom--button--primary--hover-background));
+			color: var(--laao-trigger-hover-text, var(--wp--custom--button--primary--hover-text));
+		}
+	}
+
+	&.trigger-variant-ghost {
+		border: none;
+		background: transparent;
+
+		&:hover {
+			background-color: var(--laao-trigger-hover-bg, var(--laao-color-hover-subtle));
+		}
+	}
+
+	&.trigger-variant-text {
+		border: none;
+		background: transparent;
+		padding: 0;
+		min-height: var(--laao-control-min);
+		border-radius: 0;
+
+		&:hover {
+			background: transparent;
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+			color: var(--laao-trigger-hover-text, currentcolor);
+		}
+	}
+
+	&.trigger-full-width {
+		width: 100%;
+	}
+}
+
+/* When trigger is full width the wrapper needs to match. */
+.wp-block-laao-modal:has(.trigger-full-width) {
+	display: block;
+}
+
+/* ──────────────────────────────────────────────
+ * Modal shell — uses shared laao-overlay primitive
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__shell {
+
+	/* Per-block overlay token overrides (--laao-overlay-opacity, --laao-overlay-blur). */
+	--laao-modal-duration: var(--laao-duration-normal);
+
+	/* Keep the block functional when the shared theme overlay bundle is
+	   deferred, disabled, or removed by an optimization plugin. */
+	position: fixed;
+	inset: 0;
+	z-index: var(--laao-z-modal, 1000);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100vw;
+	isolation: isolate;
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.wp-block-laao-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background-color: transparent;
+	opacity: 0;
+	cursor: pointer;
+	transition:
+		background-color var(--laao-modal-duration) var(--laao-ease-default, ease),
+		opacity var(--laao-modal-duration) var(--laao-ease-default, ease),
+		backdrop-filter var(--laao-modal-duration) var(--laao-ease-default, ease);
+
+	.wp-block-laao-modal__shell.is-open & {
+		background-color: var(--laao-color-scrim, rgb(0 0 0));
+		opacity: var(--laao-overlay-opacity, 0.5);
+	}
+
+	@supports (backdrop-filter: blur(1px)) {
+		backdrop-filter: blur(0);
+
+		.wp-block-laao-modal__shell.is-open & {
+			backdrop-filter: blur(var(--laao-overlay-blur, 4px));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		backdrop-filter: none;
+	}
+}
+
+/* ──────────────────────────────────────────────
+ * Dialog panel
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__dialog {
 	position: relative;
-	/* Modal overlay */
-	.wp-block-laao-modal-overlay {
-		position: fixed;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: min(90vw, var(--laao-dialog-max-width, var(--laao-panel-width-lg)));
+	max-height: 85vh;
+
+	/* Match laao-panel chrome; block supports override via CSS vars. */
+	background-color: var(--laao-dialog-bg, var(--laao-color-surface));
+	color: var(--laao-dialog-text, var(--laao-color-foreground));
+	border-color: var(--laao-dialog-border-color, var(--laao-color-border-muted));
+	border-style: var(--laao-dialog-border-style, solid);
+	border-width: var(--laao-dialog-border-width, 0);
+	border-radius: var(--laao-dialog-radius, var(--laao-dialog-border-radius, var(--laao-radius-panel)));
+	box-shadow: var(--laao-dialog-shadow, var(--laao-shadow-panel));
+	padding: var(--laao-dialog-padding, 1.5rem);
+	outline: none;
+
+	/* Entrance/exit animation — always transition opacity so transitionend fires. */
+	opacity: 0;
+	transition:
+		opacity var(--laao-modal-duration) var(--laao-ease-default),
+		transform var(--laao-modal-duration) var(--laao-ease-default);
+
+	.wp-block-laao-modal__shell.is-open & {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* ── Position variants ────── */
+
+	&.modal-position-center {
+
+		/* Use CSS 'translate' property for positioning so 'transform' stays
+		   free for the animation (the two CSS properties compose independently). */
+		translate: -50% -50%;
+		top: 50%;
+		left: 50%;
+
+		/* Remove from flex centering since we position manually. */
+		position: absolute;
+	}
+
+	&.modal-position-top-left {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	&.modal-position-top-right {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	&.modal-position-bottom-left {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+
+	&.modal-position-bottom-right {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+
+	/* ── Drawer / sheet positions ────── */
+
+	&.modal-position-bottom {
+		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		top: 0;
-		z-index: 9999;
-		display: none;
-		cursor: pointer;
-		background-color: rgb(0 0 0 / 0.85);
-		opacity: 0;
-		transition-property: all;
-		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-		transition-duration: 150ms;
-		transition-duration: var(--laao-modal-animation-duration);
-
-		&.is-active {
-			display: block;
-			opacity: 0;
-
-			/* Animation classes for overlay */
-			&.animation-enter {
-				animation: modal-fade-in var(--laao-modal-animation-duration)
-					forwards ease-out;
-			}
-
-			&.animation-exit {
-				animation: modal-fade-out var(--laao-modal-animation-duration)
-					forwards ease-out;
-			}
-		}
-	}
-
-	.wp-block-laao-modal-container {
-		position: fixed;
-		z-index: 9999;
-		display: none;
 		width: 100%;
+		max-width: none;
+		max-height: 90dvh;
+		border-radius: var(--laao-radius-panel) var(--laao-radius-panel) 0 0;
+		box-shadow: 0 -4px 24px var(--laao-color-shadow);
+		transform: translateY(100%); /* Closed: off-screen below. */
+	}
 
-		@media (--bp-md) {
-			& {
-				max-width: 24rem;
-			}
+	&.modal-position-top {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		max-width: none;
+		max-height: 90dvh;
+		border-radius: 0 0 var(--laao-radius-panel) var(--laao-radius-panel);
+		box-shadow: 0 4px 24px var(--laao-color-shadow);
+		transform: translateY(-100%); /* Closed: off-screen above. */
+	}
+
+	&.modal-position-left {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		width: min(90vw, var(--laao-panel-width-drawer));
+		max-width: none;
+		max-height: 100%;
+		height: 100%;
+		border-radius: 0 var(--laao-radius-panel) var(--laao-radius-panel) 0;
+		box-shadow: 4px 0 24px var(--laao-color-shadow);
+		transform: translateX(-100%); /* Closed: off-screen left. */
+	}
+
+	&.modal-position-right {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: min(90vw, var(--laao-panel-width-drawer));
+		max-width: none;
+		max-height: 100%;
+		height: 100%;
+		border-radius: var(--laao-radius-panel) 0 0 var(--laao-radius-panel);
+		box-shadow: -4px 0 24px var(--laao-color-shadow);
+		transform: translateX(100%); /* Closed: off-screen right. */
+	}
+
+	/* ── Enter animation initial (closed) states ─────────────────────────────
+	   All values are the "before" state. The base transition animates FROM
+	   these values TO the open state (opacity: 1; transform: none).
+	   ─────────────────────────────────────────────────────────────────────── */
+
+	/* Directional slides — all four cardinal directions. */
+	&.modal-enter-slide-down  { transform: translateY(-2rem); }
+
+	&.modal-enter-slide-up    { transform: translateY(2rem); }
+
+	&.modal-enter-slide-left  { transform: translateX(2rem); }
+
+	&.modal-enter-slide-right { transform: translateX(-2rem); }
+
+	/* Scale variants. */
+	&.modal-enter-zoom-in { transform: scale(0.92); }
+
+	&.modal-enter-expand  { transform: scale(0.96); }
+
+	&.modal-enter-recede  { transform: scale(1.04); }
+
+	/* Lift — ultra-subtle native dropdown feel; fixed 150ms ignores the duration setting. */
+	&.modal-enter-lift {
+		transform: translateY(4px) scale(0.98);
+		transition:
+			opacity 150ms ease-out,
+			transform 150ms ease-out;
+	}
+
+	/* Spring — elastic bezier overshoots then settles back.
+	   Both opacity and transform use the same duration so transitionend fires
+	   only when the full animation (including overshoot) has completed. */
+	&.modal-enter-spring {
+		transform: translateY(1.5rem) scale(0.96);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	/* Pop — pure scale spring, no translate. */
+	&.modal-enter-pop {
+		transform: scale(0.88);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	/* Warp — expo-out: opens almost instantly then decelerates to rest. */
+	&.modal-enter-warp {
+		transform: scale(0.92) translateY(8px);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* Material — Material Design 3 "emphasized decelerate" easing. */
+	&.modal-enter-material {
+		transform: translateY(1rem) scale(0.94);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.2, 0, 0, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.2, 0, 0, 1);
+	}
+
+	/* Float — weighted, editorial. expo-out gives it a sense of mass decelerating. */
+	&.modal-enter-float {
+		transform: translateY(1.5rem) scale(0.94);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* Drift — content materializes (expo-out opacity) then glides to position. */
+	&.modal-enter-drift {
+		transform: translateY(-1rem) scale(0.94);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* Flip up — 3D perspective flip. Same duration as opacity so finish() fires
+	   only after the full flip completes, not mid-rotation. */
+	&.modal-enter-flip-up {
+		transform: perspective(800px) rotateX(-80deg);
+		transform-origin: bottom center;
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	}
+
+	/* Blur — filter-based; adds filter to the transition list. */
+	&.modal-enter-blur {
+		filter: blur(16px);
+		transition:
+			opacity var(--laao-modal-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
+			filter var(--laao-modal-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
+			transform var(--laao-modal-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Blur must be cleared while open — otherwise dialog content stays blurry. */
+	.wp-block-laao-modal__shell.is-open &.modal-enter-blur {
+		filter: blur(0);
+	}
+
+	/* Center variants — 'translate' (positioning) and 'transform' (animation) are
+	   independent CSS properties so these are technically redundant, kept for parity. */
+	&.modal-position-center.modal-enter-slide-down  { transform: translateY(-2rem); }
+
+	&.modal-position-center.modal-enter-slide-up    { transform: translateY(2rem); }
+
+	&.modal-position-center.modal-enter-spring      { transform: translateY(1.5rem) scale(0.96); }
+
+	&.modal-position-center.modal-enter-flip-up     { transform: perspective(800px) rotateX(-80deg); }
+
+	/* Exit animations are applied imperatively via inline styles in view.ts
+	   (buildExitAnimation), independent of these enter classes — so enter and
+	   exit can be mixed freely. No modal-exit-* classes are used. */
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		transform: none !important;
+		filter: none !important;
+		clip-path: none !important;
+	}
+}
+
+/* ──────────────────────────────────────────────
+ * Dialog body — the scrollable content area
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__dialog-body {
+	flex: 1 1 auto;
+	min-height: 0;
+	outline: none;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
+}
+
+/* ──────────────────────────────────────────────
+ * Close button (server-rendered by render.php)
+ * ────────────────────────────────────────────── */
+
+.wp-block-laao-modal__close {
+	--laao-icon-button-background: var(--laao-close-btn-bg, transparent);
+	--laao-icon-button-color: var(--laao-close-btn-color, var(--laao-color-foreground-muted, currentcolor));
+	--laao-icon-button-hover-background: var(--laao-close-btn-hover-bg, var(--laao-icon-button-background));
+	--laao-icon-button-hover-color: var(--laao-close-btn-hover-color, var(--laao-color-accent));
+
+	flex-shrink: 0;
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 700;
+
+	&.close-size-sm {
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	&.close-size-md {
+		font-size: var(--wp--preset--font-size--medium);
+	}
+
+	&.close-size-lg {
+		font-size: var(--wp--preset--font-size--large);
+	}
+
+	&.close-variant-ghost {
+		--laao-icon-button-border: transparent;
+	}
+
+	&.close-variant-outlined {
+		--laao-icon-button-border: var(--laao-color-border);
+	}
+
+	&.close-variant-filled {
+		--laao-icon-button-background: var(--laao-close-btn-bg, var(--laao-color-hover-default));
+	}
+
+	&.close-placement-inside-top-right {
+		align-self: flex-end;
+		margin: -0.35rem -0.35rem 0.5rem 0;
+	}
+
+	&.close-placement-inside-top-left {
+		align-self: flex-start;
+		margin: -0.35rem 0 0.5rem -0.35rem;
+	}
+
+	&.close-placement-inside-bottom-right {
+		align-self: flex-end;
+		margin-top: auto;
+		padding-top: 0.75rem;
+	}
+
+	&.close-placement-inside-bottom-left {
+		align-self: flex-start;
+		margin-top: auto;
+		padding-top: 0.75rem;
+	}
+
+	&.close-placement-sticky-top-right {
+		--laao-icon-button-background: var(--laao-close-btn-bg, var(--laao-dialog-bg, var(--laao-color-surface)));
+
+		align-self: flex-end;
+		position: sticky;
+		top: -0.25rem;
+		z-index: 1;
+		margin: -0.35rem -0.35rem 0.5rem 0;
+	}
+
+	/* Outside close sits on the scrim — light chrome for contrast. */
+	&.close-placement-outside-top-right,
+	&.close-placement-outside-top-left {
+		--laao-icon-button-background: var(--laao-close-btn-bg, color-mix(in oklch, var(--laao-color-black) 40%, transparent));
+		--laao-icon-button-color: var(--laao-close-btn-color, var(--laao-color-on-scrim));
+
+		position: absolute;
+		z-index: 2;
+		opacity: 0;
+		backdrop-filter: blur(4px);
+		transition: opacity var(--laao-modal-duration, 300ms) var(--laao-ease-default, ease);
+
+		.wp-block-laao-modal__shell.is-open & {
+			opacity: 1;
 		}
 
-		&.is-active {
-			display: block;
+	}
 
-			/* Animation classes for modal content */
-			&.animation-enter-fade {
-				animation: modal-fade-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
+	&.close-placement-outside-top-right {
+		top: 1rem;
+		right: 1rem;
+	}
 
-			&.animation-exit-fade {
-				animation: modal-fade-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
+	&.close-placement-outside-top-left {
+		top: 1rem;
+		left: 1rem;
+	}
 
-			/* Standard position slide animations */
-			&:not(.modal-position-center).animation-enter-slide-down {
-				animation: modal-slide-down-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		backdrop-filter: none;
+	}
+}
 
-			&:not(.modal-position-center).animation-exit-slide-down {
-				animation: modal-slide-down-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
+/* ============================================================
+ * @starting-style — dialog entry from display:none → visible.
+ * Backdrop entry handled by components/overlay.css.
+ * ============================================================ */
 
-			&:not(.modal-position-center).animation-enter-slide-up {
-				animation: modal-slide-up-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
+@supports selector(@starting-style) {
 
-			&:not(.modal-position-center).animation-exit-slide-up {
-				animation: modal-slide-up-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
+	@starting-style {
 
-			/* Center position slide animations */
-			&.modal-position-center.animation-enter-slide-down {
-				animation: modal-center-slide-down-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
-
-			&.modal-position-center.animation-exit-slide-down {
-				animation: modal-center-slide-down-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
-
-			&.modal-position-center.animation-enter-slide-up {
-				animation: modal-center-slide-up-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
-
-			&.modal-position-center.animation-exit-slide-up {
-				animation: modal-center-slide-up-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
-
-			/* Standard position zoom animations */
-			&:not(.modal-position-center).animation-enter-zoom-in {
-				animation: modal-zoom-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
-
-			&:not(.modal-position-center).animation-exit-zoom-out {
-				animation: modal-zoom-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
-
-			/* Center position zoom animations */
-			&.modal-position-center.animation-enter-zoom-in {
-				animation: modal-center-zoom-in var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
-
-			&.modal-position-center.animation-exit-zoom-out {
-				animation: modal-center-zoom-out var(--laao-modal-animation-duration) forwards ease-out;
-				transition-delay: 0s;
-			}
-
-			/* Standard position bounce animation */
-			&:not(.modal-position-center).animation-enter-bounce {
-				animation: modal-bounce var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
-
-			/* Center position bounce animation */
-			&.modal-position-center.animation-enter-bounce {
-				animation: modal-center-bounce var(--laao-modal-animation-duration) forwards ease-in;
-				transition-delay: var(--laao-modal-animation-delay);
-			}
+		/* Dialog fades in from opacity:0 on first paint. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog {
+			opacity: 0;
 		}
 
-		/* Position variants */
-		&.modal-position-center {
-			left: 50%;
-			top: 50%;
-			--tw-translate-x: -50%;
-			--tw-translate-y: -50%;
-			transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+		/* Enter animation starting states — one per animation type. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-slide-down { transform: translateY(-2rem); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-slide-up { transform: translateY(2rem); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-slide-left { transform: translateX(2rem); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-slide-right { transform: translateX(-2rem); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-zoom-in { transform: scale(0.92); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-expand { transform: scale(0.96); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-recede { transform: scale(1.04); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-lift { transform: translateY(4px) scale(0.98); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-spring { transform: translateY(1.5rem) scale(0.96); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-pop { transform: scale(0.88); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-warp { transform: scale(0.92) translateY(8px); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-material { transform: translateY(1rem) scale(0.94); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-float { transform: translateY(1.5rem) scale(0.94); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-drift { transform: translateY(-1rem) scale(0.94); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-flip-up { transform: perspective(800px) rotateX(-80deg); }
+
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-enter-blur { filter: blur(16px); }
+
+		/* Bottom sheet: starts off-screen below. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-position-bottom {
+			transform: translateY(100%);
 		}
 
-		&.modal-position-top-left {
-			left: 0;
-			top: 0;
+		/* Top drawer: starts off-screen above. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-position-top {
+			transform: translateY(-100%);
 		}
 
-		&.modal-position-top-right {
-			right: 0;
-			top: 0;
+		/* Left panel: starts off-screen left. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-position-left {
+			transform: translateX(-100%);
 		}
 
-		&.modal-position-bottom-left {
-			bottom: 0;
-			left: 0;
+		/* Right panel: starts off-screen right. */
+		.wp-block-laao-modal__shell.is-open
+		.wp-block-laao-modal__dialog.modal-position-right {
+			transform: translateX(100%);
 		}
-
-		&.modal-position-bottom-right {
-			bottom: 0;
-			right: 0;
-		}
-	}
-
-	.wp-block-laao-modal {
-		display: flex;
-		flex-direction: column;
-
-		/* Close button */
-		.wp-block-laao-modal-close {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			place-self: end;
-			background-color: var(--wp--preset--color--laao-gray);
-			padding-left: 0.5rem;
-			padding-right: 0.5rem;
-			font-size: 1.5rem;
-			line-height: 2rem;
-			line-height: 1.375;
-			color: var(--wp--preset--color--laao-white);
-			transition-property: all;
-			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-			transition-duration: 300ms;
-
-			&:hover,
-			&:focus {
-				border-style: none;
-				background-color: var(--wp--preset--color--laao-red);
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-			}
-		}
-	}
-}
-
-/* Animation handling based on data attributes */
-&.is-active[data-animation-enter="fade"]:not([data-animation-enter="none"]) {
-	animation-name: modal-fade-in;
-	animation-fill-mode: forwards;
-	animation-timing-function: ease-out;
-}
-
-&.is-active[data-animation-enter="slide-down"] {
-	animation-name: modal-slide-down-in;
-	animation-fill-mode: forwards;
-	animation-timing-function: ease-out;
-}
-
-/* Modal animations */
-/* Fade animations */
-@keyframes modal-fade-in {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-@keyframes modal-fade-out {
-	from {
-		opacity: 1;
-	}
-	to {
-		opacity: 0;
-	}
-}
-
-/* Slide animations */
-@keyframes modal-slide-down-in {
-	from {
-		transform: translateY(-100px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-slide-down-out {
-	from {
-		transform: translateY(0);
-		opacity: 1;
-	}
-	to {
-		transform: translateY(100px);
-		opacity: 0;
-	}
-}
-
-/* Special slide animations for centered modals */
-@keyframes modal-center-slide-down-in {
-	from {
-		transform: translate(-50%, -50%) translateY(-100px);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-center-slide-down-out {
-	from {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-	to {
-		transform: translate(-50%, -50%) translateY(100px);
-		opacity: 0;
-	}
-}
-
-@keyframes modal-center-slide-up-in {
-	from {
-		transform: translate(-50%, -50%) translateY(100px);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-center-slide-up-out {
-	from {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-	to {
-		transform: translate(-50%, -50%) translateY(-100px);
-		opacity: 0;
-	}
-}
-
-/* Zoom animations */
-@keyframes modal-zoom-in {
-	from {
-		transform: scale(0.9);
-		opacity: 0;
-	}
-	to {
-		transform: scale(1);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-zoom-out {
-	from {
-		transform: scale(1);
-		opacity: 1;
-	}
-	to {
-		transform: scale(0.9);
-		opacity: 0;
-	}
-}
-
-/* Special zoom animations for centered modals */
-@keyframes modal-center-zoom-in {
-	from {
-		transform: translate(-50%, -50%) scale(0.7);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -50%) scale(1);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-center-zoom-out {
-	from {
-		transform: translate(-50%, -50%) scale(1);
-		opacity: 1;
-	}
-	to {
-		transform: translate(-50%, -50%) scale(0.7);
-		opacity: 0;
-	}
-}
-
-/* Bounce animation */
-@keyframes modal-bounce {
-	0% {
-		transform: scale(0.6);
-		opacity: 0;
-	}
-	50% {
-		transform: scale(1.1);
-		opacity: 1;
-	}
-	75% {
-		transform: scale(0.9);
-	}
-	100% {
-		transform: scale(1);
-		opacity: 1;
-	}
-}
-
-/* Special bounce animation for centered modals */
-@keyframes modal-center-bounce {
-	0% {
-		transform: translate(-50%, -50%) scale(0.6);
-		opacity: 0;
-	}
-	50% {
-		transform: translate(-50%, -50%) scale(1.1);
-		opacity: 1;
-	}
-	75% {
-		transform: translate(-50%, -50%) scale(0.9);
-	}
-	100% {
-		transform: translate(-50%, -50%) scale(1);
-		opacity: 1;
-	}
-}
-
-/* Slide animations */
-@keyframes modal-slide-up-in {
-	from {
-		transform: translateY(100px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-@keyframes modal-slide-up-out {
-	from {
-		transform: translateY(0);
-		opacity: 1;
-	}
-	to {
-		transform: translateY(-100px);
-		opacity: 0;
 	}
 }

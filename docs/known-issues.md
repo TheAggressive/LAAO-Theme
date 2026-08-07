@@ -4,37 +4,31 @@ Defects that are understood, reproducible, and deliberately not fixed yet.
 Recorded here so they are not rediscovered from scratch, and so a test that
 declines to assert something says why.
 
-## Closed modals stay in the keyboard tab order
+## The front-page modal opens automatically on load
 
-**Impact:** a keyboard user pressing Tab on the home page reaches the newsletter
-form inside a _closed_ modal before reaching any page content. The skip link,
-which is correctly first in the DOM and focusable, is effectively unreachable.
+**Not a defect — configured behaviour.** `templates/front-page.html` sets
+`"openOnLoad":true` on its modal, so the newsletter popup opens by itself.
 
-**Observed tab order on a clean install:**
+Recorded because it looks like a bug from the outside, and was twice
+misdiagnosed as one during the Tailwind removal: the first Tab lands inside the
+modal rather than on the skip link, which reads as a stray focus trap until you
+find the attribute.
 
-```
-Tab 1 -> input.required            (newsletter email, inside the closed modal)
-Tab 2 -> input.button              (newsletter submit)
-Tab 3 -> button.wp-block-laao-modal-close
-```
+**It is still worth revisiting.** An auto-opening modal takes keyboard focus and
+interrupts screen-reader users before they reach any content, and WCAG 2.2's
+guidance on change-of-context applies. Options, in ascending order of effort:
+delay it until after a scroll or exit-intent trigger (the ported block supports
+both via `scrollDepthTrigger` and `exitIntentTrigger`), set `openOnLoadOnce` so
+it appears once per visitor rather than every page view, or drop the automatic
+open entirely.
 
-**Cause:** `laao/modal` renders its content inline and marks it
-`aria-hidden="true"`, but nothing removes it from the tab order. `aria-hidden`
-hides an element from assistive technology; it does not make it unfocusable, and
-focusing an `aria-hidden` element is its own conformance failure.
+That is a product decision about how the newsletter is promoted, not a bug fix,
+which is why it is here rather than in a pull request.
 
-**Not a styling problem.** Confirmed during the Tailwind removal: modal CSS was
-byte-identical before and after, so this predates that work.
-
-**Likely fix:** apply `inert` to the modal content while closed, which removes it
-from both the tab order and the accessibility tree in one attribute, and drop the
-now-redundant `aria-hidden`. Needs testing against the block's focus-trap logic,
-which currently manages focus itself.
-
-**Why the accessibility suite does not assert it:** `tests/e2e/accessibility.spec.ts`
-asserts a skip link exists and is focusable, but deliberately stops short of
-asserting it receives the first Tab. Asserting that would fail for this reason,
-turning a styling gate red for an unrelated behavioural defect.
+**Why the accessibility suite does not assert first-Tab focus:**
+`tests/e2e/accessibility.spec.ts` checks a skip link exists and is focusable but
+stops short of asserting it receives the first Tab, which would fail purely
+because of this setting.
 
 ## Two templates are shadowed by database copies
 

@@ -1,0 +1,88 @@
+/*
+ * Semantic design tokens.
+ *
+ * theme.json holds the raw palette; these give those values roles. A component
+ * asks for "the border colour" rather than "light grey", so re-theming happens
+ * here instead of in every block.
+ *
+ * Introduced with the modal block, which was ported from the Aggressive Apparel
+ * theme and reads 26 tokens it does not set — that theme keeps an equivalent
+ * layer. Every one below is consumed by something; this is not a speculative
+ * scale, and it should grow only when a component genuinely needs a new role.
+ *
+ * Colours resolve through the palette rather than repeating literals, so the
+ * oklch values in theme.json stay the single source of truth.
+ */
+
+:root {
+	/* Surfaces and text. */
+	--laao-color-surface: var(--wp--preset--color--laao-white);
+	--laao-color-foreground: var(--wp--preset--color--laao-black);
+	--laao-color-foreground-muted: var(--wp--preset--color--laao-dark-gray);
+	--laao-color-black: var(--wp--preset--color--laao-black);
+	--laao-color-accent: var(--wp--preset--color--laao-red);
+	--laao-color-neutral-bg: var(--wp--preset--color--laao-light-gray);
+
+	/*
+	 * Text placed on a scrim — the dimmed backdrop behind an open modal. Always
+	 * white regardless of surface, because the scrim is dark by definition.
+	 */
+	--laao-color-on-scrim: var(--wp--preset--color--laao-white);
+
+	/* Borders. */
+	--laao-color-border: var(--wp--preset--color--laao-gray);
+	--laao-color-border-muted: var(--wp--preset--color--laao-light-gray);
+
+	/*
+	 * Hover washes. Expressed with colour-mix so they follow the palette
+	 * instead of being hand-picked greys that drift when the palette changes.
+	 */
+	--laao-color-hover-default: color-mix(
+		in oklch,
+		var(--wp--preset--color--laao-black) 8%,
+		transparent
+	);
+	--laao-color-hover-subtle: color-mix(
+		in oklch,
+		var(--wp--preset--color--laao-black) 4%,
+		transparent
+	);
+
+	/* Informational accent, distinct from the brand red used for actions. */
+	--laao-color-info: var(--wp--preset--color--laao-dark-gray);
+
+	/* Shadow colour, kept separate so opacity can be tuned in one place. */
+	--laao-color-shadow: rgb(0 0 0 / 0.25);
+	--laao-shadow-panel: 0 25px 50px -12px var(--laao-color-shadow);
+
+	/* Radii. */
+	--laao-radius-button: 0.375rem;
+	--laao-radius-panel: 0.5rem;
+
+	/* Motion. Matches the durations already used across the theme's CSS. */
+	--laao-duration-fast: 150ms;
+	--laao-duration-normal: 300ms;
+	--laao-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+	/*
+	 * Minimum interactive size. 2.75rem is 44px at the default root size, the
+	 * WCAG 2.5.5 target-size guideline, so controls stay usable on touch.
+	 */
+	--laao-control-min: 2.75rem;
+	--laao-button-height-md: 2.5rem;
+	--laao-button-height-lg: 3rem;
+
+	/* Panel widths for the modal's dialog and drawer positions. */
+	--laao-panel-width-lg: 40rem;
+	--laao-panel-width-drawer: 24rem;
+
+	/*
+	 * Focus ring. Uses the accent colour so it is visible against every surface
+	 * in the palette, and is defined once so no component invents its own.
+	 */
+	--laao-focus-ring:
+		0 0 0 2px var(--laao-color-surface), 0 0 0 4px var(--laao-color-accent);
+
+	/* Stacking. Above sticky navigation, below anything the browser owns. */
+	--laao-z-modal: 400;
+}

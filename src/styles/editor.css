@@ -1,6 +1,9 @@
 /* Base reset — see _reset.css. */
 @import "./_reset.css";
 
+/* Semantic design tokens */
+@import "./base/_tokens.css";
+
 /* Breakpoints */
 @import "./_breakpoints.css";
 

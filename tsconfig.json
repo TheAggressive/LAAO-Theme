@@ -29,7 +29,14 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 
-		"types": ["jest", "node"]
+		"types": [
+			"jest",
+			"node",
+			"@types/react",
+			"@types/react-dom",
+			"@types/wordpress__block-editor",
+			"@types/wordpress__edit-post"
+		]
 	},
 	"include": ["src/**/*", "types/**/*"],
 	"exclude": ["node_modules", "vendor", "dist"]
