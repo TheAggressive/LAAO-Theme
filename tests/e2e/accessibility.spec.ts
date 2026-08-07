@@ -96,11 +96,15 @@ test.describe('accessibility', () => {
 		).toBe(true);
 
 		// NOTE: this deliberately does not assert the skip link receives the
-		// FIRST Tab. It currently does not: the modal block renders its content
-		// inline and keeps it in the tab order while closed, so the newsletter
-		// input is reached first. That is a real pre-existing defect, unrelated
-		// to styling — see docs/known-issues.md. Asserting first-focus here
-		// would fail for a reason this suite is not the right place to fix.
+		// FIRST Tab. On the front page it does not, because that template sets
+		// openOnLoad on its modal — the newsletter popup opens by itself and
+		// correctly traps focus, so the first Tab lands inside it.
+		//
+		// That is configuration, not a defect. A closed modal is no longer in
+		// the tab order at all: the block sets `hidden`, which removes it.
+		// Asserting first-focus here would fail purely because of a content
+		// setting. See docs/known-issues.md, which also covers why an
+		// auto-opening modal is worth revisiting on its own merits.
 	});
 
 	test('every image has an alt attribute', async ({ page }) => {
