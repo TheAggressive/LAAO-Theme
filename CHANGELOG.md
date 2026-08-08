@@ -1,3 +1,5 @@
+## [1.13.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.13.0...v1.13.1) (2026-08-08)
+
 ## [1.13.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.12.0...v1.13.0) (2026-08-08)
 
 ## [1.12.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.11.0...v1.12.0) (2026-08-07)
