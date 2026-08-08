@@ -97,6 +97,7 @@ class Bootstrap {
 		$this->container->register( 'styles', fn() => new Assets\Styles() );
 		$this->container->register( 'scripts', fn() => new Assets\Scripts( $editorial, $cover, $wh ) );
 		$this->container->register( 'highlight_columns', fn() => new Editorial\Highlight_Columns( $editorial ) );
+		$this->container->register( 'ad_link_labels', fn() => new Accessibility\Ad_Link_Labels() );
 	}
 
 	/**
@@ -116,5 +117,6 @@ class Bootstrap {
 		$this->container->get( 'styles' )->init();
 		$this->container->get( 'scripts' )->init();
 		$this->container->get( 'highlight_columns' )->init();
+		$this->container->get( 'ad_link_labels' )->init();
 	}
 }

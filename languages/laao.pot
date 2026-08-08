@@ -39,6 +39,12 @@ msgstr ""
 msgid "https://theaggressive.com"
 msgstr ""
 
+#. translators: %s: the advertisement's title.
+#: inc/Accessibility/class-ad-link-labels.php:150
+#, php-format
+msgid "Advertisement: %s"
+msgstr ""
+
 #: inc/Core/class-theme-update-package-verifier.php:95
 msgid "The LAAO update package is missing a SHA-256 checksum."
 msgstr ""
