@@ -59,6 +59,14 @@ class Theme_Support {
 	 * @return void
 	 */
 	public function register(): void {
+		/*
+		 * Without this the theme's own languages/ directory is never consulted.
+		 * Just-in-time loading resolves a theme domain against WP_LANG_DIR, not
+		 * against the theme, so the catalogs shipped in the release archive stay
+		 * invisible until they are registered here.
+		 */
+		load_theme_textdomain( 'laao', get_template_directory() . '/languages' );
+
 		add_theme_support( 'automatic-feed-links' );
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'post-thumbnails' );

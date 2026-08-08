@@ -76,6 +76,14 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<exclude-pattern>tests/php/*</exclude-pattern>
 	</rule>
+	<!--
+		WP_Filesystem does not exist in these tests: WordPress is mocked by
+		Brain\Monkey rather than loaded. A fixture that writes a temp file has
+		no alternative to the native calls, and `require` cannot be stubbed.
+	-->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
 	<rule ref="WordPress.WP.EnqueuedResources">
 		<exclude-pattern>tests/php/*</exclude-pattern>
 	</rule>

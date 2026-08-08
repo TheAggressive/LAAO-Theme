@@ -204,6 +204,14 @@ Commit types drive the version: `feat` minor, `fix`/`perf` patch,
 - **The front-page modal opens on load** by configuration (`openOnLoad: true`),
   which is why the first Tab lands inside it. Not a bug — see
   `docs/known-issues.md`.
+- **A theme's own `.mo` files are named `<locale>.mo`,** not
+  `<domain>-<locale>.mo`. `_load_textdomain_just_in_time()` uses the prefixed
+  form only for paths outside the theme. Worse, since WP 6.7
+  `load_theme_textdomain()` merely registers the path and returns `true`
+  unconditionally, so a wrong filename looks like success and the site quietly
+  renders English. `bin/i18n/compile.sh` renames what `wp i18n make-mo`
+  produces. Verify translations by asserting on `__()` output, never on that
+  return value.
 - **Force-pushing `master` is blocked** by an active ruleset with no bypass.
   That is deliberate; see `.github/rulesets/README.md` for the incident that
   caused it.
