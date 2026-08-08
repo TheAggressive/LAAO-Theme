@@ -83,6 +83,17 @@
 	--laao-focus-ring:
 		0 0 0 2px var(--laao-color-surface), 0 0 0 4px var(--laao-color-accent);
 
-	/* Stacking. Above sticky navigation, below anything the browser owns. */
-	--laao-z-modal: 400;
+	/*
+	 * Stacking. This must stay above every other layer in the theme, and the
+	 * highest of those is 999 — .site-nav, the event-gallery lightbox and the
+	 * animate-on-scroll overlays all sit there.
+	 *
+	 * It was 400 when the modal was ported, which put the dialog underneath the
+	 * open mobile navigation. The modal's own CSS asks for
+	 * `var(--laao-z-modal, 1000)`, so the fallback was already correct and
+	 * defining the token below it was what broke the layering.
+	 *
+	 * bin/ci/check-z-index.mjs fails the build if anything climbs above this.
+	 */
+	--laao-z-modal: 1000;
 }
