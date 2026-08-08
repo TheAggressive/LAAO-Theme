@@ -68,7 +68,7 @@ test.describe('accessibility', () => {
 		).toEqual([]);
 	});
 
-	test('a skip link exists and is keyboard focusable', async ({ page }) => {
+	test('the skip link receives the first Tab', async ({ page }) => {
 		await page.goto('/', { waitUntil: 'networkidle' });
 
 		const skipLink = page
@@ -80,31 +80,28 @@ test.describe('accessibility', () => {
 			'no skip link found — keyboard users must tab the whole header to reach content'
 		).toHaveCount(1);
 
-		// Visually hidden is correct; removed from the tab order is not.
-		const focusable = await skipLink.evaluate((el) => {
-			const style = getComputedStyle(el);
-			return (
-				style.display !== 'none' &&
-				style.visibility !== 'hidden' &&
-				(el as HTMLElement).tabIndex >= 0
-			);
+		await page.keyboard.press('Tab');
+
+		const focused = await page.evaluate(() => {
+			const element = document.activeElement;
+			if (!element) {
+				return null;
+			}
+			return {
+				tag: element.tagName.toLowerCase(),
+				className: element.className.toString(),
+				href: element.getAttribute('href') ?? '',
+			};
 		});
 
+		// A keyboard user must reach the skip link before anything else, or
+		// they tab the entire header on every page. This assertion was only
+		// possible once the front-page modal stopped opening on load — an
+		// auto-opening dialog correctly traps focus, so it took the first Tab.
 		expect(
-			focusable,
-			'the skip link is present but not focusable, so it cannot be used'
-		).toBe(true);
-
-		// NOTE: this deliberately does not assert the skip link receives the
-		// FIRST Tab. On the front page it does not, because that template sets
-		// openOnLoad on its modal — the newsletter popup opens by itself and
-		// correctly traps focus, so the first Tab lands inside it.
-		//
-		// That is configuration, not a defect. A closed modal is no longer in
-		// the tab order at all: the block sets `hidden`, which removes it.
-		// Asserting first-focus here would fail purely because of a content
-		// setting. See docs/known-issues.md, which also covers why an
-		// auto-opening modal is worth revisiting on its own merits.
+			`${focused?.className} ${focused?.href}`.toLowerCase(),
+			`first focusable element was <${focused?.tag} class="${focused?.className}">`
+		).toMatch(/skip|#content|#main/);
 	});
 
 	test('every image has an alt attribute', async ({ page }) => {
