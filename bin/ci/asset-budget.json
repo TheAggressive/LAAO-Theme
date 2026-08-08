@@ -1,0 +1,53 @@
+{
+	"comment": [
+		"Transfer budgets for the assets a visitor downloads, in gzipped bytes.",
+		"Gzipped because that is what crosses the wire; raw size would let a",
+		"change that compresses badly pass while the page got slower.",
+		"",
+		"Only front-end assets are listed. Editor bundles are large and irrelevant",
+		"to a reader, so budgeting all of dist/ would drown the signal.",
+		"",
+		"Thresholds sit roughly 15% above what the theme ships today, recorded",
+		"below. That headroom is for ordinary growth; a change that needs the",
+		"budget raised should say why in its commit message.",
+		"",
+		"bin/ci/check-asset-budget.mjs enforces this.",
+		"pnpm perf measures what the numbers here cannot: LCP, CLS and TBT."
+	],
+	"budgets": [
+		{
+			"file": "dist/styles/app.css",
+			"maxGzip": 10240,
+			"measured": 8526,
+			"note": "Global stylesheet, loaded on every page."
+		},
+		{
+			"file": "dist/scripts/gsap.js",
+			"maxGzip": 47104,
+			"measured": 44182,
+			"note": "GSAP with ScrollTrigger. The single largest thing a visitor downloads, on every page. If this needs raising, first ask whether it can be loaded only where it is used."
+		},
+		{
+			"file": "dist/scripts/smoothscroll.js",
+			"maxGzip": 6656,
+			"measured": 5310,
+			"note": "Lenis smooth scrolling."
+		}
+	],
+	"groups": [
+		{
+			"name": "block front-end assets",
+			"globs": [
+				"dist/blocks/*/view.js",
+				"dist/blocks/*/style-index.css",
+				"dist/blocks-interactivity/*/view.js",
+				"dist/blocks-interactivity/*/style-index.css"
+			],
+			"maxGzip": 19456,
+			"measured": 16680,
+			"note": "Loaded per block, so no single page pays all of it. Budgeted together because the total is what grows unnoticed as blocks are added."
+		}
+	],
+	"totalMaxGzip": 83968,
+	"totalMeasured": 74698
+}

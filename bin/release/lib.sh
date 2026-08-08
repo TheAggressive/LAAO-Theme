@@ -20,6 +20,12 @@ readonly PACKAGE_EXCLUDES=(
 	'.husky'
 	'.node-version'
 	'.phpunit.result.cache'
+	# Local tool caches. .cache holds Lighthouse's Chrome profile, which
+	# contains sockets and lock files — rsync copies them and zip then aborts
+	# with "No such device or address" rather than skipping them.
+	'.cache'
+	'.lighthouseci'
+	'lighthouserc.cjs'
 	'.prettierrc.js'
 	'.releaserc.json'
 	'.stylelintignore'
