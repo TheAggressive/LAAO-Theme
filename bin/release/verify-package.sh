@@ -45,6 +45,28 @@ for excluded in "${PACKAGE_EXCLUDES[@]}"; do
 done
 log "no excluded paths present"
 
+# Every locale catalog must reach the archive compiled.
+#
+# The .po files are the source and are committed; the .mo and Jed JSON files
+# are build output and gitignored, so a release that skips `pnpm i18n:compile`
+# would ship the sources and nothing that gettext or wp_set_script_translations
+# can actually read. That failure is invisible — the site just renders English —
+# which is exactly why it is asserted here rather than left to review.
+shopt -s nullglob
+for po in languages/*.po; do
+	# laao-es_ES.po → es_ES. The compiled catalog drops the domain prefix
+	# because WordPress looks for "{locale}.mo" inside a theme; see
+	# bin/i18n/compile.sh.
+	locale="$(basename "${po}" .po)"
+	locale="${locale#"${THEME_SLUG}-"}"
+
+	packaged="${EXTRACTED}/${THEME_SLUG}/languages/${locale}.mo"
+	[[ -f "${packaged}" ]] \
+		|| die "languages/$(basename "${po}") has no compiled ${locale}.mo in the package — run 'pnpm i18n:compile' before packaging"
+done
+shopt -u nullglob
+log "locale catalogs compiled"
+
 FILE_COUNT="$(find "${EXTRACTED}/${THEME_SLUG}" -type f | wc -l)"
 log "${FILE_COUNT} files packaged"
 

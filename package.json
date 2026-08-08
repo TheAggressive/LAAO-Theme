@@ -69,13 +69,21 @@
 		"release:verify": "bash bin/release/verify-package.sh",
 		"ci:doctor": "node bin/ci/doctor.mjs",
 		"ci:frontend": "pnpm lint:js && pnpm lint:css && pnpm format:check && pnpm typecheck && pnpm lint:files && pnpm test:tools && pnpm test:js",
+		"ci:i18n": "pnpm ci:doctor && bash bin/ci/i18n.sh",
 		"ci:php": "pnpm lint:php && pnpm analyse:php && pnpm test:php",
 		"ci:build": "pnpm build",
 		"ci:e2e": "pnpm test:e2e",
 		"ci:package": "pnpm release:package && pnpm release:verify",
 		"ci:verify": "bash bin/ci/verify.sh",
 		"qa": "pnpm ci:frontend && pnpm ci:php",
-		"packages-update": "wp-scripts packages-update"
+		"packages-update": "wp-scripts packages-update",
+		"i18n": "bash bin/i18n/all.sh",
+		"i18n:pot": "bash bin/i18n/pot.sh",
+		"i18n:sync": "bash bin/i18n/sync.sh",
+		"i18n:compile": "bash bin/i18n/compile.sh",
+		"i18n:status": "bash bin/i18n/status.sh",
+		"i18n:check": "bash bin/i18n/check.sh",
+		"i18n:locale": "bash bin/i18n/locale-new.sh"
 	},
 	"browserslist": [
 		"extends @wordpress/browserslist-config"

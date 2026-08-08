@@ -94,27 +94,90 @@ class Scripts {
 	/**
 	 * Registers every editor sidebar plugin without enqueuing any of them.
 	 *
+	 * Dependencies and versions come from the .asset.php manifests webpack
+	 * writes beside each bundle. They were previously hardcoded as
+	 * `wp-plugins, wp-editor, react`, which understated them: the manifests
+	 * also list wp-components, wp-core-data, wp-data, wp-primitives,
+	 * react-jsx-runtime and — the one that matters here — wp-i18n. That worked
+	 * only because wp-editor happens to pull most of them in transitively, so
+	 * the day WordPress trims that dependency chain the panels break with no
+	 * change on our side.
+	 *
+	 * The manifest version is a content hash, so a bundle busts caches when it
+	 * actually changes rather than once per theme release.
+	 *
 	 * @return void
 	 */
 	public function register_block_plugins(): void {
-		$version = wp_get_theme()->get( 'Version' );
-		$uri     = get_template_directory_uri();
-		$deps    = array( 'wp-plugins', 'wp-editor', 'react' );
+		$uri = get_template_directory_uri();
 
 		$plugins = array(
-			'editorial-block-plugin'       => 'editorial-block-plugin.js',
-			'image-credits-block-plugin'   => 'image-credits-block-plugin.js',
-			'cover-block-plugin'           => 'cover-block-plugin.js',
-			'wh-image-credit-block-plugin' => 'wh-image-credit-block-plugin.js',
-			'wh-link-to-block-plugin'      => 'wh-link-to-block-plugin.js',
-			'location-block-plugin'        => 'location-block-plugin.js',
-			'hair-makeup-block-plugin'     => 'hair-makeup-credits-block-plugin.js',
-			'highlight-block-plugin'       => 'highlight-block-plugin.js',
+			'editorial-block-plugin'       => 'editorial-block-plugin',
+			'image-credits-block-plugin'   => 'image-credits-block-plugin',
+			'cover-block-plugin'           => 'cover-block-plugin',
+			'wh-image-credit-block-plugin' => 'wh-image-credit-block-plugin',
+			'wh-link-to-block-plugin'      => 'wh-link-to-block-plugin',
+			'location-block-plugin'        => 'location-block-plugin',
+			'hair-makeup-block-plugin'     => 'hair-makeup-credits-block-plugin',
+			'highlight-block-plugin'       => 'highlight-block-plugin',
 		);
 
 		foreach ( $plugins as $handle => $file ) {
-			wp_register_script( $handle, $uri . '/dist/scripts/' . $file, $deps, $version, false );
+			$asset = $this->read_asset_manifest( $file );
+
+			wp_register_script(
+				$handle,
+				$uri . '/dist/scripts/' . $file . '.js',
+				$asset['dependencies'],
+				$asset['version'],
+				false
+			);
+
+			/*
+			 * Blocks registered from block.json get this from their `textdomain`
+			 * field. These panels are registered by hand, so without this call
+			 * every __() in them returns English regardless of site locale.
+			 */
+			wp_set_script_translations( $handle, 'laao', get_template_directory() . '/languages' );
 		}
+	}
+
+	/**
+	 * Reads the webpack-generated dependency manifest for a bundle.
+	 *
+	 * Falls back to the theme version and no dependencies when the manifest is
+	 * absent or malformed. A missing manifest means an incomplete build, and a
+	 * script that loads without its dependencies is easier to diagnose in the
+	 * console than an editor that silently drops a panel.
+	 *
+	 * @param string $file Bundle basename, without extension.
+	 * @return array{dependencies: string[], version: string}
+	 */
+	private function read_asset_manifest( string $file ): array {
+		$fallback = array(
+			'dependencies' => array(),
+			'version'      => (string) wp_get_theme()->get( 'Version' ),
+		);
+
+		$path = get_template_directory() . '/dist/scripts/' . $file . '.asset.php';
+
+		if ( ! is_readable( $path ) ) {
+			return $fallback;
+		}
+
+		$manifest = require $path;
+
+		if ( ! is_array( $manifest ) ) {
+			return $fallback;
+		}
+
+		$dependencies = $manifest['dependencies'] ?? array();
+		$version      = $manifest['version'] ?? $fallback['version'];
+
+		return array(
+			'dependencies' => is_array( $dependencies ) ? array_map( 'strval', $dependencies ) : array(),
+			'version'      => is_scalar( $version ) ? (string) $version : $fallback['version'],
+		);
 	}
 
 	/**

@@ -110,4 +110,131 @@ class ScriptsTest extends TestCase {
 		$tag = 'jquery.min.js src="/fake"';
 		$this->assertStringNotContainsString( 'defer', $this->scripts->defer( $tag ) );
 	}
+
+	// -------------------------------------------------------------------------
+	// Editor sidebar plugin registration
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Registers the sidebar plugins against a fixture theme directory.
+	 *
+	 * Builds dist/scripts/*.asset.php under a temp root rather than reading the
+	 * real dist/, so the assertions hold whether or not a build has run — the
+	 * PHP lane in CI does not build.
+	 *
+	 * @param array<string, string> $manifests Bundle basename => manifest PHP source.
+	 * @return array{registered: array<string, array{deps: string[], version: string}>, translated: string[]}
+	 */
+	private function register_with_manifests( array $manifests ): array {
+		$root = sys_get_temp_dir() . '/laao-scripts-' . uniqid( '', true );
+		mkdir( $root . '/dist/scripts', 0777, true );
+
+		foreach ( $manifests as $file => $source ) {
+			file_put_contents( $root . '/dist/scripts/' . $file . '.asset.php', $source );
+		}
+
+		$registered = array();
+		$translated = array();
+
+		Functions\when( 'get_template_directory' )->justReturn( $root );
+		Functions\when( 'get_template_directory_uri' )->justReturn( 'https://example.test/theme' );
+		Functions\when( 'wp_get_theme' )->justReturn(
+			new class() {
+				/**
+				 * Stands in for WP_Theme::get().
+				 *
+				 * @param string $key Header key.
+				 * @return string
+				 */
+				public function get( string $key ): string {
+					return 'Version' === $key ? '9.9.9' : '';
+				}
+			}
+		);
+
+		Functions\when( 'wp_register_script' )->alias(
+			function ( $handle, $src, $deps, $version ) use ( &$registered ) {
+				$registered[ $handle ] = array(
+					'deps'    => $deps,
+					'version' => $version,
+				);
+				return true;
+			}
+		);
+
+		Functions\when( 'wp_set_script_translations' )->alias(
+			function ( $handle ) use ( &$translated ) {
+				$translated[] = $handle;
+				return true;
+			}
+		);
+
+		$this->scripts->register_block_plugins();
+
+		$fixtures = glob( $root . '/dist/scripts/*' );
+		if ( is_array( $fixtures ) ) {
+			array_map( 'unlink', $fixtures );
+		}
+		rmdir( $root . '/dist/scripts' );
+		rmdir( $root . '/dist' );
+		rmdir( $root );
+
+		return array(
+			'registered' => $registered,
+			'translated' => $translated,
+		);
+	}
+
+	public function test_dependencies_and_version_come_from_the_asset_manifest(): void {
+		// The hardcoded list this replaced was wp-plugins, wp-editor, react —
+		// which omitted wp-i18n, so every __() in these panels was untranslatable
+		// even once a catalog existed.
+		$result = $this->register_with_manifests(
+			array(
+				'editorial-block-plugin' => "<?php return array('dependencies' => array('wp-i18n', 'wp-components'), 'version' => 'abc123');",
+			)
+		);
+
+		$this->assertSame(
+			array( 'wp-i18n', 'wp-components' ),
+			$result['registered']['editorial-block-plugin']['deps']
+		);
+		$this->assertSame( 'abc123', $result['registered']['editorial-block-plugin']['version'] );
+	}
+
+	public function test_every_sidebar_plugin_receives_script_translations(): void {
+		$result = $this->register_with_manifests( array() );
+
+		$this->assertCount(
+			8,
+			$result['translated'],
+			'Each registered sidebar panel must get wp_set_script_translations().'
+		);
+		$this->assertSame(
+			array_keys( $result['registered'] ),
+			$result['translated'],
+			'Translations must be set for exactly the handles that were registered.'
+		);
+	}
+
+	public function test_missing_manifest_falls_back_to_the_theme_version(): void {
+		$result = $this->register_with_manifests( array() );
+
+		$this->assertSame( '9.9.9', $result['registered']['cover-block-plugin']['version'] );
+		$this->assertSame( array(), $result['registered']['cover-block-plugin']['deps'] );
+	}
+
+	public function test_malformed_manifest_does_not_fatal(): void {
+		// A manifest returning a scalar is what a truncated write looks like.
+		// Registering with no dependencies is recoverable and visible in the
+		// console; a TypeError during init takes the whole editor down.
+		$result = $this->register_with_manifests(
+			array(
+				'highlight-block-plugin' => '<?php return "not an array";',
+			)
+		);
+
+		$this->assertSame( '9.9.9', $result['registered']['highlight-block-plugin']['version'] );
+		$this->assertSame( array(), $result['registered']['highlight-block-plugin']['deps'] );
+	}
 }

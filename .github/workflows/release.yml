@@ -162,6 +162,32 @@ jobs:
                       tests/e2e/.results/
                   retention-days: 7
 
+    i18n:
+        name: 🌐 i18n
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: pnpm/action-setup@v6
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            # Deliberately does not depend on `build`: the POT is extracted from
+            # source, and dist/ is excluded so compiled copies of every block
+            # string are not attributed to a file nobody edits. Running off the
+            # artifact would report drift for strings that exist twice.
+            - name: Check POT drift, translator comments and catalogs
+              run: pnpm ci:i18n
+
     package:
         name: 📦 Package
         runs-on: ubuntu-latest

@@ -1,0 +1,10 @@
+# Compiled catalogs — the release build runs `pnpm i18n:compile`, so these are
+# generated from the .po files rather than committed. Committing them means
+# reviewing a binary diff and, eventually, shipping one that no longer matches
+# its source.
+#
+# The .mo files are named for the locale alone, not the text domain: WordPress
+# looks for "{locale}.mo" when the catalog directory lives inside the theme.
+# See bin/i18n/compile.sh.
+*.mo
+laao-*.json

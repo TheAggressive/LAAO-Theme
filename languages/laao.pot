@@ -1,0 +1,802 @@
+# Copyright (C) 2026 The Aggressive, LLC
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: LAAO\n"
+"Report-Msgid-Bugs-To: https://laartsonline.com\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI\n"
+"X-Domain: laao\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "LAAO"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://laartsonline.com"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Official WordPress Block Theme for LAAO"
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "The Aggressive, LLC"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://theaggressive.com"
+msgstr ""
+
+#: inc/Core/class-theme-update-package-verifier.php:95
+msgid "The LAAO update package is missing a SHA-256 checksum."
+msgstr ""
+
+#: inc/Core/class-theme-update-package-verifier.php:118
+msgid "The LAAO update package failed checksum verification and was not installed."
+msgstr ""
+
+#. translators: 1: theme name, 2: current version, 3: new version
+#: inc/Core/class-theme-updates.php:342
+#, php-format
+msgid "A new version of %1$s is available. You have version %2$s and the latest version is %3$s."
+msgstr ""
+
+#: inc/Core/class-theme-updates.php:357
+msgid "Update now"
+msgstr ""
+
+#: inc/Editorial/class-highlight-columns.php:76
+#: src/scripts/highlight-block-plugin.js:81
+msgid "Highlight"
+msgstr ""
+
+#: patterns/cover-post-query-loop.php
+msgctxt "Pattern title"
+msgid "Cover Post Query Loop Template"
+msgstr ""
+
+#: patterns/cover-post-query-loop.php
+msgctxt "Pattern description"
+msgid "A query loop pattern that displays cover posts in a grid layout"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/render.php:21
+msgid "Open navigation menu"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/render.php:21
+msgid "Close navigation menu"
+msgstr ""
+
+#: src/blocks-interactivity/modal/render.php:80
+msgid "Open Modal"
+msgstr ""
+
+#: src/blocks-interactivity/modal/render.php:265
+msgid "Close modal"
+msgstr ""
+
+#: src/blocks/whats-hot/render.php:138
+msgid "Sorry, No What's Hot posts found."
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:29
+msgid "Fade"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:33
+msgid "Slide"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:36
+#: src/blocks-interactivity/animate-on-scroll/edit.js:56
+msgid "Up"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:37
+#: src/blocks-interactivity/animate-on-scroll/edit.js:57
+msgid "Down"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:38
+#: src/blocks-interactivity/animate-on-scroll/edit.js:58
+#: src/blocks-interactivity/animate-on-scroll/edit.js:67
+msgid "Left"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:39
+#: src/blocks-interactivity/animate-on-scroll/edit.js:59
+#: src/blocks-interactivity/animate-on-scroll/edit.js:68
+msgid "Right"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:44
+msgid "Zoom"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:47
+msgid "In"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:48
+msgid "Out"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:53
+msgid "Flip"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:64
+msgid "Rotate"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:73
+msgid "Blur"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:97
+#: src/blocks-interactivity/mobile-nav/edit.js:45
+msgid "Animation Settings"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:101
+msgid "Animation Type"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:123
+msgid "Direction"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:136
+msgid "Stagger Children"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:145
+msgid "Stagger Delay (seconds)"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:156
+msgid "Duration (seconds)"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:175
+msgid "Detection Boundary"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:233
+msgid "Negative values delay trigger until element is further in viewport. -50% means element must be halfway into viewport before triggering."
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:240
+msgid "Visibility Trigger"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:244
+msgid "100% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:248
+msgid "90% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:252
+msgid "80% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:256
+msgid "70% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:260
+msgid "60% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:264
+msgid "50% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:268
+msgid "40% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:272
+msgid "30% of Element (Default)"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:276
+msgid "20% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:280
+msgid "10% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:283
+msgid "0% of Element"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:286
+msgid "What percentage of the target's visibility should be in the Detection Boundary before the animation triggers. 0% means even if the target is not visible, the animation will trigger. 100% means the animation will trigger when the target is 100% in the Detection Boundary."
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:294
+msgid "Debug Mode"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/edit.js:297
+msgid "Shows visual indicators for the Detection Boundary & Visibility Trigger"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/edit.js:49
+msgid "Display Icon"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/edit.js:53
+msgid "Menu Icon"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/edit.js:57
+msgid "Close Icon"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/edit.js:62
+msgid "Select the icon to be displayed."
+msgstr ""
+
+#: src/blocks/copyright-date-block/edit.js:53
+msgid "Show starting year"
+msgstr ""
+
+#: src/blocks/copyright-date-block/edit.js:63
+msgid "Starting year"
+msgstr ""
+
+#: src/blocks/copyright-date-block/edit.js:73
+msgid "Company name"
+msgstr ""
+
+#: src/blocks/query-loop-ad-inserter/edit.js:76
+msgid "Place Ad After Every Nth Post"
+msgstr ""
+
+#: src/blocks/whats-hot/edit.js:44
+msgid "What's Hot Settings"
+msgstr ""
+
+#: src/blocks/whats-hot/edit.js:48
+msgid "Number of posts"
+msgstr ""
+
+#: src/blocks/whats-hot/edit.js:59
+msgid "Display Featured Image"
+msgstr ""
+
+#: src/blocks/whats-hot/edit.js:69
+msgid "Display Caption"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:43
+msgid "Cover Images"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:47
+msgid "Cover Image #2:"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:65
+#: src/scripts/cover-block-plugin.js:146
+msgid "Upload Image"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:96
+#: src/scripts/cover-block-plugin.js:177
+msgid "Replace"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:107
+#: src/scripts/cover-block-plugin.js:188
+msgid "Replace Image"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:122
+#: src/scripts/cover-block-plugin.js:203
+msgid "Remove"
+msgstr ""
+
+#: src/scripts/cover-block-plugin.js:128
+msgid "Cover Image #3:"
+msgstr ""
+
+#: src/scripts/editorial-block-plugin.js:32
+msgid "Editorial Credits"
+msgstr ""
+
+#: src/scripts/editorial-block-plugin.js:37
+#: src/scripts/image-credits-block-plugin.js:53
+msgid "Credit Types:"
+msgstr ""
+
+#: src/scripts/editorial-block-plugin.js:64
+msgid "Author Name:"
+msgstr ""
+
+#: src/scripts/hair-makeup-credits-block-plugin.js:32
+msgid "Hair/Makeup Credits"
+msgstr ""
+
+#: src/scripts/hair-makeup-credits-block-plugin.js:38
+msgid "Hair Credited To:"
+msgstr ""
+
+#: src/scripts/hair-makeup-credits-block-plugin.js:52
+msgid "Makeup Credited To:"
+msgstr ""
+
+#: src/scripts/hair-makeup-credits-block-plugin.js:66
+msgid "Grooming Credited To:"
+msgstr ""
+
+#: src/scripts/highlight-block-plugin.js:92
+msgid "This post is scheduled to appear in the Highlight section."
+msgstr ""
+
+#: src/scripts/highlight-block-plugin.js:96
+msgid "Set a start and end date to feature this post in the Highlight section."
+msgstr ""
+
+#: src/scripts/highlight-block-plugin.js:103
+msgid "Start"
+msgstr ""
+
+#: src/scripts/highlight-block-plugin.js:108
+msgid "End"
+msgstr ""
+
+#: src/scripts/highlight-block-plugin.js:128
+msgid "Clear Schedule"
+msgstr ""
+
+#: src/scripts/image-credits-block-plugin.js:48
+#: src/scripts/wh-image-credit-block-plugin.js:48
+msgid "Image Credits"
+msgstr ""
+
+#: src/scripts/image-credits-block-plugin.js:101
+msgid "Credit Belongs To:"
+msgstr ""
+
+#: src/scripts/image-credits-block-plugin.js:122
+msgid "CAPTION ID:"
+msgstr ""
+
+#: src/scripts/location-block-plugin.js:32
+msgid "Location"
+msgstr ""
+
+#: src/scripts/location-block-plugin.js:38
+msgid "Location:"
+msgstr ""
+
+#: src/scripts/wh-image-credit-block-plugin.js:61
+msgid "CAPTION:"
+msgstr ""
+
+#: src/scripts/wh-link-to-block-plugin.js:32
+msgid "Link To Page"
+msgstr ""
+
+#: src/scripts/wh-link-to-block-plugin.js:37
+msgid "Page To Link:"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/block.json
+msgctxt "block title"
+msgid "Animate On Scroll"
+msgstr ""
+
+#: src/blocks-interactivity/animate-on-scroll/block.json
+msgctxt "block description"
+msgid "Animate elements on scroll."
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block title"
+msgid "Event Gallery"
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block description"
+msgid "LAAO Event Gallery"
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block keyword"
+msgid "Event Gallery"
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block keyword"
+msgid "LAAO"
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block keyword"
+msgid "Gallery"
+msgstr ""
+
+#: src/blocks-interactivity/event-gallery/block.json
+msgctxt "block keyword"
+msgid "Events"
+msgstr ""
+
+#: src/blocks-interactivity/hero/block.json
+msgctxt "block title"
+msgid "Hero"
+msgstr ""
+
+#: src/blocks-interactivity/hero/block.json
+msgctxt "block description"
+msgid "The hero block for LAAO that features Ken Burns-style image slideshow."
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/block.json
+msgctxt "block title"
+msgid "Mobile Nav"
+msgstr ""
+
+#: src/blocks-interactivity/mobile-nav/block.json
+msgctxt "block description"
+msgid "An interactive block with the Interactivity API."
+msgstr ""
+
+#: src/blocks-interactivity/modal/block.json
+msgctxt "block title"
+msgid "Modal"
+msgstr ""
+
+#: src/blocks-interactivity/modal/block.json
+msgctxt "block description"
+msgid "An interactive modal block that can be positioned and triggered by other elements."
+msgstr ""
+
+#: src/blocks/article-credits/block.json
+msgctxt "block title"
+msgid "Article Credits"
+msgstr ""
+
+#: src/blocks/article-credits/block.json
+msgctxt "block description"
+msgid "Article Post Credits"
+msgstr ""
+
+#: src/blocks/block-binding-image/block.json
+msgctxt "block title"
+msgid "Block Binding Image"
+msgstr ""
+
+#: src/blocks/block-binding-image/block.json
+msgctxt "block description"
+msgid "Example block scaffolded with Create Block tool."
+msgstr ""
+
+#: src/blocks/copyright-date-block/block.json
+msgctxt "block title"
+msgid "Copyright Date Tag"
+msgstr ""
+
+#: src/blocks/copyright-date-block/block.json
+msgctxt "block description"
+msgid "LAAO copyright date tagline."
+msgstr ""
+
+#: src/blocks/highlight-posts/block.json
+msgctxt "block title"
+msgid "Highlight Posts"
+msgstr ""
+
+#: src/blocks/highlight-posts/block.json
+msgctxt "block description"
+msgid "A block that displays the highlight posts tagged with 'featured'"
+msgstr ""
+
+#: src/blocks/laao-post-featured-image/block.json
+msgctxt "block title"
+msgid "Laao Post Featured Image w/ Caption"
+msgstr ""
+
+#: src/blocks/laao-post-featured-image/block.json
+msgctxt "block description"
+msgid "Post featured image with image caption block for Laao theme."
+msgstr ""
+
+#: src/blocks/logo/block.json
+msgctxt "block title"
+msgid "Site Logo"
+msgstr ""
+
+#: src/blocks/logo/block.json
+msgctxt "block description"
+msgid "LAAO Site Logo Block"
+msgstr ""
+
+#: src/blocks/query-loop-ad-inserter/block.json
+msgctxt "block title"
+msgid "Query Loop Ad Inserter"
+msgstr ""
+
+#: src/blocks/query-loop-ad-inserter/block.json
+msgctxt "block description"
+msgid "Insert Ads in the query loop."
+msgstr ""
+
+#: src/blocks/whats-hot/block.json
+msgctxt "block title"
+msgid "Whats Hot"
+msgstr ""
+
+#: src/blocks/whats-hot/block.json
+msgctxt "block description"
+msgid "This block displays the latest 4 posts from the 'What's Hot' postType."
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "4 (0.25rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "8 (0.5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "12 (0.75rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "16 (1rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "20 (1.25rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "24 (1.5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "28 (1.75rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "32 (2rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "36 (2.25rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "40 (2.5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "44 (2.75rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "48 (3rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "56 (3.5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "64 (4rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "80 (5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "96 (6rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "112 (7rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "128 (8rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "144 (9rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "160 (10rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "176 (11rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "192 (12rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "208 (13rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "224 (14rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Black"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "White"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Red"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Dark Gray"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Gray"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Gray on Dark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Transparent"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Industrial"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "System UI"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Roboto Condensed"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Anton"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "XS (0.75rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "SM (0.875rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "LG (1.125rem Fluid)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "XL (1.25rem Fluid)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "2XL (1.5rem Fluid)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "3XL (1.875rem Fluid)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "4XL (2.25rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "5XL (3rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "6XL (3.75rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "7XL (4.5rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "8XL (6rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "9XL (8rem)"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""

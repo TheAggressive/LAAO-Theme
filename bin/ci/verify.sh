@@ -32,6 +32,9 @@ if ! curl -sfo /dev/null "${WP_URL}"; then
 fi
 pnpm ci:e2e
 
+echo "==> i18n"
+pnpm ci:i18n
+
 echo "==> Package"
 pnpm ci:package
 
