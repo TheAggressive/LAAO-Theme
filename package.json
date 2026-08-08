@@ -46,7 +46,7 @@
 		"lint:css:fix": "wp-scripts lint-style 'src/**/*.css' --fix",
 		"lint:php": "composer run-script phpcs",
 		"lint:php:fix": "composer run-script phpcs:fix",
-		"lint:files": "bash bin/check-file-length.sh && bash bin/ci/check-action-pins.sh && bash bin/ci/check-template-colors.sh",
+		"lint:files": "bash bin/check-file-length.sh && bash bin/ci/check-action-pins.sh && bash bin/ci/check-template-colors.sh && node bin/ci/check-z-index.mjs",
 		"test:tools": "bash bin/ci/dependabot-major-guard.test.sh",
 		"lint:commit": "commitlint --edit",
 		"typecheck": "tsc --noEmit",
