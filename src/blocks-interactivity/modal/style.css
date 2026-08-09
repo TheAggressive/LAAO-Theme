@@ -27,6 +27,17 @@
 	display: inline-block;
 }
 
+/*
+ * With no trigger button there is nothing to lay out, and an empty
+ * inline-block still generates a line box — it left 40px of blank space under
+ * the footer. display: contents removes the box and keeps the children: the
+ * announcer is absolutely positioned and visually hidden, and the shell is
+ * fixed to the viewport, so neither needs this element as a containing block.
+ */
+.wp-block-laao-modal--no-trigger {
+	display: contents;
+}
+
 /* ──────────────────────────────────────────────
  * Screen-reader announcer (visually hidden)
  * ────────────────────────────────────────────── */
