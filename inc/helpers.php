@@ -39,3 +39,38 @@ if ( ! function_exists( 'laao_trusted_html' ) ) {
 		return $html;
 	}
 }
+
+if ( ! function_exists( 'laao_modal_opens_itself' ) ) {
+	/**
+	 * Whether a modal already has a way to open, so needs no default button.
+	 *
+	 * The modal block renders an "Open Modal" button only as a fallback: it
+	 * exists so a modal is reachable at all. Every other way of opening one
+	 * makes it redundant, and a stray button offering to open a dialog that
+	 * opens by itself is worse than no button.
+	 *
+	 * openOnLoad was missing from this list, which is how a modal set to open
+	 * on page load still rendered one. It lives here rather than inline in
+	 * render.php so the rule can be tested without rendering a block.
+	 *
+	 * openOnLoadOnce is deliberately absent: the editor only offers it while
+	 * openOnLoad is on, so it modifies that trigger rather than being one.
+	 *
+	 * @param string $trigger_block_id Client ID of a block designated as the trigger.
+	 * @param bool   $open_on_load     Opens automatically on page load.
+	 * @param bool   $exit_intent      Opens on exit intent.
+	 * @param bool   $scroll_depth     Opens at a scroll depth.
+	 * @return bool True when something already opens the modal.
+	 */
+	function laao_modal_opens_itself(
+		string $trigger_block_id,
+		bool $open_on_load,
+		bool $exit_intent,
+		bool $scroll_depth
+	): bool {
+		return '' !== trim( $trigger_block_id )
+			|| $open_on_load
+			|| $exit_intent
+			|| $scroll_depth;
+	}
+}

@@ -410,12 +410,32 @@ wp_interactivity_state(
 	)
 );
 
+$renders_default_trigger = ! laao_modal_opens_itself(
+	$trigger_block_id,
+	$open_on_load,
+	$exit_intent_trigger,
+	$scroll_depth_trigger
+);
+
+/*
+ * The wrapper is inline-block so the trigger button sits in document flow.
+ * Without a button it has nothing to lay out, but an empty inline-block still
+ * generates a line box — 40px of blank space under the footer on this theme.
+ *
+ * display: contents removes the box while leaving the children rendered, which
+ * is what they need: the announcer is absolutely positioned and visually
+ * hidden, and the shell is fixed to the viewport, so neither depends on this
+ * element for its containing block.
+ */
+$wrapper_classes = $renders_default_trigger ? '' : 'wp-block-laao-modal--no-trigger';
+
 ?>
 
 <div
 	<?php
 	echo get_block_wrapper_attributes(
 		array(
+			'class'               => $wrapper_classes,
 			'data-wp-interactive' => 'laao/modal',
 			'data-wp-context'     => (string) wp_json_encode( array( 'id' => $unique_id ) ),
 			'data-wp-init'        => 'actions.init',
@@ -424,7 +444,8 @@ wp_interactivity_state(
 	?>
 >
 
-	<?php if ( empty( $trigger_block_id ) && ! $exit_intent_trigger && ! $scroll_depth_trigger ) : ?>
+	<?php // The default button is a fallback; see laao_modal_opens_itself(). ?>
+	<?php if ( $renders_default_trigger ) : ?>
 	<button
 		class="<?php echo esc_attr( $trigger_classes ); ?>"
 		type="button"

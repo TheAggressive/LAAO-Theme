@@ -505,9 +505,24 @@ function setupScrollDepthTrigger(
 
 	const handleScroll = (): void => {
 		if (triggered) return;
-		const scrolled = window.scrollY + window.innerHeight;
-		const total = document.documentElement.scrollHeight;
-		if ((scrolled / total) * 100 >= percent) {
+
+		/*
+		 * Progress through the scrollable distance, not through the document.
+		 * The previous formula was (scrollY + innerHeight) / scrollHeight,
+		 * which counts the viewport itself as already scrolled: on a page only
+		 * twice the viewport height that is 50% before the visitor moves, so
+		 * the modal opened on load. A 40px layout change was enough to cross
+		 * the threshold and turn a scroll trigger back into an auto-opening
+		 * dialog — the exact behaviour the scroll trigger exists to avoid.
+		 */
+		const scrollable =
+			document.documentElement.scrollHeight - window.innerHeight;
+
+		// A page that cannot scroll can never reach a scroll depth. Opening
+		// anyway would be an auto-open wearing a scroll trigger's name.
+		if (scrollable <= 0) return;
+
+		if ((window.scrollY / scrollable) * 100 >= percent) {
 			triggered = true;
 			window.removeEventListener('scroll', handleScroll);
 			openModal(id, modalsState);
