@@ -145,10 +145,25 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-size: cover;
-			background-position: 25% center;
 			opacity: 0;
 			transition: opacity 1s ease-out;
+
+			/*
+			 * The slide used to carry the image as a CSS background, which
+			 * meant every visitor downloaded the full-size original because a
+			 * background cannot express srcset. It is now a real <img>, and
+			 * object-fit reproduces what background-size and background-position
+			 * were doing — including the 25% horizontal framing, which keeps
+			 * faces in shot on the banners this block renders.
+			 */
+			.wp-block-laao-hero-slide__image {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: 25% center;
+			}
 
 			&.is-active {
 				z-index: 5;
