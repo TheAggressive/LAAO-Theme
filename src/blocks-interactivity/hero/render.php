@@ -51,8 +51,8 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 		}
 
 		$slides[] = array(
-			'imageUrl' => has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'full' ) : null,
-			'content'  => $content,
+			'imageId' => has_post_thumbnail() ? (int) get_post_thumbnail_id( get_the_ID() ) : 0,
+			'content' => $content,
 		);
 	}
 
@@ -94,8 +94,40 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 				)
 				?>
 					data-wp-class--is-active="callbacks.isActive"
-					style="background-image: url('<?php echo esc_url( $slide['imageUrl'] ); ?>');"
-				></div>
+				>
+					<?php
+					/*
+					 * An <img> rather than a CSS background, which is what this
+					 * was. A background cannot carry srcset, so every visitor
+					 * downloaded the full-size original — a phone rendering the
+					 * hero 400px wide still pulled the 1920px file. It also
+					 * cannot be lazy-loaded or prioritised.
+					 *
+					 * The first slide is the LCP element on the front page, so
+					 * it loads eagerly at high priority; the rest are behind an
+					 * opacity transition and can wait.
+					 *
+					 * Not escaped with wp_kses_post(): it strips srcset, sizes,
+					 * fetchpriority and decoding, which is the entire point of
+					 * this markup. wp_get_attachment_image() already escapes.
+					 */
+					echo laao_trusted_html(
+						wp_get_attachment_image(
+							$slide['imageId'],
+							'full',
+							false,
+							array(
+								'class'         => 'wp-block-laao-hero-slide__image',
+								'alt'           => '',
+								'loading'       => 0 === $index ? 'eager' : 'lazy',
+								'fetchpriority' => 0 === $index ? 'high' : 'auto',
+								'decoding'      => 'async',
+								'sizes'         => '100vw',
+							)
+						)
+					);
+					?>
+				</div>
 			<?php endforeach; ?>
 	</div>
 </div>

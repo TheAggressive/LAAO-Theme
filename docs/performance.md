@@ -57,10 +57,10 @@ This matters more here than anywhere else in the toolchain:
 
 |                   | wp-env            | laartsonline.local        |
 | ----------------- | ----------------- | ------------------------- |
-| performance score | 100               | 83                        |
-| LCP               | 0.7 s             | 2.7 s                     |
-| total transfer    | 420 KB            | 2951 KB                   |
-| images            | 54 KB (1 request) | **2566 KB (18 requests)** |
+| performance score | 100               | 89                        |
+| LCP               | 0.7 s             | 2.0 s                     |
+| total transfer    | 420 KB            | 2097 KB                   |
+| images            | 54 KB (1 request) | **1712 KB (18 requests)** |
 | scripts           | 96 KB             | 101 KB                    |
 
 wp-env has no content, no ads and no plugins, and reports a perfect score that
@@ -69,6 +69,26 @@ means nothing. The real page is 2.9MB, and **images are 87% of it**.
 The theme's own scripts and styles are ~120KB and barely move between the two.
 Nothing in `asset-budget.json` would have caught the thing that actually costs
 this site two seconds, which is why both halves exist.
+
+### What was fixed
+
+The hero block rendered each slide as a CSS `background-image` pointing at the
+full-size original. A background cannot carry `srcset`, so every visitor
+downloaded the largest file — a phone rendering the hero 400px wide still
+pulled the 1920px image — and it could be neither lazy-loaded nor prioritised.
+
+The slides are now real `<img>` elements with `object-fit: cover`, which
+reproduces the previous framing while letting the browser choose a source:
+
+| hero images     | before  | after  |
+| --------------- | ------- | ------ |
+| mobile, 390px   | 1307 KB | 149 KB |
+| desktop, 1440px | 1307 KB | 536 KB |
+
+On the live front page that moved the score from 83 to 89 and LCP from 2.7 s to
+2.0 s — inside Google's "good" threshold rather than outside it.
+
+### What is left, and is not the theme's to fix
 
 The images are ad creatives and editorial photography, uploaded at full size.
 That is the largest single performance win available on this site, and it is a
