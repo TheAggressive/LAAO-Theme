@@ -424,7 +424,8 @@ wp_interactivity_state(
 	?>
 >
 
-	<?php if ( empty( $trigger_block_id ) && ! $exit_intent_trigger && ! $scroll_depth_trigger ) : ?>
+	<?php // The default button is a fallback; see laao_modal_opens_itself(). ?>
+	<?php if ( ! laao_modal_opens_itself( $trigger_block_id, $open_on_load, $exit_intent_trigger, $scroll_depth_trigger ) ) : ?>
 	<button
 		class="<?php echo esc_attr( $trigger_classes ); ?>"
 		type="button"
