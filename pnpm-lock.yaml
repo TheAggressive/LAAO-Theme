@@ -259,8 +259,8 @@ importers:
         specifier: ^16.1.1
         version: 16.1.1(postcss@8.5.26)
       postcss-mixins:
-        specifier: ^11.0.3
-        version: 11.0.3(postcss@8.5.26)
+        specifier: ^12.1.2
+        version: 12.1.2(postcss@8.5.26)
       postcss-nesting:
         specifier: ^14.0.1
         version: 14.0.1(postcss@8.5.26)
@@ -6440,14 +6440,6 @@ packages:
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
 
-  fdir@6.4.0:
-    resolution: {integrity: sha512-3oB133prH1o4j/L5lLW7uOCF1PlD+/It2L0eL/iAqWMB91RBbqTewABqxhj0ibBd90EEmWZq7ntIWzVaWcXTGQ==}
-    peerDependencies:
-      picomatch: ^4.0.4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   fdir@6.4.4:
     resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
     peerDependencies:
@@ -8972,8 +8964,8 @@ packages:
     peerDependencies:
       postcss: ^8.5.23
 
-  postcss-js@4.0.1:
-    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
+  postcss-js@4.1.0:
+    resolution: {integrity: sha512-oIAOTqgIo7q2EOwbhb8UalYePMvYoIeRY2YKntdpFQXNosSu3vLrniGgmH9OKs/qAkfoj5oB3le/7mINW1LCfw==}
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
       postcss: ^8.5.23
@@ -9087,9 +9079,9 @@ packages:
     peerDependencies:
       postcss: ^8.5.23
 
-  postcss-mixins@11.0.3:
-    resolution: {integrity: sha512-HZa6DHlN7uCkp7GTFNvhpyK/Gi9+vrVG7FPl2oQdj+sXUuYo4ri9OsWBseTnvnLfWxRWOq8/VwcHcixtZPrRRg==}
-    engines: {node: ^18.0 || ^ 20.0 || >= 22.0}
+  postcss-mixins@12.1.2:
+    resolution: {integrity: sha512-90pSxmZVfbX9e5xCv7tI5RV1mnjdf16y89CJKbf/hD7GyOz1FCxcYMl8ZYA8Hc56dbApTKKmU9HfvgfWdCxlwg==}
+    engines: {node: ^20.0 || ^22.0 || >=24.0}
     peerDependencies:
       postcss: ^8.5.23
 
@@ -10436,9 +10428,9 @@ packages:
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
 
-  sugarss@4.0.1:
-    resolution: {integrity: sha512-WCjS5NfuVJjkQzK10s8WOBY+hhDxxNt/N6ZaGwxFZ+wN3/lKKFSaaKUNecULcTTvE4urLcKaZFQD8vO0mOZujw==}
-    engines: {node: '>=12.0'}
+  sugarss@5.0.1:
+    resolution: {integrity: sha512-ctS5RYCBVvPoZAnzIaX5QSShK8ZiZxD5HUqSxlusvEMC+QZQIPCPOIJg6aceFX+K2rf4+SH89eu++h1Zmsr2nw==}
+    engines: {node: '>=18.0'}
     peerDependencies:
       postcss: ^8.5.23
 
@@ -10623,10 +10615,6 @@ packages:
 
   tinyglobby@0.2.17:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
-    engines: {node: '>=12.0.0'}
-
-  tinyglobby@0.2.9:
-    resolution: {integrity: sha512-8or1+BGEdk1Zkkw2ii16qSS7uVrQJPre5A9o/XkWPATkk23FZh/15BKFxPnlTy6vkljZxLqYCzzBMj30ZrSvjw==}
     engines: {node: '>=12.0.0'}
 
   tldts-core@6.1.86:
@@ -21195,10 +21183,6 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fdir@6.4.0(picomatch@4.0.5):
-    optionalDependencies:
-      picomatch: 4.0.5
-
   fdir@6.4.4(picomatch@4.0.5):
     optionalDependencies:
       picomatch: 4.0.5
@@ -23842,7 +23826,7 @@ snapshots:
       read-cache: 1.0.0
       resolve: 1.22.12
 
-  postcss-js@4.0.1(postcss@8.5.26):
+  postcss-js@4.1.0(postcss@8.5.26):
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.5.26
@@ -23956,13 +23940,13 @@ snapshots:
       postcss: 8.5.26
       postcss-selector-parser: 7.1.4
 
-  postcss-mixins@11.0.3(postcss@8.5.26):
+  postcss-mixins@12.1.2(postcss@8.5.26):
     dependencies:
       postcss: 8.5.26
-      postcss-js: 4.0.1(postcss@8.5.26)
+      postcss-js: 4.1.0(postcss@8.5.26)
       postcss-simple-vars: 7.0.1(postcss@8.5.26)
-      sugarss: 4.0.1(postcss@8.5.26)
-      tinyglobby: 0.2.9
+      sugarss: 5.0.1(postcss@8.5.26)
+      tinyglobby: 0.2.17
 
   postcss-modules-extract-imports@3.1.0(postcss@8.5.26):
     dependencies:
@@ -25626,7 +25610,7 @@ snapshots:
 
   stylis@4.2.0: {}
 
-  sugarss@4.0.1(postcss@8.5.26):
+  sugarss@5.0.1(postcss@8.5.26):
     dependencies:
       postcss: 8.5.26
 
@@ -25805,11 +25789,6 @@ snapshots:
   tinyglobby@0.2.17:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
-
-  tinyglobby@0.2.9:
-    dependencies:
-      fdir: 6.4.0(picomatch@4.0.5)
       picomatch: 4.0.5
 
   tldts-core@6.1.86: {}
