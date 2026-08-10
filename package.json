@@ -128,7 +128,7 @@
 		"@wordpress/core-data": "^7.52.0",
 		"@wordpress/data": "^10.52.0",
 		"@wordpress/data-controls": "^4.52.0",
-		"@wordpress/dataviews": "^4.19.0",
+		"@wordpress/dataviews": "^17.3.0",
 		"@wordpress/date": "^5.52.0",
 		"@wordpress/deprecated": "^4.52.0",
 		"@wordpress/dom": "^4.52.0",
