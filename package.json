@@ -149,7 +149,7 @@
 		"@wordpress/prettier-config": "^4.52.0",
 		"@wordpress/primitives": "^4.52.0",
 		"@wordpress/server-side-render": "^5.23.0",
-		"@wordpress/stylelint-config": "^23.15.0",
+		"@wordpress/stylelint-config": "^24.1.0",
 		"autoprefixer": "^10.5.4",
 		"browser-sync-webpack-plugin": "^2.4.0",
 		"browserslist": "^4.28.7",
