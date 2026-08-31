@@ -1,10 +1,9 @@
 # CLAUDE.md — LAAO Theme
 
 Guidance for AI assistants working in the LAArtsOnline.com WordPress theme.
-
-Adapted from the sibling Aggressive Apparel theme. Where the two differ, this
-file is authoritative for LAAO: it has no WooCommerce, no navigation block
-system, and a smaller block set.
+Adapted from the sibling Aggressive Apparel theme; where the two differ this
+file is authoritative for LAAO — no WooCommerce, no navigation block system,
+and a smaller block set.
 
 ## Overview
 
@@ -13,11 +12,9 @@ publication. Service-container architecture, custom Gutenberg blocks with
 Interactivity API support, and a CI pipeline that runs the same commands
 locally as it does on GitHub.
 
-- **Version:** see `style.css` / `package.json` — semantic-release owns it, never hardcode
-- **Requires:** WordPress 6.8+, PHP 8.4+
-- **Tested up to:** WordPress 7.0.2
-- **Toolchain:** Node 24.18.1, pnpm 11.1.2 (pinned; `pnpm ci:doctor` enforces)
-- **No Tailwind.** Removed deliberately — see "Styling" below.
+Version, WP/PHP floors and the pinned Node/pnpm toolchain live in `style.css`
+and `package.json` — semantic-release owns the version, never hardcode it, and
+`pnpm ci:doctor` enforces the toolchain. **No Tailwind** (see "Styling").
 
 ## Quick commands
 
@@ -26,16 +23,12 @@ pnpm install
 pnpm build              # all three webpack configs
 pnpm start              # watch mode
 pnpm env:start          # wp-env on :9950 (phpMyAdmin :9952)
-
 pnpm ci:verify          # the whole pipeline, exactly as CI runs it
-pnpm test:php           # PHPUnit (68 tests)
-pnpm test:js            # Jest (47 tests)
-pnpm test:e2e           # Playwright (13 tests)
-pnpm analyse:php        # PHPStan level 8
-pnpm lint:php:fix       # phpcbf
-
 pnpm cli <wp args>      # WP-CLI inside wp-env
 ```
+
+Individual suites: `test:php`, `test:js`, `test:e2e`, `analyse:php`,
+`lint:php:fix`. `package.json` is the source of truth for the rest.
 
 `pnpm ci:verify` is the contract: every GitHub job maps 1:1 onto a `pnpm ci:*`
 script, so "green locally" and "green in CI" mean the same thing. Run it before
@@ -45,30 +38,13 @@ proposing a change is finished.
 
 ### Directory structure
 
-```
-inc/                    PHP. Autoloaded LAAO\* → inc/class-*.php
-  class-bootstrap.php     service registration + init order
-  class-service-container.php
-  helpers.php             plain functions for block render callbacks
-  Assets/                 Scripts, Styles
-  Core/                   Post_Types, Post_Meta, Block_Types, Theme_Support,
-                          Cache_Version, Icons, Theme_Updates (+ 3 collaborators)
-  Editorial/              Highlight_Columns
-src/
-  blocks/                 static + dynamic blocks (JS)
-  blocks-interactivity/   Interactivity API blocks
-  interactivity/          shared Interactivity helpers
-  styles/                 global CSS; base/_tokens.css is the semantic layer
-  scripts/                editor sidebar plugins, gsap, smoothscroll
-bin/
-  ci/                     doctor, guards, palette baseline, CI parity
-  release/                package, verify-package
-tests/
-  php/Unit/               PHPUnit + Brain\Monkey (WordPress is mocked, not loaded)
-  e2e/                    Playwright: smoke, palette, accessibility
-docs/                     known-issues, site-editor-overrides
-.github/rulesets/         committed branch-protection intent
-```
+`ls` gives you the layout. The parts it does not tell you:
+
+- `inc/` autoloads `LAAO\*` → `inc/class-*.php`; `inc/helpers.php` holds plain
+  functions for block render callbacks.
+- `src/blocks/` is static + dynamic blocks, `src/blocks-interactivity/` is the
+  Interactivity API set, `src/styles/base/_tokens.css` is the semantic layer.
+- `tests/php/Unit/` mocks WordPress (Brain\Monkey); `tests/e2e/` is Playwright.
 
 ### PHP
 
@@ -87,13 +63,9 @@ cannot drift.
 
 ### Blocks
 
-Three build configs, three block types:
-
-| Kind        | Where                        | Entry                         |
-| ----------- | ---------------------------- | ----------------------------- |
-| Static      | `src/blocks/*`               | `save.js` writes markup       |
-| Dynamic     | `src/blocks/*`               | `render.php`                  |
-| Interactive | `src/blocks-interactivity/*` | `view.js` + Interactivity API |
+Three build configs, three block types: static (`src/blocks/*`, `save.js` writes
+markup), dynamic (`src/blocks/*`, `render.php`), and interactive
+(`src/blocks-interactivity/*`, `view.js` + Interactivity API).
 
 **Blocks are registered from `dist/`, not `src/`.** Editing a `render.php` in
 `src/` changes nothing until you rebuild. This costs time repeatedly if you
@@ -134,11 +106,9 @@ once left article pages rendering a different brand red from the front page.
 
 ## Testing
 
-| Suite    | Runner                    | Notes                                              |
-| -------- | ------------------------- | -------------------------------------------------- |
-| PHP unit | PHPUnit 13 + Brain\Monkey | WordPress is **not** loaded; functions are stubbed |
-| JS unit  | Jest via wp-scripts       |                                                    |
-| E2E      | Playwright                | smoke, palette, accessibility                      |
+PHP unit runs on PHPUnit 13 + Brain\Monkey — **WordPress is not loaded**,
+functions are stubbed. JS unit is Jest via wp-scripts. E2E is Playwright
+(smoke, palette, accessibility).
 
 PHPUnit 13 removed annotation data providers — use `#[DataProvider]`.
 
@@ -165,12 +135,9 @@ undefined-colour check compared against a string the probe never emitted.
 
 `pnpm ci:frontend` runs, beyond the obvious linters:
 
-- `bin/check-file-length.sh` — warn 800 lines, fail 1000, no allowlist
-- `bin/ci/check-action-pins.sh` — GitHub Actions must use major tags
-- `bin/ci/check-template-colors.sh` — no hard-coded palette literals
-- `bin/ci/dependabot-major-guard.test.sh` — 18 cases for the auto-merge guard
-
-Every one exists because the thing it checks actually drifted.
+file length (warn 800, fail 1000, no allowlist), GitHub Actions pinned to major
+tags, no hard-coded palette literals in templates, and the dependabot auto-merge
+guard. Every one exists because the thing it checks actually drifted.
 
 ## Release
 
@@ -178,11 +145,10 @@ semantic-release on `master`. `bin/release/package.sh` builds the zip and a
 SHA-256 sidecar; `verify-package.sh` asserts the archive is installable before
 publishing.
 
-The updater (`Core\Theme_Updates` + HTTP client, release repository, package
-verifier) verifies that checksum before WordPress unpacks anything, and refuses
-an update whose checksum cannot be resolved. Every URL passes an allow-list —
-HTTPS, GitHub hosts, port 443, no embedded credentials, no `..` — including URLs
-read back out of a transient.
+The updater (`Core\Theme_Updates` + collaborators) verifies that checksum before
+WordPress unpacks anything and refuses an update whose checksum cannot be
+resolved. Every URL passes an allow-list (HTTPS, GitHub hosts, port 443, no
+credentials, no `..`) — including URLs read back out of a transient.
 
 Commit types drive the version: `feat` minor, `fix`/`perf` patch,
 `chore`/`ci`/`docs`/`refactor`/`test`/`style` no release.
@@ -225,3 +191,9 @@ Commit types drive the version: `feat` minor, `fix`/`perf` patch,
 - Comments explain **why**, not what. The repo is consistent about this.
 - Prefer small, reviewable commits with conventional types; the CHANGELOG is
   generated from them.
+- Be concise. Answer at the altitude asked; skip preamble and recap.
+- Route mechanical work — bulk rename, reformat, summarise, scrape, collate —
+  to a Haiku sub-agent. It is the same result at a fraction of the rate.
+- Never propose `/compact` as a cost saving. It re-sends the whole window to
+  build the summary, then keeps paying for the summary. `/clear` between
+  unrelated jobs is the thing that actually reduces the bill.
