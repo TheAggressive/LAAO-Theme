@@ -59,15 +59,20 @@ test.describe('theme smoke', () => {
 		expect(errors, `console errors:\n${errors.join('\n')}`).toHaveLength(0);
 	});
 
-	test('loads no third-party assets', async ({ page }) => {
+	test('loads no third-party assets', async ({ page, baseURL }) => {
 		// The theme bundles GSAP and Lenis from npm; nothing should be fetched
 		// from a public CDN. A CDN dependency is an uncontrolled request on
 		// every page view, a privacy exposure, and — when the URL carries a
 		// floating tag like @next — a library that can change without a deploy.
 		const external: string[] = [];
-		const siteHost = new URL(
-			process.env.WP_BASE_URL ?? 'http://localhost:9930'
-		).hostname;
+
+		// Read the origin off the fixture rather than resolving it again here.
+		// playwright.config.ts already routes it through wpEnvUrl(); the copy
+		// that used to live on this line kept a port the environment had left.
+		if (!baseURL) {
+			throw new Error('baseURL is not configured');
+		}
+		const siteHost = new URL(baseURL).hostname;
 
 		page.on('request', (request) => {
 			const url = new URL(request.url());
