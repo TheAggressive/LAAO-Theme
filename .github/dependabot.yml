@@ -1,19 +1,21 @@
 version: 2
 
-# Keep routine dependency maintenance low-noise: monthly, grouped, and limited
-# to minor/patch releases. Security updates remain eligible and are grouped
-# separately so critical fixes are not suppressed by routine version policy.
+# Keep routine dependency maintenance low-noise: weekly, broadly grouped, and
+# limited to minor/patch releases. Security updates remain eligible and are
+# grouped separately so urgent fixes are not delayed by routine version policy.
 updates:
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: monthly
+      interval: weekly
+      day: monday
+      time: '06:00'
     open-pull-requests-limit: 2
     cooldown:
-      default-days: 14
+      default-days: 7
       semver-major-days: 30
-      semver-minor-days: 14
-      semver-patch-days: 7
+      semver-minor-days: 7
+      semver-patch-days: 3
     allow:
       - dependency-name: '*'
         update-types:
@@ -27,31 +29,12 @@ updates:
         update-types:
           - minor
           - patch
-      eslint:
+      js-tooling:
         applies-to: version-updates
-        patterns:
-          - 'eslint'
-          - 'eslint-*'
-          - '@eslint/*'
-          - '@typescript-eslint/*'
-        update-types:
-          - minor
-          - patch
-      testing:
-        applies-to: version-updates
-        patterns:
-          - '@playwright/*'
-          - 'jest'
-          - 'jest-*'
-          - '@types/jest'
-        update-types:
-          - minor
-          - patch
-      dev-minor-patch:
-        applies-to: version-updates
-        dependency-type: development
         patterns:
           - '*'
+        exclude-patterns:
+          - '@wordpress/*'
         update-types:
           - minor
           - patch
@@ -66,33 +49,22 @@ updates:
   - package-ecosystem: composer
     directory: '/'
     schedule:
-      interval: monthly
+      interval: weekly
+      day: monday
+      time: '06:00'
     open-pull-requests-limit: 2
     cooldown:
-      default-days: 14
+      default-days: 7
       semver-major-days: 30
-      semver-minor-days: 14
-      semver-patch-days: 7
+      semver-minor-days: 7
+      semver-patch-days: 3
     allow:
       - dependency-name: '*'
         update-types:
           - version-update:semver-minor
           - version-update:semver-patch
     groups:
-      php-quality:
-        applies-to: version-updates
-        patterns:
-          - 'phpstan/*'
-          - 'szepeviktor/*'
-          - 'squizlabs/*'
-          - 'wp-coding-standards/*'
-          - 'automattic/vipwpcs'
-          - 'phpcompatibility/*'
-          - 'dealerdirect/*'
-        update-types:
-          - minor
-          - patch
-      routine-composer:
+      php-tooling:
         applies-to: version-updates
         patterns:
           - '*'
@@ -110,10 +82,12 @@ updates:
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
-      interval: monthly
+      interval: weekly
+      day: monday
+      time: '06:00'
     open-pull-requests-limit: 2
     cooldown:
-      default-days: 14
+      default-days: 7
     allow:
       - dependency-name: '*'
         update-types:
