@@ -6,6 +6,17 @@ yarn-error.log
 .vscode/
 .phpunit.result.cache
 
+# Agent/editor state that is per-machine, not per-project. .claude/skills/ is
+# committed, so this has to name the file rather than the directory.
+.claude/settings.local.json
+
+# Editor and tooling backups. .wp-env.json.bak-9930 was committed by accident
+# and sat in the tree carrying a stale port until it was noticed.
+*.bak
+*.bak-*
+*.orig
+*.rej
+
 # Release artifacts — built by bin/release/package.sh, attached to the GitHub
 # release, never committed.
 /laao-*.zip
@@ -13,7 +24,6 @@ yarn-error.log
 
 # Playwright
 /tests/e2e/.results/
-/tests/e2e/.report/
 /playwright-report/
 /test-results/
 
