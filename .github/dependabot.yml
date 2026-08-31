@@ -4,106 +4,106 @@ version: 2
 # limited to minor/patch releases. Security updates remain eligible and are
 # grouped separately so urgent fixes are not delayed by routine version policy.
 updates:
-  - package-ecosystem: npm
-    directory: '/'
-    schedule:
-      interval: weekly
-      day: monday
-      time: '06:00'
-    open-pull-requests-limit: 2
-    cooldown:
-      default-days: 7
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
-    allow:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-minor
-          - version-update:semver-patch
-    groups:
-      wordpress:
-        applies-to: version-updates
-        patterns:
-          - '@wordpress/*'
-        update-types:
-          - minor
-          - patch
-      js-tooling:
-        applies-to: version-updates
-        patterns:
-          - '*'
-        exclude-patterns:
-          - '@wordpress/*'
-        update-types:
-          - minor
-          - patch
-      security-updates:
-        applies-to: security-updates
-        patterns:
-          - '*'
-    commit-message:
-      prefix: 'chore'
-      include: scope
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          interval: weekly
+          day: monday
+          time: '06:00'
+      open-pull-requests-limit: 2
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+          semver-minor-days: 7
+          semver-patch-days: 3
+      allow:
+          - dependency-name: '*'
+            update-types:
+                - version-update:semver-minor
+                - version-update:semver-patch
+      groups:
+          wordpress:
+              applies-to: version-updates
+              patterns:
+                  - '@wordpress/*'
+              update-types:
+                  - minor
+                  - patch
+          js-tooling:
+              applies-to: version-updates
+              patterns:
+                  - '*'
+              exclude-patterns:
+                  - '@wordpress/*'
+              update-types:
+                  - minor
+                  - patch
+          security-updates:
+              applies-to: security-updates
+              patterns:
+                  - '*'
+      commit-message:
+          prefix: 'chore'
+          include: scope
 
-  - package-ecosystem: composer
-    directory: '/'
-    schedule:
-      interval: weekly
-      day: monday
-      time: '06:00'
-    open-pull-requests-limit: 2
-    cooldown:
-      default-days: 7
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
-    allow:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-minor
-          - version-update:semver-patch
-    groups:
-      php-tooling:
-        applies-to: version-updates
-        patterns:
-          - '*'
-        update-types:
-          - minor
-          - patch
-      security-updates:
-        applies-to: security-updates
-        patterns:
-          - '*'
-    commit-message:
-      prefix: 'chore'
-      include: scope
+    - package-ecosystem: composer
+      directory: '/'
+      schedule:
+          interval: weekly
+          day: monday
+          time: '06:00'
+      open-pull-requests-limit: 2
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+          semver-minor-days: 7
+          semver-patch-days: 3
+      allow:
+          - dependency-name: '*'
+            update-types:
+                - version-update:semver-minor
+                - version-update:semver-patch
+      groups:
+          php-tooling:
+              applies-to: version-updates
+              patterns:
+                  - '*'
+              update-types:
+                  - minor
+                  - patch
+          security-updates:
+              applies-to: security-updates
+              patterns:
+                  - '*'
+      commit-message:
+          prefix: 'chore'
+          include: scope
 
-  - package-ecosystem: github-actions
-    directory: '/'
-    schedule:
-      interval: weekly
-      day: monday
-      time: '06:00'
-    open-pull-requests-limit: 2
-    cooldown:
-      default-days: 7
-    allow:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-minor
-          - version-update:semver-patch
-    groups:
-      actions:
-        applies-to: version-updates
-        patterns:
-          - '*'
-        update-types:
-          - minor
-          - patch
-      security-actions:
-        applies-to: security-updates
-        patterns:
-          - '*'
-    commit-message:
-      prefix: 'ci'
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          interval: weekly
+          day: monday
+          time: '06:00'
+      open-pull-requests-limit: 2
+      cooldown:
+          default-days: 7
+      allow:
+          - dependency-name: '*'
+            update-types:
+                - version-update:semver-minor
+                - version-update:semver-patch
+      groups:
+          actions:
+              applies-to: version-updates
+              patterns:
+                  - '*'
+              update-types:
+                  - minor
+                  - patch
+          security-actions:
+              applies-to: security-updates
+              patterns:
+                  - '*'
+      commit-message:
+          prefix: 'ci'
