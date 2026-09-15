@@ -2,6 +2,17 @@
 
 Official WordPress block theme for [LAArtsOnline.com](https://laartsonline.com), built by [The Aggressive, LLC](https://theaggressive.com).
 
+A production-focused Full Site Editing theme built around custom Gutenberg blocks, the WordPress Interactivity API, editorial workflows, automated testing, and release tooling. It combines traditional WordPress publishing with purpose-built blocks and interactive front-end features for an arts and culture publication.
+
+## Engineering Highlights
+
+- **Modern WordPress architecture** — Full Site Editing with custom static, dynamic, and Interactivity API blocks.
+- **Editorial tooling** — custom post metadata, post types, highlight-date workflows, and publishing-focused blocks.
+- **Interactive front end** — accessible modal and navigation patterns, event galleries, hero interactions, and GSAP-powered motion.
+- **Structured PHP architecture** — PSR-4-style autoloading, bootstrap services, and a lightweight dependency container.
+- **Automated quality** — PHPUnit, Jest, ESLint, Stylelint, Prettier, Husky hooks, and Conventional Commits.
+- **Automated releases** — semantic-release generates releases and changelog updates from the `master` branch.
+
 ## Requirements
 
 | Dependency | Version               |
