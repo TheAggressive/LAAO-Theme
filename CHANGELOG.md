@@ -1,3 +1,16 @@
+# [1.15.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.14.2...v1.15.0) (2026-09-23)
+
+
+### Bug Fixes
+
+* **ci:** refresh release validation baselines ([8b48b7e](https://github.com/TheAggressive/LAAO-Theme/commit/8b48b7e6584b27c47cf3a6ce7b44b88d11e593e5))
+* **release:** use compatible changelog preset ([d9ba51c](https://github.com/TheAggressive/LAAO-Theme/commit/d9ba51c5ab3815d7c902077920e4e037bf497f20))
+
+
+### Features
+
+* port interactive blocks and modal support ([01a0f2c](https://github.com/TheAggressive/LAAO-Theme/commit/01a0f2ceadf7439aa28f3bd19580a652942d6dab))
+
 ## [1.14.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.14.1...v1.14.2) (2026-08-09)
 
 ## [1.14.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.14.0...v1.14.1) (2026-08-09)
