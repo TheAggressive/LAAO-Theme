@@ -47,11 +47,8 @@ export class Debug {
 			this.loggedCritical.add(key);
 		}
 
-		// toISOString() always has a 'T', but the compiler only sees string[].
-		const timestamp = (new Date().toISOString().split('T')[1] ?? '').slice(
-			0,
-			-1
-		);
+		const isoTime = new Date().toISOString().split('T')[1] ?? '';
+		const timestamp = isoTime.slice(0, -1);
 		const logMessage = `[${timestamp}] ${critical ? '[CRITICAL] ' : ''}${message}`;
 
 		this.logs.push({

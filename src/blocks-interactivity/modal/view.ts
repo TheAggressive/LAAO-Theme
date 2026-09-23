@@ -13,7 +13,7 @@
  *  - aria-live announcer updated on open/close for screen readers that do not
  *    fire on programmatic focus alone.
  *
- * @package LAAO
+ * @package Laao
  */
 
 import { store, getContext } from '@wordpress/interactivity';
@@ -21,6 +21,7 @@ import { lockScroll, unlockScroll } from '../../interactivity/scroll-lock';
 import { setupFocusTrap } from '../../interactivity/helpers';
 import {
 	buildExitAnimation,
+	calculateScrollDepth,
 	canRestoreFocus,
 	isExitIntentDismissed,
 	markExitIntentDismissed,
@@ -434,10 +435,10 @@ function closeModal(id: string, modalsState: Record<string, ModalState>): void {
 function handleDocumentKeydown(event: KeyboardEvent): void {
 	if (event.key !== 'Escape' || modalStack.length === 0) return;
 
-	// Guarded by the length check above, but noUncheckedIndexedAccess types the
-	// lookup as possibly undefined — narrow it rather than assert.
 	const id = modalStack[modalStack.length - 1];
-	if (!id) return;
+	if (!id) {
+		return;
+	}
 
 	const refs = modalRefs.get(id);
 	if (!refs) return;
@@ -505,24 +506,12 @@ function setupScrollDepthTrigger(
 
 	const handleScroll = (): void => {
 		if (triggered) return;
-
-		/*
-		 * Progress through the scrollable distance, not through the document.
-		 * The previous formula was (scrollY + innerHeight) / scrollHeight,
-		 * which counts the viewport itself as already scrolled: on a page only
-		 * twice the viewport height that is 50% before the visitor moves, so
-		 * the modal opened on load. A 40px layout change was enough to cross
-		 * the threshold and turn a scroll trigger back into an auto-opening
-		 * dialog — the exact behaviour the scroll trigger exists to avoid.
-		 */
-		const scrollable =
-			document.documentElement.scrollHeight - window.innerHeight;
-
-		// A page that cannot scroll can never reach a scroll depth. Opening
-		// anyway would be an auto-open wearing a scroll trigger's name.
-		if (scrollable <= 0) return;
-
-		if ((window.scrollY / scrollable) * 100 >= percent) {
+		const scrollDepth = calculateScrollDepth(
+			window.scrollY,
+			window.innerHeight,
+			document.documentElement.scrollHeight
+		);
+		if (scrollDepth !== null && scrollDepth >= percent) {
 			triggered = true;
 			window.removeEventListener('scroll', handleScroll);
 			openModal(id, modalsState);

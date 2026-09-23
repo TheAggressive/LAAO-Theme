@@ -33,6 +33,7 @@ readonly PACKAGE_EXCLUDES=(
 	'.vscode'
 	'.wp-env.json'
 	'.claude'
+	'.clinerules'
 	'.cursorrules'
 	'.prettierignore'
 	'bin'

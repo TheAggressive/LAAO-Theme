@@ -2,7 +2,7 @@
  * Pure modal helpers (storage keys, dismiss windows, focus restore, exit anim).
  * Kept free of Interactivity API so Jest can cover them without a store mock.
  *
- * @package LAAO
+ * @package Laao
  */
 
 export interface ExitAnimDef {
@@ -16,11 +16,11 @@ const DEFAULT_EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 const DAY_MS = 86400000;
 
 export function getExitIntentStorageKey(id: string): string {
-	return `aa_exit_intent_${id}`;
+	return `laao_exit_intent_${id}`;
 }
 
 export function getOpenOnLoadSeenKey(id: string): string {
-	return `aa_modal_seen_${id}`;
+	return `laao_modal_seen_${id}`;
 }
 
 /**
@@ -82,6 +82,23 @@ export function shouldSkipOpenOnLoadOnce(
 	} catch {
 		return false;
 	}
+}
+
+/**
+ * Percentage of the scrollable distance travelled, excluding the viewport.
+ * A document that cannot scroll has no meaningful scroll depth.
+ */
+export function calculateScrollDepth(
+	scrollY: number,
+	viewportHeight: number,
+	documentHeight: number
+): number | null {
+	const scrollableDistance = documentHeight - viewportHeight;
+	if (scrollableDistance <= 0) {
+		return null;
+	}
+
+	return Math.min(100, Math.max(0, (scrollY / scrollableDistance) * 100));
 }
 
 /**

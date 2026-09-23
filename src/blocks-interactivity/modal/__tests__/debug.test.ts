@@ -22,7 +22,7 @@ describe('Debug utility', () => {
 		Debug.showCritical = true;
 		Debug.add('critical message', true);
 		expect(Debug.getCriticalLogs()).toHaveLength(1);
-		expect(Debug.getCriticalLogs()[0]?.message).toContain(
+		expect(Debug.getCriticalLogs()[0]!.message).toContain(
 			'critical message'
 		);
 	});
@@ -65,7 +65,7 @@ describe('Debug utility', () => {
 		Debug.add('critical', true);
 		const critical = Debug.getCriticalLogs();
 		expect(critical).toHaveLength(1);
-		expect(critical[0]?.critical).toBe(true);
+		expect(critical[0]!.critical).toBe(true);
 	});
 
 	it('trims logs array when it exceeds maxLogs', () => {

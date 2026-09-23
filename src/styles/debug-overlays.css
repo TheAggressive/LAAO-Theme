@@ -1,0 +1,11 @@
+/**
+ * Scroll-debug overlays + panel (animate-on-scroll block).
+ *
+ * Build-entry stub: the source lives with the debug module in
+ * src/blocks-interactivity/debug-shared/ and is inlined here at build
+ * time. Built standalone to dist/styles/debug-overlays.css and enqueued
+ * from the block's render.php ONLY when Debug Mode renders for a user
+ * who passes laao_can_view_block_debug() — production visitors never
+ * download these bytes.
+ */
+@import "../blocks-interactivity/debug-shared/style.css";

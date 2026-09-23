@@ -1,4 +1,4 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks } from '@wordpress/block-editor';
 
 /**
  * Save function for the modal block.
@@ -10,11 +10,5 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  * @return Element to render.
  */
 export default function save(): JSX.Element {
-	const blockProps = useBlockProps.save();
-
-	return (
-		<div {...blockProps}>
-			<InnerBlocks.Content />
-		</div>
-	);
+	return <InnerBlocks.Content />;
 }

@@ -115,6 +115,7 @@
         <properties>
             <property name="customAutoEscapedFunctions" type="array">
                 <element value="laao_trusted_html"/>
+                <element value="laao_get_icon"/>
                 <element value="get_block_wrapper_attributes"/>
                 <element value="render_block"/>
             </property>

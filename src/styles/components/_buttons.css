@@ -1,0 +1,82 @@
+/**
+ * Shared icon-button primitive.
+ *
+ * Components provide contextual colors through the local custom properties;
+ * sizing, focus, motion, and interaction states stay consistent here.
+ */
+:where(.laao-icon-button) {
+	--laao-icon-button-background: transparent;
+	--laao-icon-button-color: var(--laao-color-foreground);
+	--laao-icon-button-border: transparent;
+	--laao-icon-button-hover-background: var(--laao-color-hover-default);
+	--laao-icon-button-hover-border: var(--laao-icon-button-border);
+	--laao-icon-button-hover-color: var(--laao-color-accent);
+
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	gap: 0.375rem;
+	min-width: var(--laao-control-min);
+	min-height: var(--laao-control-min);
+	padding: 0.625rem;
+	border: 1px solid var(--laao-icon-button-border);
+	border-radius: 9999px;
+	background: var(--laao-icon-button-background);
+	color: var(--laao-icon-button-color);
+	font: inherit;
+	line-height: 1;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		opacity var(--laao-duration-fast) var(--laao-ease-default),
+		background-color var(--laao-duration-fast) var(--laao-ease-default),
+		border-color var(--laao-duration-fast) var(--laao-ease-default),
+		color var(--laao-duration-fast) var(--laao-ease-default),
+		transform var(--laao-duration-fast) var(--laao-ease-default);
+}
+
+:where(.laao-icon-button--only) {
+	width: var(--laao-control-min);
+	height: var(--laao-control-min);
+	padding: 0;
+	line-height: 0;
+}
+
+:where(.laao-icon-button svg) {
+	display: block;
+	flex: 0 0 auto;
+}
+
+@media (hover: hover) {
+	:where(.laao-icon-button):hover:not(:disabled, [aria-disabled="true"]) {
+		border-color: var(--laao-icon-button-hover-border);
+		background: var(--laao-icon-button-hover-background);
+		color: var(--laao-icon-button-hover-color);
+	}
+}
+
+:where(.laao-icon-button):focus-visible {
+	outline: none;
+	box-shadow: var(--laao-focus-ring);
+}
+
+:where(.laao-icon-button):active:not(:disabled, [aria-disabled="true"]) {
+	transform: scale(0.94);
+}
+
+:where(.laao-icon-button):is(:disabled, [aria-disabled="true"]) {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+:where(.laao-icon-button--square) {
+	border-radius: var(--laao-radius-button);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:where(.laao-icon-button) {
+		transition: none;
+	}
+}

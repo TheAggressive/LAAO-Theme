@@ -1,0 +1,152 @@
+/**
+ * Hero Carousel — content entrance choreography.
+ *
+ * @package Laao
+ */
+
+/* ---------------------------------------------------------------------- */
+
+/* Content entrance choreography — staggered children on slide activation  */
+
+/* ---------------------------------------------------------------------- */
+
+/*
+ * Keep inactive (and clone) content in the entrance "from" state so a loop
+ * wrap never flashes settled copy on the edge clone, then restarts entrance.
+ */
+.laao-hero--content-fade-up
+	.laao-hero__slide:not(.is-active)
+	.wp-block-cover__inner-container
+	> *,
+.laao-hero--content-fade-up
+	.laao-hero__slide[data-laao-hero-clone]
+	.wp-block-cover__inner-container
+	> * {
+	opacity: 0;
+	transform: translateY(1.5rem);
+}
+
+.laao-hero--content-clip
+	.laao-hero__slide:not(.is-active)
+	.wp-block-cover__inner-container
+	> *,
+.laao-hero--content-clip
+	.laao-hero__slide[data-laao-hero-clone]
+	.wp-block-cover__inner-container
+	> * {
+	opacity: 0;
+	clip-path: inset(0 0 100% 0);
+}
+
+.laao-hero--content-blur
+	.laao-hero__slide:not(.is-active)
+	.wp-block-cover__inner-container
+	> *,
+.laao-hero--content-blur
+	.laao-hero__slide[data-laao-hero-clone]
+	.wp-block-cover__inner-container
+	> * {
+	opacity: 0;
+	filter: blur(12px);
+}
+
+.laao-hero--content-fade-up
+	.laao-hero__slide.is-active
+	.wp-block-cover__inner-container
+	> *,
+.laao-hero--content-clip
+	.laao-hero__slide.is-active
+	.wp-block-cover__inner-container
+	> *,
+.laao-hero--content-blur
+	.laao-hero__slide.is-active
+	.wp-block-cover__inner-container
+	> * {
+	animation-duration: 600ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-fill-mode: both;
+}
+
+.laao-hero--content-fade-up
+	.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> * {
+	animation-name: laao-hero-content-fade-up;
+}
+
+.laao-hero--content-clip
+	.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> * {
+	animation-name: laao-hero-content-clip;
+}
+
+.laao-hero--content-blur
+	.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> * {
+	animation-name: laao-hero-content-blur;
+}
+
+/* Kicker → headline → copy → CTA stagger. */
+.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> *:nth-child(1) {
+	animation-delay: 100ms;
+}
+
+.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> *:nth-child(2) {
+	animation-delay: 220ms;
+}
+
+.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> *:nth-child(3) {
+	animation-delay: 340ms;
+}
+
+.laao-hero__slide.is-active:not([data-laao-hero-clone])
+	.wp-block-cover__inner-container
+	> *:nth-child(n + 4) {
+	animation-delay: 460ms;
+}
+
+@keyframes laao-hero-content-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(1.5rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes laao-hero-content-clip {
+	from {
+		opacity: 0;
+		clip-path: inset(0 0 100% 0);
+		transform: translateY(0.75rem);
+	}
+
+	to {
+		opacity: 1;
+		clip-path: inset(0 0 0 0);
+		transform: translateY(0);
+	}
+}
+
+@keyframes laao-hero-content-blur {
+	from {
+		opacity: 0;
+		filter: blur(12px);
+	}
+
+	to {
+		opacity: 1;
+		filter: blur(0);
+	}
+}

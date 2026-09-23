@@ -4,7 +4,7 @@
 	"name": "laao/modal",
 	"version": "1.0.0",
 	"title": "Modal",
-	"category": "laao",
+	"category": "common",
 	"description": "An interactive modal block that can be positioned and triggered by other elements.",
 	"example": {},
 	"supports": {
@@ -13,13 +13,15 @@
 		"align": true,
 		"spacing": {
 			"margin": true,
-			"padding": true
+			"padding": true,
+			"__experimentalSkipSerialization": ["padding"]
 		},
 		"__experimentalBorder": {
 			"color": true,
 			"radius": true,
 			"style": true,
 			"width": true,
+			"__experimentalSkipSerialization": true,
 			"__experimentalDefaultControls": {
 				"color": true,
 				"radius": true,
@@ -27,10 +29,21 @@
 				"width": true
 			}
 		},
-		"shadow": true,
+		"shadow": {
+			"__experimentalSkipSerialization": true
+		},
 		"color": {
 			"background": true,
-			"text": true
+			"text": true,
+			"__experimentalSkipSerialization": true
+		}
+	},
+	"selectors": {
+		"root": ".wp-block-laao-modal__dialog",
+		"css": ".wp-block-laao-modal",
+		"spacing": {
+			"margin": ".wp-block-laao-modal",
+			"padding": ".wp-block-laao-modal__dialog"
 		}
 	},
 	"textdomain": "laao",

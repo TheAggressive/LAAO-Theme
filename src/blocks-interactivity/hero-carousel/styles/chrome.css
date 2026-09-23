@@ -1,0 +1,384 @@
+/**
+ * Hero Carousel — arrows, pagination, play/pause, a11y, reduced motion.
+ *
+ * @package Laao
+ */
+
+/* ---------------------------------------------------------------------- */
+
+/* Arrows                                                                  */
+
+/* ---------------------------------------------------------------------- */
+
+.laao-hero__arrow {
+	--laao-icon-button-background: var(--laao-hero-arrow-bg);
+	--laao-icon-button-color: var(--laao-hero-arrow-color);
+
+	backdrop-filter: blur(6px);
+}
+
+.laao-hero__arrow[disabled] {
+	opacity: 0.35;
+	cursor: default;
+	pointer-events: none;
+}
+
+.laao-hero__arrow svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+/* Edge placement: vertically centered on the left/right rails. */
+.laao-hero--arrows-edges .laao-hero__arrow {
+	position: absolute;
+	top: 50%;
+	translate: 0 -50%;
+	z-index: 2;
+}
+
+.laao-hero--arrows-edges .laao-hero__arrow--prev {
+	inset-inline-start: var(--laao-hero-chrome-gap);
+}
+
+.laao-hero--arrows-edges .laao-hero__arrow--next {
+	inset-inline-end: var(--laao-hero-chrome-gap);
+}
+
+/* Bottom placement: arrows join the bottom bar cluster. */
+.laao-hero--arrows-bottom .laao-hero__arrows {
+	position: absolute;
+	inset-block-end: var(--laao-hero-chrome-gap);
+	inset-inline-end: var(--laao-hero-chrome-gap);
+	z-index: 2;
+	display: flex;
+	gap: var(--wp--preset--spacing--2, 0.5rem);
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* Bottom bar: pagination + play/pause                                     */
+
+/* ---------------------------------------------------------------------- */
+
+.laao-hero__bar {
+	position: absolute;
+	inset-block-end: var(--laao-hero-chrome-gap);
+	inset-inline: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--wp--preset--spacing--2, 0.5rem);
+	pointer-events: none;
+}
+
+.laao-hero__bar > * {
+	pointer-events: auto;
+}
+
+.laao-hero__pagination {
+	display: flex;
+	align-items: center;
+}
+
+/* Dots — 44px hit targets with a small visual marker inside. */
+.laao-hero__dot {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin: 0 -0.5rem;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: var(--laao-hero-dot-color);
+	cursor: pointer;
+}
+
+.laao-hero__dot::before {
+	content: "";
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: var(--laao-radius-full, 9999px);
+	background-color: currentcolor;
+	transition:
+		width 250ms ease,
+		background-color 250ms ease;
+}
+
+.laao-hero__dot[aria-current="true"] {
+	color: var(--laao-hero-dot-active-color);
+}
+
+.laao-hero__dot:focus-visible {
+	outline: none;
+	box-shadow: var(--laao-focus-ring);
+	border-radius: var(--laao-radius-full, 9999px);
+}
+
+/* Active dot stretches to a pill; doubles as the autoplay progress rail. */
+.laao-hero__pagination--dots .laao-hero__dot[aria-current="true"]::before {
+	width: 1.75rem;
+}
+
+.laao-hero__pagination--progress .laao-hero__dot {
+	position: relative;
+}
+
+.laao-hero__pagination--progress .laao-hero__dot[aria-current="true"]::before {
+	background-color: color-mix(in oklch, currentcolor 40%, transparent);
+}
+
+.laao-hero__pagination--progress .laao-hero__dot[aria-current="true"]::after {
+	--laao-hero-progress-w: 1.75rem;
+
+	content: "";
+	position: absolute;
+	inset-inline-start: calc(50% - 0.875rem);
+
+	/* Grow via width: transform: scaleX() would squash the pill's rounded ends
+     into flat edges as it fills. */
+	width: 0;
+	height: 0.5rem;
+	border-radius: var(--laao-radius-full, 9999px);
+	background-color: currentcolor;
+
+	/* Always attach the animation so pause can freeze mid-fill via play-state
+     instead of removing the animation (which snaps width back to 0). */
+	animation: laao-hero-progress var(--laao-hero-autoplay-ms) linear forwards;
+	animation-play-state: paused;
+}
+
+.laao-hero.is-playing
+	.laao-hero__pagination--progress
+	.laao-hero__dot[aria-current="true"]::after {
+	animation-play-state: running;
+}
+
+@keyframes laao-hero-progress {
+	from {
+		width: 0;
+	}
+
+	to {
+		width: var(--laao-hero-progress-w, 1.75rem);
+	}
+}
+
+/* Lines — flat bars instead of dots. */
+
+/* Reset the dot-tuned negative margin; the wider line bars would otherwise
+   overlap each other and the active bar (matches the numbers variant). */
+.laao-hero__pagination--lines .laao-hero__dot {
+	margin: 0;
+}
+
+.laao-hero__pagination--lines .laao-hero__dot::before {
+	width: 1.75rem;
+	height: 0.2rem;
+	border-radius: 0;
+}
+
+.laao-hero__pagination--lines .laao-hero__dot[aria-current="true"]::before {
+	width: 2.5rem;
+}
+
+.laao-hero__pagination--lines.laao-hero__pagination--progress
+	.laao-hero__dot[aria-current="true"]::after {
+	--laao-hero-progress-w: 2.5rem;
+
+	inset-inline-start: calc(50% - 1.25rem);
+	height: 0.2rem;
+	border-radius: 0;
+}
+
+/* Numbers — text markers. */
+.laao-hero__pagination--numbers .laao-hero__dot {
+	margin: 0;
+}
+
+.laao-hero__pagination--numbers .laao-hero__dot::before {
+	content: none;
+}
+
+/* No progress pill over the numerals — the active number is marked by its
+   underline instead. */
+.laao-hero__pagination--numbers .laao-hero__dot[aria-current="true"]::after {
+	content: none;
+}
+
+.laao-hero__dot-number {
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	font-weight: 600;
+	line-height: 1;
+}
+
+.laao-hero__pagination--numbers
+	.laao-hero__dot[aria-current="true"]
+	.laao-hero__dot-number {
+	text-decoration: underline;
+	text-underline-offset: 0.35em;
+}
+
+/* Thumbnails — image previews of each slide; 44px min touch target. */
+
+/* Reset the dot-tuned negative margin; otherwise thumbs overlap like lines
+   did before the same fix. Spacing comes from `gap` on the pagination row. */
+.laao-hero__pagination--thumbnails {
+	gap: 0.5rem;
+}
+
+.laao-hero__pagination--thumbnails .laao-hero__dot {
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 0;
+	flex-shrink: 0;
+	border-radius: var(--laao-radius-sm, 0.25rem);
+	overflow: hidden;
+	opacity: 0.55;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	transition:
+		opacity var(--laao-duration-fast, 150ms) var(--laao-ease-default, ease),
+		outline-color var(--laao-duration-fast, 150ms)
+			var(--laao-ease-default, ease);
+}
+
+.laao-hero__pagination--thumbnails .laao-hero__dot::before {
+	content: none;
+}
+
+/* No progress pill over the thumbnail — the active one is marked by full
+   opacity and its outline. */
+.laao-hero__pagination--thumbnails .laao-hero__dot[aria-current="true"]::after {
+	content: none;
+}
+
+.laao-hero__pagination--thumbnails .laao-hero__dot:hover {
+	opacity: 0.85;
+}
+
+.laao-hero__pagination--thumbnails .laao-hero__dot[aria-current="true"] {
+	opacity: 1;
+	outline-color: var(--laao-hero-dot-active-color);
+}
+
+.laao-hero__thumb {
+	display: block;
+	width: 4rem;
+	height: 2.75rem;
+	object-fit: cover;
+}
+
+.laao-hero__thumb--swatch {
+	background: var(--laao-color-surface-elevated);
+}
+
+/* Fraction — "2 / 5". */
+.laao-hero__fraction {
+	color: var(--laao-hero-dot-active-color);
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.06em;
+}
+
+/* Play / pause toggle — mandatory chrome whenever autoplay is enabled. */
+.laao-hero__play {
+	--laao-icon-button-color: var(--laao-hero-dot-active-color);
+}
+
+.laao-hero__play-icon {
+	display: inline-flex;
+}
+
+/* Show the icon for the action the button will take. */
+.laao-hero__play .laao-hero__play-icon--pause,
+.laao-hero__play.is-playing .laao-hero__play-icon--play {
+	display: none;
+}
+
+.laao-hero__play.is-playing .laao-hero__play-icon--pause {
+	display: inline-flex;
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* Live region (screen-reader announcements)                               */
+
+/* ---------------------------------------------------------------------- */
+
+.laao-hero__live {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(100%);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* Reduced motion — hard theme rule: no ambient or entrance animation      */
+
+/* ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.laao-hero__slide .wp-block-cover__image-background,
+	.laao-hero__slide .wp-block-cover__video-background,
+	.laao-hero__slide .wp-block-cover__inner-container > *,
+	.laao-hero__slide--motion-grain > .wp-block-cover::after,
+	.laao-hero__dot[aria-current="true"]::after {
+		animation: none !important;
+		will-change: auto;
+	}
+
+	.laao-hero__slide .wp-block-cover__image-background,
+	.laao-hero__slide .wp-block-cover__video-background {
+		filter: none;
+		clip-path: none;
+		transform: none;
+	}
+
+	/* Entrance "from" state must not leave content invisible without animation. */
+	.laao-hero--content-fade-up
+		.laao-hero__slide
+		.wp-block-cover__inner-container
+		> *,
+	.laao-hero--content-clip
+		.laao-hero__slide
+		.wp-block-cover__inner-container
+		> *,
+	.laao-hero--content-blur
+		.laao-hero__slide
+		.wp-block-cover__inner-container
+		> * {
+		opacity: 1;
+		transform: none;
+		filter: none;
+		clip-path: none;
+	}
+
+	.laao-hero__slide--motion-grain > .wp-block-cover::after {
+		opacity: 0;
+	}
+
+	.laao-hero--fade .laao-hero__slide,
+	.laao-hero--crossfade .laao-hero__slide {
+		transition: none;
+	}
+
+	.laao-hero--crossfade .laao-hero__slide {
+		transform: none;
+	}
+
+	.laao-hero__arrow,
+	.laao-hero__dot::before {
+		transition: none;
+	}
+}

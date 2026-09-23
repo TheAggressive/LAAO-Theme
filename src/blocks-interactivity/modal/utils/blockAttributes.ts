@@ -1,7 +1,7 @@
 /**
  * Safe accessors for untyped Gutenberg block attribute records.
  *
- * @package LAAO
+ * @package Laao
  */
 
 /**

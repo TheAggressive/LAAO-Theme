@@ -9,7 +9,7 @@
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  *
- * @package LAAO
+ * @package Laao
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -73,7 +73,7 @@ $position                = $sanitize_choice(
 $open_on_load            = ! empty( $attributes['openOnLoad'] );
 $open_on_load_once       = ! empty( $attributes['openOnLoadOnce'] );
 $disable_overlay         = ! empty( $attributes['disableOverlay'] );
-$trigger_block_id        = isset( $attributes['triggerBlockId'] ) && is_string( $attributes['triggerBlockId'] ) ? $attributes['triggerBlockId'] : '';
+$trigger_block_id        = isset( $attributes['triggerBlockId'] ) && is_string( $attributes['triggerBlockId'] ) ? trim( $attributes['triggerBlockId'] ) : '';
 $trigger_label           = isset( $attributes['triggerLabel'] ) && is_string( $attributes['triggerLabel'] )
 	? trim( sanitize_text_field( $attributes['triggerLabel'] ) )
 	: '';
@@ -93,6 +93,10 @@ $exit_intent_trigger     = ! empty( $attributes['exitIntentTrigger'] );
 $exit_intent_reshow_days = min( 90, max( 1, absint( $attributes['exitIntentReshowDays'] ?? 7 ) ) );
 $scroll_depth_trigger    = ! empty( $attributes['scrollDepthTrigger'] );
 $scroll_depth_percent    = min( 100, max( 10, absint( $attributes['scrollDepthPercent'] ?? 50 ) ) );
+$show_builtin_trigger    = ! $open_on_load
+	&& empty( $trigger_block_id )
+	&& ! $exit_intent_trigger
+	&& ! $scroll_depth_trigger;
 $dialog_max_width        = $sanitize_css_value( $attributes['dialogMaxWidth'] ?? '' );
 
 // ── Close button attributes ───────────────────────────────────────────────────
@@ -129,64 +133,57 @@ $overlay_opacity      = min( 90, absint( $attributes['overlayOpacity'] ?? 50 ) )
 $overlay_blur         = min( 20, absint( $attributes['overlayBlur'] ?? 4 ) );
 $overlay_color        = $sanitize_css_value( $attributes['overlayColor'] ?? '' );
 
-// ── Forward WP block supports (color.background, color.text, border) to dialog.
-// get_block_wrapper_attributes() applies these to the wrapper; we also need
-// them on the fixed-position dialog div so they actually render visually.
+// ── Apply visual block supports to the dialog rather than the wrapper. ─────────────
+// Their automatic wrapper serialization is disabled in block.json. The style
+// engine preserves WordPress preset classes and converts preset values to CSS.
 
 $style_attr   = isset( $attributes['style'] ) && is_array( $attributes['style'] ) ? $attributes['style'] : array();
 $color_style  = isset( $style_attr['color'] ) && is_array( $style_attr['color'] ) ? $style_attr['color'] : array();
 $border_style = isset( $style_attr['border'] ) && is_array( $style_attr['border'] ) ? $style_attr['border'] : array();
 
-/**
- * Normalize the scalar or per-corner shape emitted by WordPress border support
- * into a valid CSS border-radius value.
- *
- * @param mixed $radius Raw block-support radius value.
- * @return string Normalized CSS value, or an empty string when invalid.
- */
-$normalize_border_radius = static function ( $radius ) use ( $sanitize_css_value ): string {
-	if ( is_string( $radius ) || is_int( $radius ) || is_float( $radius ) ) {
-		return $sanitize_css_value( $radius );
+$dialog_color_styles       = array(
+	'text'       => isset( $attributes['textColor'] ) && is_string( $attributes['textColor'] )
+		? 'var:preset|color|' . sanitize_title( $attributes['textColor'] )
+		: ( $color_style['text'] ?? null ),
+	'background' => isset( $attributes['backgroundColor'] ) && is_string( $attributes['backgroundColor'] )
+		? 'var:preset|color|' . sanitize_title( $attributes['backgroundColor'] )
+		: ( $color_style['background'] ?? null ),
+);
+$dialog_border_styles      = array_merge(
+	$border_style,
+	isset( $attributes['borderColor'] ) && is_string( $attributes['borderColor'] )
+		? array( 'color' => 'var:preset|color|' . sanitize_title( $attributes['borderColor'] ) )
+		: array()
+);
+$dialog_support_outputs    = array(
+	wp_style_engine_get_styles(
+		array( 'color' => $dialog_color_styles ),
+		array( 'convert_vars_to_classnames' => true )
+	),
+	wp_style_engine_get_styles( array( 'border' => $dialog_border_styles ) ),
+	wp_style_engine_get_styles( array( 'shadow' => $style_attr['shadow'] ?? null ) ),
+	wp_style_engine_get_styles(
+		array(
+			'spacing' => array(
+				'padding' => $style_attr['spacing']['padding'] ?? null,
+			),
+		)
+	),
+);
+$dialog_support_class_list = array();
+$dialog_support_css_list   = array();
+
+foreach ( $dialog_support_outputs as $support_output ) {
+	if ( isset( $support_output['classnames'] ) && is_string( $support_output['classnames'] ) ) {
+		$dialog_support_class_list[] = $support_output['classnames'];
 	}
-
-	if ( ! is_array( $radius ) ) {
-		return '';
+	if ( isset( $support_output['css'] ) && is_string( $support_output['css'] ) ) {
+		$dialog_support_css_list[] = rtrim( $support_output['css'], ';' );
 	}
+}
 
-	$corner_keys = array( 'topLeft', 'topRight', 'bottomRight', 'bottomLeft' );
-	$values      = array();
-	$has_value   = false;
-
-	foreach ( $corner_keys as $index => $corner_key ) {
-		if ( array_key_exists( $corner_key, $radius ) ) {
-			$value = $radius[ $corner_key ];
-		} elseif ( array_key_exists( $index, $radius ) ) {
-			$value = $radius[ $index ];
-		} else {
-			$value = '';
-		}
-
-		if ( is_string( $value ) || is_int( $value ) || is_float( $value ) ) {
-			$value = $sanitize_css_value( $value );
-		} else {
-			$value = '';
-		}
-
-		if ( '' !== $value ) {
-			$has_value = true;
-		}
-
-		$values[] = '' !== $value ? $value : '0';
-	}
-
-	if ( ! $has_value ) {
-		return '';
-	}
-
-	return 1 === count( array_unique( $values ) )
-		? $values[0]
-		: implode( ' ', $values );
-};
+$dialog_support_classes = implode( ' ', array_unique( $dialog_support_class_list ) );
+$dialog_support_css     = implode( ';', array_filter( $dialog_support_css_list ) );
 
 // Build close button HTML when needed.
 $close_btn_html = '';
@@ -210,11 +207,14 @@ if ( $show_close_btn ) {
 
 	$btn_classes = implode(
 		' ',
-		array(
-			'wp-block-laao-modal__close aa-icon-button aa-icon-button--square',
-			'close-size-' . $close_size,
-			'close-variant-' . $close_variant,
-			'close-placement-' . $close_placement,
+		array_filter(
+			array(
+				'wp-block-laao-modal__close laao-icon-button laao-icon-button--square',
+				$close_label ? '' : 'laao-icon-button--only',
+				'close-size-' . $close_size,
+				'close-variant-' . $close_variant,
+				'close-placement-' . $close_placement,
+			)
 		)
 	);
 
@@ -232,10 +232,8 @@ if ( $show_close_btn ) {
 	);
 	$icon_svg   = '';
 	if ( 'text-only' !== $close_icon ) {
-		$slug = $icon_slugs[ $close_icon ] ?? 'close';
-		// Fully qualified: this file is required inside a closure by
-		// register_block_type_from_metadata(), so there is no `use` context.
-		$icon_svg = \LAAO\Core\Icons::get(
+		$slug     = $icon_slugs[ $close_icon ] ?? 'close';
+		$icon_svg = laao_get_icon(
 			$slug,
 			array(
 				'width'       => $icon_px,
@@ -304,6 +302,11 @@ $trigger_classes = implode(
 // ── Dialog inline style ───────────────────────────────────────────────────────
 // Combines: animation duration, max-width, and forwarded WP block-support values.
 
+$dialog_styles   = array_filter(
+	array(
+		rtrim( $dialog_support_css, ';' ),
+	)
+);
 $dialog_css_vars = array(
 	'--laao-modal-duration: ' . esc_attr( (string) $animation_duration ) . 'ms',
 );
@@ -318,54 +321,8 @@ if ( $dialog_border_radius ) {
 	$dialog_css_vars[] = '--laao-dialog-radius: ' . esc_attr( $dialog_border_radius );
 }
 
-// Forward color.background from WP block supports.
-$dialog_background = $sanitize_css_value( $color_style['background'] ?? '' );
-if ( $dialog_background ) {
-	$dialog_css_vars[] = '--laao-dialog-bg: ' . esc_attr( $dialog_background );
-}
-
-// Forward color.text from WP block supports.
-$dialog_text = $sanitize_css_value( $color_style['text'] ?? '' );
-if ( $dialog_text ) {
-	$dialog_css_vars[] = '--laao-dialog-text: ' . esc_attr( $dialog_text );
-}
-
-// Forward __experimentalBorder from WP block supports.
-$dialog_border_color = $sanitize_css_value( $border_style['color'] ?? '' );
-if ( $dialog_border_color ) {
-	$dialog_css_vars[] = '--laao-dialog-border-color: ' . esc_attr( $dialog_border_color );
-}
-$dialog_border_style = $sanitize_choice(
-	$border_style['style'] ?? '',
-	array( 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset' ),
-	''
-);
-if ( $dialog_border_style ) {
-	$dialog_css_vars[] = '--laao-dialog-border-style: ' . esc_attr( $dialog_border_style );
-}
-$dialog_border_width = $sanitize_css_value( $border_style['width'] ?? '' );
-if ( $dialog_border_width ) {
-	$dialog_css_vars[] = '--laao-dialog-border-width: ' . esc_attr( $dialog_border_width );
-}
-$block_border_radius = $normalize_border_radius( $border_style['radius'] ?? '' );
-if ( ! $dialog_border_radius && '' !== $block_border_radius ) {
-	$dialog_css_vars[] = '--laao-dialog-border-radius: ' . esc_attr( $block_border_radius );
-}
-
-// Forward shadow support onto the fixed-position dialog panel.
-$shadow = $style_attr['shadow'] ?? '';
-if ( is_string( $shadow ) && '' !== $shadow ) {
-	if ( str_starts_with( $shadow, 'var:preset|shadow|' ) ) {
-		$shadow_slug = substr( $shadow, strlen( 'var:preset|shadow|' ) );
-		$shadow      = sprintf( 'var(--wp--preset--shadow--%s)', sanitize_title( $shadow_slug ) );
-	}
-	$shadow = $sanitize_css_value( $shadow );
-	if ( $shadow ) {
-		$dialog_css_vars[] = '--laao-dialog-shadow: ' . esc_attr( $shadow );
-	}
-}
-
-$dialog_inline_style = implode( '; ', $dialog_css_vars );
+$dialog_styles[]     = implode( '; ', $dialog_css_vars );
+$dialog_inline_style = implode( '; ', $dialog_styles );
 
 // ── Backdrop/shell inline style for overlay vars ──────────────────────────────
 
@@ -391,6 +348,18 @@ $drawer_positions = array( 'bottom', 'top', 'left', 'right' );
 $is_drawer        = in_array( $position, $drawer_positions, true );
 $enter_animation  = $is_drawer ? 'fade' : $enter_animation;
 
+$dialog_classes = implode(
+	' ',
+	array_filter(
+		array(
+			'wp-block-laao-modal__dialog',
+			'modal-position-' . $position,
+			'modal-enter-' . $enter_animation,
+			$dialog_support_classes,
+		)
+	)
+);
+
 // Register per-modal state.
 wp_interactivity_state(
 	'laao/modal',
@@ -410,24 +379,7 @@ wp_interactivity_state(
 	)
 );
 
-$renders_default_trigger = ! laao_modal_opens_itself(
-	$trigger_block_id,
-	$open_on_load,
-	$exit_intent_trigger,
-	$scroll_depth_trigger
-);
-
-/*
- * The wrapper is inline-block so the trigger button sits in document flow.
- * Without a button it has nothing to lay out, but an empty inline-block still
- * generates a line box — 40px of blank space under the footer on this theme.
- *
- * display: contents removes the box while leaving the children rendered, which
- * is what they need: the announcer is absolutely positioned and visually
- * hidden, and the shell is fixed to the viewport, so neither depends on this
- * element for its containing block.
- */
-$wrapper_classes = $renders_default_trigger ? '' : 'wp-block-laao-modal--no-trigger';
+$content = laao_unwrap_modal_saved_content( $content );
 
 ?>
 
@@ -435,7 +387,7 @@ $wrapper_classes = $renders_default_trigger ? '' : 'wp-block-laao-modal--no-trig
 	<?php
 	echo get_block_wrapper_attributes(
 		array(
-			'class'               => $wrapper_classes,
+			'class'               => $show_builtin_trigger ? 'has-built-in-trigger' : 'is-triggerless',
 			'data-wp-interactive' => 'laao/modal',
 			'data-wp-context'     => (string) wp_json_encode( array( 'id' => $unique_id ) ),
 			'data-wp-init'        => 'actions.init',
@@ -444,8 +396,7 @@ $wrapper_classes = $renders_default_trigger ? '' : 'wp-block-laao-modal--no-trig
 	?>
 >
 
-	<?php // The default button is a fallback; see laao_modal_opens_itself(). ?>
-	<?php if ( $renders_default_trigger ) : ?>
+	<?php if ( $show_builtin_trigger ) : ?>
 	<button
 		class="<?php echo esc_attr( $trigger_classes ); ?>"
 		type="button"
@@ -483,7 +434,7 @@ $wrapper_classes = $renders_default_trigger ? '' : 'wp-block-laao-modal--no-trig
 
 		<div
 			id="<?php echo esc_attr( $unique_id ); ?>"
-			class="wp-block-laao-modal__dialog modal-position-<?php echo esc_attr( $position ); ?> modal-enter-<?php echo esc_attr( $enter_animation ); ?>"
+			class="<?php echo esc_attr( $dialog_classes ); ?>"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="<?php echo esc_attr( $unique_id ); ?>-label"

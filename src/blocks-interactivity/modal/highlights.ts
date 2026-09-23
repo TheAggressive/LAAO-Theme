@@ -186,8 +186,6 @@ export const findBlockDomElement = (clientId: string): Element | null => {
 
 	if (linkageMatches.length > 0) {
 		Debug.add(`Found block using linkage attribute: ${clientId}`);
-		// ?? null keeps the declared Element | null return: the length check
-		// guarantees an element, but the index signature is still optional.
 		return linkageMatches[0] ?? null;
 	}
 
