@@ -5,6 +5,7 @@ npm-debug.log
 yarn-error.log
 .vscode/
 .phpunit.result.cache
+.clinerules
 
 # Agent/editor state that is per-machine, not per-project. .claude/skills/ is
 # committed, so this has to name the file rather than the directory.
