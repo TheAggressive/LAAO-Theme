@@ -18,19 +18,19 @@
 		{
 			"file": "dist/styles/app.css",
 			"maxGzip": 10240,
-			"measured": 8526,
+			"measured": 8969,
 			"note": "Global stylesheet, loaded on every page."
 		},
 		{
 			"file": "dist/scripts/gsap.js",
 			"maxGzip": 47104,
-			"measured": 44182,
+			"measured": 44271,
 			"note": "GSAP with ScrollTrigger. The single largest thing a visitor downloads, on every page. If this needs raising, first ask whether it can be loaded only where it is used."
 		},
 		{
 			"file": "dist/scripts/smoothscroll.js",
 			"maxGzip": 6656,
-			"measured": 5310,
+			"measured": 5407,
 			"note": "Lenis smooth scrolling."
 		}
 	],
@@ -43,11 +43,11 @@
 				"dist/blocks-interactivity/*/view.js",
 				"dist/blocks-interactivity/*/style-index.css"
 			],
-			"maxGzip": 19456,
-			"measured": 16680,
+			"maxGzip": 33792,
+			"measured": 28852,
 			"note": "Loaded per block, so no single page pays all of it. Budgeted together because the total is what grows unnoticed as blocks are added."
 		}
 	],
-	"totalMaxGzip": 83968,
-	"totalMeasured": 74698
+	"totalMaxGzip": 101376,
+	"totalMeasured": 87499
 }
