@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.16.0...v1.16.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* **hero:** stop echoing the block's saved inner content ([#76](https://github.com/TheAggressive/LAAO-Theme/issues/76)) ([cd4161d](https://github.com/TheAggressive/LAAO-Theme/commit/cd4161d417f31faa17cba4aa22246f26f22c4dd3))
+
 # [1.16.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.15.0...v1.16.0) (2026-09-25)
 
 
