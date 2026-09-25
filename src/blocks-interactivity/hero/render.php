@@ -64,8 +64,6 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 		<div class="wp-block-laao-hero-caption"></div>
 	</div>
 
-	<?php echo wp_kses_post( $content ); ?>
-
 	<div
 		class="wp-block-laao-hero-slider"
 		data-wp-interactive="laao/hero"
