@@ -534,8 +534,20 @@ const { state } = store<ModalStore>('laao/modal', {
 			const { id } = getContext<ModalContext>();
 			if (!id || !state.modals[id]) return;
 
+			const externalTriggers = getExternalTriggers(id);
+
+			// A manual CSS-class connection (.modal-trigger-{id}) takes precedence over the
+			// built-in trigger: remove it so only the connected element opens the modal, and
+			// collapse the wrapper like a server-side triggerless modal.
+			if (externalTriggers.length > 0) {
+				getBuiltInTrigger(id)?.remove();
+				const wrapper = getShell(id)?.parentElement;
+				wrapper?.classList.remove('has-built-in-trigger');
+				wrapper?.classList.add('is-triggerless');
+			}
+
 			getBuiltInTrigger(id)?.setAttribute('aria-expanded', 'false');
-			getExternalTriggers(id).forEach((el) =>
+			externalTriggers.forEach((el) =>
 				bindExternalTrigger(el, id, state.modals)
 			);
 
