@@ -93,7 +93,8 @@ $exit_intent_trigger     = ! empty( $attributes['exitIntentTrigger'] );
 $exit_intent_reshow_days = min( 90, max( 1, absint( $attributes['exitIntentReshowDays'] ?? 7 ) ) );
 $scroll_depth_trigger    = ! empty( $attributes['scrollDepthTrigger'] );
 $scroll_depth_percent    = min( 100, max( 10, absint( $attributes['scrollDepthPercent'] ?? 50 ) ) );
-$show_builtin_trigger    = ! $open_on_load
+$show_builtin_trigger    = ! empty( $attributes['showBuiltInTrigger'] ?? true )
+	&& ! $open_on_load
 	&& empty( $trigger_block_id )
 	&& ! $exit_intent_trigger
 	&& ! $scroll_depth_trigger;

@@ -50,6 +50,7 @@ export function ModalInspector({
 		openOnLoad = false,
 		modalId = '',
 		triggerLabel = 'Open Modal',
+		showBuiltInTrigger = true,
 		disableOverlay = false,
 		enterAnimation = 'fade',
 		exitAnimation = 'fade',
@@ -370,6 +371,24 @@ export function ModalInspector({
 						</Button>
 					</>
 				)}
+				<ToggleControl
+					label={__('Show Built-in Trigger', 'laao')}
+					help={
+						showBuiltInTrigger
+							? __(
+									'The modal renders its own trigger button.',
+									'laao'
+								)
+							: __(
+									'Hidden. Connect a block above or add the modal-trigger-{id} class to an element so the modal can still be opened.',
+									'laao'
+								)
+					}
+					checked={showBuiltInTrigger}
+					onChange={(value) =>
+						setAttributes({ showBuiltInTrigger: value })
+					}
+				/>
 			</PanelBody>
 
 			{/* Animation panel */}

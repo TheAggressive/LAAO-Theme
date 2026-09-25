@@ -56,6 +56,7 @@ export default function Edit({
 		modalId = '',
 		triggerBlockId = '',
 		triggerBlockKey = '',
+		showBuiltInTrigger = true,
 		disableOverlay = false,
 	} = attributes;
 
@@ -317,6 +318,10 @@ export default function Edit({
 						<div className="modal-editor-footer-item">
 							<Icon icon={linkIcon} size={14} />
 							{__('Uses Trigger Block', 'laao')}{' '}
+						</div>
+					) : !showBuiltInTrigger ? (
+						<div className="modal-editor-footer-item">
+							{__('No trigger — hidden on the front end', 'laao')}
 						</div>
 					) : (
 						<div className="modal-editor-footer-item">

@@ -58,6 +58,7 @@ export type ModalAttributes = {
 	triggerBlockId: string;
 	triggerBlockKey: string;
 	triggerLabel: string;
+	showBuiltInTrigger: boolean;
 	exitIntentTrigger: boolean;
 	exitIntentReshowDays: number;
 	scrollDepthTrigger: boolean;

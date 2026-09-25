@@ -89,6 +89,10 @@
 			"type": "string",
 			"default": "Open Modal"
 		},
+		"showBuiltInTrigger": {
+			"type": "boolean",
+			"default": true
+		},
 		"exitIntentTrigger": {
 			"type": "boolean",
 			"default": false
