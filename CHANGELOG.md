@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.15.0...v1.16.0) (2026-09-25)
+
+
+### Features
+
+* **modal:** add showBuiltInTrigger control with runtime fallback for external triggers ([#75](https://github.com/TheAggressive/LAAO-Theme/issues/75)) ([3431a3c](https://github.com/TheAggressive/LAAO-Theme/commit/3431a3c1136f292dbcb08ec6ee4bc1b22bc5878c))
+
 # [1.15.0](https://github.com/TheAggressive/LAAO-Theme/compare/v1.14.2...v1.15.0) (2026-09-23)
 
 
