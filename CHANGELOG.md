@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/TheAggressive/LAAO-Theme/compare/v1.16.1...v1.16.2) (2026-09-26)
+
+
+### Bug Fixes
+
+* **hero:** render the block's inner blocks again ([#77](https://github.com/TheAggressive/LAAO-Theme/issues/77)) ([5546873](https://github.com/TheAggressive/LAAO-Theme/commit/5546873f9a1a1972cc5158554bb56f5b598b5d08)), closes [#76](https://github.com/TheAggressive/LAAO-Theme/issues/76)
+
 ## [1.16.1](https://github.com/TheAggressive/LAAO-Theme/compare/v1.16.0...v1.16.1) (2026-09-25)
 
 
