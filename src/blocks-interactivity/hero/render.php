@@ -42,17 +42,22 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	while ( $query->have_posts() ) {
 		$query->the_post();
 
-		$raw_content = (string) get_the_content();
-		$content     = null;
+		/*
+		 * Not $content: WordPress hands this file the block's rendered inner
+		 * blocks under that name, and reusing it here replaced them with the
+		 * last slide's caption before they were echoed below.
+		 */
+		$raw_caption = (string) get_the_content();
+		$caption     = null;
 
-		if ( '' !== trim( $raw_content ) ) {
+		if ( '' !== trim( $raw_caption ) ) {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- 'the_content' is a core hook; applying it is the documented way to render post content.
-			$content = str_replace( array( '<p>', '</p>' ), '', (string) apply_filters( 'the_content', $raw_content ) );
+			$caption = str_replace( array( '<p>', '</p>' ), '', (string) apply_filters( 'the_content', $raw_caption ) );
 		}
 
 		$slides[] = array(
 			'imageId' => has_post_thumbnail() ? (int) get_post_thumbnail_id( get_the_ID() ) : 0,
-			'content' => $content,
+			'content' => $caption,
 		);
 	}
 
@@ -63,6 +68,16 @@ if ( ! function_exists( 'laao_hero_context' ) ) {
 	<div class="wp-block-laao-hero-caption-container">
 		<div class="wp-block-laao-hero-caption"></div>
 	</div>
+
+	<?php
+	/*
+	 * The logo and banner ad placed in the editor, already wrapped in
+	 * .wp-block-laao-hero-content by save.js. Not wp_kses_post(): it strips
+	 * srcset and sizes from their images, and rendered block output is
+	 * already escaped.
+	 */
+	echo laao_trusted_html( $content );
+	?>
 
 	<div
 		class="wp-block-laao-hero-slider"
